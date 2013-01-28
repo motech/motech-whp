@@ -27,15 +27,21 @@ import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
+import static org.motechproject.whp.patient.builder.PatientBuilder.patient;
 
 public class WHPAdherenceServiceTest {
 
@@ -203,6 +209,34 @@ public class WHPAdherenceServiceTest {
         AdherenceList result = whpAdherenceService.findLogsInRange(PATIENT_ID, THERAPY_UID, null, today().minusDays(1));
         assertEquals(0, result.size());
         verifyZeroInteractions(adherenceLogService);
+    }
+
+    @Test
+    public void shouldReturnAdherenceDatesForPatient() {
+        LocalDate therapyStartDate = today().minusDays(10);
+        Patient patient = patient();
+        patient.getCurrentTherapy().setStartDate(therapyStartDate);
+
+        List<AdherenceRecord> adherenceRecords = new ArrayList<>();
+
+        AdherenceRecord pillTakenAdherenceRecord = new AdherenceRecord(PATIENT_ID, THERAPY_UID, today().minusDays(6));
+        pillTakenAdherenceRecord.status(PillStatus.Taken.getStatus());
+        adherenceRecords.add(pillTakenAdherenceRecord);
+
+        AdherenceRecord pillNotTakenAdherenceRecord = new AdherenceRecord(PATIENT_ID, THERAPY_UID, today().minusDays(8));
+        pillNotTakenAdherenceRecord.status(PillStatus.NotTaken.getStatus());
+        adherenceRecords.add(pillNotTakenAdherenceRecord);
+
+        AdherenceRecord unknownPillStatusAdherenceRecord = new AdherenceRecord(PATIENT_ID, THERAPY_UID, today().minusDays(3));
+        unknownPillStatusAdherenceRecord.status(PillStatus.Unknown.getStatus());
+        adherenceRecords.add(unknownPillStatusAdherenceRecord);
+
+        when(adherenceLogService.adherence(PATIENT_ID, THERAPY_UID, therapyStartDate, today())).thenReturn(adherenceRecords);
+
+        Set<LocalDate> adherenceDates = whpAdherenceService.getAdherenceDates(patient);
+
+        assertThat(adherenceDates, hasItem(today().minusDays(6)));
+        assertThat(adherenceDates.size(), is(1));
     }
 
     private void assertLog(AdherenceRecord adherenceRecord, String patientId, LocalDate doseDate, String therapyUid, String providerId, String providerDistrict, String tbId) {

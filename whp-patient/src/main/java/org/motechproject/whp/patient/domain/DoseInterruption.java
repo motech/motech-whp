@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.EqualsAndHashCode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrAfter;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
+@EqualsAndHashCode
 public class DoseInterruption implements Comparable<DoseInterruption>, Serializable {
 
     @JsonProperty

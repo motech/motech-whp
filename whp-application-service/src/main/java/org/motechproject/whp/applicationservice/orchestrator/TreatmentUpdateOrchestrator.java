@@ -6,7 +6,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceList;
-import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
@@ -21,11 +20,9 @@ import org.motechproject.whp.reports.contract.AdherenceSubmissionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.adherence.criteria.TherapyStartCriteria.shouldStartOrRestartTreatment;
 import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest;
 import static org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequestByProvider;
@@ -62,17 +59,8 @@ public class TreatmentUpdateOrchestrator {
     }
 
     public void updateDoseInterruptions(Patient patient) {
-        HashMap<LocalDate, PillStatus> dateAdherenceMap = whpAdherenceService.getDateAdherenceMap(patient);
-        List<LocalDate> allDoseDates = patient.getDoseDatesTill(today());
-
-        patient.clearDoseInterruptionsForUpdate();
-        for (LocalDate doseDate : allDoseDates) {
-            if ((dateAdherenceMap.get(doseDate) == null || !dateAdherenceMap.get(doseDate).equals(PillStatus.Taken))) {
-                patient.dosesMissedSince(doseDate);
-            } else {
-                patient.dosesResumedOnAfterBeingInterrupted(doseDate);
-            }
-        }
+        Set<LocalDate> adherenceDates = whpAdherenceService.getAdherenceDates(patient);
+        patient.updateDoseInterruptions(adherenceDates);
     }
 
     public void recordWeeklyAdherence(WeeklyAdherenceSummary weeklyAdherenceSummary, String patientId, AuditParams auditParams) {

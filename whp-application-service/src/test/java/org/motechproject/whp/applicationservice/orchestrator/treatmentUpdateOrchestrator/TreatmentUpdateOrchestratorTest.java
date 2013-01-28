@@ -9,8 +9,7 @@ import org.motechproject.whp.applicationservice.orchestrator.treatmentUpdateOrch
         AdherenceUpdateTestPart.class,
         SetNextPhaseTestPart.class,
         PhaseTransitionTestPart.class,
-        AdjustPhaseDatesTestPart.class,
-        DoseInterruptionsTestPart.class
+        AdjustPhaseDatesTestPart.class
 })
 public class TreatmentUpdateOrchestratorTest {
 }

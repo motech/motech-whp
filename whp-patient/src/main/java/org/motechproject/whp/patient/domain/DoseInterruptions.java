@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.domain;
 
+import lombok.EqualsAndHashCode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.exception.WHPDomainException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+@EqualsAndHashCode
 public class DoseInterruptions extends ArrayList<DoseInterruption> implements Serializable {
 
     public DoseInterruptions() {

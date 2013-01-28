@@ -21,9 +21,11 @@ import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static ch.lambdaj.Lambda.*;
 import static org.joda.time.Weeks.weeksBetween;
+import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
@@ -528,8 +530,20 @@ public class Patient extends MotechBaseDataObject {
         return weeksBetween(interruptionStartDate, currentAdherenceCaptureWeek().endDate().plusDays(1)).getWeeks();
     }
 
-    @JsonIgnore
     public void updatePatientAlert(PatientAlertType alertType, int value, int severity){
         patientAlerts.updateAlertStatus(alertType, value, severity);
+    }
+
+    public void updateDoseInterruptions(Set<LocalDate> adherenceDates) {
+        List<LocalDate> allDoseDates = getDoseDatesTill(today());
+        clearDoseInterruptionsForUpdate();
+        for (LocalDate doseDate : allDoseDates) {
+            if (!adherenceDates.contains(doseDate)) {
+                dosesMissedSince(doseDate);
+            } else {
+                dosesResumedOnAfterBeingInterrupted(doseDate);
+            }
+        }
+
     }
 }

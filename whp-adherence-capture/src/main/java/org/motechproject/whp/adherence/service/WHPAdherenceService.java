@@ -23,9 +23,7 @@ import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
@@ -119,13 +117,15 @@ public class WHPAdherenceService {
         return adherenceRecords.get(doseNumber - 1);
     }
 
-    public HashMap<LocalDate, PillStatus> getDateAdherenceMap(Patient patient) {
+    public Set<LocalDate> getAdherenceDates(Patient patient) {
         AdherenceList logs = findLogsInRange(patient.getPatientId(), patient.currentTherapyId(), patient.getCurrentTherapy().getStartDate(), today());
-        HashMap<LocalDate, PillStatus> datePillStatusHashMap = new HashMap<>();
+        Set<LocalDate> pillDates = new HashSet<>();
         for (Adherence log : logs) {
-            datePillStatusHashMap.put(log.getPillDate(), log.getPillStatus());
+            if(log.getPillStatus() == PillStatus.Taken){
+                pillDates.add(log.getPillDate());
+            }
         }
-        return datePillStatusHashMap;
+        return pillDates;
     }
 
     public List<String> patientsWithAdherence(TreatmentWeek week) {
