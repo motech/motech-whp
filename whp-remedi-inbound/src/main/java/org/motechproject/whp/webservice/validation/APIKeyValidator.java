@@ -29,7 +29,7 @@ public class APIKeyValidator extends NamedConstraintValidator {
     public void validateField(Object target, Field field, Errors errors) {
         field.setAccessible(true);
         try {
-            String  api_key = field.get(target).toString();
+            String  api_key = (String) field.get(target);
             if (!remediProperties.getApiKey().equals(api_key)) {
                 String message = String.format("%s:%s", "api_key", "is invalid.");
                 errors.rejectValue(field.getName(), "403 Forbidden", message);

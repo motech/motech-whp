@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.DiseaseClass;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.user.validation.DistrictValidator;
 import org.motechproject.whp.user.validation.ProviderIdValidator;
 import org.motechproject.whp.webservice.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.webservice.validation.APIKeyValidator;
@@ -98,6 +99,7 @@ public class PatientWebRequest implements CaseXmlRequest{
 
     @NotNullOrEmpty
     @Scope(scope = {UpdateScope.createScope})
+    @NamedConstraint(name = DistrictValidator.DISTRICT_CONSTRAINT)
     private String address_district;
 
     @NotNullOrEmpty

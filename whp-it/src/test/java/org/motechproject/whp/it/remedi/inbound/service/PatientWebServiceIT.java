@@ -3,7 +3,9 @@ package org.motechproject.whp.it.remedi.inbound.service;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.District;
@@ -23,6 +25,7 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
+import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.PatientRequestMapper;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.motechproject.whp.webservice.service.PatientWebService;
@@ -38,6 +41,9 @@ import static org.motechproject.util.DateUtil.now;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class PatientWebServiceIT extends SpringIntegrationTest {
+
+    @Rule
+    public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Autowired
     ProviderService providerService;
@@ -75,6 +81,15 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         allDistricts.add(district);
         patientWebService = new PatientWebService(patientService, validator, patientRequestMapper, updateCommandFactory);
     }
+
+    @Test
+    public void shouldNotCreatePatientWhenDistrictIsInvalid() {
+        exceptionThrown.expect(WHPCaseException.class);
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        patientWebRequest.setAddress_district("invalid");
+        patientWebService.createCase(patientWebRequest);
+    }
+
 
     @Test
     public void shouldCreatePatient() {
