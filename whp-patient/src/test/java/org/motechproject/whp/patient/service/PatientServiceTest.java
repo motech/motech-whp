@@ -12,9 +12,11 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.validation.RequestValidator;
+import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
+import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
@@ -43,7 +45,6 @@ public class PatientServiceTest extends BaseUnitTest {
     PatientService patientService;
     @Mock
     AllPatients allPatients;
-
     @Mock
     AllTherapyRemarks allTherapyRemarks;
     @Mock
@@ -54,16 +55,17 @@ public class PatientServiceTest extends BaseUnitTest {
     ProviderService providerService;
     @Mock
     private PatientAlertService patientAlertService;
+    @Mock
+    private PatientAlertScheduler patientAlertScheduler;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
-
+    @Mock
     PatientMapper patientMapper;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper(providerService);
-        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, patientAlertService);
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, patientAlertService, patientAlertScheduler);
     }
 
     @Test
@@ -161,6 +163,21 @@ public class PatientServiceTest extends BaseUnitTest {
 
         verify(patientAlertService).processAlertsBasedOnConfiguration(patient);
         verify(allPatients).update(patient);
+    }
+
+    @Test
+    public void shouldCreatePatient() {
+        PatientRequest patientRequest = mock(PatientRequest.class);
+        Patient patient = mock(Patient.class);
+        String patientId = "patientid";
+        when(patient.getPatientId()).thenReturn(patientId);
+
+        when(patientMapper.mapPatient(patientRequest)).thenReturn(patient);
+
+        patientService.createPatient(patientRequest);
+
+        verify(allPatients).add(patient);
+        verify(patientAlertScheduler).scheduleJob(patientId);
     }
 
 

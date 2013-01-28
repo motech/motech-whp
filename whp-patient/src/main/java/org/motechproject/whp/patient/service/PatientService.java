@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.annotations.MotechListener;
 import org.motechproject.whp.common.event.EventKeys;
+import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.alerts.service.PatientAlertService;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -28,22 +29,25 @@ public class PatientService {
     private AllTherapyRemarks allTherapyRemarks;
     private ProviderService providerService;
     private PatientAlertService patientAlertService;
+    private PatientAlertScheduler patientAlertScheduler;
 
     @Autowired
     public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks,
                           ProviderService providerService,
-                          PatientAlertService patientAlertService) {
+                          PatientAlertService patientAlertService, PatientAlertScheduler patientAlertScheduler) {
         this.allPatients = allPatients;
         this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
         this.providerService = providerService;
         this.patientAlertService = patientAlertService;
+        this.patientAlertScheduler = patientAlertScheduler;
     }
 
     public void createPatient(PatientRequest patientRequest) {
         Patient patient = patientMapper.mapPatient(patientRequest);
         allPatients.add(patient);
+        patientAlertScheduler.scheduleJob(patient.getPatientId());
     }
 
     public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
