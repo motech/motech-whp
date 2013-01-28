@@ -42,7 +42,6 @@
         <module>whp-adherence-api</module>
         <module>whp-provider-reminder</module>
         <module>whp-wgn-outbound</module>
-        <module>whp-patient-alerts</module>
     </modules>
 
     <repositories>
