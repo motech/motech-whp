@@ -56,7 +56,6 @@ public class PatientPagingService implements Paging<PatientInfo>{
         return patientInfos;
     }
 
-    //Needed for testing
     public List<Patient> getAll() {
         return allPatients.getAll();
     }
@@ -64,6 +63,14 @@ public class PatientPagingService implements Paging<PatientInfo>{
     @Override
     public String entityName() {
         return "patient_results";
+    }
+
+    public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
+        return allPatients.getAllWithActiveTreatmentFor(providerId);
+    }
+
+    public List<Patient> searchBy(String districtName) {
+        return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
     }
 
 /*

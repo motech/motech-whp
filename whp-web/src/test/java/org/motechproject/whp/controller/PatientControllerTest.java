@@ -2,7 +2,6 @@ package org.motechproject.whp.controller;
 
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -213,8 +212,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/list"));
     }
 
-    //TODO: Nishi, Abhi- future feature
-    @Ignore
     @Test
     public void shouldFetchListOfPatientsIfDistrictNameIsPresentInCookies() throws Exception {
         String district = "Vaishali";
@@ -233,8 +230,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/list"));
     }
 
-    //TODO: Nishi, Abhi- future feature
-    @Ignore
     @Test
     public void shouldFetchListOfPatientsIfProviderIdIsPresentInCookies() throws Exception {
         String providerId = "providerid";
@@ -255,7 +250,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/list"));
     }
 
-    @Ignore //TODO: not using patientService anymore
     @Test
     public void shouldSearchForPatientsByDistrict() throws Exception {
         String district = "Vaishali";
@@ -278,7 +272,6 @@ public class PatientControllerTest extends BaseControllerTest {
         verify(patientService).searchBy(district);
     }
 
-    @Ignore //TODO: not using patientService anymore
     @Test
     public void shouldSearchForPatientsByProvider() throws Exception {
         String providerId = "provider1";
@@ -303,24 +296,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(view().name("patient/patientList"));
 
         verify(patientService).getAllWithActiveTreatmentForProvider(providerId);
-    }
-
-    @Ignore //TODO: not using patientService anymore
-    @Test
-    public void shouldFetchAllPatients() throws Exception {
-
-        List<Patient> expectedLisOfPatients = asList(patient);
-
-        when(patientPagingService.getAll()).thenReturn(expectedLisOfPatients);
-
-        standaloneSetup(patientController).build()
-                .perform(get("/patients/list"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("patientList", expectedLisOfPatients))
-                .andExpect(view().name("patient/list"));
-
-        verify(patientPagingService).getAll();
-
     }
 
 }

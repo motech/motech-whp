@@ -125,11 +125,26 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     }
 
     public List<Patient> filter(FilterParams nonEmptyParams, SortParams sortCriteria, int startIndex, Integer rowsPerPage) {
-         if (nonEmptyParams.containsKey("selectedDistrict")){
-             return getAllUnderActiveTreatmentInDistrictForAGivenPage(nonEmptyParams.get("selectedDistrict").toString(), startIndex, rowsPerPage);
-         }
-        else
-             return getAll(startIndex, rowsPerPage);
+        if (nonEmptyParams.containsKey("selectedProvider")) {
+            return getAllWithActiveTreatmentForAGivenPage(nonEmptyParams.get("selectedProvider").toString(), startIndex, rowsPerPage);
+        } else if (nonEmptyParams.containsKey("selectedDistrict")) {
+            return getAllUnderActiveTreatmentInDistrictForAGivenPage(nonEmptyParams.get("selectedDistrict").toString(), startIndex, rowsPerPage);
+        } else
+            return getAll(startIndex, rowsPerPage);
+    }
+
+    private List<Patient> getAllWithActiveTreatmentForAGivenPage(String selectedProvider, int startIndex, Integer rowsPerPage) {
+        if (selectedProvider == null)
+            return new ArrayList<>();
+        String keyword = selectedProvider.toLowerCase();
+
+        ComplexKey startKey = ComplexKey.of(keyword, null);
+        ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
+        ViewQuery q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
+                .startKey(startKey).endKey(endKey)
+                .skip(startIndex * rowsPerPage).limit(rowsPerPage)
+                .includeDocs(true).inclusiveEnd(true);
+        return db.queryView(q, Patient.class);
     }
 
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")

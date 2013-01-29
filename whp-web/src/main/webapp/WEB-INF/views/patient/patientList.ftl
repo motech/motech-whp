@@ -34,19 +34,6 @@
     </tr>
     </thead>
     <tbody>
-    <#if patientList?size == 0>
-    <tr>
-        <td class="warning" style="text-align: center" colspan="14">
-            <#if selectedProvider?? && selectedProvider != "">
-                No patients found for  Provider ID: '${selectedProvider!}'
-            <#elseif selectedDistrict?? && selectedDistrict != "">
-                No patients found for  Provider District: '${selectedDistrict!}'
-            <#else>
-                Please select either Provider ID or Provider District
-            </#if>
-
-    </tr>
-        <#else>
         <tr class="patient-listing" ng-repeat="item in data.results"
             id="PatientRows_{{item.patientId}}"
             containerId="{{item.patientId}}">
@@ -86,8 +73,6 @@
                 {{item.cumulativeDosesNotTaken}}
                 </td>
             </tr>
-
-    </#if>
     </tbody>
 </table>
 </@paginator.paginate>

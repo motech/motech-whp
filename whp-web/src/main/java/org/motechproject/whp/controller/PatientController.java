@@ -97,7 +97,7 @@ public class PatientController extends BaseWebController {
     public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
                        @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
                        Model uiModel) {
-        List<Patient> patients = getAllPatients();
+        List<Patient> patients = getPatientsFor(districtName, providerId);
         prepareModelForListView(uiModel, patients, districtName, providerId);
         return "patient/list";
     }
@@ -122,7 +122,7 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam(value = "district", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
+    public String filterByDistrictAndProvider(@RequestParam(value = SELECTED_DISTRICT, required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
         List<Patient> patients = getPatientsFor(districtName, providerId);
         prepareModelForListView(uiModel, patients, districtName, providerId);
         setSearchParamsIntoCookies(response, districtName, providerId);
@@ -137,9 +137,9 @@ public class PatientController extends BaseWebController {
     private List<Patient> getPatientsFor(String districtName, String providerId) {
         List<Patient> patients;
         if (isNotEmpty(providerId))
-            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
+            patients = patientPagingService.getAllWithActiveTreatmentForProvider(providerId);
         else if (isNotEmpty(districtName))
-            patients = patientService.searchBy(districtName);
+            patients = patientPagingService.searchBy(districtName);
         else
             patients = new ArrayList<>();
 
@@ -151,18 +151,6 @@ public class PatientController extends BaseWebController {
         patients = patientPagingService.getAll();
         return patients;
     }
-
-//    private List<Patient> getPagedPatientsFor(String district, String providerId) {
-//        List<Patient> patients;
-//        if (isNotEmpty(providerId))
-//            patients = patientPagingService.getAllWithActiveTreatmentForProvider(providerId);
-//        else if (isNotEmpty(district))
-//            patients = patientPagingService.searchBy(districtName);
-//        else
-//            patients = new ArrayList<>();
-//
-//        return patients;
-//    }
 
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)

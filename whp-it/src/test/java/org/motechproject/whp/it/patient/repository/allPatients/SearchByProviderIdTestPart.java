@@ -3,6 +3,8 @@ package org.motechproject.whp.it.patient.repository.allPatients;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
@@ -18,6 +20,10 @@ import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 public class SearchByProviderIdTestPart extends AllPatientsTestPart {
+    FilterParams filterParams;
+
+    SortParams sortParams;
+
 
     @Before
     public void setUp() {
@@ -94,35 +100,30 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldFetchByDistrict() {
-        String provider1 = "provider1";
-        String provider2 = "provider2";
-        String provider3 = "provider3";
+    public void shouldFetchAllPatientsUnderAProviderByPage(){
+        int startIndex = 0;       //page starts from zero
+        int rowsPerPage = 2;
+        String providerId = "provider";
 
-        Patient patient1 = createPatient("patientId1", provider1, PROVIDER_DISTRICT);
-        Patient patient2 = createPatient("patientId2", provider2, "another-district");
-        Patient patient3 = createPatient("patientId3", provider3, PROVIDER_DISTRICT);
+        filterParams = new FilterParams();
+        filterParams.put("selectedProvider", providerId);
 
-        List<Patient> patients = allPatients.getAllUnderActiveTreatmentInDistrict(PROVIDER_DISTRICT);
-        assertPatientEquals(asList(patient1, patient3), patients);
-    }
+        String district = "district";
+        createPatient("id1", "providerid1", district);
+        Patient patient1 = createPatient("id2", providerId, district);
+        Patient patient2 = createPatient("id3", providerId, district);
+        createPatient("id4", providerId, district);
+        createPatient("id5", providerId, district);
+        Patient patient6 = createPatient("id6", providerId, district);
 
+        List<Patient> patientsForFirstPage = allPatients.filter(filterParams, sortParams, startIndex, rowsPerPage);
 
-    @Test
-    public void shouldFetchByDistrictForGivenPageNumber(){
+        assertThat(patientsForFirstPage.size(), is(2));
+        assertPatientEquals(asList(patient1,patient2), patientsForFirstPage);
 
-        String provider1 = "provider1";
-        String provider2 = "provider2";
-        String provider3 = "provider3";
-
-        Patient patient1 = createPatient("patientId1", provider1, PROVIDER_DISTRICT);
-        Patient patient2 = createPatient("patientId2", provider2, PROVIDER_DISTRICT);
-        Patient patient3 = createPatient("patientId3", provider3, PROVIDER_DISTRICT);
-
-        Integer startIndex = 1;
-        Integer rowsPerPage = 2;
-        List<Patient> patients = allPatients.getAllUnderActiveTreatmentInDistrictForAGivenPage(PROVIDER_DISTRICT, startIndex, rowsPerPage);
-        assertPatientEquals(asList(patient3), patients);
-        assertThat(patients.size(), is(1));
+        startIndex = 2;
+        List<Patient> patientsForThirdPage = allPatients.filter(filterParams, sortParams, startIndex, rowsPerPage);
+        assertThat(patientsForThirdPage.size(),is(1));
+        assertPatientEquals(patient6, patientsForThirdPage.get(0));
     }
 }
