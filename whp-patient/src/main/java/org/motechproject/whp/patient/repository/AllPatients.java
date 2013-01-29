@@ -132,6 +132,22 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
         return filterProviderIds(db.queryView(query));
     }
 
+    @View(name = "active_patient_ids", map = "function(doc) {\n" +
+            " if(doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
+            "        emit(doc.patientId, null);\n" +
+            "    }\n" +
+            "}")
+    public List<String> allActivePatientIds() {
+        ViewQuery query = createQuery("active_patient_ids");
+        ViewResult rows = db.queryView(query);
+
+        List<String> patientIds = new ArrayList<>();
+        for (ViewResult.Row row : rows) {
+            patientIds.add(row.getKey());
+        }
+        return patientIds;
+    }
+
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
 
         @Override

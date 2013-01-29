@@ -7,9 +7,12 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.domain.ProviderIds;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.util.DateUtil.today;
@@ -83,5 +86,19 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         assertThat(providerIds.asList().size(), is(2));
         assertThat(providerIds.asList(), hasItems("provider2"));
         assertThat(providerIds.asList(), hasItems("provider1"));
+    }
+
+    @Test
+    public void shouldFetchAllActivePatients() {
+        Patient activePatient = new PatientBuilder().withDefaults().withPatientId("patientId1").withAdherenceProvidedForLastWeek().build();
+        Patient inactivePatient = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
+        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Died, DateUtil.now());
+
+        allPatients.add(activePatient);
+        allPatients.add(inactivePatient);
+
+        List<String> patientIds = allPatients.allActivePatientIds();
+        assertThat(patientIds.size(), is(1));
+        assertThat(patientIds, hasItem(activePatient.getPatientId()));
     }
 }
