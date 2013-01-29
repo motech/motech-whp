@@ -48,7 +48,7 @@ public class AllAlertConfigurations {
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(5, 10, 20);
+        return new AlertThresholds(10);
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {
