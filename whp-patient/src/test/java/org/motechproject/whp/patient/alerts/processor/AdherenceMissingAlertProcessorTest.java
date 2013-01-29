@@ -5,6 +5,7 @@ import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
 
 public class AdherenceMissingAlertProcessorTest {
 
@@ -29,5 +30,10 @@ public class AdherenceMissingAlertProcessorTest {
 
         AdherenceMissingAlertProcessor adherenceMissingAlertProcessor = new AdherenceMissingAlertProcessor();
         assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+    }
+
+    @Test
+    public void shouldReturnAlertTypeAsAdherenceMissing() {
+        assertEquals(AdherenceMissing, new AdherenceMissingAlertProcessor().alertType());
     }
 }

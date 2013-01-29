@@ -1,6 +1,7 @@
 package org.motechproject.whp.common.domain.alerts;
 
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.domain.AllDaysOfWeek;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class AllAlertConfigurations {
         alertConfigurationMap = new HashMap<>();
         addAlertConfiguration(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds(), asList(DayOfWeek.Wednesday));
         addAlertConfiguration(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), asList(DayOfWeek.Wednesday));
+        addAlertConfiguration(PatientAlertType.TreatmentNotStarted, getTreatmentNotStartedAlertThresholds(), AllDaysOfWeek.allDaysOfWeek);
     }
 
     private void addAlertConfiguration(PatientAlertType alertType, AlertThresholds alertThresholds, List<DayOfWeek> daysOfWeek) {
@@ -48,6 +50,10 @@ public class AllAlertConfigurations {
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
+        return new AlertThresholds(10);
+    }
+
+    private AlertThresholds getTreatmentNotStartedAlertThresholds() {
         return new AlertThresholds(10);
     }
 

@@ -12,6 +12,8 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.motechproject.model.DayOfWeek.Wednesday;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.TreatmentNotStarted;
 
 public class AllAlertConfigurationsTest {
 
@@ -43,5 +45,14 @@ public class AllAlertConfigurationsTest {
         assertFalse(allAlertConfigurations.shouldRunToday(AdherenceMissing));
 
         verify(alertConfiguration, times(2)).shouldRunToday();
+    }
+
+    @Test
+    public void shouldReturnAlertConfigurations() {
+        AllAlertConfigurations configurations = new AllAlertConfigurations();
+        Map<PatientAlertType, AlertConfiguration> alertConfigurationMap = configurations.alertConfigurationMap;
+        assertEquals(1, alertConfigurationMap.get(AdherenceMissing).getAlertThresholds().getThreshold(1).getThreshold());
+        assertEquals(10, alertConfigurationMap.get(CumulativeMissedDoses).getAlertThresholds().getThreshold(10).getThreshold());
+        assertEquals(10, alertConfigurationMap.get(TreatmentNotStarted).getAlertThresholds().getThreshold(10).getThreshold());
     }
 }

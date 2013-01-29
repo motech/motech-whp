@@ -5,6 +5,7 @@ import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
 
 public class CumulativeMissedDosesAlertProcessorTest {
 
@@ -29,5 +30,10 @@ public class CumulativeMissedDosesAlertProcessorTest {
 
         CumulativeMissedDosesAlertProcessor cumulativeMissedDosesAlertProcessor = new CumulativeMissedDosesAlertProcessor();
         assertEquals(0, cumulativeMissedDosesAlertProcessor.process(patient));
+    }
+
+    @Test
+    public void shouldReturnAlertTypeAsCumulativeMissedDoses() {
+        assertEquals(CumulativeMissedDoses, new CumulativeMissedDosesAlertProcessor().alertType());
     }
 }
