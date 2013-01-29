@@ -1,6 +1,8 @@
 package org.motechproject.whp.applicationservice.orchestrator;
 
 import org.joda.time.LocalDate;
+import org.motechproject.event.MotechEvent;
+import org.motechproject.event.annotations.MotechListener;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
@@ -11,6 +13,7 @@ import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Phases;
@@ -88,7 +91,11 @@ public class TreatmentUpdateOrchestrator {
         reportingPublisherService.reportAdherenceSubmission(createAdherenceSubmissionRequest(patient.getCurrentProviderId(), auditParams.getUser(), now(), dailyAdherenceRequests.maxDoseDate()));
     }
 
-    public void processAlertsBasedOnConfiguration(String patientId) {
+
+    @MotechListener(subjects = EventKeys.PATIENT_ALERTS_UPDATE)
+    public void processAlertsBasedOnConfiguration(MotechEvent motechEvent) {
+        String patientId = (String) motechEvent.getParameters().get(EventKeys.PATIENT_ALERTS_UPDATE_PATIENT_ID_PARAM);
+
         Patient patient = patientService.findByPatientId(patientId);
         updateDoseInterruptions(patient);
         patientService.updateBasedOnAlertConfiguration(patient);

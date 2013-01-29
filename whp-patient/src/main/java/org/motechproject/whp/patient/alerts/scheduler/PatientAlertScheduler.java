@@ -22,6 +22,7 @@ public class PatientAlertScheduler {
     public void scheduleJob(String patientId) {
         MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_ALERTS_UPDATE);
         motechEvent.getParameters().put(JOB_ID_KEY, patientId);
+        motechEvent.getParameters().put(EventKeys.PATIENT_ALERTS_UPDATE_PATIENT_ID_PARAM, patientId);
 
         motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, allDaysOfWeekCronExpression()));
     }

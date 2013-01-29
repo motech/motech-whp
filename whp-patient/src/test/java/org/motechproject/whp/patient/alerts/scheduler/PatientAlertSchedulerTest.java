@@ -36,6 +36,7 @@ public class PatientAlertSchedulerTest {
 
         assertEquals(PATIENT_ALERTS_UPDATE, job.getMotechEvent().getSubject());
         assertEquals(patientId, job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
+        assertEquals(patientId, job.getMotechEvent().getParameters().get(EventKeys.PATIENT_ALERTS_UPDATE_PATIENT_ID_PARAM));
     }
 
 
