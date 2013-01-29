@@ -113,4 +113,8 @@ public class PatientService {
     public ProviderIds getAllProvidersWithPendingAdherence(LocalDate asOf) {
         return allPatients.findAllProvidersWithoutAdherenceAsOf(asOf);
     }
+
+    public List<String> getAllActivePatientIds() {
+        return allPatients.findAllActivePatientIds();
+    }
 }

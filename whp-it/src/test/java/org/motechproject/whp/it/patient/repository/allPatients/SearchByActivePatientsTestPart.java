@@ -97,7 +97,7 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         allPatients.add(activePatient);
         allPatients.add(inactivePatient);
 
-        List<String> patientIds = allPatients.allActivePatientIds();
+        List<String> patientIds = allPatients.findAllActivePatientIds();
         assertThat(patientIds.size(), is(1));
         assertThat(patientIds, hasItem(activePatient.getPatientId()));
     }

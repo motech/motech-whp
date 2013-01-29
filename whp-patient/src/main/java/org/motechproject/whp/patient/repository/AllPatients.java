@@ -137,7 +137,7 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
             "        emit(doc.patientId, null);\n" +
             "    }\n" +
             "}")
-    public List<String> allActivePatientIds() {
+    public List<String> findAllActivePatientIds() {
         ViewQuery query = createQuery("active_patient_ids");
         ViewResult rows = db.queryView(query);
 

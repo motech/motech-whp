@@ -180,6 +180,17 @@ public class PatientServiceTest extends BaseUnitTest {
         verify(patientAlertScheduler).scheduleJob(patientId);
     }
 
+    @Test
+    public void shouldFetchAllActivePatientIds() {
+        List<String> expectedPatientIdList = asList("patient1", "patient2");
+        when(allPatients.findAllActivePatientIds()).thenReturn(expectedPatientIdList);
+
+        List<String> activePatientIds = patientService.getAllActivePatientIds();
+
+        assertEquals(expectedPatientIdList, activePatientIds);
+        verify(allPatients).findAllActivePatientIds();
+    }
+
 
     @After
     public void tearDown() {
