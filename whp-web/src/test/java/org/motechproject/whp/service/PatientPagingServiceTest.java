@@ -9,6 +9,7 @@ import org.motechproject.paginator.response.PageResults;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.uimodel.PatientDashboardRow;
 import org.motechproject.whp.uimodel.PatientInfo;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class PatientPagingServiceTest {
         when(allPatients.filter((FilterParams)anyObject(), (SortParams)anyObject(), anyInt(), anyInt())).thenReturn(patientsPerPage);
 
         PatientPagingService patientPagingService = new PatientPagingService(allPatients);
-        PageResults<PatientInfo> pageResults = patientPagingService.page(pageNumber, rowsPerPage, new FilterParams(), new SortParams());
+        PageResults<PatientDashboardRow> pageResults = patientPagingService.page(pageNumber, rowsPerPage, new FilterParams(), new SortParams());
 
         assertThat(pageResults.getTotalRows(), is(5));
         assertThat(pageResults.getPageNo(), is(pageNumber));

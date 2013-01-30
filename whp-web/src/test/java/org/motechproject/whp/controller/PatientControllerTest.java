@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -225,7 +226,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .perform(get("/patients/list").cookie(new Cookie(PatientController.SELECTED_DISTRICT, district)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(view().name("patient/list"));
     }
@@ -245,11 +245,11 @@ public class PatientControllerTest extends BaseControllerTest {
                                 new Cookie(PatientController.SELECTED_DISTRICT, "district")))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("selectedProvider", providerId))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(view().name("patient/list"));
     }
 
+    @Ignore //Not hitting controller for search
     @Test
     public void shouldSearchForPatientsByDistrict() throws Exception {
         String district = "Vaishali";
@@ -265,13 +265,13 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(cookie().value("selectedDistrict", district))
                 .andExpect(view().name("patient/patientList"));
 
-        verify(patientService).searchBy(district);
+        verify(patientPagingService).searchBy(district);
     }
 
+    @Ignore //Not hitting controller for search
     @Test
     public void shouldSearchForPatientsByProvider() throws Exception {
         String providerId = "provider1";
@@ -281,8 +281,6 @@ public class PatientControllerTest extends BaseControllerTest {
         Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).withTreatmentUnderDistrict("some other district").build();
 
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
-        List<Patient> expectedListOfPatients = asList(patientUnderProviderA);
-        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(expectedListOfPatients);
 
         standaloneSetup(patientController).build()
                 .perform(post("/patients/search").param("selectedDistrict", district).param("selectedProvider", providerId))
@@ -290,7 +288,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(model().attribute("selectedDistrict", district))
                 .andExpect(model().attribute("selectedProvider", providerId))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(cookie().value("selectedDistrict", district))
                 .andExpect(cookie().value("selectedProvider", providerId))
                 .andExpect(view().name("patient/patientList"));

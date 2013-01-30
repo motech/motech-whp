@@ -7,7 +7,7 @@ import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.uimodel.PatientInfo;
+import org.motechproject.whp.uimodel.PatientDashboardRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PatientPagingService implements Paging<PatientInfo>{
+public class PatientPagingService implements Paging<PatientDashboardRow>{
     private AllPatients allPatients;
 
     @Autowired
@@ -24,7 +24,7 @@ public class PatientPagingService implements Paging<PatientInfo>{
     }
 
     @Override
-    public PageResults<PatientInfo> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
+    public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
 
         int startIndex = (pageNumber - 1);
         FilterParams nonEmptyParams = filterOutEmptyParams(searchCriteria);
@@ -49,11 +49,11 @@ public class PatientPagingService implements Paging<PatientInfo>{
 
     private List prepareResultsModel(List<Patient> rows) {
 
-        ArrayList<PatientInfo> patientInfos = new ArrayList<>();
+        ArrayList<PatientDashboardRow> patientDashboardRows = new ArrayList<>();
         for(Patient patient: rows){
-            patientInfos.add(new PatientInfo(patient));
+            patientDashboardRows.add(new PatientDashboardRow(patient));
         }
-        return patientInfos;
+        return patientDashboardRows;
     }
 
     public List<Patient> getAll() {
@@ -73,21 +73,4 @@ public class PatientPagingService implements Paging<PatientInfo>{
         return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
     }
 
-/*
-    public List<Patient> getAllWithActiveTreatmentForProvider(String providerId, distrit ) {
-        return  allPatients.getAllWithActiveTreatmentFor(providerId);
-    }
-
-    private List<Patient> getPagedPatientsFor(String district, String providerId) {
-        List<Patient> patients;
-        if (isNotEmpty(providerId))
-            patients = patientPagingService.getAllWithActiveTreatmentForProvider(providerId);
-        else if (isNotEmpty(district))
-            patients = patientPagingService.searchBy(districtName);
-        else
-            patients = new ArrayList<>();
-
-        return patients;
-    }
-*/
 }

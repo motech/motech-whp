@@ -1,4 +1,4 @@
-package org.motechproject.whp.service;
+package org.motechproject.whp.it;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;

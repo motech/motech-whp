@@ -97,8 +97,7 @@ public class PatientController extends BaseWebController {
     public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
                        @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
                        Model uiModel) {
-        List<Patient> patients = getPatientsFor(districtName, providerId);
-        prepareModelForListView(uiModel, patients, districtName, providerId);
+        prepareModelForListView(uiModel, districtName, providerId);
         return "patient/list";
     }
 
@@ -123,8 +122,8 @@ public class PatientController extends BaseWebController {
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
     public String filterByDistrictAndProvider(@RequestParam(value = SELECTED_DISTRICT, required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
-        List<Patient> patients = getPatientsFor(districtName, providerId);
-        prepareModelForListView(uiModel, patients, districtName, providerId);
+
+        prepareModelForListView(uiModel, districtName, providerId);
         setSearchParamsIntoCookies(response, districtName, providerId);
         return "patient/patientList";
     }
@@ -137,9 +136,9 @@ public class PatientController extends BaseWebController {
     private List<Patient> getPatientsFor(String districtName, String providerId) {
         List<Patient> patients;
         if (isNotEmpty(providerId))
-            patients = patientPagingService.getAllWithActiveTreatmentForProvider(providerId);
+            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
         else if (isNotEmpty(districtName))
-            patients = patientPagingService.searchBy(districtName);
+            patients = patientService.searchBy(districtName);
         else
             patients = new ArrayList<>();
 
@@ -192,8 +191,7 @@ public class PatientController extends BaseWebController {
 
     }
 
-    private void prepareModelForListView(Model uiModel, List<Patient> patients, String districtName, String providerId) {
-        uiModel.addAttribute(PATIENT_LIST, patients);
+    private void prepareModelForListView(Model uiModel, String districtName, String providerId) {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
         uiModel.addAttribute(SELECTED_PROVIDER, providerId);

@@ -46,30 +46,26 @@
                 <td class="tbId">{{item.tbId}}</td>
                 <td id="patient_{{item.patientId}}_ProviderId">{{item.currentTreatment.providerId}}</td>
                 <td id="patient_{{item.patientId}}_Village">
-                {{item.currentTreatment.patientAddress.address_village}}
+                {{item.addressVillage}}
                 </td>
                 <td id="patient_{{item.patientId}}_District">{{item.currentTreatment.providerDistrict}}</td>
                 <td id="patient_{{item.patientId}}_TreatmentCategory">
                 {{item.treatmentCategoryName}}
                 </td>
                 <td id="patient_{{item.patientId}}_TherapyCreationDate">
-                    <#--<#if patient.currentTreatment.startDate?? >-->
-                                {{item.currentTreatment.startDateAsString}}
-                            <#--</#if>-->
+                                {{item.currentTreatmentStartDate}}
                 </td>
                 <td id="patient_{{item.patientId}}_TreatmentStartDate">
-                    <#--<#if patient.currentTherapy.startDate?? >-->
-                                {{item.currentTherapy.startDateAsString}}
-                            <#--</#if>-->
+                                {{item.therapyStartDate}}
                 </td>
                 <td id="patient_{{item.patientId}}_IPProgress">
-                {{item.IPProgress}}
+                {{item.ipProgress}}
                 </td>
                 <td id="patient_{{item.patientId}}_CPProgress">
-                {{item.CPProgress}}
+                {{item.cpProgress}}
                 </td>
                 <td id="patient_{{item.patientId}}_MissedDoses">
-                {{item.cumulativeDosesNotTaken}}
+                {{item.cumulativeMissedDoses}}
                 </td>
             </tr>
     </tbody>
