@@ -33,9 +33,9 @@
     </tr>
     </thead>
     <tbody>
-        <tr class="patient-listing" ng-repeat="item in data.results"
+        <tr class="patient-listing link" ng-repeat="item in data.results"
             id="PatientRows_{{item.patientId}}"
-            containerId="{{item.patientId}}">
+            containerId="{{item.patientId}}" redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />">
             <#--<tr id="patientList_{{item.patientId}}"/>-->
             <#--<tr id="patientList_{{item.patientId}}" class="<#if patient.currentTreatmentPaused>paused</#if> link"-->
                 <#--redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />">-->

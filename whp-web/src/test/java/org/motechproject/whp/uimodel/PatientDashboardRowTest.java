@@ -102,6 +102,7 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getIpProgress(), is(patient.getIPProgress()));
         assertThat(patientDashboardRow.getCpProgress(), is(patient.getCPProgress()));
         assertThat(patientDashboardRow.getCumulativeMissedDoses(), is(patient.getCumulativeDosesNotTaken()));
+        assertThat(patientDashboardRow.isCurrentTreatmentPaused(), is(therapy.isCurrentTreatmentPaused()));
 
     }
 }
