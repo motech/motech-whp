@@ -1,7 +1,10 @@
 package org.motechproject.whp.it;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
@@ -64,20 +67,53 @@ public class PatientPagingServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFetchAllPatients(){
+    public void shouldFetchTotalRowsOfPatientsFetchAfterFilteringDistrictAndProviderId(){
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
+        Patient patient2 = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
+        Patient patient3 = new PatientBuilder().withDefaults().withPatientId("patientId3").withProviderId("DontPickMe").build();
+        allPatients.add(patient1);
+        allPatients.add(patient2);
+        allPatients.add(patient3);
 
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withCaseId("patientId1")
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
-                .withPatientAge(50)
-                .withAddressDistrict("testDistrict")
-                .withTbId("elevenDigit")
-                .build();
-        patientService.createPatient(patientRequest);
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("selectedDistrict", patient1.getCurrentTreatment().getProviderDistrict());
+        filterParams.put("selectedProvider", patient1.getCurrentTreatment().getProviderId());
 
-        List<Patient> patientList = patientPagingService.getAll();
+        Integer countsPatientsAfterFiltering = patientPagingService.countRowsReturnedAfterFiltering(filterParams);
 
-        assertThat(patientList.size(), is(1));
+
+        MatcherAssert.assertThat(countsPatientsAfterFiltering, Is.is(2));
     }
+
+    @Test
+    public void shouldFetchTotalRowsOfPatientsFetchAfterFilteringDistrictAndProviderIdWhenDisctrictIsNull(){
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
+        Patient patient2 = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
+        Patient patient3 = new PatientBuilder().withDefaults().withPatientId("patientId3").withProviderId("DontPickMe").build();
+        allPatients.add(patient1);
+        allPatients.add(patient2);
+        allPatients.add(patient3);
+
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("selectedProvider", patient3.getCurrentTreatment().getProviderId());
+
+        Integer countsPatientsAfterFiltering = patientPagingService.countRowsReturnedAfterFiltering(filterParams);
+
+        MatcherAssert.assertThat(countsPatientsAfterFiltering, Is.is(1));
+    }
+
+    @Test
+    public void shouldFetchZeroTotalRowsWhenProviderIdAndDistrictIdIsNull(){
+        Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
+        Patient patient3 = new PatientBuilder().withDefaults().withPatientId("patientId3").withProviderId("DontPickMe").build();
+        allPatients.add(patient1);
+        allPatients.add(patient3);
+
+        FilterParams filterParams = new FilterParams();
+        Integer countsPatientsAfterFiltering = patientPagingService.countRowsReturnedAfterFiltering(filterParams);
+
+        MatcherAssert.assertThat(countsPatientsAfterFiltering, Is.is(0));
+    }
+
 
 }

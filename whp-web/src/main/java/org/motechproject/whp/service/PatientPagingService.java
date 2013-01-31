@@ -8,6 +8,7 @@ import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PatientDashboardRow;
+import org.motechproject.whp.patient.domain.PatientFilterKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(Integer.parseInt(allPatients.count()));
+        pageResults.setTotalRows(countRowsReturnedAfterFiltering(nonEmptyParams));
         return pageResults;
     }
 
@@ -56,21 +57,26 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
         return patientDashboardRows;
     }
 
-    public List<Patient> getAll() {
-        return allPatients.getAll();
-    }
-
     @Override
     public String entityName() {
         return "patient_results";
-    }
-
-    public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
-        return allPatients.getAllWithActiveTreatmentFor(providerId);
     }
 
     public List<Patient> searchBy(String districtName) {
         return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
     }
 
+    public Integer countRowsReturnedAfterFiltering(FilterParams filterParams) {
+        String selectedDistrict = PatientFilterKeys.SelectedDistrict.value();
+        String selectedProvider = PatientFilterKeys.SelectedProvider.value();
+        Integer noRows = 0;
+
+        if(filterParams.containsKey(selectedProvider)){
+            return allPatients.getAllWithActiveTreatmentFor(filterParams.get(selectedProvider).toString()).size();
+        }
+        else if(filterParams.containsKey(selectedDistrict)){
+                return allPatients.getAllUnderActiveTreatmentInDistrict(filterParams.get(selectedDistrict).toString()).size();
+        }
+        return noRows;
+    }
 }

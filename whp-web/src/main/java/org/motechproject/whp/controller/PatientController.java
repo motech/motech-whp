@@ -60,7 +60,6 @@ public class PatientController extends BaseWebController {
     private TreatmentCardService treatmentCardService;
     private ProviderRemarksService providerRemarksService;
 
-
     @Autowired
     public PatientController(PatientService patientService,
                              PatientPagingService patientPagingService,
@@ -119,38 +118,6 @@ public class PatientController extends BaseWebController {
     public static String redirectToPatientDashboardURL(String patientId) {
         return "redirect:/patients/show?patientId=" + patientId;
     }
-
-    @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam(value = SELECTED_DISTRICT, required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
-
-        prepareModelForListView(uiModel, districtName, providerId);
-        setSearchParamsIntoCookies(response, districtName, providerId);
-        return "patient/patientList";
-    }
-
-    private void setSearchParamsIntoCookies(HttpServletResponse response, String districtName, String providerId) {
-        setCookieValue(response, SELECTED_DISTRICT, districtName);
-        setCookieValue(response, SELECTED_PROVIDER, providerId);
-    }
-
-    private List<Patient> getPatientsFor(String districtName, String providerId) {
-        List<Patient> patients;
-        if (isNotEmpty(providerId))
-            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
-        else if (isNotEmpty(districtName))
-            patients = patientService.searchBy(districtName);
-        else
-            patients = new ArrayList<>();
-
-        return patients;
-    }
-
-    private List<Patient> getAllPatients() {
-        List<Patient> patients;
-        patients = patientPagingService.getAll();
-        return patients;
-    }
-
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
     public String adjustPhaseStartDates(@RequestParam("patientId") String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {

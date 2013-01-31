@@ -43,6 +43,25 @@ public class SearchByDistrictTestPart extends AllPatientsTestPart {
         assertThat(patients.size(), is(1));
         assertThat(patients.get(0).getPatientId(), is(patientId2));
     }
+
+    @Test
+    public void shouldReturnNoPatientsIfNoDistrictOrProviderIdGivenForTheGivenPage() {
+        int startIndex = 0;       //page starts from zero
+        int rowsPerPage = 2;
+        String district2Name = "district2";
+        String patientId2 = "id2";
+
+        filterParams = new FilterParams();
+
+        createPatient("id1", "providerid1", "district1");
+        createPatient(patientId2, "providerid2", district2Name);
+
+        List<Patient> patients = allPatients.filter(filterParams, sortParams, startIndex, rowsPerPage);
+
+        assertThat(patients.size(), is(0));
+    }
+
+
     @Test
     public void shouldFetchByDistrict() {
         String provider1 = "provider1";
