@@ -52,10 +52,6 @@
             <artifactId>whp-reporting</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject.whp-contrib</groupId>
-            <artifactId>motech-couchdb-lucene</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>

@@ -12,11 +12,11 @@ import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
-import org.motechproject.whp.container.util.URLEscape;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.query.ContainerTrackingQueryDefinition;
 import org.motechproject.whp.container.query.InTreatmentContainerTrackingQueryDefinition;
 import org.motechproject.whp.container.query.PreTreatmentContainerTrackingQueryDefinition;
+import org.motechproject.whp.container.util.URLEscape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -25,16 +25,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.motechproject.whp.common.domain.RegistrationInstance.InTreatment;
-import static org.motechproject.whp.common.domain.RegistrationInstance.PreTreatment;
-
 @Repository
 public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository<Container> {
 
     public static final String SORT_BY_ASCENDING = "asc";
 
     @Autowired
-    public AllContainerTrackingRecords(@Qualifier("whpContainerCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
+    public AllContainerTrackingRecords(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
         super(Container.class, whpLuceneAwareCouchDbConnector);
         IndexUploader uploader = new IndexUploader();
 

@@ -56,4 +56,9 @@
         </property>
     </bean>
 
+    <bean id="whpLuceneAwareCouchDbConnector" class="com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector">
+        <constructor-arg value="motech-whp"/>
+        <constructor-arg ref="whpDbInstance"/>
+    </bean>
+
 </beans>
