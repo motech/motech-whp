@@ -13,6 +13,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
+import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
@@ -26,7 +27,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +49,7 @@ public class PatientController extends BaseWebController {
     public static final String PATIENT_LIST = "patientList";
     private ProviderService providerService;
     private PatientService patientService;
+    private PatientPagingService patientPagingService;
 
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private AbstractMessageSource messageSource;
@@ -56,9 +57,9 @@ public class PatientController extends BaseWebController {
     private TreatmentCardService treatmentCardService;
     private ProviderRemarksService providerRemarksService;
 
-
     @Autowired
     public PatientController(PatientService patientService,
+                             PatientPagingService patientPagingService,
                              TreatmentCardService treatmentCardService,
                              TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                              ProviderService providerService,
@@ -68,6 +69,7 @@ public class PatientController extends BaseWebController {
                              ProviderRemarksService providerRemarksService) {
 
         this.patientService = patientService;
+        this.patientPagingService = patientPagingService;
         this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
@@ -89,8 +91,7 @@ public class PatientController extends BaseWebController {
     public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
                        @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
                        Model uiModel) {
-        List<Patient> patients = getPatientsFor(districtName, providerId);
-        prepareModelForListView(uiModel, patients, districtName, providerId);
+        prepareModelForListView(uiModel, districtName, providerId);
         return "patient/list";
     }
 
@@ -111,31 +112,6 @@ public class PatientController extends BaseWebController {
 
     public static String redirectToPatientDashboardURL(String patientId) {
         return "redirect:/patients/show?patientId=" + patientId;
-    }
-
-    @RequestMapping(value = "search", method = RequestMethod.POST)
-    public String filterByDistrictAndProvider(@RequestParam(value = "selectedDistrict", required = false) String districtName, @RequestParam(value = SELECTED_PROVIDER, required = false) String providerId, Model uiModel, HttpServletResponse response) {
-        List<Patient> patients = getPatientsFor(districtName, providerId);
-        prepareModelForListView(uiModel, patients, districtName, providerId);
-        setSearchParamsIntoCookies(response, districtName, providerId);
-        return "patient/patientList";
-    }
-
-    private void setSearchParamsIntoCookies(HttpServletResponse response, String districtName, String providerId) {
-        setCookieValue(response, SELECTED_DISTRICT, districtName);
-        setCookieValue(response, SELECTED_PROVIDER, providerId);
-    }
-
-    private List<Patient> getPatientsFor(String districtName, String providerId) {
-        List<Patient> patients;
-        if (isNotEmpty(providerId))
-            patients = patientService.getAllWithActiveTreatmentForProvider(providerId);
-        else if (isNotEmpty(districtName))
-            patients = patientService.searchBy(districtName);
-        else
-            patients = new ArrayList<>();
-
-        return patients;
     }
 
     @RequestMapping(value = "adjustPhaseStartDates", method = RequestMethod.POST)
@@ -169,8 +145,7 @@ public class PatientController extends BaseWebController {
 
     }
 
-    private void prepareModelForListView(Model uiModel, List<Patient> patients, String districtName, String providerId) {
-        uiModel.addAttribute(PATIENT_LIST, patients);
+    private void prepareModelForListView(Model uiModel, String districtName, String providerId) {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute(SELECTED_DISTRICT, districtName);
         uiModel.addAttribute(SELECTED_PROVIDER, providerId);

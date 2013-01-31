@@ -4,6 +4,8 @@ import org.ektorp.CouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.patient.WHPPatientConstants;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -18,6 +20,12 @@ public class AllPatientsTest {
 
     @Mock
     private CouchDbConnector dbConnector;
+
+    @Mock
+    private FilterParams filterParams;
+
+    @Mock
+    private SortParams sortParams;
 
     private AllPatients allPatients;
 
@@ -34,5 +42,4 @@ public class AllPatientsTest {
 
         verify(eventContext).send(WHPPatientConstants.PATIENT_UPDATED_SUBJECT, patient);
     }
-
 }

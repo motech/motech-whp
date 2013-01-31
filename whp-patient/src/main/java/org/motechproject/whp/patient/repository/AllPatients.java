@@ -8,11 +8,14 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.Countable;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PatientFilterKeys;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +30,6 @@ import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_
 
 @Repository
 public class AllPatients extends MotechBaseRepository<Patient> implements Countable {
-
 
     private EventContext eventContext;
 
@@ -79,19 +81,44 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     @View(name = "find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
             "emit([doc.currentTherapy.currentTreatment.providerId, doc.currentTherapy.currentTreatment.startDate], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
-        if (providerId == null)
+        return getAllWithActiveTreatmentForAGivenPage(providerId, null , null);
+    }
+
+    private List<Patient> getAllWithActiveTreatmentForAGivenPage(String selectedProvider, Integer startIndex, Integer rowsPerPage) {
+        if (selectedProvider == null)
             return new ArrayList<>();
-        String keyword = providerId.toLowerCase();
+        String keyword = selectedProvider.toLowerCase();
 
         ComplexKey startKey = ComplexKey.of(keyword, null);
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        ViewQuery q;
+
+        if(rowsPerPage == null || startIndex == null){
+            q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
+                    .startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        }else{
+            q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
+                .startKey(startKey).endKey(endKey)
+                .skip(startIndex * rowsPerPage).limit(rowsPerPage)
+                .includeDocs(true).inclusiveEnd(true);
+        }
         return db.queryView(q, Patient.class);
     }
 
-    @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
     public List<Patient> getAllUnderActiveTreatmentInDistrict(String district) {
-        ViewQuery q = createQuery("find_by_district_having_active_treatment_v1").key(district).includeDocs(true);
+        return  getAllUnderActiveTreatmentInDistrictForAGivenPage(district, null, null);
+    }
+
+    @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
+    public List<Patient> getAllUnderActiveTreatmentInDistrictForAGivenPage(String district, Integer startIndex, Integer rowsPerPage) {
+
+        ViewQuery q;
+        if (startIndex==null || rowsPerPage==null){
+            q = createQuery("find_by_district_having_active_treatment_v1").key(district).includeDocs(true);
+        }
+        else {
+            q = createQuery("find_by_district_having_active_treatment_v1").skip(startIndex * rowsPerPage).limit(rowsPerPage).key(district).includeDocs(true);
+        }
         List<Patient> patients = db.queryView(q, Patient.class);
         Collections.sort(patients, new PatientComparatorByFirstName());
         return patients;
@@ -111,6 +138,18 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
     public List<Patient> getAll(int pageNumber, int pageSize) {
         ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
         return db.queryView(query, Patient.class);
+    }
+
+    public List<Patient> filter(FilterParams nonEmptyParams, SortParams sortCriteria, int startIndex, Integer rowsPerPage) {
+        String selectedDistrict = PatientFilterKeys.SelectedDistrict.value();
+        String selectedProvider = PatientFilterKeys.SelectedProvider.value();
+
+        if (nonEmptyParams.containsKey(selectedProvider)) {
+            return getAllWithActiveTreatmentForAGivenPage(nonEmptyParams.get(selectedProvider).toString(), startIndex, rowsPerPage);
+        } else if (nonEmptyParams.containsKey(selectedDistrict)) {
+            return getAllUnderActiveTreatmentInDistrictForAGivenPage(nonEmptyParams.get(selectedDistrict).toString(), startIndex, rowsPerPage);
+        } else
+            return new ArrayList<>();
     }
 
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")

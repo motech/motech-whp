@@ -9,7 +9,8 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
         PersistenceTestPart.class,
         SearchByPatientIdTestPart.class,
         SearchByProviderIdTestPart.class,
-        SearchByActivePatientsTestPart.class
+        SearchByActivePatientsTestPart.class,
+        SearchByDistrictTestPart.class
 })
 public class AllPatientsIT extends SpringIntegrationTest {
 }

@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
@@ -17,6 +16,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
+import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
@@ -42,7 +42,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
@@ -57,6 +56,9 @@ public class PatientControllerTest extends BaseControllerTest {
     PatientService patientService;
     @Mock
     ProviderService providerService;
+    @Mock
+    PatientPagingService patientPagingService;
+
     @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
@@ -92,7 +94,7 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
+        patientController = new PatientController(patientService, patientPagingService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -222,7 +224,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .perform(get("/patients/list").cookie(new Cookie(PatientController.SELECTED_DISTRICT, district)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(view().name("patient/list"));
     }
@@ -242,57 +243,7 @@ public class PatientControllerTest extends BaseControllerTest {
                                 new Cookie(PatientController.SELECTED_DISTRICT, "district")))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("selectedProvider", providerId))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(view().name("patient/list"));
     }
-
-    @Test
-    public void shouldSearchForPatientsByDistrict() throws Exception {
-        String district = "Vaishali";
-        Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("providerid").withTreatmentUnderDistrict("some other district").build();
-
-        List<Patient> expectedListOfPatients = asList(patientUnderDistrict);
-
-        when(patientService.searchBy(district)).thenReturn(expectedListOfPatients);
-
-
-        standaloneSetup(patientController).build()
-                .perform(post("/patients/search").param("selectedDistrict", district))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("districts", districts))
-                .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
-                .andExpect(cookie().value("selectedDistrict", district))
-                .andExpect(view().name("patient/patientList"));
-
-        verify(patientService).searchBy(district);
-    }
-
-    @Test
-    public void shouldSearchForPatientsByProvider() throws Exception {
-        String providerId = "provider1";
-        String district = "Vaishali";
-
-        Provider provider = new Provider(providerId, "", district, DateUtil.now());
-        Patient patientUnderProviderA = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).withTreatmentUnderDistrict("some other district").build();
-
-        when(providerService.findByProviderId(providerId)).thenReturn(provider);
-        List<Patient> expectedListOfPatients = asList(patientUnderProviderA);
-        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(expectedListOfPatients);
-
-        standaloneSetup(patientController).build()
-                .perform(post("/patients/search").param("selectedDistrict", district).param("selectedProvider", providerId))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("districts", districts))
-                .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("selectedProvider", providerId))
-                .andExpect(model().attribute("patientList", expectedListOfPatients))
-                .andExpect(cookie().value("selectedDistrict", district))
-                .andExpect(cookie().value("selectedProvider", providerId))
-                .andExpect(view().name("patient/patientList"));
-
-        verify(patientService).getAllWithActiveTreatmentForProvider(providerId);
-    }
-
 }
