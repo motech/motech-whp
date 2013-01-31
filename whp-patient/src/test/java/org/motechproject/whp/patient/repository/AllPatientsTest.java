@@ -1,6 +1,6 @@
 package org.motechproject.whp.patient.repository;
 
-import org.ektorp.CouchDbConnector;
+import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ public class AllPatientsTest {
     private EventContext eventContext;
 
     @Mock
-    private CouchDbConnector dbConnector;
+    private LuceneAwareCouchDbConnector dbConnector;
 
     @Mock
     private FilterParams filterParams;

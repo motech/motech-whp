@@ -1,21 +1,25 @@
 package org.motechproject.whp.patient.repository;
 
+import com.github.ldriscoll.ektorplucene.CustomLuceneResult;
+import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
+import com.github.ldriscoll.ektorplucene.util.IndexUploader;
+import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ComplexKey;
-import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
-import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.Countable;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.PatientFilterKeys;
+import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,14 +33,20 @@ import java.util.List;
 import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
 
 @Repository
-public class AllPatients extends MotechBaseRepository<Patient> implements Countable {
+public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implements Countable {
 
     private EventContext eventContext;
 
     @Autowired
-    public AllPatients(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector, EventContext eventContext) {
-        super(Patient.class, dbCouchDbConnector);
+    public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector, EventContext eventContext) {
+        super(Patient.class, whpLuceneAwareCouchDbConnector);
         this.eventContext = eventContext;
+        IndexUploader uploader = new IndexUploader();
+
+        PatientQueryDefinition patientQueryDefinition = new PatientQueryDefinition();
+
+        uploader.updateSearchFunctionIfNecessary(db, patientQueryDefinition.viewName(), patientQueryDefinition.searchFunctionName(), patientQueryDefinition.indexFunction());
+        new SearchFunctionUpdater().updateAnalyzer(db, patientQueryDefinition.viewName(), patientQueryDefinition.searchFunctionName(), "keyword");
     }
 
     @Override
@@ -140,18 +150,6 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
         return db.queryView(query, Patient.class);
     }
 
-    public List<Patient> filter(FilterParams nonEmptyParams, SortParams sortCriteria, int startIndex, Integer rowsPerPage) {
-        String selectedDistrict = PatientFilterKeys.SelectedDistrict.value();
-        String selectedProvider = PatientFilterKeys.SelectedProvider.value();
-
-        if (nonEmptyParams.containsKey(selectedProvider)) {
-            return getAllWithActiveTreatmentForAGivenPage(nonEmptyParams.get(selectedProvider).toString(), startIndex, rowsPerPage);
-        } else if (nonEmptyParams.containsKey(selectedDistrict)) {
-            return getAllUnderActiveTreatmentInDistrictForAGivenPage(nonEmptyParams.get(selectedDistrict).toString(), startIndex, rowsPerPage);
-        } else
-            return new ArrayList<>();
-    }
-
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
     public void createViewForProvidersWithActivePatients() {
     }
@@ -187,6 +185,10 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
         return patientIds;
     }
 
+    public List<Patient> filter(FilterParams queryParams, SortParams sortParams, int skip, int limit) {
+        return filter(new PatientQueryDefinition(), queryParams, sortParams, skip, limit);
+    }
+
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
 
         @Override
@@ -205,5 +207,11 @@ public class AllPatients extends MotechBaseRepository<Patient> implements Counta
 
     private String firstValue(ViewResult rows) {
         return (rows.getSize() > 0) ? rows.getRows().get(0).getValue() : null;
+    }
+
+    @Override
+    protected TypeReference<CustomLuceneResult<Patient>> getTypeReference() {
+        return new TypeReference<CustomLuceneResult<Patient>>() {
+        };
     }
 }

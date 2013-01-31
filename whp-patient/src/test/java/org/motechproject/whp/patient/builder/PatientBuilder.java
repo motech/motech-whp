@@ -6,6 +6,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.domain.*;
 
 import java.util.ArrayList;
@@ -203,6 +204,27 @@ public class PatientBuilder {
 
     public PatientBuilder withTherapy(Therapy therapy) {
         patient.setCurrentTherapy(therapy);
+        return this;
+    }
+
+    public PatientBuilder withCumulativeMissedAlertValue(int cumulativeMissedDoses, int severity) {
+        patient.updatePatientAlert(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoses, severity);
+        return this;
+    }
+
+    public PatientBuilder withAdherenceMissedWeeks(int adherenceMissedWeeks, int severity, LocalDate alertDate) {
+        patient.updatePatientAlert(PatientAlertType.AdherenceMissing, adherenceMissedWeeks, severity);
+        patient.getPatientAlerts().adherenceMissingAlert().setAlertDate(alertDate);
+        return this;
+    }
+
+    public PatientBuilder withTreatmentNotStartedDays(int treatmentNotStartedDays, int severity) {
+        patient.updatePatientAlert(PatientAlertType.TreatmentNotStarted, treatmentNotStartedDays, severity);
+        return this;
+    }
+
+    public PatientBuilder withProviderDistrict(String district) {
+        patient.getCurrentTreatment().setProviderDistrict(district);
         return this;
     }
 }
