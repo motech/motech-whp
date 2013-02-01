@@ -8,7 +8,6 @@ import org.motechproject.paginator.service.Paging;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PatientDashboardRow;
-import org.motechproject.whp.patient.domain.PatientFilterKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +24,14 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
     }
 
     @Override
-    public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
-
-        int startIndex = (pageNumber - 1);
-        FilterParams nonEmptyParams = filterOutEmptyParams(searchCriteria);
+    public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams filterParams, SortParams sortCriteria) {
+        int startIndex = (pageNumber - 1) * rowsPerPage;
+        FilterParams nonEmptyParams = filterOutEmptyParams(filterParams);
         List<Patient> rowsForPage = allPatients.filter(nonEmptyParams, sortCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(countRowsReturnedAfterFiltering(nonEmptyParams));
+        pageResults.setTotalRows(allPatients.count(filterParams));
         return pageResults;
     }
 
@@ -49,7 +47,6 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
     }
 
     private List prepareResultsModel(List<Patient> rows) {
-
         ArrayList<PatientDashboardRow> patientDashboardRows = new ArrayList<>();
         for(Patient patient: rows){
             patientDashboardRows.add(new PatientDashboardRow(patient));
@@ -60,23 +57,5 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
     @Override
     public String entityName() {
         return "patient_results";
-    }
-
-    public List<Patient> searchBy(String districtName) {
-        return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
-    }
-
-    public Integer countRowsReturnedAfterFiltering(FilterParams filterParams) {
-        String selectedDistrict = PatientFilterKeys.SelectedDistrict.value();
-        String selectedProvider = PatientFilterKeys.SelectedProvider.value();
-        Integer noRows = 0;
-
-        if(filterParams.containsKey(selectedProvider)){
-            return allPatients.getAllWithActiveTreatmentFor(filterParams.get(selectedProvider).toString()).size();
-        }
-        else if(filterParams.containsKey(selectedDistrict)){
-                return allPatients.getAllUnderActiveTreatmentInDistrict(filterParams.get(selectedDistrict).toString()).size();
-        }
-        return noRows;
     }
 }
