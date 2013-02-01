@@ -5,15 +5,16 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.model.AlertDateFilters;
+import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
-import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
@@ -36,6 +37,7 @@ import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
 import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDate.date;
 
 @Controller
@@ -43,39 +45,35 @@ import static org.motechproject.whp.common.util.WHPDate.date;
 public class PatientController extends BaseWebController {
 
     public static final String DISTRICT_LIST = "districts";
-    public static final String SELECTED_DISTRICT = "selectedDistrict";
-    public static final String SELECTED_PROVIDER = "selectedProvider";
-
     public static final String PATIENT_LIST = "patientList";
+
     private ProviderService providerService;
     private PatientService patientService;
-    private PatientPagingService patientPagingService;
-
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private AbstractMessageSource messageSource;
     private AllDistricts allDistrictsCache;
     private TreatmentCardService treatmentCardService;
     private ProviderRemarksService providerRemarksService;
+    private AllTreatmentCategories allTreatmentCategories;
 
     @Autowired
     public PatientController(PatientService patientService,
-                             PatientPagingService patientPagingService,
                              TreatmentCardService treatmentCardService,
                              TreatmentUpdateOrchestrator treatmentUpdateOrchestrator,
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
                              AllDistricts allDistrictsCache,
-                             ProviderRemarksService providerRemarksService) {
+                             ProviderRemarksService providerRemarksService, AllTreatmentCategories allTreatmentCategories) {
 
         this.patientService = patientService;
-        this.patientPagingService = patientPagingService;
         this.treatmentCardService = treatmentCardService;
         this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.messageSource = messageSource;
         this.providerRemarksService = providerRemarksService;
+        this.allTreatmentCategories = allTreatmentCategories;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -88,10 +86,8 @@ public class PatientController extends BaseWebController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String list(@CookieValue(value = SELECTED_DISTRICT, required = false) String districtName,
-                       @CookieValue(value = SELECTED_PROVIDER, required = false) String providerId,
-                       Model uiModel) {
-        prepareModelForListView(uiModel, districtName, providerId);
+    public String list(Model uiModel) {
+        prepareModelForListView(uiModel);
         return "patient/list";
     }
 
@@ -140,16 +136,17 @@ public class PatientController extends BaseWebController {
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);
-        uiModel.addAttribute("weekStartDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().startDate()).value());
-        uiModel.addAttribute("weekEndDate", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().endDate()).value());
+        uiModel.addAttribute("weekStartDate", WHPDate.date(currentAdherenceCaptureWeek().startDate()).value());
+        uiModel.addAttribute("weekEndDate", WHPDate.date(currentAdherenceCaptureWeek().endDate()).value());
 
     }
 
-    private void prepareModelForListView(Model uiModel, String districtName, String providerId) {
+    private void prepareModelForListView(Model uiModel) {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
-        uiModel.addAttribute(SELECTED_DISTRICT, districtName);
-        uiModel.addAttribute(SELECTED_PROVIDER, providerId);
-        uiModel.addAttribute("lastSunday", WHPDate.date(TreatmentWeekInstance.currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
+        uiModel.addAttribute("alertTypes", new AlertTypeFilters());
+        uiModel.addAttribute("alertDates", new AlertDateFilters());
+        uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
+        uiModel.addAttribute("lastSunday", WHPDate.date(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
     }
 
 

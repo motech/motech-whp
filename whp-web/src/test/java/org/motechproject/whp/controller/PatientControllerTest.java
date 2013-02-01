@@ -14,6 +14,10 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
+import org.motechproject.whp.patient.model.AlertDateFilters;
+import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.service.PatientPagingService;
@@ -27,7 +31,6 @@ import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.context.support.StaticMessageSource;
 import org.springframework.ui.Model;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -71,6 +74,11 @@ public class PatientControllerTest extends BaseControllerTest {
     HttpSession session;
     @Mock
     ProviderRemarksService providerRemarksService;
+    @Mock
+    AllTreatmentCategories allTreatmentCategories;
+    @Mock
+    List<TreatmentCategory> treatmentCategories;
+
 
     AbstractMessageSource messageSource;
 
@@ -79,6 +87,8 @@ public class PatientControllerTest extends BaseControllerTest {
     PatientController patientController;
 
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
+    AlertTypeFilters alertTypes = new AlertTypeFilters();
+    AlertDateFilters alertDates = new AlertDateFilters();
 
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
@@ -94,7 +104,7 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, patientPagingService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService);
+        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -104,6 +114,7 @@ public class PatientControllerTest extends BaseControllerTest {
         when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
         auditLogs = mock(List.class);
         when(providerRemarksService.getRemarks(patient)).thenReturn(auditLogs);
+        when(allTreatmentCategories.getAll()).thenReturn(treatmentCategories);
     }
 
     private void setupMessageSource() {
@@ -208,42 +219,9 @@ public class PatientControllerTest extends BaseControllerTest {
                 .perform(get("/patients/list"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("districts", districts))
-                .andExpect(view().name("patient/list"));
-    }
-
-    @Test
-    public void shouldFetchListOfPatientsIfDistrictNameIsPresentInCookies() throws Exception {
-        String district = "Vaishali";
-        Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId("providerid").withTreatmentUnderDistrict("some other district").build();
-
-        List<Patient> expectedListOfPatients = asList(patientUnderDistrict);
-
-        when(patientService.searchBy(district)).thenReturn(expectedListOfPatients);
-
-        standaloneSetup(patientController).build()
-                .perform(get("/patients/list").cookie(new Cookie(PatientController.SELECTED_DISTRICT, district)))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("selectedDistrict", district))
-                .andExpect(model().attribute("districts", districts))
-                .andExpect(view().name("patient/list"));
-    }
-
-    @Test
-    public void shouldFetchListOfPatientsIfProviderIdIsPresentInCookies() throws Exception {
-        String providerId = "providerid";
-        Patient patientUnderDistrict = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).withTreatmentUnderDistrict("some other district").build();
-
-        List<Patient> expectedListOfPatients = asList(patientUnderDistrict);
-
-        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(expectedListOfPatients);
-
-        standaloneSetup(patientController).build()
-                .perform(get("/patients/list")
-                        .cookie(new Cookie(PatientController.SELECTED_PROVIDER, providerId),
-                                new Cookie(PatientController.SELECTED_DISTRICT, "district")))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("selectedProvider", providerId))
-                .andExpect(model().attribute("districts", districts))
+                .andExpect(model().attribute("alertTypes", alertTypes))
+                .andExpect(model().attribute("alertDates", alertDates))
+                .andExpect(model().attribute("treatmentCategories", treatmentCategories))
                 .andExpect(view().name("patient/list"));
     }
 }
