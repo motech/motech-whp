@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.query;
 
+import lombok.Getter;
 import org.motechproject.couchdb.lucene.query.QueryDefinition;
 import org.motechproject.couchdb.lucene.query.field.Field;
 import org.motechproject.couchdb.lucene.query.field.QueryField;
@@ -17,6 +18,9 @@ public class PatientQueryDefinition implements QueryDefinition {
     public static final String ALERT_SEVERITY = "AlertSeverity";
     public static final String ALERT_VALUE = "AlertValue";
     public static final String ALERT_DATE = "AlertDate";
+
+    @Getter
+    protected final QueryField isActive = new QueryField("isActive", STRING);
     protected final QueryField patientId = new QueryField("patientId", STRING);
     protected final QueryField providerId = new QueryField("providerId", STRING);
     protected final QueryField providerDistrict = new QueryField("providerDistrict", STRING);
@@ -27,6 +31,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     @Override
     public List<Field> fields() {
         List<Field> fields = new ArrayList<>();
+        fields.add(isActive);
         fields.add(patientId);
         fields.add(providerId);
         fields.add(providerDistrict);
@@ -59,6 +64,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                 "if(doc.type == 'Patient') { " +
                     "var index=new Document(); " +
                     "index.add(doc.patientId, {field: 'patientId'}); " +
+                    "index.add(doc.onActiveTreatment, {field: 'isActive'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
                     "index.add(doc.currentTherapy.treatmentCategory, {field: 'treatmentCategory'}); " +

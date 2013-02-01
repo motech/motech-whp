@@ -186,11 +186,17 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     }
 
     public List<Patient> filter(FilterParams queryParams, SortParams sortParams, int skip, int limit) {
-        return filter(new PatientQueryDefinition(), queryParams, sortParams, skip, limit);
+        return filter(new PatientQueryDefinition(), activePatientFilter(queryParams), sortParams, skip, limit);
+    }
+
+    private FilterParams activePatientFilter(FilterParams queryParams) {
+        PatientQueryDefinition queryDefinition = new PatientQueryDefinition();
+        queryParams.put(queryDefinition.getIsActive().getName(), "true");
+        return queryParams;
     }
 
     public int count(FilterParams queryParams) {
-        return super.count(new PatientQueryDefinition(), queryParams);
+        return super.count(new PatientQueryDefinition(), activePatientFilter(queryParams));
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {

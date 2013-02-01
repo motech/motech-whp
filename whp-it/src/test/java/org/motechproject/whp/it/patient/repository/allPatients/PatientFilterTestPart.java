@@ -1,5 +1,6 @@
 package org.motechproject.whp.it.patient.repository.allPatients;
 
+import ch.lambdaj.Lambda;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.paginator.contract.FilterParams;
@@ -9,11 +10,17 @@ import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
 import java.util.List;
 
+import static ch.lambdaj.Lambda.having;
+import static ch.lambdaj.Lambda.on;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.joda.time.DateTime.now;
 
 public class PatientFilterTestPart  extends AllPatientsTestPart {
 
@@ -21,6 +28,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     private Patient patient2;
     private Patient patient3;
     private Patient patient4WithoutAlerts;
+    private Patient inactivePatient;
 
     @Before
     public void setUp() {
@@ -53,10 +61,33 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderId("provider3")
                 .withProviderDistrict("district3").build();
 
+        inactivePatient = new PatientBuilder().withDefaults()
+                .withPatientId("patient5")
+                .withProviderId("provider3")
+                .withProviderDistrict("district3").build();
+        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+
         allPatients.add(patient1);
         allPatients.add(patient2);
         allPatients.add(patient3);
         allPatients.add(patient4WithoutAlerts);
+        allPatients.add(inactivePatient);
+    }
+
+    @Test
+    public void shouldReturnAllActivePatients() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(4, searchResults.size());
+        assertEquals(4, allPatients.count(queryParams));
+        assertTrue(hasNoInactivePatients(searchResults));
+    }
+
+    private boolean hasNoInactivePatients(List<Patient> searchResults) {
+        return Lambda.filter(having(on(Patient.class).isOnActiveTreatment(), equalTo(false)), searchResults).size() == 0;
     }
 
     @Test
@@ -69,6 +100,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
 
         assertEquals(2, searchResults.size());
         assertEquals(2, allPatients.count(queryParams));
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 
     @Test
@@ -81,6 +113,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
 
         assertEquals(2, searchResults.size());
         assertEquals(2, allPatients.count(queryParams));
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 
 
@@ -96,6 +129,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, searchResults.size());
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 
     @Test
@@ -110,6 +144,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, searchResults.size());
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 
     @Test
@@ -124,6 +159,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, searchResults.size());
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 
     @Test
@@ -141,5 +177,6 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, searchResults.size());
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        assertTrue(hasNoInactivePatients(searchResults));
     }
 }
