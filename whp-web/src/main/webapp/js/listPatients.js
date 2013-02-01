@@ -9,45 +9,31 @@ function submitOnEnter(key) {
 
 
 function submitFormOnEnterKey() {
-    $('#district').bind('keypress', function (event, e) {
+    $('#providerDistrict').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
-    $('#providerId').bind('keypress', function (event, e) {
+    $('#providerDistrict').bind('keypress', function (event, e) {
         submitOnEnter(e);
     });
 }
 
 function resetFieldsOnInvalidValue() {
-    $("#district").bind("invalid-value", function () {
-        $("#district-autocomplete").val("");
+    $("#providerDistrict").bind("invalid-value", function () {
+        $("#providerDistrict-autocomplete").val("");
     });
 }
 
 function initSearchPane() {
-    $("#district").combobox();
+    $("#providerDistrict").combobox();
     submitFormOnEnterKey();
     resetFieldsOnInvalidValue();
 }
 
 $(function () {
     initSearchPane();
-
     initializeCollapsiblePane('#search-section', '#search-section-header-link', "Show Search Pane", "Hide Search Pane");
-
-    $('#searchButton').click(function () {
-        $("#searchForm").submit();
-    });
-
-    $("#searchForm").submit(function (event) {
-        event.preventDefault();
-        var districtId = $("#district-autocomplete").val();
-        var providerId = $("#providerId").val();
-        var data = {
-            "selectedDistrict":districtId,
-            "selectedProvider":providerId
-        };
-        $.post('/whp/patients/search', data, function (response) {
-            $('#patients').html(response);
-        })
-    });
+//
+//    $('#searchButton').click(function () {
+//        $("#searchForm").submit();
+//    });
 });
