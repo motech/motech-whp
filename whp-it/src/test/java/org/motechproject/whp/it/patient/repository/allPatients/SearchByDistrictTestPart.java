@@ -1,6 +1,7 @@
 package org.motechproject.whp.it.patient.repository.allPatients;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
@@ -26,6 +27,7 @@ public class SearchByDistrictTestPart extends AllPatientsTestPart {
     }
 
     @Test
+    @Ignore
     public void shouldReturnPatientsForADistrictForTheGivenPage() {
         int startIndex = 0;       //page starts from zero
         int rowsPerPage = 2;
@@ -45,6 +47,7 @@ public class SearchByDistrictTestPart extends AllPatientsTestPart {
     }
 
     @Test
+    @Ignore
     public void shouldReturnNoPatientsIfNoDistrictOrProviderIdGivenForTheGivenPage() {
         int startIndex = 0;       //page starts from zero
         int rowsPerPage = 2;

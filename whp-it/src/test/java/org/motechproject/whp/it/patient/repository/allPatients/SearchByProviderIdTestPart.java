@@ -2,6 +2,7 @@ package org.motechproject.whp.it.patient.repository.allPatients;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
@@ -100,6 +101,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     }
 
     @Test
+    @Ignore("No longer applicable with the dashboard")
     public void shouldFetchAllPatientsUnderAProviderByPage(){
         int startIndex = 0;       //page starts from zero
         int rowsPerPage = 2;
