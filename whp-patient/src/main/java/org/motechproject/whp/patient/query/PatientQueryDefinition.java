@@ -50,12 +50,13 @@ public class PatientQueryDefinition implements QueryDefinition {
 
     @Override
     public String searchFunctionName() {
-        return "findByCriteria";
+        return "findPatientsByCriteria";
     }
 
     @Override
     public String indexFunction() {
         return "function(doc) { " +
+                "if(doc.type == 'Patient') { " +
                     "var index=new Document(); " +
                     "index.add(doc.patientId, {field: 'patientId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
@@ -73,7 +74,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "} "+
 
                     "return index;" +
-                "}";
+                " }}";
     }
 
 }

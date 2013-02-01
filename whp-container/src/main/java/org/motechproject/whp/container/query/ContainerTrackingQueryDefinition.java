@@ -35,6 +35,7 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
     @Override
     public String indexFunction() {
         return "function(doc) { " +
+                "if(doc.type == 'Container'){"+
                 "var index=new Document(); " +
                 "index.add(doc.containerId, {field: 'containerId'}); " +
                 "index.add(doc.providerId, {field: 'providerId'}); " +
@@ -59,7 +60,7 @@ public abstract class ContainerTrackingQueryDefinition implements QueryDefinitio
                 "} " +
 
                 "return index;" +
-                "}";
+                " }}";
     }
 
     public String getContainerInstanceFieldName() {
