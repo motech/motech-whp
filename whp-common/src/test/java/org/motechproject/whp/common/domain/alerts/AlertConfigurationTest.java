@@ -3,6 +3,9 @@ package org.motechproject.whp.common.domain.alerts;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.common.service.AlertsPropertiesValues;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
@@ -13,9 +16,15 @@ import static org.motechproject.whp.common.domain.alerts.PatientAlertType.Adhere
 
 public class AlertConfigurationTest extends BaseUnitTest{
 
+    AlertsPropertiesValues alertsPropertiesValues;
+
     @Test
     public void shouldCheckIfAlertShouldBeRunOnCurrentDay() {
-        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(1,2,6), asList(Monday, Wednesday));
+        List<String> adherenceMissingWeeks = asList("1", "2", "6");
+        alertsPropertiesValues = new AlertsPropertiesValues();
+        alertsPropertiesValues.setAdherenceMissingWeeks(adherenceMissingWeeks);
+
+        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks()), asList(Monday, Wednesday));
 
         mockCurrentDate(new LocalDate(2013, 1, 25)); //friday
         assertFalse(alertConfiguration.shouldRunToday());

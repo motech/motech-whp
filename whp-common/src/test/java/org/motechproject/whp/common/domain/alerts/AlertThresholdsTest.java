@@ -1,14 +1,23 @@
 package org.motechproject.whp.common.domain.alerts;
 
 import org.junit.Test;
+import org.motechproject.whp.common.service.AlertsPropertiesValues;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
 public class AlertThresholdsTest {
 
+    AlertsPropertiesValues alertsPropertiesValues;
+
     @Test
     public void shouldReturnAlertThresholdForGivenValue() {
-        AlertThresholds alertThresholds = new AlertThresholds(4, 8, 12);
+        List<String> adherenceMissingWeeks = asList("4", "8", "12");
+        alertsPropertiesValues = new AlertsPropertiesValues();
+        alertsPropertiesValues.setAdherenceMissingWeeks(adherenceMissingWeeks);
+        AlertThresholds alertThresholds = new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks());
 
         assertEquals(new AlertThreshold(0, 0), alertThresholds.getThreshold(2));
         assertEquals(new AlertThreshold(4, 1), alertThresholds.getThreshold(4));

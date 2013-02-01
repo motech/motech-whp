@@ -7,10 +7,10 @@ public class AlertThresholds {
     private List<AlertThreshold> alertThresholds = new ArrayList<>();
     private final AlertThreshold zeroThreshold = new AlertThreshold(0, 0);
 
-    public AlertThresholds(int... thresholds) {
+    public AlertThresholds(List<Integer> thresholds) {
         alertThresholds.add(zeroThreshold);
         int index = 1;
-        for(int threshold : thresholds){
+        for(Integer threshold : thresholds){
             alertThresholds.add(new AlertThreshold(threshold, index ++));
         }
     }

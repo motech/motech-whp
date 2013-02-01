@@ -16,14 +16,23 @@ import static java.util.Arrays.asList;
 public class AllAlertConfigurations {
     Map<PatientAlertType, AlertConfiguration> alertConfigurationMap;
 
-    @Autowired
     AlertsPropertiesValues alertsProperties;
+
+    @Autowired
+    public AllAlertConfigurations(AlertsPropertiesValues alertsPropertiesValues) {
+        this.alertsProperties = alertsPropertiesValues;
+        initializeAlertConfiguration();
+    }
 
     public AllAlertConfigurations(Map<PatientAlertType, AlertConfiguration> alertConfigurationMap) {
         this.alertConfigurationMap = alertConfigurationMap;
     }
 
     public AllAlertConfigurations() {
+        initializeAlertConfiguration();
+    }
+
+    private void initializeAlertConfiguration() {
         alertConfigurationMap = new HashMap<>();
         addAlertConfiguration(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds(), asList(DayOfWeek.Wednesday));
         addAlertConfiguration(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), asList(DayOfWeek.Wednesday));
@@ -46,20 +55,20 @@ public class AllAlertConfigurations {
         return getAlertThresholds(alertType).getThreshold(value);
     }
 
-    public int getAlertSeverityFor(PatientAlertType alertType, int value) {
+    public Integer getAlertSeverityFor(PatientAlertType alertType, int value) {
         return getThresholdFor(alertType, value).getAlertSeverity();
     }
 
     private AlertThresholds getAdherenceMissingAlertThresholds() {
-        return new AlertThresholds(1, 2, 6);
+        return new AlertThresholds(alertsProperties.getAdherenceMissingWeeks());
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(10);
+        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()));
     }
 
     private AlertThresholds getTreatmentNotStartedAlertThresholds() {
-        return new AlertThresholds(10);
+        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()));
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {

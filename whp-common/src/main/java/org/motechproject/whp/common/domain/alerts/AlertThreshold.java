@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class AlertThreshold {
-    private int threshold;
-    private int alertSeverity;
+    private Integer threshold;
+    private Integer alertSeverity;
 
-    public AlertThreshold(int threshold, int alertSeverity) {
+    public AlertThreshold(Integer threshold, Integer alertSeverity) {
         this.threshold = threshold;
         this.alertSeverity = alertSeverity;
     }
