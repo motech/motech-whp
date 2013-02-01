@@ -37,7 +37,7 @@
                                 <label class="control-label">Provider District</label>
 
                                 <div class="controls">
-                                    <select id="providerDistrict" name="providerDistrict" data-id="district-autocomplete">
+                                    <select id="providerDistrict" name="providerDistrict" data-id="providerDistrict-autocomplete">
                                         <option value=""></option>
                                         <#list districts as district>
                                             <option value="${district.name}"

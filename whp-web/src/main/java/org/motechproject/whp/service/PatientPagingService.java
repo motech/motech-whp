@@ -26,8 +26,8 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
     @Override
     public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams filterParams, SortParams sortCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        FilterParams nonEmptyParams = filterOutEmptyParams(filterParams);
-        List<Patient> rowsForPage = allPatients.filter(nonEmptyParams, sortCriteria, startIndex, rowsPerPage);
+        filterParams = filterOutEmptyParams(filterParams);
+        List<Patient> rowsForPage = allPatients.filter(filterParams, sortCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
