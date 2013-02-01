@@ -12,7 +12,10 @@ import static org.motechproject.whp.common.domain.alerts.PatientAlertType.Treatm
 
 @Data
 public class PatientAlerts {
+
     private Map<PatientAlertType, PatientAlert> alerts = new HashMap<>();
+
+    private boolean hasAlerts;
 
     public PatientAlert getAlert(PatientAlertType alertType) {
         if(alerts.containsKey(alertType)){
@@ -38,5 +41,20 @@ public class PatientAlerts {
 
     public void updateAlertStatus(PatientAlertType alertType, int value, int severity) {
         getAlert(alertType).update(value, severity);
+        updateAlertStatus();
+    }
+
+    private void updateAlertStatus() {
+        for(PatientAlert alert : alerts.values()){
+            if(alert.hasAlert()){
+                hasAlerts = true;
+                return;
+            }
+        }
+        hasAlerts = false;
+    }
+
+    public boolean hasAlerts(){
+        return hasAlerts;
     }
 }

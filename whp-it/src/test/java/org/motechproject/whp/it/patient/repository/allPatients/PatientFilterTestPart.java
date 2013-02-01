@@ -10,6 +10,7 @@ import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
@@ -29,6 +30,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     private Patient patient3;
     private Patient patient4WithoutAlerts;
     private Patient inactivePatient;
+    private final String UNIQUE_TREATMENT_CATEGORY_CODE = "05";
 
     @Before
     public void setUp() {
@@ -59,7 +61,13 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         patient4WithoutAlerts = new PatientBuilder().withDefaults()
                 .withPatientId("patient4")
                 .withProviderId("provider3")
-                .withProviderDistrict("district3").build();
+                .withProviderDistrict("district3")
+                .build();
+
+        TreatmentCategory treatmentCategory = new TreatmentCategory();
+        treatmentCategory.setName("Unique treatment category");
+        treatmentCategory.setCode(UNIQUE_TREATMENT_CATEGORY_CODE);
+        patient4WithoutAlerts.getCurrentTherapy().setTreatmentCategory(treatmentCategory);
 
         inactivePatient = new PatientBuilder().withDefaults()
                 .withPatientId("patient5")
@@ -86,8 +94,30 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertTrue(hasNoInactivePatients(searchResults));
     }
 
-    private boolean hasNoInactivePatients(List<Patient> searchResults) {
-        return Lambda.filter(having(on(Patient.class).isOnActiveTreatment(), equalTo(false)), searchResults).size() == 0;
+    @Test
+    public void shouldReturnAllActivePatientsWithAlerts() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("hasAlerts", "true");
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(3, searchResults.size());
+        assertEquals(3, allPatients.count(queryParams));
+        assertTrue(hasNoInactivePatients(searchResults));
+    }
+
+    @Test
+    public void shouldReturnAllActivePatientsWithGivenTreatmentCategory() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("treatmentCategory", UNIQUE_TREATMENT_CATEGORY_CODE);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
+        assertEquals(patient4WithoutAlerts.getPatientId(), searchResults.get(0).getPatientId());
     }
 
     @Test
@@ -116,7 +146,6 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertTrue(hasNoInactivePatients(searchResults));
     }
 
-
     @Test
     public void shouldFilterPatientsByCumulativeMissedDoses() {
         SortParams sortParams = new SortParams();
@@ -131,6 +160,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
     }
+
 
     @Test
     public void shouldFilterPatientsByAdherenceMissingWeeks() {
@@ -178,5 +208,9 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
+    }
+
+    private boolean hasNoInactivePatients(List<Patient> searchResults) {
+        return Lambda.filter(having(on(Patient.class).isOnActiveTreatment(), equalTo(false)), searchResults).size() == 0;
     }
 }

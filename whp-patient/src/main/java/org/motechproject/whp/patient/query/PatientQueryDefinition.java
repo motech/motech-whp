@@ -27,6 +27,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     protected final QueryField treatmentCategory = new QueryField("treatmentCategory", STRING);
     protected final QueryField cumulativeMissedDoses = new QueryField("cumulativeMissedDoses", STRING);
     protected final QueryField adherenceMissingWeeks = new QueryField("adherenceMissingWeeks", STRING);
+    protected final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
 
     @Override
     public List<Field> fields() {
@@ -38,6 +39,7 @@ public class PatientQueryDefinition implements QueryDefinition {
         fields.add(treatmentCategory);
         fields.add(cumulativeMissedDoses);
         fields.add(adherenceMissingWeeks);
+        fields.add(hasAlerts);
 
         for(PatientAlertType alertType : PatientAlertType.values()){
             fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, STRING));
@@ -65,6 +67,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "var index=new Document(); " +
                     "index.add(doc.patientId, {field: 'patientId'}); " +
                     "index.add(doc.onActiveTreatment, {field: 'isActive'}); " +
+                    "index.add(doc.patientAlerts.hasAlerts, {field: 'hasAlerts'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
                     "index.add(doc.currentTherapy.treatmentCategory.code, {field: 'treatmentCategory'}); " +

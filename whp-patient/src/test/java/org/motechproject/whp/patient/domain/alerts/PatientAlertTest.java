@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.motechproject.testing.utils.BaseUnitTest;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
 
@@ -48,5 +50,15 @@ public class PatientAlertTest extends BaseUnitTest {
         assertEquals(originalSeverity, patientAlert.getAlertSeverity());
         assertEquals(originalAlertDate, patientAlert.getAlertDate());
         assertEquals(AdherenceMissing, patientAlert.getAlertType());
+    }
+
+    @Test
+    public void shouldReturnIfAlertIsOn() {
+        PatientAlert patientAlert = new PatientAlert(AdherenceMissing);
+        patientAlert.setAlertSeverity(0);
+        assertFalse(patientAlert.hasAlert());
+
+        patientAlert.setAlertSeverity(3);
+        assertTrue(patientAlert.hasAlert());
     }
 }

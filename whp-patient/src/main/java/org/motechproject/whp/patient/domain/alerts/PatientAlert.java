@@ -28,4 +28,8 @@ public class PatientAlert {
             setAlertSeverity(severity);
         }
     }
+
+    public boolean hasAlert() {
+        return alertSeverity > 0;
+    }
 }
