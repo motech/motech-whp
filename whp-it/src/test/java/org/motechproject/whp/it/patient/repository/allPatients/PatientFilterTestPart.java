@@ -20,6 +20,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     private Patient patient1;
     private Patient patient2;
     private Patient patient3;
+    private Patient patient4WithoutAlerts;
 
     @Before
     public void setUp() {
@@ -47,9 +48,15 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withAdherenceMissedWeeks(5, 2, DateUtil.today().minusDays(5))
                 .withTreatmentNotStartedDays(0, 0).build();
 
+        patient4WithoutAlerts = new PatientBuilder().withDefaults()
+                .withPatientId("patient4")
+                .withProviderId("provider3")
+                .withProviderDistrict("district3").build();
+
         allPatients.add(patient1);
         allPatients.add(patient2);
         allPatients.add(patient3);
+        allPatients.add(patient4WithoutAlerts);
     }
 
     @Test
@@ -57,6 +64,18 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerDistrict", "district");
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(2, searchResults.size());
+        assertEquals(2, allPatients.count(queryParams));
+    }
+
+    @Test
+    public void shouldFilterPatientsByProviderId() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("providerId", "provider1");
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 

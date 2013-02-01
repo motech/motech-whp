@@ -60,12 +60,18 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "var index=new Document(); " +
                     "index.add(doc.patientId, {field: 'patientId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
-                    "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'});" +
-                    "index.add(doc.currentTherapy.treatmentCategory, {field: 'treatmentCategory'});" +
-                    "index.add(doc.patientAlerts.alerts['CumulativeMissedDoses'].value, {field: 'cumulativeMissedDoses'});" +
-                    "index.add(doc.patientAlerts.alerts['AdherenceMissing'].value, {field: 'adherenceMissingWeeks'});" +
+                    "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
+                    "index.add(doc.currentTherapy.treatmentCategory, {field: 'treatmentCategory'}); " +
 
                     "var alertTypes = Object.keys(doc.patientAlerts.alerts); " +
+                    " if(doc.patientAlerts.alerts['CumulativeMissedDoses']) { " +
+                        "index.add(doc.patientAlerts.alerts['CumulativeMissedDoses'].value, {field: 'cumulativeMissedDoses'}); " +
+                    " } "+
+
+                    " if(doc.patientAlerts.alerts['AdherenceMissing']) { " +
+                        "index.add(doc.patientAlerts.alerts['AdherenceMissing'].value, {field: 'adherenceMissingWeeks'}); " +
+                    " } "+
+
                     "for (var i=0; i<alertTypes.length ;i++) { " +
                         "var alertType =  alertTypes[i]; " +
                         "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {field: alertType + '"+ ALERT_SEVERITY + "'}); "+
