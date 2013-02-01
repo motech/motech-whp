@@ -25,18 +25,14 @@ public class RemediPropertiesTest {
     @Test
     public void shouldGetRemediUrlFromPropertyFile() {
         when(remediProperty.getProperty("remedi.url")).thenReturn("myUrl");
-
         String url = remediProperties.getUrl();
-
         assertEquals("myUrl", url);
     }
 
     @Test
     public void shouldGetRemediApiKeyFromPropertyFile() {
         when(remediProperty.getProperty("remedi.api.key")).thenReturn("myApiKey");
-
         String apiKey = remediProperties.getApiKey();
-
         assertEquals("myApiKey", apiKey);
     }
 }

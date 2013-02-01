@@ -2,6 +2,8 @@ package org.motechproject.whp.common.domain.alerts;
 
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.domain.AllDaysOfWeek;
+import org.motechproject.whp.common.service.AlertsPropertiesValues;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,6 +15,9 @@ import static java.util.Arrays.asList;
 @Component
 public class AllAlertConfigurations {
     Map<PatientAlertType, AlertConfiguration> alertConfigurationMap;
+
+    @Autowired
+    AlertsPropertiesValues alertsProperties;
 
     public AllAlertConfigurations(Map<PatientAlertType, AlertConfiguration> alertConfigurationMap) {
         this.alertConfigurationMap = alertConfigurationMap;
