@@ -23,19 +23,49 @@
             <@paginator.filter id = "patient_list_filter"  pagination_id = "patient_listing">
             <div id="search-pane">
                     <fieldset class="filters">
-                        <div class="row-fluid filters">
-                            <div class="control-group span2">
-                                <label class="control-label">Provider ID</label>
 
+                        <div class="row-fluid sel-result">
+                            <div class="control-group span2">
+                                <label class="control-label">Alert Type</label>
                                 <div class="controls">
-                                    <input type="text" name="providerId" id="providerId"
-                                           value="{{searchCriteria.providerId}}"/>
+                                    <select id="alertType" name="alertType">
+                                        <option value=""></option>
+                                        <#list alertTypes.alertTypeFilters as alertType>
+                                            <option value="${alertType.name()}"
+                                                    ng-selected="{{isSelected('${alertType.name()}', searchCriteria.alertType, 'alertType')}}">${alertType.displayText}</option>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group span2">
+                                <label class="control-label">Alert Date</label>
+                                <div class="controls">
+                                    <select id="alertDate" name="alertDate">
+                                        <option value=""></option>
+                                        <#list alertDates.alertDateFilters as alertDate>
+                                            <option value="${alertDate.name()}"
+                                                    ng-selected="{{isSelected('${alertDate.name()}', searchCriteria.alertDate, 'alertDate')}}">${alertDate.displayText}</option>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group span2">
+                                <label class="control-label">Treatment Category</label>
+                                <div class="controls">
+                                    <select id="treatmentCategory" name="treatmentCategory">
+                                        <option value=""></option>
+                                        <#list treatmentCategories as category>
+                                            <option value="${category.code}"
+                                                    ng-selected="{{isSelected('${category.code}', searchCriteria.treatmentCategory, 'treatmentCategory')}}">${category.name}</option>
+                                        </#list>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="control-group span2">
                                 <label class="control-label">Provider District</label>
-
                                 <div class="controls">
                                     <select id="providerDistrict" name="providerDistrict" data-id="providerDistrict-autocomplete">
                                         <option value=""></option>
@@ -45,6 +75,34 @@
                                         </#list>
                                     </select>
                                 </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row-fluid sel-result">
+                            <div class="row-fluid filters">
+                                <div class="control-group span2">
+                                    <label class="control-label">Provider ID</label>
+
+                                    <div class="controls">
+                                        <input type="text" name="providerId" id="providerId"  value="{{searchCriteria.providerId}}"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group span2">
+                                    <label class="control-label">Cumulative Missed</label>
+                                    <div class="controls">
+                                        <input maxlength="3" type="text" name="cumulativeMissedDoses" id="cumulativeMissedDoses"  value="{{searchCriteria.cumulativeMissedDoses}}"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group span2">
+                                    <label class="control-label">Adherence Missing</label>
+                                    <div class="controls">
+                                        <input maxlength="3" type="text" name="adherenceMissingWeeks" id="adherenceMissingWeeks"  value="{{searchCriteria.adherenceMissingWeeks}}"/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </fieldset>

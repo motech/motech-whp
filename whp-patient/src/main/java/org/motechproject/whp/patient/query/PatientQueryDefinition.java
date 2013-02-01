@@ -67,7 +67,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "index.add(doc.onActiveTreatment, {field: 'isActive'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
-                    "index.add(doc.currentTherapy.treatmentCategory, {field: 'treatmentCategory'}); " +
+                    "index.add(doc.currentTherapy.treatmentCategory.code, {field: 'treatmentCategory'}); " +
 
                     "var alertTypes = Object.keys(doc.patientAlerts.alerts); " +
                     " if(doc.patientAlerts.alerts['CumulativeMissedDoses']) { " +

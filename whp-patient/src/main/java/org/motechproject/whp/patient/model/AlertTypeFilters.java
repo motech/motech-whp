@@ -9,9 +9,9 @@ import static java.util.Arrays.asList;
 
 @Data
 public class AlertTypeFilters {
-    private List<AlertTypeFilter> alertTypeFilterList = new ArrayList<>();
+    private List<AlertTypeFilter> alertTypeFilters = new ArrayList<>();
 
     public AlertTypeFilters() {
-        alertTypeFilterList.addAll(asList(AlertTypeFilter.values()));
+        alertTypeFilters.addAll(asList(AlertTypeFilter.values()));
     }
 }
