@@ -20,14 +20,14 @@ public class PatientQueryDefinition implements QueryDefinition {
     public static final String ALERT_DATE = "AlertDate";
 
     @Getter
-    protected final QueryField isActive = new QueryField("isActive", STRING);
-    protected final QueryField patientId = new QueryField("patientId", STRING);
-    protected final QueryField providerId = new QueryField("providerId", STRING);
-    protected final QueryField providerDistrict = new QueryField("providerDistrict", STRING);
-    protected final QueryField treatmentCategory = new QueryField("treatmentCategory", STRING);
-    protected final QueryField cumulativeMissedDoses = new QueryField("cumulativeMissedDoses", STRING);
-    protected final QueryField adherenceMissingWeeks = new QueryField("adherenceMissingWeeks", STRING);
-    protected final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
+    protected static final QueryField isActive = new QueryField("isActive", STRING);
+    protected static final QueryField patientId = new QueryField("patientId", STRING);
+    protected static final QueryField providerId = new QueryField("providerId", STRING);
+    protected static final QueryField providerDistrict = new QueryField("providerDistrict", STRING);
+    protected static final QueryField treatmentCategory = new QueryField("treatmentCategory", STRING);
+    protected static final QueryField cumulativeMissedDoses = new QueryField("cumulativeMissedDoses", STRING);
+    protected static final QueryField adherenceMissingWeeks = new QueryField("adherenceMissingWeeks", STRING);
+    protected static final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
 
     @Override
     public List<Field> fields() {
@@ -92,4 +92,15 @@ public class PatientQueryDefinition implements QueryDefinition {
                 " }}";
     }
 
+    public static String alertDateParam(PatientAlertType alertType) {
+        return alertType.name() + ALERT_DATE;
+    }
+
+    public static String alertSeverityParam(PatientAlertType alertType) {
+        return alertType.name() + ALERT_SEVERITY;
+    }
+
+    public static String alertStatusFieldName() {
+        return hasAlerts.getName();
+    }
 }
