@@ -61,8 +61,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(2, searchResults.size());
-//        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
-//        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+        assertEquals(2, allPatients.count(queryParams));
     }
 
 
@@ -76,6 +75,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
     }
 
@@ -89,6 +89,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
     }
 
@@ -102,6 +103,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
     }
 
@@ -118,7 +120,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
     }
-
 }

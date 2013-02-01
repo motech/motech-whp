@@ -189,6 +189,10 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
         return filter(new PatientQueryDefinition(), queryParams, sortParams, skip, limit);
     }
 
+    public int count(FilterParams queryParams) {
+        return super.count(new PatientQueryDefinition(), queryParams);
+    }
+
     public static class PatientComparatorByFirstName implements Comparator<Patient> {
 
         @Override
