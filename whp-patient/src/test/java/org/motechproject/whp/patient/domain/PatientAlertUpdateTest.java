@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class PatientAlertUpdateTest extends BaseUnitTest {
 
@@ -87,14 +88,16 @@ public class PatientAlertUpdateTest extends BaseUnitTest {
     @Test
     public void shouldReturnWeeksElapsedSinceLastDose() {
         Therapy therapy = mock(Therapy.class);
-        mockCurrentDate(new LocalDate(2012, 01, 01));
-        when(therapy.getOngoingDoseInterruption()).thenReturn(new DoseInterruption(DateUtil.today().minusWeeks(3)));
+
+        when(therapy.getOngoingDoseInterruption()).thenReturn(new DoseInterruption(new LocalDate(2013, 01, 18).minusWeeks(3)));
 
         Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        assertEquals(3, patient.getWeeksElapsedSinceLastDose());
+        LocalDate currentAdherenceWeekEndDate = new LocalDate(2013, 01, 18).minusDays(5);
+        assertEquals(2, patient.getWeeksElapsedSinceLastDose(currentAdherenceWeekEndDate));
+        assertEquals(1, patient.getWeeksElapsedSinceLastDose(currentAdherenceWeekEndDate.minusWeeks(1)));
     }
 
     @Test
@@ -106,8 +109,6 @@ public class PatientAlertUpdateTest extends BaseUnitTest {
         PatientAlerts patientAlerts = new PatientAlerts();
         patient.setPatientAlerts(patientAlerts);
 
-        patient.getWeeksElapsedSinceLastDose();
-
-        assertEquals(0, patient.getWeeksElapsedSinceLastDose());
+        assertEquals(0, patient.getWeeksElapsedSinceLastDose(currentAdherenceCaptureWeek().endDate()));
     }
 }

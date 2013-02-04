@@ -227,4 +227,9 @@ public class PatientBuilder {
         patient.getCurrentTreatment().setProviderDistrict(district);
         return this;
     }
+
+    public PatientBuilder withDoseInterruptions(DoseInterruptions doseInterruptions) {
+        patient.getCurrentTherapy().setDoseInterruptions(doseInterruptions);
+        return this;
+    }
 }

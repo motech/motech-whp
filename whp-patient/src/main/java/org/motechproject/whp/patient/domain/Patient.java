@@ -518,16 +518,16 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
-    public int getWeeksElapsedSinceLastDose() {
+    public int getWeeksElapsedSinceLastDose(LocalDate tillDate) {
         DoseInterruption ongoingDoseInterruption = this.getCurrentTherapy().getOngoingDoseInterruption();
         if(ongoingDoseInterruption == null){
             return 0;
         }
-        return weeksElapsedSinceLastDose(ongoingDoseInterruption.startDate());
+        return weeksElapsedSinceLastDose(ongoingDoseInterruption.startDate(), tillDate);
     }
 
-    private int weeksElapsedSinceLastDose(LocalDate interruptionStartDate) {
-        return weeksBetween(interruptionStartDate, currentAdherenceCaptureWeek().endDate().plusDays(1)).getWeeks();
+    private int weeksElapsedSinceLastDose(LocalDate fromDate, LocalDate tillDate) {
+        return weeksBetween(fromDate, tillDate.plusDays(1)).getWeeks();
     }
 
     public void updatePatientAlert(PatientAlertType alertType, int value, int severity){

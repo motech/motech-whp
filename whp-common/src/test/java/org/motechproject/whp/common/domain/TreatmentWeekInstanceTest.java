@@ -5,14 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
+import org.motechproject.whp.common.builder.DefaultAdherencePropertyValues;
 import org.motechproject.whp.common.service.AdherencePropertyValues;
 import org.motechproject.whp.common.service.AdherenceWindow;
 
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.model.DayOfWeek.*;
 
 public class TreatmentWeekInstanceTest extends BaseUnitTest{
 
@@ -26,8 +24,7 @@ public class TreatmentWeekInstanceTest extends BaseUnitTest{
     @Before
     public void setUp() {
         initMocks(this);
-        when(adherencePropertyValues.validAdherenceDays()).thenReturn(asList(Sunday, Monday, Tuesday));
-        adherenceWindow = new AdherenceWindow(adherencePropertyValues);
+        adherenceWindow = new AdherenceWindow(DefaultAdherencePropertyValues.build());
         treatmentWeekInstance = new TreatmentWeekInstance(adherenceWindow);
     }
 
