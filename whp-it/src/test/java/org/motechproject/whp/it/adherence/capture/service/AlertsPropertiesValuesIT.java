@@ -2,11 +2,14 @@ package org.motechproject.whp.it.adherence.capture.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.domain.AllDaysOfWeek;
 import org.motechproject.whp.common.service.AlertsPropertiesValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -33,5 +36,20 @@ public class AlertsPropertiesValuesIT {
     @Test
     public void shouldGetTreatmentNotStartedDays(){
         assertThat(alertsPropertiesValues.getTreatmentNotStartedDays(), is(10));
+    }
+
+    @Test
+    public void shouldGetDayOfAlertGenerationForCumulativeMissedDoses(){
+        assertThat(alertsPropertiesValues.getDayOfAlertGenerationForCumulativeMissedDoses(), is(asList(DayOfWeek.Wednesday)));
+    }
+
+    @Test
+    public void shouldGetDayOfAlertGenerationForAdherenceMissingWeeks(){
+        assertThat(alertsPropertiesValues.getDaysOfAlertGenerationForAdherenceMissingWeeks(), is(asList(DayOfWeek.Wednesday)));
+    }
+
+    @Test
+    public void shouldGetDayOfAlertGenerationForTreatmentNotStarted(){
+        assertThat(alertsPropertiesValues.getDayOfAlertGenerationForTreatmentNotStarted(), is(AllDaysOfWeek.allDaysOfWeek));
     }
 }

@@ -34,9 +34,9 @@ public class AllAlertConfigurations {
 
     private void initializeAlertConfiguration() {
         alertConfigurationMap = new HashMap<>();
-        addAlertConfiguration(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds(), asList(DayOfWeek.Wednesday));
-        addAlertConfiguration(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), asList(DayOfWeek.Wednesday));
-        addAlertConfiguration(PatientAlertType.TreatmentNotStarted, getTreatmentNotStartedAlertThresholds(), AllDaysOfWeek.allDaysOfWeek);
+        addAlertConfiguration(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds(), alertsProperties.getDaysOfAlertGenerationForAdherenceMissingWeeks());
+        addAlertConfiguration(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), alertsProperties.getDayOfAlertGenerationForCumulativeMissedDoses());
+        addAlertConfiguration(PatientAlertType.TreatmentNotStarted, getTreatmentNotStartedAlertThresholds(), alertsProperties.getDayOfAlertGenerationForTreatmentNotStarted());
     }
 
     private void addAlertConfiguration(PatientAlertType alertType, AlertThresholds alertThresholds, List<DayOfWeek> daysOfWeek) {

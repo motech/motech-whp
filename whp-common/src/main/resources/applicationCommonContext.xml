@@ -13,7 +13,7 @@
 
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
     <util:properties id="adherenceProperties" location="classpath:adherence.properties"/>
-    <util:properties id="alertsProperties" location="classpath:alerts.properties"/>
+    <util:properties id="alertsProperties" location="classpath:patientAlerts.properties"/>
     <util:properties id="ivrProperty" location="classpath:ivr.properties"/>
 
     <util:properties id="whpProperties" location="classpath:/whp.properties"/>
