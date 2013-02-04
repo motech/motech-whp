@@ -5,10 +5,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 
 import java.io.Serializable;
 
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDateUtil.isOnOrAfter;
 import static org.motechproject.whp.common.util.WHPDateUtil.numberOf_DDD_Between;
 
@@ -38,7 +38,7 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
     }
 
     public int getMissedDoseCount(TreatmentCategory treatmentCategory){
-        return getMissedDoseCount(treatmentCategory, this.startDate);
+        return getMissedDoseCount(treatmentCategory, this.startDate, null);
     }
 
     public LocalDate startDate() {
@@ -69,11 +69,11 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
         return endDate == null;
     }
 
-    public int getMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate asOfDate) {
+    public int getMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate asOfDate, LocalDate tillDate) {
         asOfDate = asOfDate.isBefore(this.startDate) ? this.startDate : asOfDate;
         if (asOfDate != null) {
             int totalDoses = 0;
-            LocalDate endDate = this.endDate == null ? TreatmentWeekInstance.currentAdherenceCaptureWeek().endDate() : this.endDate;
+            LocalDate endDate = getEndDate(tillDate);
             for (DayOfWeek dayOfWeek : treatmentCategory.getPillDays()) {
                 totalDoses = totalDoses + numberOf_DDD_Between(asOfDate, endDate, dayOfWeek);
             }
@@ -81,5 +81,18 @@ public class DoseInterruption implements Comparable<DoseInterruption>, Serializa
         } else {
             return 0;
         }
+    }
+
+    private LocalDate getEndDate(LocalDate tillDate) {
+        if(endDate != null && tillDate != null && endDate.isBefore(tillDate))
+             return endDate;
+
+        if(tillDate != null)
+            return tillDate;
+
+        if(endDate != null)
+            return endDate;
+
+        return currentAdherenceCaptureWeek().endDate();
     }
 }

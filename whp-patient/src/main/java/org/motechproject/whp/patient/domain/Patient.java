@@ -493,9 +493,9 @@ public class Patient extends MotechBaseDataObject {
         return getCurrentTreatment().getProviderId();
     }
 
-    public int cumulativeMissedDoses() {
+    public int cumulativeMissedDoses(LocalDate tillDate) {
         LocalDate asOfDate = getDateOfReferenceForCumulativeMissedDoses();
-        return currentTherapy.getCumulativeMissedDoses(asOfDate);
+        return currentTherapy.getCumulativeMissedDoses(asOfDate, tillDate);
     }
 
     private LocalDate getDateOfReferenceForCumulativeMissedDoses() {
@@ -523,6 +523,11 @@ public class Patient extends MotechBaseDataObject {
         if(ongoingDoseInterruption == null){
             return 0;
         }
+
+        if(ongoingDoseInterruption.startDate().isAfter(tillDate)) {
+            return 0;
+        }
+
         return weeksElapsedSinceLastDose(ongoingDoseInterruption.startDate(), tillDate);
     }
 

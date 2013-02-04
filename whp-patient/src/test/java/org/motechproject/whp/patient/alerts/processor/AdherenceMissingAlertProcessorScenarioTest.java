@@ -58,4 +58,15 @@ public class AdherenceMissingAlertProcessorScenarioTest extends BaseUnitTest {
         assertEquals(0, adherenceMissingAlertProcessor.process(patient));
     }
 
+    @Test
+    public void shouldReturnAdherenceMissingWeeksBasedOnAdherenceWindow_whenOnGoingDoseInterruptionIsAheadOfTillDate() {
+        DoseInterruptions doseInterruptions = new DoseInterruptions();
+        DoseInterruption currentDoseInterruption = new DoseInterruption(new LocalDate(2013, 01, 15));
+        doseInterruptions.add(currentDoseInterruption);
+        Patient patient = new PatientBuilder().withDefaults().withDoseInterruptions(doseInterruptions).build();
+
+        mockCurrentDate(new LocalDate(2013, 01, 01));
+        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+    }
+
 }

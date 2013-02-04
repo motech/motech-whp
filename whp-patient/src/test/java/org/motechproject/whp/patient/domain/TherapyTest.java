@@ -17,11 +17,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.*;
+import static org.motechproject.whp.common.domain.AllDaysOfWeek.allDaysOfWeek;
 import static org.motechproject.whp.common.domain.Phase.*;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
-import static org.motechproject.whp.patient.builder.AllDaysOfWeek.allDaysOfWeek;
 
 public class TherapyTest {
 
@@ -404,7 +404,7 @@ public class TherapyTest {
                 .build();
         therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
 
-         assertEquals(4, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1)));
+         assertEquals(4, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1), new LocalDate(2013, 01, 05)));
     }
 
     @Test
@@ -423,7 +423,7 @@ public class TherapyTest {
                 .build();
         therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
 
-         assertEquals(3, therapy.getCumulativeMissedDoses(new LocalDate(2013, 01, 03)));
+         assertEquals(3, therapy.getCumulativeMissedDoses(new LocalDate(2013, 01, 03), new LocalDate(2013, 01, 05)));
     }
 
     @Test
@@ -438,7 +438,7 @@ public class TherapyTest {
                 .withDoseInterruptions(doseInterruptions).build();
         therapy.addTreatment(currentTreatment, currentTreatment.getStartDate().toDateTime(now()));
 
-        assertEquals(0, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1)));
+        assertEquals(0, therapy.getCumulativeMissedDoses(currentTreatment.getStartDate().minusDays(1), new LocalDate(2013, 01, 05)));
     }
 
     @Test

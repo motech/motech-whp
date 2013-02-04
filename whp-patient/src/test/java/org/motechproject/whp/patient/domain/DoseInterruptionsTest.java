@@ -4,9 +4,9 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNull;
 
 public class DoseInterruptionsTest {
 
-    final List<DayOfWeek> allDaysOfWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday);
+    final List<DayOfWeek> allDaysOfWeek = asList(DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday);
 
     @Test
     public void shouldAddDoseInterruptionToDoseInterruptions() {
@@ -33,7 +33,7 @@ public class DoseInterruptionsTest {
         DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012,7,6));
         DoseInterruption doseInterruption3 = new DoseInterruption(new LocalDate(2012,7,4));
 
-        DoseInterruptions doseInterruptions = new DoseInterruptions(Arrays.asList(doseInterruption1, doseInterruption2, doseInterruption3));
+        DoseInterruptions doseInterruptions = new DoseInterruptions(asList(doseInterruption1, doseInterruption2, doseInterruption3));
 
         assertArrayEquals(new DoseInterruption[]{doseInterruption1, doseInterruption3, doseInterruption2}, doseInterruptions.toArray());
     }
@@ -52,9 +52,9 @@ public class DoseInterruptionsTest {
         DoseInterruption doseInterruption3 = new DoseInterruption(new LocalDate(2013,1,24));
         doseInterruption3.endMissedPeriod(new LocalDate(2013,1,29));    //6
 
-        DoseInterruptions doseInterruptions = new DoseInterruptions(Arrays.asList(doseInterruption1, doseInterruption2, doseInterruption3));
+        DoseInterruptions doseInterruptions = new DoseInterruptions(asList(doseInterruption1, doseInterruption2, doseInterruption3));
 
-        assertEquals(29, doseInterruptions.getCumulativeMissedDoseCount(treatmentCategory,new LocalDate(2012, 7, 2)));
+        assertEquals(29, doseInterruptions.getCumulativeMissedDoseCount(treatmentCategory,new LocalDate(2012, 7, 2), new LocalDate(2013,1,29)));
     }
 
     @Test
@@ -63,10 +63,10 @@ public class DoseInterruptionsTest {
         doseInterruption1.endMissedPeriod(new LocalDate(2012, 7, 21));
         DoseInterruption doseInterruption2 = new DoseInterruption(new LocalDate(2012,7,24));
 
-        DoseInterruptions doseInterruptions = new DoseInterruptions(Arrays.asList(doseInterruption1, doseInterruption2));
+        DoseInterruptions doseInterruptions = new DoseInterruptions(asList(doseInterruption1, doseInterruption2));
 
         assertEquals(doseInterruption2, doseInterruptions.ongoingDoseInterruption());
         assertNull(new DoseInterruptions().ongoingDoseInterruption());
-        assertNull(new DoseInterruptions(Arrays.asList(doseInterruption1)).ongoingDoseInterruption());
+        assertNull(new DoseInterruptions(asList(doseInterruption1)).ongoingDoseInterruption());
     }
 }

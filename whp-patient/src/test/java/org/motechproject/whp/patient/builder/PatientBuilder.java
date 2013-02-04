@@ -232,4 +232,9 @@ public class PatientBuilder {
         patient.getCurrentTherapy().setDoseInterruptions(doseInterruptions);
         return this;
     }
+
+    public PatientBuilder withTreatmentCategory(TreatmentCategory treatmentCategory) {
+        patient.getCurrentTherapy().setTreatmentCategory(treatmentCategory);
+        return this;
+    }
 }

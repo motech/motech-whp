@@ -55,10 +55,10 @@ public class DoseInterruptions extends ArrayList<DoseInterruption> implements Se
         return latestDoseInterruption != null && latestDoseInterruption.isOngoing();
     }
 
-    public int getCumulativeMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate startDate) {
+    public int getCumulativeMissedDoseCount(TreatmentCategory treatmentCategory, LocalDate startDate, LocalDate endDate) {
         int cumulativeMissedDoseCount = 0;
         for(DoseInterruption interruption: this){
-            cumulativeMissedDoseCount += interruption.getMissedDoseCount(treatmentCategory, startDate);
+            cumulativeMissedDoseCount += interruption.getMissedDoseCount(treatmentCategory, startDate, endDate);
         }
         return cumulativeMissedDoseCount;
     }
