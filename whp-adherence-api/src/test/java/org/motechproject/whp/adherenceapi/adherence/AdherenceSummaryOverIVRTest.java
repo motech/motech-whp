@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.adherence.builder.AdherenceSummaryByProviderBuilder;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.adherence.service.AdherenceWindow;
+import org.motechproject.whp.common.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceFlashingRequest;
 import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingResponse;

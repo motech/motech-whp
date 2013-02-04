@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.common.service;
 
 import org.motechproject.model.DayOfWeek;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,8 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.common.service;
 
 
 import org.junit.Test;
+import org.motechproject.whp.common.service.AdherencePropertyValues;
 
 import java.util.List;
 

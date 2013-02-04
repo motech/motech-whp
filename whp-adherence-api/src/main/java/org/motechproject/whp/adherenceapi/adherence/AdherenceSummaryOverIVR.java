@@ -3,7 +3,7 @@ package org.motechproject.whp.adherenceapi.adherence;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.adherence.service.AdherenceWindow;
+import org.motechproject.whp.common.service.AdherenceWindow;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.errors.FlashingRequestErrors;
 import org.motechproject.whp.adherenceapi.reporting.AdherenceFlashingReportRequest;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.adherence.service;
+package org.motechproject.whp.common.service;
 
 
 import org.joda.time.LocalDate;
@@ -6,8 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.model.DayOfWeek;
+import org.motechproject.whp.common.service.AdherencePropertyValues;
+import org.motechproject.whp.common.service.AdherenceWindow;
 
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -59,5 +62,11 @@ public class AdherenceWindowTest {
         when(adherenceProperties.validAdherenceDays()).thenReturn(asList(DayOfWeek.Sunday, DayOfWeek.Monday));
 
         assertTrue(adherenceWindow.isValidAdherenceDay(tuesday));
+    }
+
+    @Test
+    public void shouldReturnLastDayOfAdherenceWindow() {
+        when(adherenceProperties.validAdherenceDays()).thenReturn(asList(DayOfWeek.Sunday, DayOfWeek.Monday));
+        assertEquals(DayOfWeek.Monday, adherenceWindow.lastAdherenceDay());
     }
 }
