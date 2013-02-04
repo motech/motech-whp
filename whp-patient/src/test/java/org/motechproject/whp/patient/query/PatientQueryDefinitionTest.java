@@ -12,10 +12,10 @@ public class PatientQueryDefinitionTest {
 
     @Test
     public void shouldReturnFilterParamsForGivenAlertTypes() {
-        assertEquals(AdherenceMissing.name() + ALERT_DATE, PatientQueryDefinition.alertDateParam(AdherenceMissing));
+        assertEquals(AdherenceMissing.name() + ALERT_DATE, PatientQueryDefinition.alertDateParamForType(AdherenceMissing));
         assertEquals(AdherenceMissing.name() + ALERT_SEVERITY, PatientQueryDefinition.alertSeverityParam(AdherenceMissing));
         assertEquals(CumulativeMissedDoses.name() + ALERT_SEVERITY, PatientQueryDefinition.alertSeverityParam(CumulativeMissedDoses));
-        assertEquals(CumulativeMissedDoses.name() + ALERT_DATE, PatientQueryDefinition.alertDateParam(CumulativeMissedDoses));
+        assertEquals(CumulativeMissedDoses.name() + ALERT_DATE, PatientQueryDefinition.alertDateParamForType(CumulativeMissedDoses));
     }
 
     @Test

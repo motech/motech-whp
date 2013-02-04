@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
+import org.motechproject.whp.mapper.AlertsFilterTransformer;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class PatientPagingServiceTest {
@@ -28,16 +29,22 @@ public class PatientPagingServiceTest {
     @Mock
     PatientInfo patientInfo;
 
+    @Mock
+    AlertsFilterTransformer alertsFilterTransformer;
+
     FilterParams filterParams;
 
     int pageNumber = 2;
     final int rowsPerPage = 2;
     final Patient patient1 = new PatientBuilder().withDefaults().withPatientId("patientid1").build();
     final Patient patient2 = new PatientBuilder().withDefaults().withPatientId("patientid2").withProviderId("provider2").build();
+    private PatientPagingService patientPagingService;
 
     @Before
     public void setUp(){
         initMocks(this);
+        filterParams = new FilterParams();
+        patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer);
     }
 
     @Test
@@ -49,13 +56,13 @@ public class PatientPagingServiceTest {
 
         int expectedCount = 10;
 
-        filterParams = new FilterParams();
         filterParams.put("providerId", "providerID");
 
+        when(alertsFilterTransformer.transform(filterParams)).thenReturn(filterParams);
         when(allPatients.filter(filterParams, new SortParams(), (pageNumber - 1) * rowsPerPage, rowsPerPage)).thenReturn(patientsPerPage);
         when(allPatients.count(filterParams)).thenReturn(expectedCount);
 
-        PatientPagingService patientPagingService = new PatientPagingService(allPatients);
+        PatientPagingService patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer);
         PageResults<PatientDashboardRow> pageResults = patientPagingService.page(pageNumber, rowsPerPage, filterParams, new SortParams());
 
         assertThat(pageResults.getTotalRows(), is(expectedCount));
@@ -65,4 +72,16 @@ public class PatientPagingServiceTest {
         assertThat(pageResults.getResults().get(1).getPatientId(), is("patientid2"));
     }
 
+    @Test
+    public void shouldPassTransformedParamToPagingService(){
+        SortParams sortParams = new SortParams();
+        FilterParams transformedFilterParams = mock(FilterParams.class);
+
+        when(alertsFilterTransformer.transform(filterParams)).thenReturn(transformedFilterParams);
+
+        patientPagingService.page(pageNumber, rowsPerPage, filterParams, sortParams);
+
+        verify(allPatients).filter(transformedFilterParams, sortParams, 2, rowsPerPage);
+        verify(allPatients).count(transformedFilterParams);
+    }
 }

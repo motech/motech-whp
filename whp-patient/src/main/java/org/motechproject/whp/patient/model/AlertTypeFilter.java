@@ -3,6 +3,9 @@ package org.motechproject.whp.patient.model;
 import lombok.Getter;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
 import static org.motechproject.whp.patient.query.PatientQueryDefinition.alertSeverityParam;
 import static org.motechproject.whp.patient.query.PatientQueryDefinition.alertStatusFieldName;
@@ -26,5 +29,14 @@ public enum AlertTypeFilter {
         this.displayText = displayText;
         this.filterKey = filterKey;
         this.filterValue = filterValue;
+    }
+
+    public static Map<String, Object> getQueryFields(String enumValue) {
+        Map<String, Object> queryFields = new HashMap<>();
+
+        AlertTypeFilter alertTypeFilter = AlertTypeFilter.valueOf(enumValue);
+        queryFields.put(alertTypeFilter.getFilterKey(), alertTypeFilter.getFilterValue());
+
+        return queryFields;
     }
 }

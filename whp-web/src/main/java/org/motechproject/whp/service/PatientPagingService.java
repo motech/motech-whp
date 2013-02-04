@@ -5,6 +5,7 @@ import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
+import org.motechproject.whp.mapper.AlertsFilterTransformer;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.uimodel.PatientDashboardRow;
@@ -17,21 +18,24 @@ import java.util.List;
 @Service
 public class PatientPagingService implements Paging<PatientDashboardRow>{
     private AllPatients allPatients;
+    private AlertsFilterTransformer alertsFilterTransformer;
 
     @Autowired
-    public PatientPagingService(AllPatients allPatients){
+    public PatientPagingService(AllPatients allPatients, AlertsFilterTransformer alertsFilterTransformer){
         this.allPatients = allPatients;
+        this.alertsFilterTransformer = alertsFilterTransformer;
     }
 
     @Override
     public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams filterParams, SortParams sortCriteria) {
         int startIndex = (pageNumber - 1) * rowsPerPage;
         filterParams = filterOutEmptyParams(filterParams);
-        List<Patient> rowsForPage = allPatients.filter(filterParams, sortCriteria, startIndex, rowsPerPage);
+        FilterParams transformedFilterParams = alertsFilterTransformer.transform(filterParams);
+        List<Patient> rowsForPage = allPatients.filter(transformedFilterParams, sortCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(allPatients.count(filterParams));
+        pageResults.setTotalRows(allPatients.count(transformedFilterParams));
         return pageResults;
     }
 
