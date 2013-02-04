@@ -1,10 +1,10 @@
 package org.motechproject.whp.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
@@ -25,7 +25,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -55,6 +58,7 @@ public class PatientController extends BaseWebController {
     private TreatmentCardService treatmentCardService;
     private ProviderRemarksService providerRemarksService;
     private AllTreatmentCategories allTreatmentCategories;
+    private TreatmentWeekInstance treatmentWeekInstance;
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -64,7 +68,9 @@ public class PatientController extends BaseWebController {
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
                              AllDistricts allDistrictsCache,
-                             ProviderRemarksService providerRemarksService, AllTreatmentCategories allTreatmentCategories) {
+                             ProviderRemarksService providerRemarksService,
+                             AllTreatmentCategories allTreatmentCategories,
+                             TreatmentWeekInstance treatmentWeekInstance) {
 
         this.patientService = patientService;
         this.treatmentCardService = treatmentCardService;
@@ -74,6 +80,7 @@ public class PatientController extends BaseWebController {
         this.messageSource = messageSource;
         this.providerRemarksService = providerRemarksService;
         this.allTreatmentCategories = allTreatmentCategories;
+        this.treatmentWeekInstance = treatmentWeekInstance;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -146,7 +153,7 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("alertTypes", new AlertTypeFilters());
         uiModel.addAttribute("alertDates", new AlertDateFilters());
         uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
-        uiModel.addAttribute("lastSunday", WHPDate.date(currentAdherenceCaptureWeek().dateOf(DayOfWeek.Sunday)).lucidValue());
+        uiModel.addAttribute("lastSunday", WHPDate.date(treatmentWeekInstance.previousAdherenceWeekEndDate()).lucidValue());
     }
 
 

@@ -8,7 +8,9 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.builder.TreatmentWeekInstanceBuilder;
 import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -93,6 +95,7 @@ public class PatientControllerTest extends BaseControllerTest {
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
     private List<AuditLog> auditLogs;
+    private TreatmentWeekInstance treatmentWeekInstance;
 
 
     @Before
@@ -104,7 +107,9 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories);
+        treatmentWeekInstance = TreatmentWeekInstanceBuilder.build();
+
+        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
