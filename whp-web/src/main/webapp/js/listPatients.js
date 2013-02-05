@@ -32,13 +32,19 @@ function initSearchPane() {
 $(function () {
     $('#patient_listing').bind('pageLoadSuccess', function () {
         if ($('#patientList tbody tr').length == 1) {
-            var noResultsMessage = "No Patients found";
+            var noResultsMessage = "No Patients found.";
 
             $('[type=no-results] td').html(noResultsMessage);
             $('[type=no-results]').show();
         }
         else {
             $('[type=no-results]').hide();
+        }
+    });
+
+    $('.numbersOnly').keyup(function () {
+        if (this.value != this.value.replace(/[^0-9\.]/g, '')) {
+            this.value = this.value.replace(/[^0-9\.]/g, '');
         }
     });
 

@@ -90,16 +90,16 @@
                                 </div>
 
                                 <div class="control-group span2">
-                                    <label class="control-label">Cumulative Missed</label>
+                                    <label class="control-label">Cumulative Missed Doses</label>
                                     <div class="controls">
-                                        <input maxlength="3" type="text" name="cumulativeMissedDoses" id="cumulativeMissedDoses"  value="{{searchCriteria.cumulativeMissedDoses}}"/>
+                                        <input class="numbersOnly" maxlength="3" type="text" name="cumulativeMissedDoses" id="cumulativeMissedDoses"  value="{{searchCriteria.cumulativeMissedDoses}}"/>
                                     </div>
                                 </div>
 
                                 <div class="control-group span2">
-                                    <label class="control-label">Adherence Missing</label>
+                                    <label class="control-label">Adherence Missing Doses</label>
                                     <div class="controls">
-                                        <input maxlength="3" type="text" name="adherenceMissingWeeks" id="adherenceMissingWeeks"  value="{{searchCriteria.adherenceMissingWeeks}}"/>
+                                        <input class="numbersOnly" maxlength="3" type="text" name="adherenceMissingWeeks" id="adherenceMissingWeeks"  value="{{searchCriteria.adherenceMissingWeeks}}"/>
                                     </div>
                                 </div>
 
