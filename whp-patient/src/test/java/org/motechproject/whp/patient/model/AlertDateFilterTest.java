@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.model;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.whp.common.util.WHPDate;
@@ -8,14 +9,13 @@ import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 import static org.motechproject.whp.patient.model.AlertDateFilter.*;
 
 public class AlertDateFilterTest {
     @Test
     public void shouldReturnDateRangesGivenTheDateFilter(){
-        assertNull(TillDate.getFrom());
-        assertNull(TillDate.getTo());
+        assertEquals(WHPDate.date(new DateTime(1900, 1, 1, 0, 0, 0).toLocalDate()).value(), TillDate.getFrom());
+        assertEquals(WHPDate.date(LocalDate.now()).value(), TillDate.getTo());
 
         assertEquals(WHPDate.date(LocalDate.now()).value(), Today.getFrom());
         assertEquals(WHPDate.date(LocalDate.now()).value(), Today.getTo());

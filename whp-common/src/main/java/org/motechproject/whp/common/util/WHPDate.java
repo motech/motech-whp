@@ -1,6 +1,7 @@
 package org.motechproject.whp.common.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -10,6 +11,7 @@ public class WHPDate {
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     public static final String LUCID_DATE_FORMAT = "EEEE, dd MMMM yyyy";
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
+    public static final LocalDate ARBITRARY_PAST_DATE =  new DateTime(1900, 1, 1, 0, 0, 0).toLocalDate();
 
     private DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT);
 
