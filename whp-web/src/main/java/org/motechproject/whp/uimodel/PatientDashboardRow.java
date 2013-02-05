@@ -2,6 +2,7 @@ package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
@@ -53,7 +54,8 @@ public class PatientDashboardRow {
         showAlert = (patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp();
         ipProgress = patient.getIPProgress();
         cpProgress = patient.getCPProgress();
-        cumulativeMissedDoses = patient.getCumulativeDosesNotTaken();
+        int realTimeCumulativeMissedDoses = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        cumulativeMissedDoses = realTimeCumulativeMissedDoses;
     }
 }
 
