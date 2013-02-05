@@ -1,7 +1,7 @@
 package org.motechproject.whp.patient.model;
 
 import lombok.Getter;
-import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.WHPDate;
 
 import java.util.HashMap;
@@ -14,10 +14,10 @@ import static org.motechproject.whp.patient.query.PatientQueryDefinition.alertDa
 @Getter
 public enum AlertDateFilter {
 
-    TillDate("Alerts raised till date", WHPDate.date(ARBITRARY_PAST_DATE).value(), WHPDate.date(LocalDate.now()).value()),
-    Today("Alerts raised today", WHPDate.date(LocalDate.now()).value(), WHPDate.date(LocalDate.now()).value()),
-    ThisWeek("Alerts raised this week", WHPDate.date(LocalDate.now().minusWeeks(1)).value(), WHPDate.date(LocalDate.now()).value()),
-    ThisMonth("Alerts raised this month", WHPDate.date(LocalDate.now().minusMonths(1)).value(), WHPDate.date(LocalDate.now()).value());
+    TillDate("Alerts raised till date", WHPDate.date(ARBITRARY_PAST_DATE).value(), WHPDate.date(DateUtil.today()).value()),
+    Today("Alerts raised today", WHPDate.date(DateUtil.today()).value(), WHPDate.date(DateUtil.today()).value()),
+    ThisWeek("Alerts raised this week", WHPDate.date(DateUtil.today().minusWeeks(1)).value(), WHPDate.date(DateUtil.today()).value()),
+    ThisMonth("Alerts raised this month", WHPDate.date(DateUtil.today().minusMonths(1)).value(), WHPDate.date(DateUtil.today()).value());
 
     private String displayText;
     private String from;

@@ -193,24 +193,6 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldFilterPatientsByPatientAlertsTypeAndDateRange() {
-        SortParams sortParams = new SortParams();
-        FilterParams queryParams = new FilterParams();
-        queryParams.put("providerId", "provider1");
-        String alertDateFrom = WHPDate.date(DateUtil.today().minusDays(5)).value();
-        String alertDateTo = WHPDate.date(DateUtil.today().minusDays(5)).value();
-        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateFrom", alertDateFrom);
-        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateTo", alertDateTo);
-
-        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
-
-        assertEquals(1, searchResults.size());
-        assertEquals(1, allPatients.count(queryParams));
-        assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
-        assertTrue(hasNoInactivePatients(searchResults));
-    }
-
-    @Test
     public void shouldFilterPatientsByPatientAlertsDateRange() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();

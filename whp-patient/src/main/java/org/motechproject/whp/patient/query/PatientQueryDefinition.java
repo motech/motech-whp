@@ -46,7 +46,6 @@ public class PatientQueryDefinition implements QueryDefinition {
         for(PatientAlertType alertType : PatientAlertType.values()){
             fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, STRING));
             fields.add(new QueryField(alertType.name() + ALERT_VALUE, STRING));
-            fields.add(new RangeField(alertType.name() + ALERT_DATE, DATE, alertType.name() + ALERT_DATE + "From", alertType.name() + ALERT_DATE + "To"));
             fields.add(new RangeField(ALERT_DATE, DATE, ALERT_DATE + FROM, ALERT_DATE + TO));
         }
 
@@ -88,7 +87,6 @@ public class PatientQueryDefinition implements QueryDefinition {
                         "var alertType =  alertTypes[i]; " +
                         "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {field: alertType + '"+ ALERT_SEVERITY + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].value, {field: alertType + '"+ ALERT_VALUE + "'}); "+
-                        "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: alertType + '"+ ALERT_DATE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: '"+ ALERT_DATE + "'}); "+
                     "} "+
 
