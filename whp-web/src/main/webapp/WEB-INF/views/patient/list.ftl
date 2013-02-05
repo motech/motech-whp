@@ -158,6 +158,9 @@
                             <td id="patient_{{item.patientId}}_CPProgress">{{item.cpProgress}}</td>
                             <td id="patient_{{item.patientId}}_MissedDoses">{{item.cumulativeMissedDoses}}</td>
                         </tr>
+                        <tr type="no-results" class="hide">
+                            <td class="warning text-center" colspan="14"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </@paginator.paginate>
@@ -173,6 +176,6 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript"
-            src="<@spring.url '/resources-${applicationVersion}/js/listPatients.js'/>"></script>
+    <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
+    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/listPatients.js'/>"></script>
 </@layout.defaultLayout>
