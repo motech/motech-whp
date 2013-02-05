@@ -25,7 +25,7 @@ public class PatientAlertUpdateTest extends BaseUnitTest {
         Therapy therapy = mock(Therapy.class);
 
         LocalDate currentTreatmentStartDate = new LocalDate(2013, 01, 01);
-        when(therapy.getCurrentTreatmentStartDate()).thenReturn(currentTreatmentStartDate);
+        when(therapy.getStartDate()).thenReturn(currentTreatmentStartDate);
         int expectedCumulativeMissedDoses = 20;
 
         when(therapy.getCumulativeMissedDoses(eq(currentTreatmentStartDate), any(LocalDate.class))).thenReturn(expectedCumulativeMissedDoses);
@@ -45,7 +45,7 @@ public class PatientAlertUpdateTest extends BaseUnitTest {
 
         int expectedCumulativeMissedDoses = 20;
         LocalDate currentTreatmentStartDate = new LocalDate(2013, 01, 01);
-        when(therapy.getCurrentTreatmentStartDate()).thenReturn(currentTreatmentStartDate);
+        when(therapy.getStartDate()).thenReturn(currentTreatmentStartDate);
         when(therapy.getCumulativeMissedDoses(eq(cumulativeMissedDoseAlert.getResetDate()), any(LocalDate.class))).thenReturn(expectedCumulativeMissedDoses);
 
         Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();

@@ -500,7 +500,7 @@ public class Patient extends MotechBaseDataObject {
 
     private LocalDate getDateOfReferenceForCumulativeMissedDoses() {
         PatientAlert alert = patientAlerts.getAlert(CumulativeMissedDoses);
-        LocalDate treatmentStartDate = currentTherapy.getCurrentTreatmentStartDate();
+        LocalDate treatmentStartDate = currentTherapy.getStartDate();
         LocalDate alertResetDate = alert.getResetDate();
         return alertResetDate != null && alertResetDate.isAfter(treatmentStartDate) ? alertResetDate : treatmentStartDate;
     }
