@@ -27,6 +27,29 @@
 
                     <div class="row-fluid sel-result">
                         <div class="control-group span2">
+                            <label class="control-label">Provider ID</label>
+
+                            <div class="controls">
+                                <input type="text" name="providerId" id="providerId"
+                                       value="{{searchCriteria.providerId}}"/>
+                            </div>
+                        </div>
+
+                        <div class="control-group span2">
+                            <label class="control-label">Treatment Category</label>
+
+                            <div class="controls">
+                                <select id="treatmentCategory" name="treatmentCategory">
+                                    <option value=""></option>
+                                    <#list treatmentCategories as category>
+                                        <option value="${category.code}"
+                                                ng-selected="{{isSelected('${category.code}', searchCriteria.treatmentCategory, 'treatmentCategory')}}">${category.name}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group span2">
                             <label class="control-label">Alert Type</label>
 
                             <div class="controls">
@@ -53,21 +76,9 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="control-group span2">
-                            <label class="control-label">Treatment Category</label>
-
-                            <div class="controls">
-                                <select id="treatmentCategory" name="treatmentCategory">
-                                    <option value=""></option>
-                                    <#list treatmentCategories as category>
-                                        <option value="${category.code}"
-                                                ng-selected="{{isSelected('${category.code}', searchCriteria.treatmentCategory, 'treatmentCategory')}}">${category.name}</option>
-                                    </#list>
-                                </select>
-                            </div>
-                        </div>
-
+                    <div class="row-fluid sel-result">
                         <div class="control-group span2">
                             <label class="control-label">Provider District</label>
 
@@ -80,17 +91,6 @@
                                                 ng-selected="{{isSelected('${district.name}', searchCriteria.providerDistrict, 'providerDistrict')}}">${district.name}</option>
                                     </#list>
                                 </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row-fluid sel-result">
-                        <div class="control-group span2">
-                            <label class="control-label">Provider ID</label>
-
-                            <div class="controls">
-                                <input type="text" name="providerId" id="providerId"
-                                       value="{{searchCriteria.providerId}}"/>
                             </div>
                         </div>
 
