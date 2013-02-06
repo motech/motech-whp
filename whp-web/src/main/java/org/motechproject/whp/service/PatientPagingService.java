@@ -1,6 +1,5 @@
 package org.motechproject.whp.service;
 
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
@@ -28,8 +27,9 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
 
     @Override
     public PageResults<PatientDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams filterParams, SortParams sortCriteria) {
+        filterParams = filterParams.removeEmptyParams();
+
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        filterParams = filterOutEmptyParams(filterParams);
         FilterParams transformedFilterParams = alertsFilterTransformer.transform(filterParams);
         List<Patient> rowsForPage = allPatients.filter(transformedFilterParams, sortCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
@@ -37,17 +37,6 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
         pageResults.setResults(prepareResultsModel(rowsForPage));
         pageResults.setTotalRows(allPatients.count(transformedFilterParams));
         return pageResults;
-    }
-
-    private FilterParams filterOutEmptyParams(FilterParams searchCriteria) {
-        FilterParams properties = new FilterParams();
-        for (Object key : searchCriteria.keySet()) {
-            Object value = searchCriteria.get(key);
-            if (!StringUtils.isBlank((String) value)) {
-                properties.put(key.toString(), value.toString());
-            }
-        }
-        return properties;
     }
 
     private List prepareResultsModel(List<Patient> rows) {

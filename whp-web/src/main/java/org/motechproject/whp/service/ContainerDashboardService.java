@@ -1,6 +1,5 @@
 package org.motechproject.whp.service;
 
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
@@ -27,26 +26,15 @@ public abstract class ContainerDashboardService implements Paging<ContainerTrack
 
     @Override
     public PageResults<ContainerTrackingDashboardRow> page(Integer pageNumber, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
-        FilterParams nonEmptyParams = filterOutEmptyParams(searchCriteria);
+        searchCriteria = searchCriteria.removeEmptyParams();
 
         int startIndex = (pageNumber - 1) * rowsPerPage;
-        List<Container> rowsForPage = allContainerTrackingRecords.filter(getSupportedInstance(), nonEmptyParams, sortCriteria, startIndex, rowsPerPage);
+        List<Container> rowsForPage = allContainerTrackingRecords.filter(getSupportedInstance(), searchCriteria, sortCriteria, startIndex, rowsPerPage);
         PageResults pageResults = new PageResults();
         pageResults.setPageNo(pageNumber);
         pageResults.setResults(prepareResultsModel(rowsForPage));
-        pageResults.setTotalRows(allContainerTrackingRecords.count(getSupportedInstance(), nonEmptyParams));
+        pageResults.setTotalRows(allContainerTrackingRecords.count(getSupportedInstance(), searchCriteria));
         return pageResults;
-    }
-
-    private FilterParams filterOutEmptyParams(FilterParams searchCriteria) {
-        FilterParams properties = new FilterParams();
-        for (Object key : searchCriteria.keySet()) {
-            Object value = searchCriteria.get(key);
-            if (!StringUtils.isBlank((String) value)) {
-                properties.put(key.toString(), value.toString());
-            }
-        }
-        return properties;
     }
 
     private List prepareResultsModel(List<Container> rows) {
