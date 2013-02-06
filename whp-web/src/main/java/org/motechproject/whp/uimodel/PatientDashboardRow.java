@@ -7,6 +7,7 @@ import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 
 @Data
 @EqualsAndHashCode
@@ -29,6 +30,10 @@ public class PatientDashboardRow {
     private String ipProgress;
     private String cpProgress;
     private Integer cumulativeMissedDoses;
+    private Integer treatmentNotStartedSeverity;
+    private Integer cumulativeMissedDosesSeverity;
+    private Integer adherenceMissingWeeks;
+    private Integer adherenceMissingWeeksSeverity;
 
 
     public PatientDashboardRow(Patient patient) {
@@ -54,8 +59,15 @@ public class PatientDashboardRow {
         showAlert = (patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp();
         ipProgress = patient.getIPProgress();
         cpProgress = patient.getCPProgress();
-        int realTimeCumulativeMissedDoses = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
-        cumulativeMissedDoses = realTimeCumulativeMissedDoses;
+
+        PatientAlerts patientAlerts = patient.getPatientAlerts();
+        cumulativeMissedDoses = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        treatmentNotStartedSeverity = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity();
+        cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();
+        adherenceMissingWeeks = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
+        adherenceMissingWeeksSeverity = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity();
+
     }
+
 }
 

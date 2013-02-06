@@ -115,8 +115,7 @@
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
-                        <button id="clearFilter" type="reset" class="btn "><i class="icon-remove"></i> Clear All
-                        </button>
+                        <button id="clearFilter" type="reset" class="btn "><i class="icon-remove"></i> Clear All</button>
                         <button type="submit" id="searchButton" class="btn btn-primary">
                             Search <i class="icon-search icon-white"></i>
                         </button>
@@ -134,6 +133,9 @@
                        redirectOnRowClick="true">
                     <thead>
                     <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
@@ -154,7 +156,10 @@
                     <tr class="patient-listing link" ng-repeat="item in data.results"
                         id="PatientRows_{{item.patientId}}"
                         containerId="{{item.patientId}}"
-                        redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />">
+                        redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />" open-in-new-tab="true">
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity">{{item.treatmentNotStartedSeverity}}</td>
+                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio">{{item.adherenceMissingWeeksSeverity}} / {{item.adherenceMissingWeeks}}</td>
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity">{{item.cumulativeMissedDosesSeverity}}</td>
                         <td class="name">{{item.firstName}}</td>
                         <td>{{item.age}}</td>
                         <td id="patient_{{item.patientId}}_Gender">{{item.gender}}</td>
@@ -172,7 +177,7 @@
                         <td id="patient_{{item.patientId}}_MissedDoses">{{item.cumulativeMissedDoses}}</td>
                     </tr>
                     <tr type="no-results" class="hide">
-                        <td class="warning text-center" colspan="14"></td>
+                        <td class="warning text-center" colspan="17"></td>
                     </tr>
                     </tbody>
                 </table>

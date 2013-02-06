@@ -3,12 +3,13 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import org.motechproject.whp.user.domain.Provider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,9 +41,11 @@ public class PatientDashboardRowTest {
     Treatment currentTreatment;
     TestResults expectedTestResults;
     Therapy therapy;
+    PatientAlerts patientAlerts;
 
     @Before
     public void setup() {
+
         currentTreatment = new TreatmentBuilder()
                 .withStartDate(new LocalDate(2012, 2, 2))
                 .withTbId(tbId)
@@ -78,9 +81,12 @@ public class PatientDashboardRowTest {
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
-                .withAdherenceProvidedForLastWeek()
+                .withAdherenceMissedWeeks(6, 2, DateUtil.today())
                 .withCumulativeMissedAlertValue(10,2)
+                .withTreatmentNotStartedDays(8,2)
                 .build();
+
+        patientAlerts = patient.getPatientAlerts();
 
 
 
@@ -105,11 +111,13 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getTherapyStartDate(), is(therapy.getStartDateAsString()));
         assertThat(patientDashboardRow.getIpProgress(), is(patient.getIPProgress()));
         assertThat(patientDashboardRow.getCpProgress(), is(patient.getCPProgress()));
-
-        int cumulativeMissedDosesFromPatientAlerts = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
-        assertThat(patientDashboardRow.getCumulativeMissedDoses(), is(cumulativeMissedDosesFromPatientAlerts));
-
         assertThat(patientDashboardRow.isCurrentTreatmentPaused(), is(therapy.isCurrentTreatmentPaused()));
+
+        assertThat(patientDashboardRow.getCumulativeMissedDoses(), is(10));
+        assertThat(patientDashboardRow.getTreatmentNotStartedSeverity(), is(2));
+        assertThat(patientDashboardRow.getCumulativeMissedDosesSeverity(), is(2));
+        assertThat(patientDashboardRow.getAdherenceMissingWeeks(), is(6));
+        assertThat(patientDashboardRow.getAdherenceMissingWeeksSeverity(), is(2));
 
     }
 
