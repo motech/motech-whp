@@ -117,4 +117,13 @@ public class PatientService {
     public List<String> getAllActivePatientIds() {
         return allPatients.findAllActivePatientIds();
     }
+
+    public Boolean updateFlag(String patientId, boolean flagValue) {
+        Patient patient = allPatients.findByPatientId(patientId);
+        if(patient == null)
+            return false;
+        patient.getPatientFlag().setFlagValue(flagValue);
+        allPatients.update(patient);
+        return true;
+    }
 }

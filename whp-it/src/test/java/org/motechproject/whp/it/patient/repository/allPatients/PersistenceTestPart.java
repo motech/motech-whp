@@ -6,10 +6,12 @@ import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.PatientFlag;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 public class PersistenceTestPart extends AllPatientsTestPart {
 
@@ -55,5 +57,18 @@ public class PersistenceTestPart extends AllPatientsTestPart {
         assertEquals(SputumTrackingInstance.PreTreatment, smearTestRecord.getSmear_sample_instance());
         assertEquals(SmearTestResult.Positive, smearTestRecord.getSmear_test_result_1());
         assertEquals(DateUtil.today(), smearTestRecord.getSmear_test_date_1());
+    }
+
+    @Test
+    public void shouldSaveAndRetrieveUpdateFlag(){
+        Patient patient = createPatient("cha01100001", "providerId", PROVIDER_DISTRICT);
+        PatientFlag patientFlag = new PatientFlag();
+        patientFlag.setFlagValue(true);
+        patient.setPatientFlag(patientFlag);
+        allPatients.update(patient);
+
+        Patient savedPatient = allPatients.findByPatientId(patient.getPatientId());
+
+        assertTrue(savedPatient.getPatientFlag().isFlagSet());
     }
 }

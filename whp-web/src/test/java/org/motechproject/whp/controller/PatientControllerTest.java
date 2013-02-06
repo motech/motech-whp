@@ -229,4 +229,17 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("treatmentCategories", treatmentCategories))
                 .andExpect(view().name("patient/list"));
     }
+
+    @Test
+    public void shouldUpdateFlagOnGivenPatientId() throws Exception {
+        String patientId = "12345";
+        when(patientService.updateFlag(patientId, true)).thenReturn(true);
+
+        standaloneSetup(patientController).build()
+                .perform(get("/patients/" + patientId + "/updateFlag").param("value", "true"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"));
+
+        verify(patientService).updateFlag(patientId, true);
+    }
 }

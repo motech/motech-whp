@@ -43,6 +43,7 @@ public class Patient extends MotechBaseDataObject {
     private PatientStatus status = PatientStatus.Open;
     private DateTime lastModifiedDate;
     private boolean onActiveTreatment = true;
+    private PatientFlag patientFlag;
 
     private Therapy currentTherapy;
     private List<Therapy> therapyHistory = new ArrayList<>();

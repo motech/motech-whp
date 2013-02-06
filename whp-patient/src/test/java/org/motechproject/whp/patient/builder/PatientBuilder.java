@@ -43,11 +43,18 @@ public class PatientBuilder {
         patient.setGender(Gender.O);
         patient.setPhoneNumber("1234567890");
         patient.addTreatment(defaultTreatment(), defaultTherapy(), now(), now());
+        patient.setPatientFlag(defaultPatientFlag());
         return this;
     }
 
     public Patient build() {
         return patient;
+    }
+
+    public PatientFlag defaultPatientFlag() {
+        PatientFlag patientFlag = new PatientFlag();
+        patientFlag.setFlagValue(false);
+        return patientFlag;
     }
 
     public Treatment defaultTreatment() {

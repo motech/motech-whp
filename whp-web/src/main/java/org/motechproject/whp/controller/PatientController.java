@@ -25,10 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -96,6 +93,12 @@ public class PatientController extends BaseWebController {
     public String list(Model uiModel) {
         prepareModelForListView(uiModel);
         return "patient/list";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{patientId}/updateFlag")
+    @ResponseBody
+    public String updateFlag(@PathVariable("patientId") String patientId, @RequestParam("value") Boolean value) {
+        return (patientService.updateFlag(patientId, value)) ? "success" : "failure";
     }
 
     @RequestMapping(value = "show", method = RequestMethod.GET)

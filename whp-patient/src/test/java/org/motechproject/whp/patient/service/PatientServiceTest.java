@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.testing.utils.BaseUnitTest;
@@ -35,6 +36,8 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -61,6 +64,7 @@ public class PatientServiceTest extends BaseUnitTest {
     public ExpectedException expectedException = ExpectedException.none();
     @Mock
     PatientMapper patientMapper;
+    public static final String PATIENT_ID = "patientid";
 
     @Before
     public void setUp() {
@@ -169,15 +173,14 @@ public class PatientServiceTest extends BaseUnitTest {
     public void shouldCreatePatient() {
         PatientRequest patientRequest = mock(PatientRequest.class);
         Patient patient = mock(Patient.class);
-        String patientId = "patientid";
-        when(patient.getPatientId()).thenReturn(patientId);
+        when(patient.getPatientId()).thenReturn(PATIENT_ID);
 
         when(patientMapper.mapPatient(patientRequest)).thenReturn(patient);
 
         patientService.createPatient(patientRequest);
 
         verify(allPatients).add(patient);
-        verify(patientAlertScheduler).scheduleJob(patientId);
+        verify(patientAlertScheduler).scheduleJob(PATIENT_ID);
     }
 
     @Test
@@ -191,6 +194,33 @@ public class PatientServiceTest extends BaseUnitTest {
         verify(allPatients).findAllActivePatientIds();
     }
 
+    @Test
+    public void shouldUpdatePatientFlagByPatientId(){
+        Patient patient = PatientBuilder.patient();
+        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(patient);
+
+        Boolean isFlagUpdated = patientService.updateFlag(PATIENT_ID, true);
+
+        ArgumentCaptor<Patient> captor = ArgumentCaptor.forClass(Patient.class);
+        verify(allPatients).update(captor.capture());
+        verify(allPatients).findByPatientId(PATIENT_ID);
+
+        Patient updatedPatient = captor.getValue();
+        assertTrue(isFlagUpdated);
+        assertEquals(PATIENT_ID, updatedPatient.getPatientId());
+        assertEquals(true, updatedPatient.getPatientFlag().isFlagSet());
+    }
+
+    @Test
+    public void shouldReturnFalseIfFlagUpdateIsNotSuccess(){
+        when(allPatients.findByPatientId(PATIENT_ID)).thenReturn(null);
+
+        Boolean isFlagUpdated = patientService.updateFlag(PATIENT_ID, true);
+
+        verify(allPatients).findByPatientId(PATIENT_ID);
+        verify(allPatients, never()).update(any(Patient.class));
+        assertFalse(isFlagUpdated);
+    }
 
     @After
     public void tearDown() {
