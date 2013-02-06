@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
+import static org.motechproject.couchdb.lucene.query.field.FieldType.INT;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
 public class PatientQueryDefinition implements QueryDefinition {
@@ -18,6 +19,10 @@ public class PatientQueryDefinition implements QueryDefinition {
     public static final String ALERT_SEVERITY = "AlertSeverity";
     public static final String ALERT_VALUE = "AlertValue";
     public static final String ALERT_DATE = "AlertDate";
+    private static final String FROM = "From";
+    private static final String TO = "To";
+    public static final String ADHERENCE_MISSING_WEEKS = "adherenceMissingWeeks";
+    public static final String CUMULATIVE_MISSED_DOSES = "cumulativeMissedDoses";
 
     @Getter
     protected static final QueryField isActive = new QueryField("isActive", STRING);
@@ -25,11 +30,9 @@ public class PatientQueryDefinition implements QueryDefinition {
     protected static final QueryField providerId = new QueryField("providerId", STRING);
     protected static final QueryField providerDistrict = new QueryField("providerDistrict", STRING);
     protected static final QueryField treatmentCategory = new QueryField("treatmentCategory", STRING);
-    protected static final QueryField cumulativeMissedDoses = new QueryField("cumulativeMissedDoses", STRING);
-    protected static final QueryField adherenceMissingWeeks = new QueryField("adherenceMissingWeeks", STRING);
+    protected static final RangeField cumulativeMissedDoses = new RangeField(CUMULATIVE_MISSED_DOSES, INT, CUMULATIVE_MISSED_DOSES + FROM, CUMULATIVE_MISSED_DOSES + TO);
+    protected static final RangeField adherenceMissingWeeks = new RangeField(ADHERENCE_MISSING_WEEKS, INT, ADHERENCE_MISSING_WEEKS + FROM, ADHERENCE_MISSING_WEEKS + TO);
     protected static final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
-    private static final String FROM = "From";
-    private static final String TO = "To";
 
     @Override
     public List<Field> fields() {
@@ -76,11 +79,11 @@ public class PatientQueryDefinition implements QueryDefinition {
 
                     "var alertTypes = Object.keys(doc.patientAlerts.alerts); " +
                     " if(doc.patientAlerts.alerts['CumulativeMissedDoses']) { " +
-                        "index.add(doc.patientAlerts.alerts['CumulativeMissedDoses'].value, {field: 'cumulativeMissedDoses'}); " +
+                        "index.add(doc.patientAlerts.alerts['CumulativeMissedDoses'].value, {field: 'cumulativeMissedDoses', type: 'int'}); " +
                     " } "+
 
                     " if(doc.patientAlerts.alerts['AdherenceMissing']) { " +
-                        "index.add(doc.patientAlerts.alerts['AdherenceMissing'].value, {field: 'adherenceMissingWeeks'}); " +
+                        "index.add(doc.patientAlerts.alerts['AdherenceMissing'].value, {field: 'adherenceMissingWeeks', type: 'int'}); " +
                     " } "+
 
                     "for (var i=0; i<alertTypes.length ;i++) { " +
@@ -112,5 +115,21 @@ public class PatientQueryDefinition implements QueryDefinition {
 
     public static String alertStatusFieldName() {
         return hasAlerts.getName();
+    }
+
+    public static String cumulativeMissedDosesFromParam() {
+        return CUMULATIVE_MISSED_DOSES + FROM;
+    }
+
+    public static String cumulativeMissedDosesToParam() {
+        return CUMULATIVE_MISSED_DOSES + TO;
+    }
+
+    public static String adherenceMissingWeeksFromParam() {
+        return ADHERENCE_MISSING_WEEKS + FROM;
+    }
+
+    public static String adherenceMissingWeeksToParam() {
+        return ADHERENCE_MISSING_WEEKS + TO;
     }
 }

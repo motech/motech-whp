@@ -36,4 +36,30 @@ public class AlertsFilterTransformerTest {
         assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
         assertEquals(AlertTypeFilter.AdherenceMissingWithSeverityThree.getFilterValue(), transformedFilterParams.get(PatientQueryDefinition.alertSeverityParam(PatientAlertType.AdherenceMissing)));
     }
+
+    @Test
+    public void shouldConvertCumulativeDosesFilterIntoDesiredQueryFields(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("treatmentCategory", "01");
+        filterParams.put("cumulativeMissedDoses", 10);
+
+        FilterParams transformedFilterParams = new AlertsFilterTransformer().transform(filterParams);
+
+        assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
+        assertEquals(10, transformedFilterParams.get(PatientQueryDefinition.cumulativeMissedDosesFromParam()));
+        assertEquals(Integer.MAX_VALUE, transformedFilterParams.get(PatientQueryDefinition.cumulativeMissedDosesToParam()));
+    }
+
+    @Test
+    public void shouldConvertAdherenceMissingWeeksFilterIntoDesiredQueryFields(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("treatmentCategory", "01");
+        filterParams.put("adherenceMissingWeeks", 12);
+
+        FilterParams transformedFilterParams = new AlertsFilterTransformer().transform(filterParams);
+
+        assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
+        assertEquals(12, transformedFilterParams.get(PatientQueryDefinition.adherenceMissingWeeksFromParam()));
+        assertEquals(Integer.MAX_VALUE, transformedFilterParams.get(PatientQueryDefinition.adherenceMissingWeeksToParam()));
+    }
 }

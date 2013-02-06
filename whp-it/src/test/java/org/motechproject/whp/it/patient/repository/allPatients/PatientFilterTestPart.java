@@ -151,13 +151,15 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", "provider1");
-        queryParams.put("cumulativeMissedDoses", "10");
+        queryParams.put("cumulativeMissedDosesFrom", 10);
+        queryParams.put("cumulativeMissedDosesTo", Integer.MAX_VALUE);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
-        assertEquals(1, searchResults.size());
-        assertEquals(1, allPatients.count(queryParams));
+        assertEquals(2, searchResults.size());
+        assertEquals(2, allPatients.count(queryParams));
         assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+        assertEquals(patient2.getPatientId(), searchResults.get(1).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
     }
 
@@ -167,13 +169,15 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", "provider1");
-        queryParams.put("adherenceMissingWeeks", "5");
+        queryParams.put("adherenceMissingWeeksFrom", 3);
+        queryParams.put("adherenceMissingWeeksTo", Integer.MAX_VALUE);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
-        assertEquals(1, searchResults.size());
-        assertEquals(1, allPatients.count(queryParams));
-        assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        assertEquals(2, searchResults.size());
+        assertEquals(2, allPatients.count(queryParams));
+        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+        assertEquals(patient2.getPatientId(), searchResults.get(1).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
     }
 
