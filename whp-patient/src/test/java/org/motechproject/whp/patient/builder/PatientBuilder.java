@@ -244,4 +244,9 @@ public class PatientBuilder {
         patient.getCurrentTherapy().setTreatmentCategory(treatmentCategory);
         return this;
     }
+
+    public PatientBuilder withPatientFlag(boolean flagValue) {
+        patient.getPatientFlag().setFlagValue(flagValue);
+        return this;
+    }
 }

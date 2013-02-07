@@ -1,74 +1,89 @@
-<div class="default-arrow well" >
+<div class="default-arrow well">
 
 <div class="row-fluid">
 
     <p class="patient">
-         <span class="name"> ${patient.firstName!} ${patient.lastName!} </span>
-         <span class="sub-details"> ( Age:  ${patient.age!}, ${patient.gender!} ) </span>
+
+        <#if patient.flag>
+            <#assign flagValue="false"/>
+        <#else>
+            <#assign flagValue="true"/>
+        </#if>
+
+        <img id="flag_star"
+             endpoint="<@spring.url '/patients/${patient.patientId}/updateFlag?value=${flagValue}'/>"
+             flagValue="${patient.flag?string}" class="flagImage"
+             src="<@spring.url '/resources-${applicationVersion}/img/${patient.flag?string}-star.png'/>"/>
+
+        <span class="name"> ${patient.firstName!} ${patient.lastName!} </span>
+        <span class="sub-details"> ( Age:  ${patient.age!}, ${patient.gender!} ) </span>
          <span class="patient-addr">
-          <b>Address:</b>   ${patient.address!}, ${patient.addressVillage!}, ${patient.addressDistrict!} |  <b>Mob:</b> ${patient.phoneNumber!}
+          <b>Address:</b>   ${patient.address!}, ${patient.addressVillage!}, ${patient.addressDistrict!}
+             |  <b>Mob:</b> ${patient.phoneNumber!}
          </span>
     </p>
 
-    <p class="provider-details"> <b>Provider:</b> <span class="name">${patient.providerId!}</span>, ${patient.providerDistrict!} - District | <b>Mob:</b> ${patient.providerMobileNumber!}
+    <p class="provider-details"><b>Provider:</b> <span
+            class="name">${patient.providerId!}</span>, ${patient.providerDistrict!} - District |
+        <b>Mob:</b> ${patient.providerMobileNumber!}
 </div>
 
-    <hr />
+<hr/>
 
 <div class="row-fluid">
-            <div class="span4">
-                <h3>Treatment Details</h3>
-                <table class="table table-bordered table-striped">
+    <div class="span4">
+        <h3>Treatment Details</h3>
+        <table class="table table-bordered table-striped">
 
-                    <tbody>
-                    <tr>
-                        <th>TB ID</th>
-                        <td>${patient.tbId!}</td>
-                    </tr>
+            <tbody>
+            <tr>
+                <th>TB ID</th>
+                <td>${patient.tbId!}</td>
+            </tr>
 
-                    <tr>
-                        <th>TB Registration Number</th>
-                        <td>${patient.tbRegistrationNumber!}</td>
-                    </tr>
+            <tr>
+                <th>TB Registration Number</th>
+                <td>${patient.tbRegistrationNumber!}</td>
+            </tr>
 
-                    <tr>
-                        <th>PHI</th>
-                        <td>${patient.phi!}</td>
-                    </tr>
+            <tr>
+                <th>PHI</th>
+                <td>${patient.phi!}</td>
+            </tr>
 
-                    <tr>
-                        <th>Disease Classification</th>
-                        <td>${patient.diseaseClass!}</td>
-                    </tr>
+            <tr>
+                <th>Disease Classification</th>
+                <td>${patient.diseaseClass!}</td>
+            </tr>
 
-                    <tr>
-                        <th>Type of patient</th>
-                        <td>${patient.patientType!}</td>
-                    </tr>
+            <tr>
+                <th>Type of patient</th>
+                <td>${patient.patientType!}</td>
+            </tr>
 
-                    <tr>
-                        <th>Treatment Category</th>
-                        <td>${patient.treatmentCategoryName!}</td>
-                    </tr>
+            <tr>
+                <th>Treatment Category</th>
+                <td>${patient.treatmentCategoryName!}</td>
+            </tr>
 
-                    <tr>
-                        <th>Treatment Start Date</th>
-                        <td>${patient.therapyStartDate!}</td>
-                    </tr>
+            <tr>
+                <th>Treatment Start Date</th>
+                <td>${patient.therapyStartDate!}</td>
+            </tr>
 
-                    <tr>
-                        <th>Current Phase</th>
-                        <td id="patientCurrentPhase"><#if patient.currentPhase??>${patient.currentPhase.name.toString()}
-                            (${patient.currentPhase.name.name()})</#if></td>
-                    </tr>
-                    <tr>
-                        <th>Longest Interruption</th>
-                        <td id="longestTreatmentInterruption">${patient.longestDoseInterruption} (in weeks)</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <tr>
+                <th>Current Phase</th>
+                <td id="patientCurrentPhase"><#if patient.currentPhase??>${patient.currentPhase.name.toString()}
+                    (${patient.currentPhase.name.name()})</#if></td>
+            </tr>
+            <tr>
+                <th>Longest Interruption</th>
+                <td id="longestTreatmentInterruption">${patient.longestDoseInterruption} (in weeks)</td>
+            </tr>
+            </tbody>
+        </table>
 
-            </div>
+    </div>
     <!--
             <div class="span4">
                 <h3>Patient Details</h3>
@@ -182,15 +197,10 @@
         </table>
 
     </div>
-        </div>
-        <div class="row-fluid">
+</div>
+<div class="row-fluid">
 
-         </div>
-
-
-
-
-
+</div>
 
 
 </div>

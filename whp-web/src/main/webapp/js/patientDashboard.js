@@ -45,5 +45,23 @@ $(function () {
         $(this).css('cursor', 'pointer');
     });
 
+    $('#flag_star').bind('click', function(event){
+        var target = event.target;
+        $.ajax({
+            type:"GET",
+            url:$(target).attr("endpoint"),
+            success:function (data) {
+                var imageSrc = $(target).attr('src');
+                var endpoint = $(target).attr('endpoint');
+                var flagImageCurrentValue = $(target).attr("flagValue");
+                var flagImageNextValue = (flagImageCurrentValue == "true") ? "false" : "true";
+
+                $(target).attr('src', imageSrc.replace(flagImageCurrentValue + "-star", flagImageNextValue + "-star"));
+                $(target).attr('endpoint', endpoint.replace("value=" + flagImageNextValue, "value=" + flagImageCurrentValue));
+                $(target).attr("flagValue", flagImageNextValue);
+            }
+        });
+    });
+
     createAutoClosingAlert(".dateUpdated-message-alert", 5000);
 });

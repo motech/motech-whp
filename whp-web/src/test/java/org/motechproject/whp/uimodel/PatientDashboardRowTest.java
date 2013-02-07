@@ -84,11 +84,8 @@ public class PatientDashboardRowTest {
                 .withAdherenceMissedWeeks(6, 2, DateUtil.today())
                 .withCumulativeMissedAlertValue(10,2)
                 .withTreatmentNotStartedDays(8,2)
+                .withPatientFlag(true)
                 .build();
-
-        PatientFlag patientFlag = new PatientFlag();
-        patientFlag.setFlagValue(true);
-        patient.setPatientFlag(patientFlag);
 
         patientAlerts = patient.getPatientAlerts();
 

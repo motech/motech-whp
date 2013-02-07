@@ -54,6 +54,7 @@ public class PatientInfo {
     private boolean showAlert;
     private String providerDistrict;
     private static final String COMMA = ", ";
+    private Boolean flag;
 
     public PatientInfo(Patient patient, Provider provider) {
         initializePatientInfo(patient);
@@ -105,6 +106,7 @@ public class PatientInfo {
         longestDoseInterruption = patient.getLongestDoseInterruption();
         showAlert = (patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp();
         adherenceCapturedForThisWeek = patient.hasAdherenceForLastReportingWeekForCurrentTherapy();
+        flag = patient.getPatientFlag().isFlagSet();
     }
 
     private List<String> mapPhaseNameToString(Patient patient) {

@@ -93,6 +93,7 @@ public class PatientInfoTest {
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
                 .withAdherenceProvidedForLastWeek()
+                .withPatientFlag(true)
                 .build();
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
@@ -123,6 +124,7 @@ public class PatientInfoTest {
         assertThat(patientInfo.getAddressDistrict(), is("district"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
         assertTrue(patientInfo.isAdherenceCapturedForThisWeek());
+        assertTrue(patientInfo.getFlag());
     }
 
     @Test
