@@ -34,6 +34,7 @@ public class PatientDashboardRow {
     private Integer cumulativeMissedDosesSeverity;
     private Integer adherenceMissingWeeks;
     private Integer adherenceMissingWeeksSeverity;
+    private Boolean flag;
 
 
     public PatientDashboardRow(Patient patient) {
@@ -66,7 +67,7 @@ public class PatientDashboardRow {
         cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();
         adherenceMissingWeeks = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
         adherenceMissingWeeksSeverity = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity();
-
+        flag = patient.getPatientFlag().isFlagSet();
     }
 
 }

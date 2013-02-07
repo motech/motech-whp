@@ -86,6 +86,10 @@ public class PatientDashboardRowTest {
                 .withTreatmentNotStartedDays(8,2)
                 .build();
 
+        PatientFlag patientFlag = new PatientFlag();
+        patientFlag.setFlagValue(true);
+        patient.setPatientFlag(patientFlag);
+
         patientAlerts = patient.getPatientAlerts();
 
 
@@ -118,6 +122,8 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getCumulativeMissedDosesSeverity(), is(2));
         assertThat(patientDashboardRow.getAdherenceMissingWeeks(), is(6));
         assertThat(patientDashboardRow.getAdherenceMissingWeeksSeverity(), is(2));
+
+        assertThat(patientDashboardRow.getFlag(), is(true));
 
     }
 

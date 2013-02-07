@@ -11,9 +11,10 @@
 <script type="text/javascript">
     $(function () {
         $('#achtung').each(function () {
-            $(this).tooltip({title: "Patient Nearing Transition!"});
+            $(this).tooltip({title:"Patient Nearing Transition!"});
         })
     });
+
 </script>
 <h1>Patients Listing</h1>
 
@@ -22,6 +23,7 @@
     <@paginator.filter id = "patient_list_filter"  pagination_id = "patient_listing">
         <div class="well" id="search-section">
             <h3 class="search-section-header"><a id="search-section-header-link" href="#">Hide Search Pane</a></h3>
+
             <div id="search-pane">
                 <fieldset class="filters">
 
@@ -115,7 +117,8 @@
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
-                        <button id="clearFilter" type="reset" class="btn "><i class="icon-remove"></i> Clear All</button>
+                        <button id="clearFilter" type="reset" class="btn "><i class="icon-remove"></i> Clear All
+                        </button>
                         <button type="submit" id="searchButton" class="btn btn-primary">
                             Search <i class="icon-search icon-white"></i>
                         </button>
@@ -133,6 +136,7 @@
                        redirectOnRowClick="true">
                     <thead>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -156,10 +160,23 @@
                     <tr class="patient-listing link" ng-repeat="item in data.results"
                         id="PatientRows_{{item.patientId}}"
                         containerId="{{item.patientId}}"
-                        redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />" open-in-new-tab="true">
-                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity">{{item.treatmentNotStartedSeverity}}</td>
-                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio">{{item.adherenceMissingWeeksSeverity}} / {{item.adherenceMissingWeeks}}</td>
-                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity">{{item.cumulativeMissedDosesSeverity}}</td>
+                        redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />"
+                        open-in-new-tab="true">
+                        <td id="patient_{{item.patientId}}_Flag" class="row-click-exclude">
+                            <img id="flag_star"
+                                 endpoint="<@spring.url '/patients/{{item.patientId}}/updateFlag?value={{!item.flag}}'/>"
+                                 flagValue="{{item.flag}}" class="flagImage"
+                                 src="<@spring.url '/resources-${applicationVersion}/img/{{item.flag}}-star.png'/>"/>
+                        </td>
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity">
+                            {{item.treatmentNotStartedSeverity}}
+                        </td>
+                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio">
+                            {{item.adherenceMissingWeeksSeverity}} / {{item.adherenceMissingWeeks}}
+                        </td>
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity">
+                            {{item.cumulativeMissedDosesSeverity}}
+                        </td>
                         <td class="name">{{item.firstName}}</td>
                         <td>{{item.age}}</td>
                         <td id="patient_{{item.patientId}}_Gender">{{item.gender}}</td>

@@ -30,6 +30,7 @@ function initSearchPane() {
 }
 
 $(function () {
+
     $('#patient_listing').bind('pageLoadSuccess', function () {
         if ($('#patientList tbody tr').length == 1) {
             var noResultsMessage = "No Patients found.";
@@ -39,6 +40,27 @@ $(function () {
         }
         else {
             $('[type=no-results]').hide();
+        }
+    });
+
+    $('#patient_listing').bind('click', function(event){
+
+        var target = event.target;
+        if($(target).hasClass("flagImage")){
+            $.ajax({
+                type:"GET",
+                url:$(target).attr("endpoint"),
+                success:function (data) {
+                    var imageSrc = $(target).attr('src');
+                    var endpoint = $(target).attr('endpoint');
+                    var flagImageCurrentValue = $(target).attr("flagValue");
+                    var flagImageNextValue = (flagImageCurrentValue == "true") ? "false" : "true";
+
+                    $(target).attr('src', imageSrc.replace(flagImageCurrentValue + "-star", flagImageNextValue + "-star"));
+                    $(target).attr('endpoint', endpoint.replace("value=" + flagImageNextValue, "value=" + flagImageCurrentValue));
+                    $(target).attr("flagValue", flagImageNextValue);
+                }
+            });
         }
     });
 
