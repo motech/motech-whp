@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.model.FlagFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
 import java.util.List;
@@ -40,7 +41,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderDistrict("district")
                 .withCumulativeMissedAlertValue(10, 1)
                 .withAdherenceMissedWeeks(3, 1, DateUtil.today().minusDays(7))
-                .withTreatmentNotStartedDays(0, 0).build();
+                .withTreatmentNotStartedDays(0, 0)
+                .withPatientFlag(true).build();
 
         patient2 = new PatientBuilder().withDefaults()
                 .withPatientId("patient2")
@@ -211,6 +213,21 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, searchResults.size());
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        assertTrue(hasNoInactivePatients(searchResults));
+    }
+
+    @Test
+    public void shouldFilterPatientsByFlag() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("providerId", "provider1");
+        queryParams.put("flag", FlagFilter.True.getValue());
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
+        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
     }
 

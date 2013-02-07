@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.model.FlagFilters;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
@@ -155,6 +156,7 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute("alertTypes", new AlertTypeFilters());
         uiModel.addAttribute("alertDates", new AlertDateFilters());
+        uiModel.addAttribute("flags", new FlagFilters());
         uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
         uiModel.addAttribute("lastSunday", WHPDate.date(treatmentWeekInstance.previousAdherenceWeekEndDate()).lucidValue());
     }

@@ -113,6 +113,19 @@
                                        id="adherenceMissingWeeks" value="{{searchCriteria.adherenceMissingWeeks}}"/>
                             </div>
                         </div>
+                        <div class="control-group span2">
+                            <label class="control-label">Flag</label>
+
+                            <div class="controls">
+                                <select id="flag" name="flag">
+                                    <option value=""></option>
+                                    <#list flags.flagFilters as flagFilter>
+                                        <option value="${flagFilter.value}"
+                                                ng-selected="{{isSelected('${flagFilter.value}', searchCriteria.flag, 'flag')}}">${flagFilter.displayText}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">

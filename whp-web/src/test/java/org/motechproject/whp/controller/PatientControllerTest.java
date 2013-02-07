@@ -19,6 +19,7 @@ import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.model.FlagFilters;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
@@ -91,6 +92,7 @@ public class PatientControllerTest extends BaseControllerTest {
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
     AlertTypeFilters alertTypes = new AlertTypeFilters();
     AlertDateFilters alertDates = new AlertDateFilters();
+    FlagFilters flags = new FlagFilters();
 
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
@@ -226,6 +228,7 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("districts", districts))
                 .andExpect(model().attribute("alertTypes", alertTypes))
                 .andExpect(model().attribute("alertDates", alertDates))
+                .andExpect(model().attribute("flags", flags))
                 .andExpect(model().attribute("treatmentCategories", treatmentCategories))
                 .andExpect(view().name("patient/list"));
     }

@@ -23,6 +23,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     private static final String TO = "To";
     public static final String ADHERENCE_MISSING_WEEKS = "adherenceMissingWeeks";
     public static final String CUMULATIVE_MISSED_DOSES = "cumulativeMissedDoses";
+    public static final String FLAG_FILTER_PARAM = "flag";
 
     @Getter
     protected static final QueryField isActive = new QueryField("isActive", STRING);
@@ -33,6 +34,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     protected static final RangeField cumulativeMissedDoses = new RangeField(CUMULATIVE_MISSED_DOSES, INT, CUMULATIVE_MISSED_DOSES + FROM, CUMULATIVE_MISSED_DOSES + TO);
     protected static final RangeField adherenceMissingWeeks = new RangeField(ADHERENCE_MISSING_WEEKS, INT, ADHERENCE_MISSING_WEEKS + FROM, ADHERENCE_MISSING_WEEKS + TO);
     protected static final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
+    protected static final QueryField flag = new QueryField("flag", STRING);
 
     @Override
     public List<Field> fields() {
@@ -45,6 +47,7 @@ public class PatientQueryDefinition implements QueryDefinition {
         fields.add(cumulativeMissedDoses);
         fields.add(adherenceMissingWeeks);
         fields.add(hasAlerts);
+        fields.add(flag);
 
         for(PatientAlertType alertType : PatientAlertType.values()){
             fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, STRING));
@@ -76,6 +79,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
                     "index.add(doc.currentTherapy.treatmentCategory.code, {field: 'treatmentCategory'}); " +
+                    "index.add(doc.patientFlag.value, {field: 'flag'}); " +
 
                     "var alertTypes = Object.keys(doc.patientAlerts.alerts); " +
                     " if(doc.patientAlerts.alerts['CumulativeMissedDoses']) { " +
