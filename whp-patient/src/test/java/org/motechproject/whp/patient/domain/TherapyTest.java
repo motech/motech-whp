@@ -465,4 +465,21 @@ public class TherapyTest {
 
         assertEquals(expectedDoseInterruption, therapy.getOngoingDoseInterruption());
     }
+
+    @Test
+    public void shouldReturnPhaseRecordForGivenPhase() {
+        Therapy therapy = new Therapy();
+        therapy.getPhases().setCPStartDate(today().plusDays(2));
+
+        assertEquals(therapy.getPhases().getPhaseRecords().get(Phase.CP), therapy.getPhase(Phase.CP));
+    }
+
+    @Test
+    public void shouldReturnCurrentPhaseName() {
+        Therapy therapy = new Therapy();
+        assertNull(therapy.getCurrentPhaseName());
+
+        therapy.getPhases().setCPStartDate(today().plusDays(2));
+        assertEquals(Phase.CP.name(), therapy.getCurrentPhaseName());
+    }
 }

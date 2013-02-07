@@ -66,7 +66,7 @@ public class Phases implements Serializable {
     }
 
     @JsonIgnore
-    void setIPStartDate(LocalDate startDate) {
+    public void setIPStartDate(LocalDate startDate) {
         setPhaseStartDate(startDate, Phase.IP);
     }
 

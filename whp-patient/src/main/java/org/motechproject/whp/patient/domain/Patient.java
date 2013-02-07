@@ -85,10 +85,19 @@ public class Patient extends MotechBaseDataObject {
         currentTherapy = therapy;
     }
 
+
     public List<Therapy> allTherapies() {
-        ArrayList<Therapy> therapies = new ArrayList<Therapy>();
+        ArrayList<Therapy> therapies = new ArrayList<>();
         therapies.add(currentTherapy);
         therapies.addAll(therapyHistory);
+        return therapies;
+    }
+
+    @JsonIgnore
+    public List<Therapy> getAllTherapiesWithCurrentTherapy() {
+        ArrayList<Therapy> therapies = new ArrayList<>();
+        therapies.addAll(therapyHistory);
+        therapies.add(currentTherapy);
         return therapies;
     }
 

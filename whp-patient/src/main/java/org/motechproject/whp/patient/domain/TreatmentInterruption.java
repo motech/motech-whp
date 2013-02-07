@@ -3,7 +3,9 @@ package org.motechproject.whp.patient.domain;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.motechproject.util.DateUtil;
 
 import java.io.Serializable;
 import java.util.List;
@@ -70,4 +72,11 @@ public class TreatmentInterruption implements Serializable {
                         && isOnOrBefore(newDateTime(doseDate), newDateTime(resumptionDate)));
     }
 
+    public int pausedDuration() {
+        return Days.daysBetween(getPauseDate(), getEndDate()).getDays();
+    }
+
+    private LocalDate getEndDate() {
+        return isCurrentlyPaused()? DateUtil.today() :getResumptionDate();
+    }
 }

@@ -43,6 +43,10 @@
             <artifactId>whp-user</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp.reports</groupId>
+            <artifactId>whp-reports-contract</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-scheduler</artifactId>
         </dependency>

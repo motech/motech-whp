@@ -430,4 +430,27 @@ public class Therapy implements Serializable {
     public DoseInterruption getOngoingDoseInterruption() {
         return doseInterruptions.ongoingDoseInterruption();
     }
+
+    @JsonIgnore
+    public PhaseRecord getPhase(Phase phase) {
+        return getPhases().getPhaseRecords().get(phase);
+    }
+
+    @JsonIgnore
+    public int getRemainingDoses(Phase phase) {
+        PhaseRecord phaseRecord = getPhase(phase);
+        return phaseRecord != null ? phaseRecord.remainingDoses(getTreatmentCategory()) : null;
+    }
+
+    @JsonIgnore
+    public Integer getDosesTakenForPhase(Phase phase) {
+        PhaseRecord phaseRecord = getPhase(phase);
+        return phaseRecord != null ? phaseRecord.getNumberOfDosesTaken() : null;
+    }
+
+    @JsonIgnore
+    public String getCurrentPhaseName() {
+        PhaseRecord currentPhase = getCurrentPhase();
+        return currentPhase != null ? currentPhase.getName().name() : null;
+    }
 }

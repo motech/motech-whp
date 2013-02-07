@@ -34,7 +34,7 @@ public class PhaseRecord implements Serializable {
         return startDate != null;
     }
 
-    public int remainingDoses(TreatmentCategory treatmentCategory) {
+    public Integer remainingDoses(TreatmentCategory treatmentCategory) {
         return treatmentCategory.numberOfDosesForPhase(name) - pillTakenSummaries.getTotalPillsTaken();
     }
 
@@ -57,7 +57,7 @@ public class PhaseRecord implements Serializable {
     }
 
     @JsonIgnore
-    public int getNumberOfDosesTaken() {
+    public Integer getNumberOfDosesTaken() {
         return pillTakenSummaries.getTotalPillsTaken();
     }
 

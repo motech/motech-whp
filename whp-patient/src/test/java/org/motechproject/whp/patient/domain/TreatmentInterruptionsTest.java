@@ -50,4 +50,39 @@ public class TreatmentInterruptionsTest {
 
         assertTrue(treatmentInterruptions.latestInterruption().isCurrentlyPaused());
     }
+
+    @Test
+    public void shouldReturnTotalInterruptionInDays() {
+        TreatmentInterruption interruption1 = new TreatmentInterruption("paws", today());
+        interruption1.resumeTreatment("resuming paws", today().plusDays(1));
+        TreatmentInterruption interruption2 = new TreatmentInterruption("paws", today().plusDays(2));
+        interruption2.resumeTreatment("resuming paws", today().plusDays(3));
+        TreatmentInterruption interruption3 = new TreatmentInterruption("pawsAgain", today().minusDays(3));
+        TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1, interruption2, interruption3));
+
+        assertEquals(5, treatmentInterruptions.totalPausedDuration());
+    }
+
+    @Test
+    public void shouldReturnReasonForPauseForOngoingInterruption() {
+        String reasonForPause = "reason for pause";
+        TreatmentInterruption interruption1 = new TreatmentInterruption(reasonForPause, today());
+        TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1));
+        assertEquals(reasonForPause, treatmentInterruptions.getPauseReasonForOngoingInterruption());
+
+        TreatmentInterruptions noInterruptions = new TreatmentInterruptions();
+        assertNull(noInterruptions.getPauseReasonForOngoingInterruption());
+    }
+
+    @Test
+    public void shouldReturnOngoingInterruptionPausedDate() {
+        String reasonForPause = "reason for pause";
+        TreatmentInterruption interruption1 = new TreatmentInterruption(reasonForPause, today());
+        TreatmentInterruptions treatmentInterruptions = new TreatmentInterruptions(Arrays.asList(interruption1));
+        assertEquals(today(), treatmentInterruptions.getPauseDateForOngoingInterruption());
+
+        TreatmentInterruptions noInterruptions = new TreatmentInterruptions();
+        assertNull(noInterruptions.getPauseDateForOngoingInterruption());
+
+    }
 }

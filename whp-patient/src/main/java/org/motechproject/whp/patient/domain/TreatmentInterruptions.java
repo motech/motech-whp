@@ -32,4 +32,22 @@ public class TreatmentInterruptions extends ArrayList<TreatmentInterruption> imp
         if (CollectionUtils.isEmpty(this)) return null;
         return get(size() - 1);
     }
+
+    public int totalPausedDuration() {
+        int total = 0;
+        for (TreatmentInterruption treatmentInterruption : this) {
+            total += treatmentInterruption.pausedDuration();
+        }
+        return total;
+    }
+
+    @JsonIgnore
+    public String getPauseReasonForOngoingInterruption() {
+        return latestInterruption() != null ? latestInterruption().getReasonForPause() : null;
+    }
+
+    @JsonIgnore
+    public LocalDate getPauseDateForOngoingInterruption() {
+        return latestInterruption() != null ? latestInterruption().getPauseDate() : null;
+    }
 }

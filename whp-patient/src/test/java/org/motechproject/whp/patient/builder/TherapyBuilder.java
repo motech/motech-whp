@@ -2,9 +2,13 @@ package org.motechproject.whp.patient.builder;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.patient.domain.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.motechproject.model.DayOfWeek.*;
@@ -56,6 +60,11 @@ public class TherapyBuilder {
         return this;
     }
 
+    public TherapyBuilder withCloseDate(LocalDate endDate) {
+        therapy.setCloseDate(endDate);
+        return this;
+    }
+
     public TherapyBuilder withNoOfDosesTaken(Phase phaseName, int doses) {
         therapy.setNumberOfDosesTaken(phaseName, doses, today());
         return this;
@@ -73,6 +82,22 @@ public class TherapyBuilder {
 
     public TherapyBuilder withDoseInterruptions(DoseInterruptions doseInterruptions) {
         therapy.setDoseInterruptions(doseInterruptions);
+        return this;
+    }
+
+    public TherapyBuilder withDefaults() {
+        List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
+        therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
+        therapy.setDiseaseClass(DiseaseClass.P);
+
+        therapy.getPhases().setIPStartDate(today());
+        therapy.endLatestPhase(today());
+        therapy.getPhases().setNextPhase(Phase.EIP);
+        therapy.getPhases().startNextPhase();
+        therapy.endLatestPhase(today());
+        therapy.getPhases().setNextPhase(Phase.CP);
+        therapy.getPhases().startNextPhase();
+        therapy.endLatestPhase(today());
         return this;
     }
 }

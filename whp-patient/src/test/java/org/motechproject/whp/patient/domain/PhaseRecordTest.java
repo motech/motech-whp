@@ -2,7 +2,6 @@ package org.motechproject.whp.patient.domain;
 
 import org.junit.Test;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
 
 import static junit.framework.Assert.assertEquals;
 import static org.motechproject.util.DateUtil.today;
@@ -18,6 +17,6 @@ public class PhaseRecordTest {
 
         phase.setNumberOfDosesTaken(11, today());
 
-        assertEquals(13, phase.remainingDoses(category));
+        assertEquals(new Integer(13), phase.remainingDoses(category));
     }
 }

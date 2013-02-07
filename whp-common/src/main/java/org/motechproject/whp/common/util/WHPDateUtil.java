@@ -1,5 +1,6 @@
 package org.motechproject.whp.common.util;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Weeks;
 import org.joda.time.format.DateTimeFormat;
@@ -56,5 +57,17 @@ public class WHPDateUtil {
 
     public static Date toDate(String date) {
         return StringUtil.isNullOrEmpty(date) ? null : dateTimeFormatter.parseDateTime(date).toDate();
+    }
+
+    public static java.sql.Date toSqlDate(LocalDate date){
+        if(date == null)
+            return null;
+        return new java.sql.Date(date.toDate().getTime());
+    }
+
+    public static java.sql.Date toSqlDate(DateTime dateTime) {
+        if(dateTime == null)
+            return null;
+        return new java.sql.Date(dateTime.toDate().getTime());
     }
 }

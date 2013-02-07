@@ -39,26 +39,26 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withPatientId("patient1")
                 .withProviderId("provider1")
                 .withProviderDistrict("district")
-                .withCumulativeMissedAlertValue(10, 1)
+                .withCumulativeMissedAlertValue(10, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(3, 1, DateUtil.today().minusDays(7))
-                .withTreatmentNotStartedDays(0, 0)
+                .withTreatmentNotStartedDays(0, 0, DateUtil.today())
                 .withPatientFlag(true).build();
 
         patient2 = new PatientBuilder().withDefaults()
                 .withPatientId("patient2")
                 .withProviderId("provider1")
                 .withProviderDistrict("district")
-                .withCumulativeMissedAlertValue(11, 1)
+                .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(5, 2, DateUtil.today().minusDays(5))
-                .withTreatmentNotStartedDays(0, 0).build();
+                .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
 
         patient3 = new PatientBuilder().withDefaults()
                 .withPatientId("patient3")
                 .withProviderId("provider2")
                 .withProviderDistrict("district2")
-                .withCumulativeMissedAlertValue(11, 1)
+                .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(5, 2, DateUtil.today().minusDays(5))
-                .withTreatmentNotStartedDays(0, 0).build();
+                .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
 
         patient4WithoutAlerts = new PatientBuilder().withDefaults()
                 .withPatientId("patient4")

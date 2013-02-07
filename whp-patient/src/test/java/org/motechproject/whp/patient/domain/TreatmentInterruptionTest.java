@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.domain;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
+import org.motechproject.util.DateUtil;
 
 import java.util.List;
 
@@ -102,5 +103,18 @@ public class TreatmentInterruptionTest {
         List<LocalDate> datesInWeek = getDatesInRange(new LocalDate(2012, 5, 21), new LocalDate(2012, 5, 27));
 
         Assert.assertFalse(interruption.isTreatmentInterrupted(datesInWeek));
+    }
+
+    @Test
+    public void shouldReturnPausedDuration() {
+        LocalDate pauseDate = new LocalDate(2012, 5, 20);
+        LocalDate resumptionDate = new LocalDate(2012, 5, 24);
+        TreatmentInterruption interruption = new TreatmentInterruption("paws", pauseDate);
+        interruption.resumeTreatment("swap", resumptionDate);
+
+        assertEquals(4, interruption.pausedDuration());
+
+        TreatmentInterruption ongoingInterruption = new TreatmentInterruption("paws", DateUtil.today().minusDays(3));
+        assertEquals(3, ongoingInterruption.pausedDuration());
     }
 }

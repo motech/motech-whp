@@ -82,8 +82,8 @@ public class PatientDashboardRowTest {
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
                 .withAdherenceMissedWeeks(6, 2, DateUtil.today())
-                .withCumulativeMissedAlertValue(10,2)
-                .withTreatmentNotStartedDays(8,2)
+                .withCumulativeMissedAlertValue(10,2, DateUtil.today())
+                .withTreatmentNotStartedDays(8,2, DateUtil.today())
                 .withPatientFlag(true)
                 .build();
 
