@@ -13,22 +13,24 @@ import static org.motechproject.whp.patient.query.PatientQueryDefinition.alertSt
 @Getter
 public enum AlertTypeFilter {
 
-    AllAlerts("All alerts (Patients with one or more alerts set)", alertStatusFieldName(), "true"),
-    AdherenceMissingWithSeverityOne("Adherence missing for 1 week alert (Yellow alert)", alertSeverityParam(AdherenceMissing), "1"),
-    AdherenceMissingWithSeverityTwo("Adherence missing for 2 weeks alert (Red alert)", alertSeverityParam(AdherenceMissing), "2"),
-    AdherenceMissingWithSeverityThree("Adherence missing for 6 weeks alert (Maroon alert)", alertSeverityParam(AdherenceMissing), "3"),
-    CumulativeMissedDoses("Cumulative missed doses alert", alertSeverityParam(PatientAlertType.CumulativeMissedDoses), "1"),
-    TreatmentNotStarted("Missing Date of Start of Treatment Alert", alertSeverityParam(PatientAlertType.TreatmentNotStarted), "1"),
-    NoAlerts("No Alerts", alertStatusFieldName(), "false");
+    AllAlerts("All alerts (Patients with one or more alerts set)", alertStatusFieldName(), "true", null),
+    AdherenceMissingWithSeverityOne("Adherence missing for 1 week alert (Yellow alert)", alertSeverityParam(AdherenceMissing), "1", PatientAlertType.AdherenceMissing),
+    AdherenceMissingWithSeverityTwo("Adherence missing for 2 weeks alert (Red alert)", alertSeverityParam(AdherenceMissing), "2", PatientAlertType.AdherenceMissing),
+    AdherenceMissingWithSeverityThree("Adherence missing for 6 weeks alert (Maroon alert)", alertSeverityParam(AdherenceMissing), "3", PatientAlertType.AdherenceMissing),
+    CumulativeMissedDoses("Cumulative missed doses alert", alertSeverityParam(PatientAlertType.CumulativeMissedDoses), "1", PatientAlertType.CumulativeMissedDoses),
+    TreatmentNotStarted("Missing Date of Start of Treatment Alert", alertSeverityParam(PatientAlertType.TreatmentNotStarted), "1", PatientAlertType.TreatmentNotStarted),
+    NoAlerts("No Alerts", alertStatusFieldName(), "false", null);
 
     private String displayText;
     private final String filterKey;
     private final String filterValue;
+    private final PatientAlertType alertType;
 
-    AlertTypeFilter(String displayText, String filterKey, String filterValue) {
+    AlertTypeFilter(String displayText, String filterKey, String filterValue, PatientAlertType alertType) {
         this.displayText = displayText;
         this.filterKey = filterKey;
         this.filterValue = filterValue;
+        this.alertType = alertType;
     }
 
     public static Map<String, Object> getQueryFields(String enumValue) {

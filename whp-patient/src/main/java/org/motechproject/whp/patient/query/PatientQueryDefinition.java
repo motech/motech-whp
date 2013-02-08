@@ -23,7 +23,6 @@ public class PatientQueryDefinition implements QueryDefinition {
     private static final String TO = "To";
     public static final String ADHERENCE_MISSING_WEEKS = "adherenceMissingWeeks";
     public static final String CUMULATIVE_MISSED_DOSES = "cumulativeMissedDoses";
-    public static final String FLAG_FILTER_PARAM = "flag";
 
     @Getter
     protected static final QueryField isActive = new QueryField("isActive", STRING);
@@ -52,6 +51,7 @@ public class PatientQueryDefinition implements QueryDefinition {
         for(PatientAlertType alertType : PatientAlertType.values()){
             fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, STRING));
             fields.add(new QueryField(alertType.name() + ALERT_VALUE, STRING));
+            fields.add(new RangeField(alertType.name() + ALERT_DATE, DATE, alertDateFromParamForType(alertType), alertDateToParamForType(alertType)));
             fields.add(new RangeField(ALERT_DATE, DATE, ALERT_DATE + FROM, ALERT_DATE + TO));
         }
 
@@ -94,6 +94,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                         "var alertType =  alertTypes[i]; " +
                         "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {field: alertType + '"+ ALERT_SEVERITY + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].value, {field: alertType + '"+ ALERT_VALUE + "'}); "+
+                        "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: alertType + '"+ ALERT_DATE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: '"+ ALERT_DATE + "'}); "+
                     "} "+
 
@@ -135,5 +136,13 @@ public class PatientQueryDefinition implements QueryDefinition {
 
     public static String adherenceMissingWeeksToParam() {
         return ADHERENCE_MISSING_WEEKS + TO;
+    }
+
+    public static String alertDateFromParamForType(PatientAlertType alertType) {
+        return alertType.name() + alertDateFromParam();
+    }
+
+    public static String alertDateToParamForType(PatientAlertType alertType) {
+        return alertType.name() + alertDateToParam();
     }
 }

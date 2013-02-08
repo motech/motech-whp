@@ -3,6 +3,7 @@ package org.motechproject.whp.patient.model;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
@@ -30,6 +31,33 @@ public class AlertDateFilterTest {
     @Test
     public void shouldReturnQueryFieldsGivenAnEnumValue(){
         Map<String,Object> queryFields = AlertDateFilter.getQueryFields(AlertDateFilter.ThisMonth.name());
+
+        assertEquals(2, queryFields.size());
+        assertEquals(WHPDate.date(LocalDate.now().minusMonths(1)).value(), queryFields.get(PatientQueryDefinition.alertDateFromParam()));
+        assertEquals(WHPDate.date(LocalDate.now()).value(), queryFields.get(PatientQueryDefinition.alertDateToParam()));
+    }
+
+    @Test
+    public void shouldReturnQueryFieldsForGivenAlertDateAndType() {
+        Map<String,Object> queryFields = AlertDateFilter.getQueryFieldsForType(AlertDateFilter.ThisMonth.name(), AlertTypeFilter.AdherenceMissingWithSeverityOne.name());
+
+        assertEquals(2, queryFields.size());
+        assertEquals(WHPDate.date(LocalDate.now().minusMonths(1)).value(), queryFields.get(PatientQueryDefinition.alertDateFromParamForType(PatientAlertType.AdherenceMissing)));
+        assertEquals(WHPDate.date(LocalDate.now()).value(), queryFields.get(PatientQueryDefinition.alertDateToParamForType(PatientAlertType.AdherenceMissing)));
+    }
+
+    @Test
+    public void shouldReturnQueryFieldsForTypeGivenAlertDateAndAllAlertsAlertType() {
+        Map<String,Object> queryFields = AlertDateFilter.getQueryFieldsForType(AlertDateFilter.ThisMonth.name(), AlertTypeFilter.AllAlerts.name());
+
+        assertEquals(2, queryFields.size());
+        assertEquals(WHPDate.date(LocalDate.now().minusMonths(1)).value(), queryFields.get(PatientQueryDefinition.alertDateFromParam()));
+        assertEquals(WHPDate.date(LocalDate.now()).value(), queryFields.get(PatientQueryDefinition.alertDateToParam()));
+    }
+
+    @Test
+    public void shouldReturnQueryFieldsForTypeGivenAlertDateAndNoAlertsAlertType() {
+        Map<String,Object> queryFields = AlertDateFilter.getQueryFieldsForType(AlertDateFilter.ThisMonth.name(), AlertTypeFilter.NoAlerts.name());
 
         assertEquals(2, queryFields.size());
         assertEquals(WHPDate.date(LocalDate.now().minusMonths(1)).value(), queryFields.get(PatientQueryDefinition.alertDateFromParam()));

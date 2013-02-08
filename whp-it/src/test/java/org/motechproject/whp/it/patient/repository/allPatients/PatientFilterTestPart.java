@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.model.AlertTypeFilter;
 import org.motechproject.whp.patient.model.FlagFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
@@ -153,8 +154,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", "provider1");
-        queryParams.put("cumulativeMissedDosesFrom", 10);
-        queryParams.put("cumulativeMissedDosesTo", Integer.MAX_VALUE);
+        queryParams.put(PatientQueryDefinition.cumulativeMissedDosesFromParam(), 10);
+        queryParams.put(PatientQueryDefinition.cumulativeMissedDosesFromParam(), Integer.MAX_VALUE);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
@@ -171,8 +172,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", "provider1");
-        queryParams.put("adherenceMissingWeeksFrom", 3);
-        queryParams.put("adherenceMissingWeeksTo", Integer.MAX_VALUE);
+        queryParams.put(PatientQueryDefinition.adherenceMissingWeeksFromParam(), 3);
+        queryParams.put(PatientQueryDefinition.adherenceMissingWeeksToParam(), Integer.MAX_VALUE);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
@@ -205,8 +206,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         queryParams.put("providerId", "provider1");
         String alertDateFrom = WHPDate.date(DateUtil.today().minusDays(5)).value();
         String alertDateTo = WHPDate.date(DateUtil.today().minusDays(5)).value();
-        queryParams.put("AlertDateFrom", alertDateFrom);
-        queryParams.put("AlertDateTo", alertDateTo);
+        queryParams.put(PatientQueryDefinition.alertDateFromParam(), alertDateFrom);
+        queryParams.put(PatientQueryDefinition.alertDateToParam(), alertDateTo);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
@@ -229,6 +230,56 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(1, allPatients.count(queryParams));
         assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
         assertTrue(hasNoInactivePatients(searchResults));
+    }
+
+    @Test
+    public void shouldFilterPatientsByAlertTypeAndDateCombined() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("providerId", "provider1");
+        String alertDateFrom = WHPDate.date(DateUtil.today().minusDays(10)).value();
+        String alertDateTo = WHPDate.date(DateUtil.today().minusDays(7)).value();
+        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateFrom", alertDateFrom);
+        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateTo", alertDateTo);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(1, allPatients.count(queryParams));
+    }
+
+    @Test
+    public void shouldFilterPatientsByAlertTypeAndDateCombinedAndNotReturnAnything() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("providerId", "provider1");
+        String alertDateFrom = WHPDate.date(DateUtil.today().minusDays(10)).value();
+        String alertDateTo = WHPDate.date(DateUtil.today().minusDays(7)).value();
+        queryParams.put(PatientAlertType.CumulativeMissedDoses.name() + "AlertDateFrom", alertDateFrom);
+        queryParams.put(PatientAlertType.CumulativeMissedDoses.name() + "AlertDateTo", alertDateTo);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(0, searchResults.size());
+        assertEquals(0, allPatients.count(queryParams));
+    }
+
+    @Test
+    public void shouldFilterPatientsByAlertTypeAndDateCombinedAlongWithSeverity() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put("providerId", "provider1");
+        String alertDateFrom = WHPDate.date(DateUtil.today().minusDays(10)).value();
+        String alertDateTo = WHPDate.date(DateUtil.today().minusDays(5)).value();
+        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateFrom", alertDateFrom);
+        queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateTo", alertDateTo);
+        queryParams.put(AlertTypeFilter.AdherenceMissingWithSeverityOne.getFilterKey(), AlertTypeFilter.AdherenceMissingWithSeverityOne.getFilterValue());
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+        assertEquals(1, allPatients.count(queryParams));
     }
 
     private boolean hasNoInactivePatients(List<Patient> searchResults) {

@@ -1,10 +1,11 @@
 package org.motechproject.whp.mapper;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.paginator.contract.FilterParams;
+import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.patient.model.AlertDateFilter;
 import org.motechproject.whp.patient.model.AlertTypeFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
@@ -21,8 +22,8 @@ public class AlertsFilterTransformerTest {
         FilterParams transformedFilterParams = new AlertsFilterTransformer().transform(filterParams);
 
         assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
-        assertEquals(WHPDate.date(LocalDate.now()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateFromParam()));
-        assertEquals(WHPDate.date(LocalDate.now()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateToParam()));
+        assertEquals(WHPDate.date(DateUtil.today()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateFromParam()));
+        assertEquals(WHPDate.date(DateUtil.today()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateToParam()));
     }
 
     @Test
@@ -35,6 +36,22 @@ public class AlertsFilterTransformerTest {
 
         assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
         assertEquals(AlertTypeFilter.AdherenceMissingWithSeverityThree.getFilterValue(), transformedFilterParams.get(PatientQueryDefinition.alertSeverityParam(PatientAlertType.AdherenceMissing)));
+    }
+
+    @Test
+    public void shouldConvertAlertTypeFilterAndDateFilterCombinedIntoDesiredQueryFields(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("treatmentCategory", "01");
+        filterParams.put("alertType", AlertTypeFilter.AdherenceMissingWithSeverityThree.name());
+        filterParams.put("alertDate", AlertDateFilter.Today.name());
+
+        FilterParams transformedFilterParams = new AlertsFilterTransformer().transform(filterParams);
+
+        assertEquals(4, transformedFilterParams.size());
+        assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
+        assertEquals(AlertTypeFilter.AdherenceMissingWithSeverityThree.getFilterValue(), transformedFilterParams.get(PatientQueryDefinition.alertSeverityParam(PatientAlertType.AdherenceMissing)));
+        assertEquals(WHPDate.date(DateUtil.today()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateFromParamForType(PatientAlertType.AdherenceMissing)));
+        assertEquals(WHPDate.date(DateUtil.today()).value(), transformedFilterParams.get(PatientQueryDefinition.alertDateToParamForType(PatientAlertType.AdherenceMissing)));
     }
 
     @Test
