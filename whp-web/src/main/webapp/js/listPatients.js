@@ -51,14 +51,16 @@ $(function () {
                 type:"GET",
                 url:$(target).attr("endpoint"),
                 success:function (data) {
-                    var imageSrc = $(target).attr('src');
-                    var endpoint = $(target).attr('endpoint');
-                    var flagImageCurrentValue = $(target).attr("flagValue");
-                    var flagImageNextValue = (flagImageCurrentValue == "true") ? "false" : "true";
+                    if(data === "success") {
+                        var imageSrc = $(target).attr('src');
+                        var endpoint = $(target).attr('endpoint');
+                        var flagImageCurrentValue = $(target).attr("flagValue");
+                        var flagImageNextValue = (flagImageCurrentValue == "true") ? "false" : "true";
 
-                    $(target).attr('src', imageSrc.replace(flagImageCurrentValue + "-star", flagImageNextValue + "-star"));
-                    $(target).attr('endpoint', endpoint.replace("value=" + flagImageNextValue, "value=" + flagImageCurrentValue));
-                    $(target).attr("flagValue", flagImageNextValue);
+                        $(target).attr('src', imageSrc.replace(flagImageCurrentValue + "-star", flagImageNextValue + "-star"));
+                        $(target).attr('endpoint', endpoint.replace("value=" + flagImageNextValue, "value=" + flagImageCurrentValue));
+                        $(target).attr("flagValue", flagImageNextValue);
+                    }
                 }
             });
         }
