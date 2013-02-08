@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.motechproject.util.DateUtil;
 
 public class WHPDate {
 
@@ -36,6 +37,11 @@ public class WHPDate {
     public static WHPDate date(LocalDate date) {
         return new WHPDate(date);
     }
+
+    public static String today() {
+        return WHPDate.date(DateUtil.today()).value();
+    }
+
 
     public String value() {
         if (null == date) {
