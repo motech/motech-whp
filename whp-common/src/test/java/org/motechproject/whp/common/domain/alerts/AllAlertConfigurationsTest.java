@@ -8,21 +8,13 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.AllDaysOfWeek;
 import org.motechproject.whp.common.service.AlertsPropertiesValues;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static junit.framework.Assert.*;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.model.DayOfWeek.Wednesday;
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.TreatmentNotStarted;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.*;
 
 public class AllAlertConfigurationsTest {
 
@@ -34,17 +26,31 @@ public class AllAlertConfigurationsTest {
     @Before
     public void setUp() {
         initMocks(this);
+        when(alertsPropertiesValues.getAdherenceMissingSeverityColors()).thenReturn(asList("", "yellow", "pink", "red"));
+        when(alertsPropertiesValues.getCumulativeMissedDosesSeverityColors()).thenReturn(asList("", "blue"));
+        when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("", "brown"));
     }
 
     @Test
     public void shouldReturnAlertThresholdSeverity() {
         when(alertsPropertiesValues.getAdherenceMissingWeeks()).thenReturn(asList(1, 2, 6));
-        allAlertConfigurations = new AllAlertConfigurations(alertsPropertiesValues);
+         allAlertConfigurations = new AllAlertConfigurations(alertsPropertiesValues);
 
         assertEquals((Integer) 1, allAlertConfigurations.getAlertSeverityFor(AdherenceMissing, 1));
         assertEquals((Integer) 2, allAlertConfigurations.getAlertSeverityFor(AdherenceMissing, 2));
         assertEquals((Integer) 3, allAlertConfigurations.getAlertSeverityFor(AdherenceMissing, 6));
     }
+
+    @Test
+    public void shouldReturnAlertThresholdSeverityColor() {
+        when(alertsPropertiesValues.getAdherenceMissingWeeks()).thenReturn(asList(1, 2, 6));
+        allAlertConfigurations = new AllAlertConfigurations(alertsPropertiesValues);
+
+        assertEquals("yellow", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 1));
+        assertEquals("pink", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 2));
+        assertEquals("red", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 6));
+    }
+
 
     @Test
     public void shouldReturnIfAlertShouldBeRunToday() {

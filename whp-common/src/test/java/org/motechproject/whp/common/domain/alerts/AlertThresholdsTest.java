@@ -15,14 +15,16 @@ public class AlertThresholdsTest {
     @Test
     public void shouldReturnAlertThresholdForGivenValue() {
         List<String> adherenceMissingWeeks = asList("4", "8", "12");
+        List<String> adherenceMissingWeeksColors = asList("yellow", "pink", "red");
         alertsPropertiesValues = new AlertsPropertiesValues();
         alertsPropertiesValues.setAdherenceMissingWeeks(adherenceMissingWeeks);
-        AlertThresholds alertThresholds = new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks());
+        alertsPropertiesValues.setAdherenceMissingSeverityColors(adherenceMissingWeeksColors);
+        AlertThresholds alertThresholds = new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks(), alertsPropertiesValues.getAdherenceMissingSeverityColors());
 
-        assertEquals(new AlertThreshold(0, 0), alertThresholds.getThreshold(2));
-        assertEquals(new AlertThreshold(4, 1), alertThresholds.getThreshold(4));
-        assertEquals(new AlertThreshold(8, 2), alertThresholds.getThreshold(9));
-        assertEquals(new AlertThreshold(12, 3), alertThresholds.getThreshold(14));
+        assertEquals(new AlertThreshold(0, 0, ""), alertThresholds.getThreshold(2));
+        assertEquals(new AlertThreshold(4, 1, "yellow"), alertThresholds.getThreshold(4));
+        assertEquals(new AlertThreshold(8, 2, "pink"), alertThresholds.getThreshold(9));
+        assertEquals(new AlertThreshold(12, 3, "red"), alertThresholds.getThreshold(14));
     }
 
 }

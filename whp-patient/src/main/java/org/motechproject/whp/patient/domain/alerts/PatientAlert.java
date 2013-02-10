@@ -12,6 +12,7 @@ public class PatientAlert {
     private LocalDate alertDate;
     private PatientAlertType alertType;
     private int alertSeverity;
+    private String alertSeverityColor;
     private LocalDate resetDate;
 
     public PatientAlert() {
@@ -21,11 +22,12 @@ public class PatientAlert {
         this.alertType = alertType;
     }
 
-    public void update(int newValue, int severity) {
+    public void update(int newValue, int severity, String severityColor) {
         setValue(newValue);
         if(getAlertSeverity() != severity){
             setAlertDate(today());
             setAlertSeverity(severity);
+            setAlertSeverityColor(severityColor);
         }
     }
 

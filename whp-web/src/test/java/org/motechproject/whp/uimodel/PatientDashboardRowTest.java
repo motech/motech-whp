@@ -81,9 +81,9 @@ public class PatientDashboardRowTest {
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
-                .withAdherenceMissedWeeks(6, 2, DateUtil.today())
-                .withCumulativeMissedAlertValue(10,2, DateUtil.today())
-                .withTreatmentNotStartedDays(8,2, DateUtil.today())
+                .withAdherenceMissedWeeks(6, 2, DateUtil.today(), "pink")
+                .withCumulativeMissedAlertValue(10,2, DateUtil.today(), "blue")
+                .withTreatmentNotStartedDays(8,2, DateUtil.today(), "brown")
                 .withPatientFlag(true)
                 .build();
 
@@ -119,6 +119,10 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getCumulativeMissedDosesSeverity(), is(2));
         assertThat(patientDashboardRow.getAdherenceMissingWeeks(), is(6));
         assertThat(patientDashboardRow.getAdherenceMissingWeeksSeverity(), is(2));
+
+        assertThat(patientDashboardRow.getAdherenceMissingSeverityColor(), is("pink"));
+        assertThat(patientDashboardRow.getCumulativeMissedDosesSeverityColor(), is("blue"));
+        assertThat(patientDashboardRow.getTreatmentNotStartedSeverityColor(), is("brown"));
 
         assertThat(patientDashboardRow.getFlag(), is(true));
 

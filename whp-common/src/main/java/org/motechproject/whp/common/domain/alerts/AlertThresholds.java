@@ -5,13 +5,14 @@ import java.util.List;
 
 public class AlertThresholds {
     private List<AlertThreshold> alertThresholds = new ArrayList<>();
-    private final AlertThreshold zeroThreshold = new AlertThreshold(0, 0);
+    private final AlertThreshold zeroThreshold = new AlertThreshold(0, 0, "");
 
-    public AlertThresholds(List<Integer> thresholds) {
+    public AlertThresholds(List<Integer> thresholds, List<String> alertSeverityColors) {
         alertThresholds.add(zeroThreshold);
         int index = 1;
         for(Integer threshold : thresholds){
-            alertThresholds.add(new AlertThreshold(threshold, index ++));
+            alertThresholds.add(new AlertThreshold(threshold, index, alertSeverityColors.get(index)));
+            index ++;
         }
     }
 

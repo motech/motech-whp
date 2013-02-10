@@ -21,10 +21,12 @@ public class AlertConfigurationTest extends BaseUnitTest{
     @Test
     public void shouldCheckIfAlertShouldBeRunOnCurrentDay() {
         List<String> adherenceMissingWeeks = asList("1", "2", "6");
+        List<String> adherenceMissingSeverityColors = asList("", "yellow", "pink", "red");
         alertsPropertiesValues = new AlertsPropertiesValues();
         alertsPropertiesValues.setAdherenceMissingWeeks(adherenceMissingWeeks);
+        alertsPropertiesValues.setAdherenceMissingSeverityColors(adherenceMissingSeverityColors);
 
-        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks()), asList(Monday, Wednesday));
+        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks(), alertsPropertiesValues.getAdherenceMissingSeverityColors()), asList(Monday, Wednesday));
 
         mockCurrentDate(new LocalDate(2013, 1, 25)); //friday
         assertFalse(alertConfiguration.shouldRunToday());

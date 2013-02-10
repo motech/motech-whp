@@ -1,7 +1,6 @@
 package org.motechproject.whp.common.domain.alerts;
 
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.common.domain.AllDaysOfWeek;
 import org.motechproject.whp.common.service.AlertsPropertiesValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,18 +59,22 @@ public class AllAlertConfigurations {
     }
 
     private AlertThresholds getAdherenceMissingAlertThresholds() {
-        return new AlertThresholds(alertsProperties.getAdherenceMissingWeeks());
+        return new AlertThresholds(alertsProperties.getAdherenceMissingWeeks(), alertsProperties.getAdherenceMissingSeverityColors());
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()));
+        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()), alertsProperties.getCumulativeMissedDosesSeverityColors());
     }
 
     private AlertThresholds getTreatmentNotStartedAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()));
+        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()), alertsProperties.getTreatmentNotStartedSeverityColors());
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {
         return getAlertConfiguration(alertType).shouldRunToday();
+    }
+
+    public String getAlertSeverityColorFor(PatientAlertType alertType, int value) {
+        return getThresholdFor(alertType, value).getAlertSeverityColor();
     }
 }

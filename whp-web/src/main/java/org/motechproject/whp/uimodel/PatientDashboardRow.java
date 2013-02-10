@@ -31,9 +31,12 @@ public class PatientDashboardRow {
     private String cpProgress;
     private Integer cumulativeMissedDoses;
     private Integer treatmentNotStartedSeverity;
+    private String treatmentNotStartedSeverityColor;
     private Integer cumulativeMissedDosesSeverity;
+    private String cumulativeMissedDosesSeverityColor;
     private Integer adherenceMissingWeeks;
     private Integer adherenceMissingWeeksSeverity;
+    private String adherenceMissingSeverityColor;
     private Boolean flag;
 
 
@@ -64,9 +67,12 @@ public class PatientDashboardRow {
         PatientAlerts patientAlerts = patient.getPatientAlerts();
         cumulativeMissedDoses = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
         treatmentNotStartedSeverity = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity();
+        treatmentNotStartedSeverityColor = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverityColor();
         cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();
+        cumulativeMissedDosesSeverityColor = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverityColor();
         adherenceMissingWeeks = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
         adherenceMissingWeeksSeverity = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity();
+        adherenceMissingSeverityColor = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverityColor();
         flag = patient.getPatientFlag().isFlagSet();
     }
 

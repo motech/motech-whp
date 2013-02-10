@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -52,4 +54,20 @@ public class AlertsPropertiesValuesIT {
     public void shouldGetDayOfAlertGenerationForTreatmentNotStarted(){
         assertThat(alertsPropertiesValues.getDayOfAlertGenerationForTreatmentNotStarted(), is(AllDaysOfWeek.allDaysOfWeek));
     }
+
+    @Test
+    public void shouldReadAdherenceMissingWeeksSeverityColors() {
+        assertThat(alertsPropertiesValues.getAdherenceMissingSeverityColors(), is(Arrays.asList("", "yellow", "pink", "red")));
+    }
+
+    @Test
+    public void shouldReadCumulativeMissedDoesSeverityColors() {
+        assertThat(alertsPropertiesValues.getCumulativeMissedDosesSeverityColors(), is(Arrays.asList("", "blue")));
+    }
+
+    @Test
+    public void shouldReadTreatmentNotStartedSeverityColors() {
+        assertThat(alertsPropertiesValues.getTreatmentNotStartedSeverityColors(), is(Arrays.asList("", "brown")));
+    }
+
 }

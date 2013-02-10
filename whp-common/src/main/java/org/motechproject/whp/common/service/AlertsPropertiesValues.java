@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.model.DayOfWeek.getDayOfWeek;
-
 @Setter
 @Component
 public class AlertsPropertiesValues {
@@ -31,6 +29,15 @@ public class AlertsPropertiesValues {
 
     @Value("#{alertsProperties['alerts.daysOfAlertGenerationForTreatmentNotStarted'].split(',')}")
     private List<String> daysOfAlertGenerationForTreatmentNotStarted;
+
+    @Value("#{alertsProperties['alerts.adherenceMissing.severity.colors'].split(',')}")
+    private List<String> adherenceMissingSeverityColors;
+
+    @Value("#{alertsProperties['alerts.cumulativeMissedDoses.severity.colors'].split(',')}")
+    private List<String> cumulativeMissedDosesSeverityColors;
+
+    @Value("#{alertsProperties['alerts.treatmentNotStarted.severity.colors'].split(',')}")
+    private List<String> treatmentNotStartedSeverityColors;
 
 
     public AlertsPropertiesValues() {
@@ -77,5 +84,26 @@ public class AlertsPropertiesValues {
             daysOfWeek.add(DayOfWeek.getDayOfWeek(Integer.parseInt(dayOfWeek)));
         }
         return daysOfWeek;
+    }
+
+    public List<String> getAdherenceMissingSeverityColors() {
+        return addColorForEverySeverity(adherenceMissingSeverityColors);
+    }
+
+    private List<String> addColorForEverySeverity(List<String> alertColors) {
+        String NO_COLOR_FOR_ZERO_SEVERITY = "";
+
+        List<String> severityColors = new ArrayList<>();
+        severityColors.add(NO_COLOR_FOR_ZERO_SEVERITY);
+        severityColors.addAll(alertColors);
+        return severityColors;
+    }
+
+    public List<String> getCumulativeMissedDosesSeverityColors() {
+        return addColorForEverySeverity(cumulativeMissedDosesSeverityColors);
+    }
+
+    public List<String> getTreatmentNotStartedSeverityColors() {
+        return addColorForEverySeverity(treatmentNotStartedSeverityColors);
     }
 }

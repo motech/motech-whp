@@ -214,20 +214,20 @@ public class PatientBuilder {
         return this;
     }
 
-    public PatientBuilder withCumulativeMissedAlertValue(int cumulativeMissedDoses, int severity, LocalDate alertDate) {
-        patient.updatePatientAlert(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoses, severity);
+    public PatientBuilder withCumulativeMissedAlertValue(int cumulativeMissedDoses, int severity, LocalDate alertDate, String severityColor) {
+        patient.updatePatientAlert(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoses, severity, severityColor);
         patient.getPatientAlerts().cumulativeMissedDoseAlert().setAlertDate(alertDate);
         return this;
     }
 
-    public PatientBuilder withAdherenceMissedWeeks(int adherenceMissedWeeks, int severity, LocalDate alertDate) {
-        patient.updatePatientAlert(PatientAlertType.AdherenceMissing, adherenceMissedWeeks, severity);
+    public PatientBuilder withAdherenceMissedWeeks(int adherenceMissedWeeks, int severity, LocalDate alertDate, String severityColor) {
+        patient.updatePatientAlert(PatientAlertType.AdherenceMissing, adherenceMissedWeeks, severity, severityColor);
         patient.getPatientAlerts().adherenceMissingAlert().setAlertDate(alertDate);
         return this;
     }
 
-    public PatientBuilder withTreatmentNotStartedDays(int treatmentNotStartedDays, int severity, LocalDate alertDate) {
-        patient.updatePatientAlert(PatientAlertType.TreatmentNotStarted, treatmentNotStartedDays, severity);
+    public PatientBuilder withTreatmentNotStartedDays(int treatmentNotStartedDays, int severity, LocalDate alertDate, String severityColor) {
+        patient.updatePatientAlert(PatientAlertType.TreatmentNotStarted, treatmentNotStartedDays, severity, severityColor);
         patient.getPatientAlerts().treatmentNotStartedAlert().setAlertDate(alertDate);
         return this;
     }
@@ -253,9 +253,9 @@ public class PatientBuilder {
     }
 
     public PatientBuilder defaultPatientAlerts() {
-        withAdherenceMissedWeeks(2, 1, DateUtil.today());
-        withCumulativeMissedAlertValue(2, 1, DateUtil.today());
-        withTreatmentNotStartedDays(2, 1, DateUtil.today());
+        withAdherenceMissedWeeks(2, 1, DateUtil.today(), "yellow");
+        withCumulativeMissedAlertValue(2, 1, DateUtil.today(), "blue");
+        withTreatmentNotStartedDays(2, 1, DateUtil.today(), "brown");
         return this;
     }
 }

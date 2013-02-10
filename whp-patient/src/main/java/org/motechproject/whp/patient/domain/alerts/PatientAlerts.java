@@ -39,8 +39,8 @@ public class PatientAlerts {
         return getAlert(TreatmentNotStarted);
     }
 
-    public void updateAlertStatus(PatientAlertType alertType, int value, int severity) {
-        getAlert(alertType).update(value, severity);
+    public void updateAlertStatus(PatientAlertType alertType, int value, int severity, String severityColor) {
+        getAlert(alertType).update(value, severity, severityColor);
         updateAlertStatus();
     }
 
