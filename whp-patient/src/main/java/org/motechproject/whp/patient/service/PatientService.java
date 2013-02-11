@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.mapper.PatientMapper;
+import org.motechproject.whp.patient.reporting.PatientReportingService;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.user.domain.Provider;
@@ -30,24 +31,29 @@ public class PatientService {
     private ProviderService providerService;
     private PatientAlertService patientAlertService;
     private PatientAlertScheduler patientAlertScheduler;
+    private PatientReportingService patientReportingService;
 
     @Autowired
     public PatientService(AllPatients allPatients, PatientMapper patientMapper,
                           AllTherapyRemarks allTherapyRemarks,
                           ProviderService providerService,
-                          PatientAlertService patientAlertService, PatientAlertScheduler patientAlertScheduler) {
+                          PatientAlertService patientAlertService,
+                          PatientAlertScheduler patientAlertScheduler,
+                          PatientReportingService patientReportingService) {
         this.allPatients = allPatients;
         this.patientMapper = patientMapper;
         this.allTherapyRemarks = allTherapyRemarks;
         this.providerService = providerService;
         this.patientAlertService = patientAlertService;
         this.patientAlertScheduler = patientAlertScheduler;
+        this.patientReportingService = patientReportingService;
     }
 
     public void createPatient(PatientRequest patientRequest) {
         Patient patient = patientMapper.mapPatient(patientRequest);
         allPatients.add(patient);
         patientAlertScheduler.scheduleJob(patient.getPatientId());
+        patientReportingService.reportPatient(patient);
     }
 
     public List<Patient> getAllWithActiveTreatmentForProvider(String providerId) {
@@ -61,11 +67,13 @@ public class PatientService {
     public void update(Patient updatedPatient) {
         patientAlertService.processAllAlerts(updatedPatient);
         allPatients.update(updatedPatient);
+        patientReportingService.reportPatient(updatedPatient);
     }
 
     public void updateBasedOnAlertConfiguration(Patient patient) {
         patientAlertService.processAlertsBasedOnConfiguration(patient);
         allPatients.update(patient);
+        patientReportingService.reportPatient(patient);
     }
 
     public List<Patient> searchBy(String districtName) {

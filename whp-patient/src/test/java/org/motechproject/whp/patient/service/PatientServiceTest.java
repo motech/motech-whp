@@ -22,6 +22,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.TherapyRemark;
 import org.motechproject.whp.patient.mapper.PatientMapper;
+import org.motechproject.whp.patient.reporting.PatientReportingService;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTherapyRemarks;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -59,6 +60,8 @@ public class PatientServiceTest extends BaseUnitTest {
     @Mock
     private PatientAlertService patientAlertService;
     @Mock
+    private PatientReportingService patientReportingService;
+    @Mock
     private PatientAlertScheduler patientAlertScheduler;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -69,7 +72,7 @@ public class PatientServiceTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, patientAlertService, patientAlertScheduler);
+        patientService = new PatientService(allPatients, patientMapper, allTherapyRemarks, providerService, patientAlertService, patientAlertScheduler, patientReportingService);
     }
 
     @Test
@@ -158,6 +161,7 @@ public class PatientServiceTest extends BaseUnitTest {
 
         verify(patientAlertService).processAllAlerts(patient);
         verify(allPatients).update(patient);
+        verify(patientReportingService).reportPatient(patient);
     }
 
     @Test
@@ -167,6 +171,7 @@ public class PatientServiceTest extends BaseUnitTest {
 
         verify(patientAlertService).processAlertsBasedOnConfiguration(patient);
         verify(allPatients).update(patient);
+        verify(patientReportingService).reportPatient(patient);
     }
 
     @Test
@@ -181,6 +186,7 @@ public class PatientServiceTest extends BaseUnitTest {
 
         verify(allPatients).add(patient);
         verify(patientAlertScheduler).scheduleJob(PATIENT_ID);
+        verify(patientReportingService).reportPatient(patient);
     }
 
     @Test
