@@ -21,7 +21,7 @@ public class PatientReportingRequestMapper {
         patientDTO.setFirstName(patient.getFirstName());
         patientDTO.setLastName(patient.getLastName());
         patientDTO.setGender(patient.getGender().name());
-        patientDTO.setOnActiveTreatment(YesNo.value(patient.isOnActiveTreatment()).name());
+        patientDTO.setOnActiveTreatment(YesNo.value(patient.isOnActiveTreatment()).code());
         patientDTO.setPatientId(patient.getPatientId());
         patientDTO.setPatientStatus(patient.getStatus().name());
         patientDTO.setPhi(patient.getPhi());
@@ -100,7 +100,7 @@ public class PatientReportingRequestMapper {
             therapyDTO.setCpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInCP());
             therapyDTO.setIpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInIP());
             therapyDTO.setEipTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInEIP());
-            therapyDTO.setCurrentTherapy(YesNo.No.name());
+            therapyDTO.setCurrentTherapy(YesNo.No.code());
 
             therapyDTO.setTreatments(mapTreatmentDTOs(therapy.getAllTreatments()));
 
@@ -119,11 +119,11 @@ public class PatientReportingRequestMapper {
     }
 
     private void setCurrentTherapyFlagForLastTherapy(List<TherapyDTO> therapyDTOs) {
-        lastTherapy(therapyDTOs).setCurrentTherapy(YesNo.Yes.name());
+        lastTherapy(therapyDTOs).setCurrentTherapy(YesNo.Yes.code());
     }
 
     private void setCurrentTreatmentFlagForLastTreatment(List<TreatmentDTO> treatmentsForCurrentTherapy) {
-        treatmentsForCurrentTherapy.get(treatmentsForCurrentTherapy.size() - 1).setCurrentTreatment(YesNo.Yes.name());
+        treatmentsForCurrentTherapy.get(treatmentsForCurrentTherapy.size() - 1).setCurrentTreatment(YesNo.Yes.code());
     }
 
     private List<TreatmentDTO> mapTreatmentDTOs(List<Treatment> allTreatments) {
@@ -141,11 +141,11 @@ public class PatientReportingRequestMapper {
             treatmentDTO.setTbRegistrationNumber(treatment.getTbRegistrationNumber());
             treatmentDTO.setPreTreatmentSmearTestResult(treatment.getPreTreatmentSmearTestResult().value());
             treatmentDTO.setPreTreatmentWeight(treatment.getPreTreatmentWeightRecord().getWeight());
-            treatmentDTO.setIsPaused(YesNo.value(treatment.isPaused()).name());
+            treatmentDTO.setIsPaused(YesNo.value(treatment.isPaused()).code());
             treatmentDTO.setPausedDate(WHPDateUtil.toSqlDate(treatment.getInterruptions().getPauseDateForOngoingInterruption()));
             treatmentDTO.setReasonsForPause(treatment.getInterruptions().getPauseReasonForOngoingInterruption());
             treatmentDTO.setTotalPausedDuration(treatment.getInterruptions().totalPausedDuration());
-            treatmentDTO.setCurrentTreatment(YesNo.No.name());
+            treatmentDTO.setCurrentTreatment(YesNo.No.code());
 
             treatmentDTOs.add(treatmentDTO);
         }

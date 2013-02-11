@@ -43,7 +43,7 @@ public class PatientReportingRequestMapperTest {
         assertEquals(patient.getFirstName(), patientDTO.getFirstName());
         assertEquals(patient.getGender().name(), patientDTO.getGender());
         assertEquals(patient.getLastName(), patientDTO.getLastName());
-        assertEquals(YesNo.value(patient.isOnActiveTreatment()).name(), patientDTO.getOnActiveTreatment());
+        assertEquals(YesNo.value(patient.isOnActiveTreatment()).code(), patientDTO.getOnActiveTreatment());
         assertEquals(patient.getStatus().name(), patientDTO.getPatientStatus());
         assertEquals(patient.getPhi(), patientDTO.getPhi());
         assertEquals(patient.getPhoneNumber(), patientDTO.getPhoneNumber());
@@ -138,7 +138,7 @@ public class PatientReportingRequestMapperTest {
     }
 
     private void assertCurrentTherapyFlag(boolean lastTherapy, TherapyDTO therapyDTO) {
-        String expected = lastTherapy?  YesNo.Yes.name() :  YesNo.No.name();
+        String expected = lastTherapy?  YesNo.Yes.code() :  YesNo.No.code();
         assertEquals(expected, therapyDTO.getCurrentTherapy());
     }
 
@@ -163,7 +163,7 @@ public class PatientReportingRequestMapperTest {
             assertEquals(treatment.getTreatmentOutcome(), treatmentDTO.getTreatmentOutcome());
             assertEquals(treatment.getPatientType().name(), treatmentDTO.getPatientType());
             assertEquals(treatment.getProviderDistrict(), treatmentDTO.getProviderDistrict());
-            assertEquals(YesNo.value(treatment.isPaused()).name(), treatmentDTO.getIsPaused());
+            assertEquals(YesNo.value(treatment.isPaused()).code(), treatmentDTO.getIsPaused());
             assertEquals(WHPDateUtil.toSqlDate(treatment.getInterruptions().getPauseDateForOngoingInterruption()), treatmentDTO.getPausedDate());
             assertEquals(treatment.getInterruptions().totalPausedDuration(), treatmentDTO.getTotalPausedDuration());
             assertEquals(treatment.getInterruptions().getPauseReasonForOngoingInterruption(), treatmentDTO.getReasonsForPause());
@@ -175,7 +175,7 @@ public class PatientReportingRequestMapperTest {
     }
 
     private void assertCurrentTreatmentFlag(boolean isLastTherapy, boolean lastTreatment, TreatmentDTO treatmentDTO) {
-        String expected = isLastTherapy && lastTreatment ? YesNo.Yes.name() : YesNo.No.name();
+        String expected = isLastTherapy && lastTreatment ? YesNo.Yes.code() : YesNo.No.code();
         assertEquals(expected, treatmentDTO.getCurrentTreatment());
     }
 }
