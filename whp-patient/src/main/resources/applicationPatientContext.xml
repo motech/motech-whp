@@ -8,6 +8,7 @@
     <context:property-placeholder location="classpath:httpClient.properties" ignore-unresolvable="true"/>
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationCommonContext.xml"/>
+    <import resource="classpath*:applicationWHPReportingContext.xml"/>
     <import resource="classpath*:applicationScheduler.xml"/>
 
     <context:annotation-config/>

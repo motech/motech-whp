@@ -6,14 +6,15 @@ import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import org.motechproject.whp.reports.contract.enums.YesNo;
 import org.motechproject.whp.reports.contract.patient.*;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.motechproject.whp.common.util.WHPDateUtil.toSqlDate;
 
+@Component
 public class PatientReportingRequestMapper {
-
 
     public PatientDTO mapToReportingRequest(Patient patient) {
         PatientDTO patientDTO = new PatientDTO();

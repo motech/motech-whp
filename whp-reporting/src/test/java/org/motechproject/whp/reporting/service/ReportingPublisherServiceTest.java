@@ -7,6 +7,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
+import org.motechproject.whp.reports.contract.patient.PatientDTO;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -165,6 +166,17 @@ public class ReportingPublisherServiceTest {
         AdherenceSubmissionRequest request = new AdherenceSubmissionRequest();
 
         reportingPublisher.reportAdherenceSubmission(request);
+        verify(httpClientService).post(url, request);
+    }
+
+    @Test
+    public void shouldReportPatientUpdates() {
+        String url = "url";
+        when(reportingEventURLs.getPatientUpdateURL()).thenReturn(url);
+
+        PatientDTO request = new PatientDTO();
+
+        reportingPublisher.reportPatient(request);
         verify(httpClientService).post(url, request);
     }
 }

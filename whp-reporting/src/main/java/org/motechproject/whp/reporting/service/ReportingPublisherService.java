@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
+import org.motechproject.whp.reports.contract.patient.PatientDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +72,9 @@ public class ReportingPublisherService {
 
     public void reportCallStatus(AdherenceCallStatusRequest request) {
         httpClientService.post(reportingEventURLs.getCallStatusURL(), request);
+    }
+
+    public void reportPatient(PatientDTO patientDTO) {
+        httpClientService.post(reportingEventURLs.getPatientUpdateURL(), patientDTO);
     }
 }

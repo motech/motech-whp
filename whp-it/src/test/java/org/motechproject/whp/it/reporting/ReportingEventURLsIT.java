@@ -81,4 +81,9 @@ public class ReportingEventURLsIT {
     public void shouldGetAdherenceSubmissionURL() {
         assertThat(reportingEventURLs.getAdherenceSubmissionURL(), is("http://127.0.0.1:9999/whp-reports/adherencesubmission/request"));
     }
+
+    @Test
+    public void shouldGetPatientReportingUpdateURL() {
+        assertThat(reportingEventURLs.getPatientUpdateURL(), is("http://127.0.0.1:9999/whp-reports/patient/update"));
+    }
 }
