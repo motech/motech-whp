@@ -437,7 +437,7 @@ public class Therapy implements Serializable {
     }
 
     @JsonIgnore
-    public int getRemainingDoses(Phase phase) {
+    public Integer getRemainingDoses(Phase phase) {
         PhaseRecord phaseRecord = getPhase(phase);
         return phaseRecord != null ? phaseRecord.remainingDoses(getTreatmentCategory()) : null;
     }

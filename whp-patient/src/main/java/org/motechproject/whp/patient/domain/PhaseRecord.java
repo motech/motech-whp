@@ -35,6 +35,9 @@ public class PhaseRecord implements Serializable {
     }
 
     public Integer remainingDoses(TreatmentCategory treatmentCategory) {
+        if(treatmentCategory == null)
+            return null;
+
         return treatmentCategory.numberOfDosesForPhase(name) - pillTakenSummaries.getTotalPillsTaken();
     }
 

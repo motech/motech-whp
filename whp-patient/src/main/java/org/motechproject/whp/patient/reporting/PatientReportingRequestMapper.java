@@ -77,7 +77,7 @@ public class PatientReportingRequestMapper {
             therapyDTO.setStartDate(toSqlDate(therapy.getStartDate()));
             therapyDTO.setCreationDate(WHPDateUtil.toSqlDate(therapy.getCreationDate()));
             therapyDTO.setCurrentPhase(therapy.getCurrentPhaseName());
-            therapyDTO.setDiseaseClass(therapy.getDiseaseClass().value());
+            therapyDTO.setDiseaseClass(getDiseaseClass(therapy));
             therapyDTO.setPatientAge(therapy.getPatientAge());
             therapyDTO.setStatus(therapy.getStatus().name());
 
@@ -97,9 +97,11 @@ public class PatientReportingRequestMapper {
             therapyDTO.setIpPillsRemaining(therapy.getRemainingDoses(Phase.IP));
             therapyDTO.setEipPillsRemaining(therapy.getRemainingDoses(Phase.EIP));
 
-            therapyDTO.setCpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInCP());
-            therapyDTO.setIpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInIP());
-            therapyDTO.setEipTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInEIP());
+            if(therapy.getTreatmentCategory() != null){
+                therapyDTO.setCpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInCP());
+                therapyDTO.setIpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInIP());
+                therapyDTO.setEipTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInEIP());
+            }
             therapyDTO.setCurrentTherapy(YesNo.No.code());
 
             therapyDTO.setTreatments(mapTreatmentDTOs(therapy.getAllTreatments()));
@@ -112,6 +114,12 @@ public class PatientReportingRequestMapper {
         setCurrentTreatmentFlagForLastTreatment(treatmentsForCurrentTherapy);
 
         patientDTO.setTherapies(therapyDTOs);
+    }
+
+    private String getDiseaseClass(Therapy therapy) {
+        if(therapy.getDiseaseClass() == null)
+            return null;
+        return therapy.getDiseaseClass().value();
     }
 
     private TherapyDTO lastTherapy(List<TherapyDTO> therapyDTOs) {
@@ -137,10 +145,10 @@ public class PatientReportingRequestMapper {
             treatmentDTO.setStartDate(WHPDateUtil.toSqlDate(treatment.getStartDate()));
             treatmentDTO.setEndDate(WHPDateUtil.toSqlDate(treatment.getEndDate()));
             treatmentDTO.setTreatmentOutcome(getTreatmentOutcome(treatment));
-            treatmentDTO.setPatientType(treatment.getPatientType().value());
+            treatmentDTO.setPatientType(getPatientType(treatment));
             treatmentDTO.setTbRegistrationNumber(treatment.getTbRegistrationNumber());
-            treatmentDTO.setPreTreatmentSmearTestResult(treatment.getPreTreatmentSmearTestResult().value());
-            treatmentDTO.setPreTreatmentWeight(treatment.getPreTreatmentWeightRecord().getWeight());
+            treatmentDTO.setPreTreatmentSmearTestResult(getPreTreatmentSmearTestResult(treatment));
+            treatmentDTO.setPreTreatmentWeight(getPreTreatmentWeight(treatment));
             treatmentDTO.setIsPaused(YesNo.value(treatment.isPaused()).code());
             treatmentDTO.setPausedDate(WHPDateUtil.toSqlDate(treatment.getInterruptions().getPauseDateForOngoingInterruption()));
             treatmentDTO.setReasonsForPause(treatment.getInterruptions().getPauseReasonForOngoingInterruption());
@@ -151,6 +159,27 @@ public class PatientReportingRequestMapper {
         }
 
         return treatmentDTOs;
+    }
+
+    private Double getPreTreatmentWeight(Treatment treatment) {
+        if(treatment.getPreTreatmentWeightRecord() == null){
+            return null;
+        }
+        return treatment.getPreTreatmentWeightRecord().getWeight();
+    }
+
+    private String getPreTreatmentSmearTestResult(Treatment treatment) {
+        if(treatment.getPreTreatmentSmearTestResult() == null)
+            return null;
+
+        return treatment.getPreTreatmentSmearTestResult().value();
+    }
+
+    private String getPatientType(Treatment treatment) {
+        if(treatment.getPatientType() == null){
+            return null;
+        }
+        return treatment.getPatientType().value();
     }
 
     private String getTreatmentOutcome(Treatment treatment) {
