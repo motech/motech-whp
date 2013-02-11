@@ -56,8 +56,8 @@ public class AllAlertConfigurationsTest {
     @Test
     public void shouldReturnAlertConfigurations() {
         when(alertsPropertiesValues.getAdherenceMissingWeeks()).thenReturn(asList(1, 2, 6));
-        when(alertsPropertiesValues.getCumulativeMissedDoses()).thenReturn(10);
-        when(alertsPropertiesValues.getTreatmentNotStartedDays()).thenReturn(10);
+        when(alertsPropertiesValues.getCumulativeMissedDoses()).thenReturn(asList(10));
+        when(alertsPropertiesValues.getTreatmentNotStartedDays()).thenReturn(asList(10));
         when(alertsPropertiesValues.getDaysOfAlertGenerationForAdherenceMissingWeeks()).thenReturn(asList(DayOfWeek.Wednesday));
         when(alertsPropertiesValues.getDayOfAlertGenerationForCumulativeMissedDoses()).thenReturn(asList(DayOfWeek.Wednesday));
         when(alertsPropertiesValues.getDayOfAlertGenerationForTreatmentNotStarted()).thenReturn(AllDaysOfWeek.allDaysOfWeek);

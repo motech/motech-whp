@@ -32,12 +32,14 @@ public class AlertsPropertiesValuesIT {
 
     @Test
     public void shouldGetCumulativeMissedDoses(){
-        assertThat(alertsPropertiesValues.getCumulativeMissedDoses(), is(10));
+        assertThat(alertsPropertiesValues.getCumulativeMissedDoses().size(), is(1));
+        assertThat(alertsPropertiesValues.getCumulativeMissedDoses().get(0), is(10));
     }
 
     @Test
     public void shouldGetTreatmentNotStartedDays(){
-        assertThat(alertsPropertiesValues.getTreatmentNotStartedDays(), is(10));
+        assertThat(alertsPropertiesValues.getTreatmentNotStartedDays().size(), is(1));
+        assertThat(alertsPropertiesValues.getTreatmentNotStartedDays().get(0), is(10));
     }
 
     @Test

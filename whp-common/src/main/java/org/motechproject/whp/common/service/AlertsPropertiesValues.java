@@ -15,11 +15,11 @@ public class AlertsPropertiesValues {
     @Value("#{alertsProperties['alerts.adherenceMissingWeeksThreshold'].split(',')}")
     private List<String> adherenceMissingWeeks;
 
-    @Value("#{alertsProperties['alerts.cumulativeMissedDosesThreshold']}")
-    private String cumulativeMissedDoses;
+    @Value("#{alertsProperties['alerts.cumulativeMissedDosesThreshold'].split(',')}")
+    private List<String> cumulativeMissedDoses;
 
-    @Value("#{alertsProperties['alerts.treatmentNotStartedDaysThreshold']}")
-    private String treatmentNotStartedDays;
+    @Value("#{alertsProperties['alerts.treatmentNotStartedDaysThreshold'].split(',')}")
+    private List<String> treatmentNotStartedDays;
 
     @Value("#{alertsProperties['alerts.daysOfAlertGenerationForCumulativeMissedDoses'].split(',')}")
     private List<String> daysOfAlertGenerationForCumulativeDoses;
@@ -47,22 +47,12 @@ public class AlertsPropertiesValues {
         return parseToIntegerList(adherenceMissingWeeks);
     }
 
-    private List<Integer> parseToIntegerList(List<String> stringList) {
-        List<Integer> integerList = new ArrayList<>();
-
-        for (String stringValue : stringList) {
-            integerList.add(Integer.parseInt(stringValue));
-
-        }
-        return integerList;
+    public List<Integer> getCumulativeMissedDoses() {
+        return parseToIntegerList(cumulativeMissedDoses);
     }
 
-    public Integer getCumulativeMissedDoses() {
-        return Integer.parseInt(cumulativeMissedDoses);
-    }
-
-    public Integer getTreatmentNotStartedDays() {
-        return Integer.parseInt(treatmentNotStartedDays);
+    public List<Integer> getTreatmentNotStartedDays() {
+        return parseToIntegerList(treatmentNotStartedDays);
     }
 
     public List<DayOfWeek> getDayOfAlertGenerationForCumulativeMissedDoses() {
@@ -77,6 +67,18 @@ public class AlertsPropertiesValues {
         return getDayOfWeeks(daysOfAlertGenerationForTreatmentNotStarted);
     }
 
+    public List<String> getAdherenceMissingSeverityColors() {
+        return addColorForEverySeverity(adherenceMissingSeverityColors);
+    }
+
+    public List<String> getCumulativeMissedDosesSeverityColors() {
+        return addColorForEverySeverity(cumulativeMissedDosesSeverityColors);
+    }
+
+    public List<String> getTreatmentNotStartedSeverityColors() {
+        return addColorForEverySeverity(treatmentNotStartedSeverityColors);
+    }
+
     private List<DayOfWeek> getDayOfWeeks(List<String> dayOfAlertGeneration) {
         List<DayOfWeek> daysOfWeek = new ArrayList<>();
 
@@ -86,8 +88,14 @@ public class AlertsPropertiesValues {
         return daysOfWeek;
     }
 
-    public List<String> getAdherenceMissingSeverityColors() {
-        return addColorForEverySeverity(adherenceMissingSeverityColors);
+    private List<Integer> parseToIntegerList(List<String> stringList) {
+        List<Integer> integerList = new ArrayList<>();
+
+        for (String stringValue : stringList) {
+            integerList.add(Integer.parseInt(stringValue));
+
+        }
+        return integerList;
     }
 
     private List<String> addColorForEverySeverity(List<String> alertColors) {
@@ -97,13 +105,5 @@ public class AlertsPropertiesValues {
         severityColors.add(NO_COLOR_FOR_ZERO_SEVERITY);
         severityColors.addAll(alertColors);
         return severityColors;
-    }
-
-    public List<String> getCumulativeMissedDosesSeverityColors() {
-        return addColorForEverySeverity(cumulativeMissedDosesSeverityColors);
-    }
-
-    public List<String> getTreatmentNotStartedSeverityColors() {
-        return addColorForEverySeverity(treatmentNotStartedSeverityColors);
     }
 }

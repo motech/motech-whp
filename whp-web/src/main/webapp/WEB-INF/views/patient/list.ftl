@@ -181,13 +181,13 @@
                                  flagValue="{{item.flag}}" class="flagImage"
                                  src="<@spring.url '/resources-${applicationVersion}/img/{{item.flag}}-star.png'/>"/>
                         </td>
-                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" bgcolor="{{item.treatmentNotStartedSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
                             {{item.treatmentNotStartedSeverity}}
                         </td>
-                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" bgcolor="{{item.adherenceMissingSeverityColor}}">
-                            {{item.adherenceMissingWeeksSeverity}} / {{item.adherenceMissingWeeks}}
+                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" style="background-color:{{item.adherenceMissingSeverityColor}}">
+                            {{item.adherenceMissingWeeks}}
                         </td>
-                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" bgcolor="{{item.cumulativeMissedDosesSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
                             {{item.cumulativeMissedDosesSeverity}}
                         </td>
                         <td class="name">{{item.firstName}}</td>

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
 import org.motechproject.whp.mapper.AlertsFilterTransformer;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -32,6 +33,9 @@ public class PatientPagingServiceTest {
     @Mock
     AlertsFilterTransformer alertsFilterTransformer;
 
+    @Mock
+    ColorConfiguration colorConfiguration;
+
     FilterParams filterParams;
 
     int pageNumber = 2;
@@ -44,7 +48,7 @@ public class PatientPagingServiceTest {
     public void setUp(){
         initMocks(this);
         filterParams = new FilterParams();
-        patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer);
+        patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, colorConfiguration);
     }
 
     @Test
@@ -62,7 +66,7 @@ public class PatientPagingServiceTest {
         when(allPatients.filter(filterParams, new SortParams(), (pageNumber - 1) * rowsPerPage, rowsPerPage)).thenReturn(patientsPerPage);
         when(allPatients.count(filterParams)).thenReturn(expectedCount);
 
-        PatientPagingService patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer);
+        PatientPagingService patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, colorConfiguration);
         PageResults<PatientDashboardRow> pageResults = patientPagingService.page(pageNumber, rowsPerPage, filterParams, new SortParams());
 
         assertThat(pageResults.getTotalRows(), is(expectedCount));

@@ -3,8 +3,11 @@ package org.motechproject.whp.uimodel;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -14,6 +17,8 @@ import org.motechproject.whp.user.domain.Provider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientDashboardRowTest {
@@ -43,9 +48,12 @@ public class PatientDashboardRowTest {
     Therapy therapy;
     PatientAlerts patientAlerts;
 
+    @Mock
+    ColorConfiguration colorConfiguration;
+
     @Before
     public void setup() {
-
+        initMocks(this);
         currentTreatment = new TreatmentBuilder()
                 .withStartDate(new LocalDate(2012, 2, 2))
                 .withTbId(tbId)
@@ -81,14 +89,13 @@ public class PatientDashboardRowTest {
                 .withGender(gender)
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
-                .withAdherenceMissedWeeks(6, 2, DateUtil.today(), "pink")
-                .withCumulativeMissedAlertValue(10,2, DateUtil.today(), "blue")
-                .withTreatmentNotStartedDays(8,2, DateUtil.today(), "brown")
+                .withAdherenceMissedWeeks(6, 2, DateUtil.today())
+                .withCumulativeMissedAlertValue(10, 2, DateUtil.today())
+                .withTreatmentNotStartedDays(8, 2, DateUtil.today())
                 .withPatientFlag(true)
                 .build();
 
         patientAlerts = patient.getPatientAlerts();
-
 
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
@@ -96,7 +103,12 @@ public class PatientDashboardRowTest {
 
     @Test
     public void shouldCreatePatientDashboardRowFromPatient() {
-        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient);
+
+        when(colorConfiguration.getSeverityColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
+        when(colorConfiguration.getSeverityColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
+        when(colorConfiguration.getSeverityColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
+
+        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, colorConfiguration);
 
         assertThat(patientDashboardRow.getPatientId(), is(patientId));
         assertThat(patientDashboardRow.getFirstName(), is(firstName));
@@ -119,7 +131,9 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getCumulativeMissedDosesSeverity(), is(2));
         assertThat(patientDashboardRow.getAdherenceMissingWeeks(), is(6));
         assertThat(patientDashboardRow.getAdherenceMissingWeeksSeverity(), is(2));
-
+        assertThat(patientDashboardRow.getAdherenceMissingSeverityColor(), is("c2"));
+        assertThat(patientDashboardRow.getCumulativeMissedDosesSeverityColor(), is("c3"));
+        assertThat(patientDashboardRow.getTreatmentNotStartedSeverityColor(), is("c4"));
         assertThat(patientDashboardRow.getFlag(), is(true));
     }
 

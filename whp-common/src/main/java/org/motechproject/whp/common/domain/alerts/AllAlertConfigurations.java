@@ -63,11 +63,11 @@ public class AllAlertConfigurations {
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()));
+        return new AlertThresholds(alertsProperties.getCumulativeMissedDoses());
     }
 
     private AlertThresholds getTreatmentNotStartedAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()));
+        return new AlertThresholds(alertsProperties.getTreatmentNotStartedDays());
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {
