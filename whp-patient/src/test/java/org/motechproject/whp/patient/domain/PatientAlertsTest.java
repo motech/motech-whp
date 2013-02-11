@@ -23,13 +23,13 @@ public class PatientAlertsTest {
     @Test
     public void shouldReturnIfPatientHasAlert() {
         PatientAlerts alerts = new PatientAlerts();
-        alerts.updateAlertStatus(AdherenceMissing, 10, 1, "yellow");
+        alerts.updateAlertStatus(AdherenceMissing, 10, 1);
         assertTrue(alerts.hasAlerts());
 
-        alerts.updateAlertStatus(AdherenceMissing, 5, 0, "");
+        alerts.updateAlertStatus(AdherenceMissing, 5, 0);
         assertFalse(alerts.hasAlerts());
 
-        alerts.updateAlertStatus(CumulativeMissedDoses, 11, 1, "blue");
+        alerts.updateAlertStatus(CumulativeMissedDoses, 11, 1);
         assertTrue(alerts.hasAlerts());
     }
 }

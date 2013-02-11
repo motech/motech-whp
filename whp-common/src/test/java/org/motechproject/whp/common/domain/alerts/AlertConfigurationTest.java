@@ -26,7 +26,7 @@ public class AlertConfigurationTest extends BaseUnitTest{
         alertsPropertiesValues.setAdherenceMissingWeeks(adherenceMissingWeeks);
         alertsPropertiesValues.setAdherenceMissingSeverityColors(adherenceMissingSeverityColors);
 
-        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks(), alertsPropertiesValues.getAdherenceMissingSeverityColors()), asList(Monday, Wednesday));
+        AlertConfiguration alertConfiguration = new AlertConfiguration(AdherenceMissing, new AlertThresholds(alertsPropertiesValues.getAdherenceMissingWeeks()), asList(Monday, Wednesday));
 
         mockCurrentDate(new LocalDate(2013, 1, 25)); //friday
         assertFalse(alertConfiguration.shouldRunToday());

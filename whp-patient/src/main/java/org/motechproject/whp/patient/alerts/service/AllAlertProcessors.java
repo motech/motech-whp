@@ -35,7 +35,6 @@ public class AllAlertProcessors {
     private void processAlert(AlertProcessor alertProcessor, Patient patient) {
         int alertValue = alertProcessor.process(patient);
         int severity = alertConfigurations.getAlertSeverityFor(alertProcessor.alertType(), alertValue);
-        String severityColor = alertConfigurations.getAlertSeverityColorFor(alertProcessor.alertType(), alertValue);
-        patient.updatePatientAlert(alertProcessor.alertType(), alertValue, severity, severityColor);
+        patient.updatePatientAlert(alertProcessor.alertType(), alertValue, severity);
     }
 }

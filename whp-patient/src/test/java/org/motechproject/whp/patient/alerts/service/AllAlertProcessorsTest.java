@@ -25,7 +25,6 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         int adherenceMissingAlertValue = 5;
         int severityForAdherenceMissingAlert = 2;
-        String severityForAdherenceMissingAlertColor = "pink";
         when(alertProcessor1.alertType()).thenReturn(AdherenceMissing);
         when(alertProcessor1.process(patient)).thenReturn(adherenceMissingAlertValue);
         when(alertProcessor2.alertType()).thenReturn(CumulativeMissedDoses);
@@ -36,7 +35,6 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
         AllAlertConfigurations alertConfigurations = mock(AllAlertConfigurations.class);
         when(alertConfigurations.shouldRunToday(AdherenceMissing)).thenReturn(true);
         when(alertConfigurations.getAlertSeverityFor(AdherenceMissing, adherenceMissingAlertValue)).thenReturn(severityForAdherenceMissingAlert);
-        when(alertConfigurations.getAlertSeverityColorFor(AdherenceMissing, adherenceMissingAlertValue)).thenReturn(severityForAdherenceMissingAlertColor);
         when(alertConfigurations.shouldRunToday(CumulativeMissedDoses)).thenReturn(false);
 
         AllAlertProcessors allAlertProcessors = new AllAlertProcessors(alertProcessorSet, alertConfigurations);
@@ -45,7 +43,7 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         verify(alertProcessor1).process(patient);
         verify(alertProcessor2, never()).process(patient);
-        verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert, severityForAdherenceMissingAlertColor);
+        verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert);
     }
 
     @Test
@@ -58,9 +56,7 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         int adherenceMissingAlertValue = 5;
         int severityForAdherenceMissingAlert = 2;
-        String severityForAdherenceMissingAlertColor = "pink";
         int severityForCumulativeMissedDoseAlert = 2;
-        String severityForCumulativeMissedDoseAlertColor = "blue";
         int cumulativeMissedDoseValue = 3;
 
         when(alertProcessor1.alertType()).thenReturn(AdherenceMissing);
@@ -72,9 +68,7 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         AllAlertConfigurations alertConfigurations = mock(AllAlertConfigurations.class);
         when(alertConfigurations.getAlertSeverityFor(AdherenceMissing, adherenceMissingAlertValue)).thenReturn(severityForAdherenceMissingAlert);
-        when(alertConfigurations.getAlertSeverityColorFor(AdherenceMissing, adherenceMissingAlertValue)).thenReturn(severityForAdherenceMissingAlertColor);
         when(alertConfigurations.getAlertSeverityFor(CumulativeMissedDoses, cumulativeMissedDoseValue)).thenReturn(severityForCumulativeMissedDoseAlert);
-        when(alertConfigurations.getAlertSeverityColorFor(CumulativeMissedDoses, cumulativeMissedDoseValue)).thenReturn(severityForCumulativeMissedDoseAlertColor);
 
         AllAlertProcessors allAlertProcessors = new AllAlertProcessors(alertProcessorSet, alertConfigurations);
 
@@ -82,8 +76,8 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
 
         verify(alertProcessor1).process(patient);
         verify(alertProcessor2).process(patient);
-        verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert, severityForAdherenceMissingAlertColor);
-        verify(patient).updatePatientAlert(CumulativeMissedDoses, cumulativeMissedDoseValue, severityForCumulativeMissedDoseAlert, severityForCumulativeMissedDoseAlertColor);
+        verify(patient).updatePatientAlert(AdherenceMissing, adherenceMissingAlertValue, severityForAdherenceMissingAlert);
+        verify(patient).updatePatientAlert(CumulativeMissedDoses, cumulativeMissedDoseValue, severityForCumulativeMissedDoseAlert);
 
     }
 }

@@ -215,19 +215,19 @@ public class PatientBuilder {
     }
 
     public PatientBuilder withCumulativeMissedAlertValue(int cumulativeMissedDoses, int severity, LocalDate alertDate, String severityColor) {
-        patient.updatePatientAlert(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoses, severity, severityColor);
+        patient.updatePatientAlert(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoses, severity);
         patient.getPatientAlerts().cumulativeMissedDoseAlert().setAlertDate(alertDate);
         return this;
     }
 
     public PatientBuilder withAdherenceMissedWeeks(int adherenceMissedWeeks, int severity, LocalDate alertDate, String severityColor) {
-        patient.updatePatientAlert(PatientAlertType.AdherenceMissing, adherenceMissedWeeks, severity, severityColor);
+        patient.updatePatientAlert(PatientAlertType.AdherenceMissing, adherenceMissedWeeks, severity);
         patient.getPatientAlerts().adherenceMissingAlert().setAlertDate(alertDate);
         return this;
     }
 
     public PatientBuilder withTreatmentNotStartedDays(int treatmentNotStartedDays, int severity, LocalDate alertDate, String severityColor) {
-        patient.updatePatientAlert(PatientAlertType.TreatmentNotStarted, treatmentNotStartedDays, severity, severityColor);
+        patient.updatePatientAlert(PatientAlertType.TreatmentNotStarted, treatmentNotStartedDays, severity);
         patient.getPatientAlerts().treatmentNotStartedAlert().setAlertDate(alertDate);
         return this;
     }

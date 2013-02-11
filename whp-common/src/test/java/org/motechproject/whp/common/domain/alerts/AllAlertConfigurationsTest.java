@@ -42,17 +42,6 @@ public class AllAlertConfigurationsTest {
     }
 
     @Test
-    public void shouldReturnAlertThresholdSeverityColor() {
-        when(alertsPropertiesValues.getAdherenceMissingWeeks()).thenReturn(asList(1, 2, 6));
-        allAlertConfigurations = new AllAlertConfigurations(alertsPropertiesValues);
-
-        assertEquals("yellow", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 1));
-        assertEquals("pink", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 2));
-        assertEquals("red", allAlertConfigurations.getAlertSeverityColorFor(AdherenceMissing, 6));
-    }
-
-
-    @Test
     public void shouldReturnIfAlertShouldBeRunToday() {
         when(alertsPropertiesValues.getDaysOfAlertGenerationForAdherenceMissingWeeks()).thenReturn(asList(DayOfWeek.getDayOfWeek(DateUtil.today())));
         when(alertsPropertiesValues.getDayOfAlertGenerationForCumulativeMissedDoses()).thenReturn(asList(DayOfWeek.getDayOfWeek(DateUtil.today().plusDays(1))));
@@ -85,6 +74,4 @@ public class AllAlertConfigurationsTest {
         assertEquals(asList(DayOfWeek.Wednesday), alertConfigurationMap.get(CumulativeMissedDoses).getDaysOfWeek());
         assertEquals(AllDaysOfWeek.allDaysOfWeek, alertConfigurationMap.get(TreatmentNotStarted).getDaysOfWeek());
     }
-
-
 }

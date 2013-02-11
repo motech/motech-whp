@@ -23,13 +23,11 @@ public class PatientAlertTest extends BaseUnitTest {
 
         int newValue = 13;
         int newSeverity = 2;
-        String newSeverityColor = "blue";
 
-        patientAlert.update(newValue, newSeverity, newSeverityColor);
+        patientAlert.update(newValue, newSeverity);
 
         assertEquals(newValue, patientAlert.getValue());
         assertEquals(newSeverity, patientAlert.getAlertSeverity());
-        assertEquals(newSeverityColor, patientAlert.getAlertSeverityColor());
         assertEquals(today(), patientAlert.getAlertDate());
         assertEquals(AdherenceMissing, patientAlert.getAlertType());
     }
@@ -40,19 +38,16 @@ public class PatientAlertTest extends BaseUnitTest {
 
         PatientAlert patientAlert = new PatientAlert(AdherenceMissing);
         int originalSeverity = 1;
-        String originalSeverityColor = "red";
         LocalDate originalAlertDate = today().minusDays(originalSeverity);
         patientAlert.setAlertDate(originalAlertDate);
         patientAlert.setAlertSeverity(originalSeverity);
-        patientAlert.setAlertSeverityColor(originalSeverityColor);
         patientAlert.setValue(10);
 
         int newValue = 13;
-        patientAlert.update(newValue, originalSeverity, originalSeverityColor);
+        patientAlert.update(newValue, originalSeverity);
 
         assertEquals(newValue, patientAlert.getValue());
         assertEquals(originalSeverity, patientAlert.getAlertSeverity());
-        assertEquals(originalSeverityColor, patientAlert.getAlertSeverityColor());
         assertEquals(originalAlertDate, patientAlert.getAlertDate());
         assertEquals(AdherenceMissing, patientAlert.getAlertType());
     }

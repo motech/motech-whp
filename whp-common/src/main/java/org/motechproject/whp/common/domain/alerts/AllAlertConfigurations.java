@@ -59,22 +59,18 @@ public class AllAlertConfigurations {
     }
 
     private AlertThresholds getAdherenceMissingAlertThresholds() {
-        return new AlertThresholds(alertsProperties.getAdherenceMissingWeeks(), alertsProperties.getAdherenceMissingSeverityColors());
+        return new AlertThresholds(alertsProperties.getAdherenceMissingWeeks());
     }
 
     private AlertThresholds getCumulativeMissedDoseAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()), alertsProperties.getCumulativeMissedDosesSeverityColors());
+        return new AlertThresholds(asList(alertsProperties.getCumulativeMissedDoses()));
     }
 
     private AlertThresholds getTreatmentNotStartedAlertThresholds() {
-        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()), alertsProperties.getTreatmentNotStartedSeverityColors());
+        return new AlertThresholds(asList(alertsProperties.getTreatmentNotStartedDays()));
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {
         return getAlertConfiguration(alertType).shouldRunToday();
-    }
-
-    public String getAlertSeverityColorFor(PatientAlertType alertType, int value) {
-        return getThresholdFor(alertType, value).getAlertSeverityColor();
     }
 }

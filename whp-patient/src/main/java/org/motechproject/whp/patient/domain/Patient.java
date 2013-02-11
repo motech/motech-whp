@@ -545,8 +545,8 @@ public class Patient extends MotechBaseDataObject {
         return weeksBetween(fromDate, tillDate.plusDays(1)).getWeeks();
     }
 
-    public void updatePatientAlert(PatientAlertType alertType, int value, int severity, String severityColor){
-        patientAlerts.updateAlertStatus(alertType, value, severity, severityColor);
+    public void updatePatientAlert(PatientAlertType alertType, int value, int severity){
+        patientAlerts.updateAlertStatus(alertType, value, severity);
     }
 
     public void updateDoseInterruptions(Set<LocalDate> adherenceDates) {
