@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class AlertTypeFilters {
     public static final String CUMULATIVE_MISSED_DOSES = "CumulativeMissedDoses";
     public static final String TREATMENT_NOT_STARTED = "TreatmentNotStarted";
 
+    @Getter
     private List<AlertTypeFilter> alertTypeFilters = new ArrayList<>();
 
     public AlertTypeFilters() {

@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class AlertDateFilters {
 
     private AlertTypeFilters alertTypeFilters;
 
+    @Getter
     private List<AlertDateFilter> alertDateFilters = new ArrayList<>();
 
     @Autowired
