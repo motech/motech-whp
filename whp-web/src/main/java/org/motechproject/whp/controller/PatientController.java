@@ -4,20 +4,13 @@ import org.apache.commons.lang.StringUtils;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
-import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.model.AlertDateFilters;
-import org.motechproject.whp.patient.model.AlertTypeFilters;
-import org.motechproject.whp.patient.model.FlagFilters;
-import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.PatientDashboardLegends;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -46,20 +39,14 @@ import static org.motechproject.whp.common.util.WHPDate.date;
 @RequestMapping(value = "/patients")
 public class PatientController extends BaseWebController {
 
-    public static final String DISTRICT_LIST = "districts";
     public static final String PATIENT_LIST = "patientList";
 
     private ProviderService providerService;
     private PatientService patientService;
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private AbstractMessageSource messageSource;
-    private AllDistricts allDistrictsCache;
     private TreatmentCardService treatmentCardService;
     private ProviderRemarksService providerRemarksService;
-    private AllTreatmentCategories allTreatmentCategories;
-    private TreatmentWeekInstance treatmentWeekInstance;
-    private PatientDashboardLegends patientDashboardLegends;
-    private AlertTypeFilters alertTypeFilters;
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -68,24 +55,14 @@ public class PatientController extends BaseWebController {
                              ProviderService providerService,
                              @Qualifier("messageBundleSource")
                              AbstractMessageSource messageSource,
-                             AllDistricts allDistrictsCache,
-                             ProviderRemarksService providerRemarksService,
-                             AllTreatmentCategories allTreatmentCategories,
-                             TreatmentWeekInstance treatmentWeekInstance,
-                             PatientDashboardLegends patientDashboardLegends,
-                             AlertTypeFilters alertTypeFilters) {
+                             ProviderRemarksService providerRemarksService) {
 
         this.patientService = patientService;
         this.treatmentCardService = treatmentCardService;
-        this.allDistrictsCache = allDistrictsCache;
         this.providerService = providerService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.messageSource = messageSource;
         this.providerRemarksService = providerRemarksService;
-        this.allTreatmentCategories = allTreatmentCategories;
-        this.treatmentWeekInstance = treatmentWeekInstance;
-        this.patientDashboardLegends = patientDashboardLegends;
-        this.alertTypeFilters = alertTypeFilters;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -95,12 +72,6 @@ public class PatientController extends BaseWebController {
         prepareModelForListView(uiModel, patientsForProvider);
         passAdherenceSavedMessageToListView(uiModel, request);
         return "patient/listByProvider";
-    }
-
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String list(Model uiModel) {
-        prepareModelForListView(uiModel);
-        return "patient/list";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{patientId}/updateFlag")
@@ -157,16 +128,6 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("weekStartDate", WHPDate.date(currentAdherenceCaptureWeek().startDate()).value());
         uiModel.addAttribute("weekEndDate", WHPDate.date(currentAdherenceCaptureWeek().endDate()).value());
 
-    }
-
-    private void prepareModelForListView(Model uiModel) {
-        uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
-        uiModel.addAttribute("alertTypes", alertTypeFilters);
-        uiModel.addAttribute("alertDates", new AlertDateFilters(alertTypeFilters));
-        uiModel.addAttribute("flags", new FlagFilters());
-        uiModel.addAttribute("legends", patientDashboardLegends.getLegends());
-        uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
-        uiModel.addAttribute("lastSunday", WHPDate.date(treatmentWeekInstance.previousAdherenceWeekEndDate()).lucidValue());
     }
 
 

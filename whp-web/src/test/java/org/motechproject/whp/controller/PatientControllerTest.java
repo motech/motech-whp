@@ -8,26 +8,14 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.common.builder.TreatmentWeekInstanceBuilder;
-import org.motechproject.whp.common.domain.District;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
-import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
-import org.motechproject.whp.patient.domain.TreatmentCategory;
-import org.motechproject.whp.patient.model.AlertDateFilters;
-import org.motechproject.whp.patient.model.AlertTypeFilters;
-import org.motechproject.whp.patient.model.FlagFilters;
-import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
-import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
-import org.motechproject.whp.uimodel.PatientDashboardLegends;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -59,51 +47,30 @@ public class PatientControllerTest extends BaseControllerTest {
     Model uiModel;
     @Mock
     HttpServletRequest request;
-
     @Mock
     PatientService patientService;
     @Mock
     ProviderService providerService;
     @Mock
-    PatientPagingService patientPagingService;
-
-    @Mock
     TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     @Mock
     WHPAdherenceService whpAdherenceService;
-    @Mock
-    AllDistricts allDistrictsCache;
     @Mock
     TreatmentCardService treatmentCardService;
     @Mock
     HttpSession session;
     @Mock
     ProviderRemarksService providerRemarksService;
-    @Mock
-    AllTreatmentCategories allTreatmentCategories;
-    @Mock
-    List<TreatmentCategory> treatmentCategories;
-    @Mock
-    private PatientDashboardLegends patientDashboardLegends;
-    @Mock
-    private ColorConfiguration colorConfiguration;
 
     AbstractMessageSource messageSource;
     Patient patient;
     Provider provider;
 
     PatientController patientController;
-    List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
 
-    AlertTypeFilters alertTypes;
-    AlertDateFilters alertDates;
-
-    FlagFilters flags = new FlagFilters();
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
     private List<AuditLog> auditLogs;
-
-    private TreatmentWeekInstance treatmentWeekInstance;
 
 
     @Before
@@ -115,22 +82,15 @@ public class PatientControllerTest extends BaseControllerTest {
         when(request.getSession()).thenReturn(session);
         setupLoggedInUser(session, LOGGED_IN_USER_NAME);
 
-        treatmentWeekInstance = TreatmentWeekInstanceBuilder.build();
-
-        alertTypes = new AlertTypeFilters(colorConfiguration);
-        alertDates = new AlertDateFilters(alertTypes);
-
-        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends, alertTypes);
+        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, providerRemarksService);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
-        when(allDistrictsCache.getAll()).thenReturn(districts);
         cmfAdminRemarks = mock(List.class);
         when(patientService.getCmfAdminRemarks(patient)).thenReturn(cmfAdminRemarks);
         auditLogs = mock(List.class);
         when(providerRemarksService.getRemarks(patient)).thenReturn(auditLogs);
-        when(allTreatmentCategories.getAll()).thenReturn(treatmentCategories);
     }
 
     private void setupMessageSource() {
@@ -228,19 +188,6 @@ public class PatientControllerTest extends BaseControllerTest {
         assertEquals("patient/remarks", view);
     }
 
-    @Test
-    public void shouldSetUpUiModelForListAllPatients() throws Exception {
-        standaloneSetup(patientController).build()
-                .perform(get("/patients/list"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("districts", districts))
-                .andExpect(model().attribute("alertTypes", alertTypes))
-                .andExpect(model().attribute("alertDates", alertDates))
-                .andExpect(model().attribute("flags", flags))
-                .andExpect(model().attribute("treatmentCategories", treatmentCategories))
-                .andExpect(model().attribute("legends", patientDashboardLegends.getLegends()))
-                .andExpect(view().name("patient/list"));
-    }
 
     @Test
     public void shouldUpdateFlagOnGivenPatientId() throws Exception {

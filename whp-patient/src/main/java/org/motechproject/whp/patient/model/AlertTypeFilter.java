@@ -21,15 +21,6 @@ public class AlertTypeFilter {
         this.name = name;
     }
 
-    AlertTypeFilter(String name, String messageCode, String color, PatientAlertType alertType, String filterKey, String filterValue) {
-        this.name = name;
-        this.messageCode = messageCode;
-        this.color = color;
-        this.filterKey = filterKey;
-        this.filterValue = filterValue;
-        this.alertType = alertType;
-    }
-
     public Map<String, Object> getQueryFields() {
         Map<String, Object> queryFields = new HashMap<>();
         queryFields.put(filterKey, getFilterValue());
