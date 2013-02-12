@@ -1,8 +1,12 @@
 function addLink(value, openInNewTab) {
     $(value).addClass('no-padding');
     var shouldOpenNewTab = openInNewTab ? " target='_blank'" : "";
+    var clsName = 'table-condensed-padding';
+    if($(value).hasClass('alert-cell')) {
+        clsName = 'alert-count';
+    }
     $(value).html("<a class='inherit-color' redirect-link=true" + shouldOpenNewTab + " style='display:inline-block; width: 100%; height: 100%' href='" + $(value).closest('tr').attr('redirect-url') + "'>" +
-        " <div class='table-condensed-padding'>" + $(value).html() + "</div>" +
+        " <div class="+ clsName +">" + $(value).html() + "</div>" +
         "</a>");
 }
 function removeLink(value) {

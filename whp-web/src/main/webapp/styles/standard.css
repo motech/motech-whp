@@ -38,12 +38,17 @@ body.main #mainContent {
     margin: 70px 20px;
     padding: 20px;
     height: 100%;
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    border-radius: 20px;
+    background: #fff;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
    -moz-box-sizing: border-box;
    -webkit-box-sizing: border-box;
     box-sizing: border-box;
+
+    -webkit-box-shadow: 0 10px 7px -5px #777;
+    -moz-box-shadow: 0 10px 7px -5px #777;
+    box-shadow: 0 10px 7px -5px #777;
 }
 #mainContent h1 {
     color: #000;
@@ -438,7 +443,7 @@ div.buttons a, div.buttons button {
 #search-pane select {
    width: 95%;
 }
-#search-pane input#providerId {
+#search-pane input#providerId, #search-pane input[type="text"] {
     width: 95%;
 }
 #search-pane .dates {
@@ -524,6 +529,9 @@ td[class~=adherenceNotCaptured] {
     font-size: 2em;
     color: #555;
 	margin: 0;
+}
+.patient-info .patient .flagImage{
+    width: 32px;
 }
 .patient-info .provider-details  {
     font-size: 1.1em;
@@ -1080,7 +1088,7 @@ pre {
     background: #f4f4f4;
     border: 1px solid #CCCCCC;
     border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 2px #D1D1D1;
+
     color: #666666;
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
@@ -1098,7 +1106,9 @@ pre {
     border-bottom: 1px solid #E0E0E0;
     border-top: 1px solid #FBFBFB !important;
     padding: 10px 5px;
-    vertical-align: middle;
+    vertical-align: bottom;
+    text-shadow: 0 1px 1px #FFFFFF;
+    line-height: 1.1;
 }
 
 .table tr:first-child th:first-child {
@@ -1107,7 +1117,29 @@ pre {
 .table tr:first-child th:last-child {
     border-top-right-radius: 3px;
 }
-
+.table thead th.treatment-category {
+    width: 180px;
+}
+.table thead th.cum-missed-doses {
+    width: 70px;
+}
+.table tbody td.alert-cell {
+    vertical-align: middle;
+}
+.table tbody td.alert-cell .alert-count {
+    background: #FFFFFF;
+    line-height: 1;
+    margin: 0 3px;
+    padding: 2px;
+    text-align: center;
+    width: 12px;
+    -webkit-box-shadow: 0 2px 2px #777777;
+    -moz-box-shadow: 0 2px 2px #777777;
+    box-shadow: 0 2px 2px #777777;
+    -webkit-border-radius: 100% 100% 100% 100%;
+    -moz-border-radius: 100% 100% 100% 100%;
+    border-radius: 100% 100% 100% 100%;
+}
 .ellipsis {
     display: block;
     overflow: hidden;

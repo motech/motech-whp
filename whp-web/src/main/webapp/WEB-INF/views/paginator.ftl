@@ -5,9 +5,10 @@
 <div id="${id}" ng-init="entity='${entity}';contextRoot='${contextRoot}';rowsPerPage='${rowsPerPage}';id='${id}';filterSectionId='${filterSectionId}'">
     <div class="paginator" ng-controller="PaginationCtrl">
         <div>
-            <div>Found <span class="bold">{{data.totalRows}}</span> patient(s)</div>
+
             <div class="result-count-info pull-left" ng-show="hasResults()">
-                Displaying: {{firstRowCount}} - {{lastRowCount}} of {{data.totalRows}} row(s)
+                <span>Found <span class="bold">{{data.totalRows}}</span> patient(s)</span> |
+                <span>Displaying: {{firstRowCount}} - {{lastRowCount}} of {{data.totalRows}} row(s)</span>
 
             </div>
             <div class="pull-right" ng-show="hasResults()">

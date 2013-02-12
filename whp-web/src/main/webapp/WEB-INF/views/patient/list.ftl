@@ -160,12 +160,12 @@
                         <th>Provider ID</th>
                         <th>Village</th>
                         <th>Provider District</th>
-                        <th>Treatment Category</th>
+                        <th class="treatment-category">Treatment Category</th>
                         <th>TB Registration Date</th>
                         <th>Treatment Start Date</th>
                         <th>IP Treatment Progress</th>
                         <th>CP Treatment Progress</th>
-                        <th>Cumulative Missed Doses &#42;</th>
+                        <th class="cum-missed-doses">Cumulative Missed Doses &#42;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -180,13 +180,13 @@
                                  flagValue="{{item.flag}}" class="flagImage"
                                  src="<@spring.url '/resources-${applicationVersion}/img/{{item.flag}}-star.png'/>"/>
                         </td>
-                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" class="alert-cell" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
                             {{item.treatmentNotStartedSeverity}}
                         </td>
-                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" style="background-color:{{item.adherenceMissingSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" class="alert-cell"  style="background-color:{{item.adherenceMissingSeverityColor}}">
                             {{item.adherenceMissingWeeks}}
                         </td>
-                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" class="alert-cell" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
                             {{item.cumulativeMissedDosesSeverity}}
                         </td>
                         <td class="name">{{item.firstName}}</td>
