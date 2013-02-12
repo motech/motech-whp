@@ -31,7 +31,6 @@
         <module>whp-application-service</module>
         <module>whp-treatment-card</module>
         <module>whp-remedi-outbound</module>
-        <module>whp-ivr</module>
         <module>whp-remedi-inbound</module>
         <module>whp-web</module>
         <module>whp-reporting</module>
@@ -151,11 +150,6 @@
                 <artifactId>whp-config</artifactId>
                 <version>${project.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.motechproject.whp</groupId>
-                <artifactId>whp-ivr</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.motechproject.whp</groupId>

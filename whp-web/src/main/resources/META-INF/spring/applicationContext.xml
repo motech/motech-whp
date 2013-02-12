@@ -33,7 +33,6 @@
     <import resource="classpath*:applicationUserContext.xml"/>
     <import resource="classpath*:applicationPatientContext.xml"/>
     <import resource="classpath*:applicationWHPAdherenceContext.xml"/>
-    <import resource="classpath*:applicationIVRContext.xml"/>
     <import resource="classpath*:applicationPlatformServerAPI.xml"/>
     <import resource="classpath*:applicationRefDataContext.xml"/>
     <import resource="classpath*:placeholderPluginContext.xml"/>

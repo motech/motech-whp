@@ -95,17 +95,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Handles IVR requests -->
-    <servlet>
-        <servlet-name>motech-whp-ivr</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/spring/ivr-config.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
     <!-- Handles Spring requests -->
     <servlet>
         <servlet-name>motech-whp</servlet-name>
@@ -116,11 +105,6 @@
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
-
-    <servlet-mapping>
-        <servlet-name>motech-whp-ivr</servlet-name>
-        <url-pattern>/whpivr/*</url-pattern>
-    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>motech-whp</servlet-name>

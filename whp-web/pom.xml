@@ -37,10 +37,6 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
-            <artifactId>whp-ivr</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-remedi-inbound</artifactId>
         </dependency>
         <dependency>
