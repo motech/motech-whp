@@ -26,6 +26,7 @@ import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.service.PatientPagingService;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
+import org.motechproject.whp.uimodel.PatientDashboardLegends;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -81,22 +82,23 @@ public class PatientControllerTest extends BaseControllerTest {
     AllTreatmentCategories allTreatmentCategories;
     @Mock
     List<TreatmentCategory> treatmentCategories;
-
+    @Mock
+    private PatientDashboardLegends patientDashboardLegends;
 
     AbstractMessageSource messageSource;
-
     Patient patient;
     Provider provider;
-    PatientController patientController;
 
+    PatientController patientController;
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
     AlertTypeFilters alertTypes = new AlertTypeFilters();
     AlertDateFilters alertDates = new AlertDateFilters();
-    FlagFilters flags = new FlagFilters();
 
+    FlagFilters flags = new FlagFilters();
     private static final String LOGGED_IN_USER_NAME = "username";
     private List<TherapyRemark> cmfAdminRemarks;
     private List<AuditLog> auditLogs;
+
     private TreatmentWeekInstance treatmentWeekInstance;
 
 
@@ -111,7 +113,7 @@ public class PatientControllerTest extends BaseControllerTest {
 
         treatmentWeekInstance = TreatmentWeekInstanceBuilder.build();
 
-        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance);
+        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
@@ -150,12 +152,11 @@ public class PatientControllerTest extends BaseControllerTest {
         standaloneSetup(patientController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
-                .andExpect(model().size(6))
+                .andExpect(model().size(5))
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("cmfAdminRemarks", cmfAdminRemarks))
                 .andExpect(model().attribute("providerRemarks", auditLogs))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
-                .andExpect(model().attributeExists("patientAlerts"))
                 .andExpect(forwardedUrl("patient/show"));
     }
 
@@ -230,6 +231,7 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("alertDates", alertDates))
                 .andExpect(model().attribute("flags", flags))
                 .andExpect(model().attribute("treatmentCategories", treatmentCategories))
+                .andExpect(model().attribute("legends", patientDashboardLegends.getLegends()))
                 .andExpect(view().name("patient/list"));
     }
 

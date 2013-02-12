@@ -104,9 +104,9 @@ public class PatientDashboardRowTest {
     @Test
     public void shouldCreatePatientDashboardRowFromPatient() {
 
-        when(colorConfiguration.getSeverityColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
-        when(colorConfiguration.getSeverityColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
-        when(colorConfiguration.getSeverityColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
+        when(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
+        when(colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
+        when(colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
 
         PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, colorConfiguration);
 

@@ -1,6 +1,5 @@
 <#import "/spring.ftl" as spring />
 <#import "../layout/default-with-menu.ftl" as layout>
-<#include "../layout/legend.ftl">
 <#import "../paginator.ftl" as paginator>
 <@layout.defaultLayout title="Patient List" entity="cmfadmin">
 <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/util.js'/>"></script>
@@ -59,7 +58,7 @@
                                     <option value=""></option>
                                     <#list alertTypes.alertTypeFilters as alertType>
                                         <option value="${alertType.name()}"
-                                                ng-selected="{{isSelected('${alertType.name()}', searchCriteria.alertType, 'alertType')}}">${alertType.displayText}</option>
+                                                ng-selected="{{isSelected('${alertType.name()}', searchCriteria.alertType, 'alertType')}}"><@spring.message '${alertType.messageCode}'/></option>
                                     </#list>
                                 </select>
                             </div>
@@ -218,10 +217,7 @@
 </div>
 <div class="row-fluid ">
     <i>&#42; Cumulative missed doses shown as of ${lastSunday}</i>
-
-    <div class="pull-right patients-list-legend">
-        <@legend key1="paused" value1="Current Treatment Paused" />
-    </div>
+    <#include "../layout/legends.ftl">
 </div>
 </div>
     <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>

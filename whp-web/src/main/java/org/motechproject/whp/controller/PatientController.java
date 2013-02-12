@@ -17,6 +17,7 @@ import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
 import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
+import org.motechproject.whp.uimodel.PatientDashboardLegends;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
@@ -57,6 +58,7 @@ public class PatientController extends BaseWebController {
     private ProviderRemarksService providerRemarksService;
     private AllTreatmentCategories allTreatmentCategories;
     private TreatmentWeekInstance treatmentWeekInstance;
+    private PatientDashboardLegends patientDashboardLegends;
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -68,7 +70,8 @@ public class PatientController extends BaseWebController {
                              AllDistricts allDistrictsCache,
                              ProviderRemarksService providerRemarksService,
                              AllTreatmentCategories allTreatmentCategories,
-                             TreatmentWeekInstance treatmentWeekInstance) {
+                             TreatmentWeekInstance treatmentWeekInstance,
+                             PatientDashboardLegends patientDashboardLegends) {
 
         this.patientService = patientService;
         this.treatmentCardService = treatmentCardService;
@@ -79,6 +82,7 @@ public class PatientController extends BaseWebController {
         this.providerRemarksService = providerRemarksService;
         this.allTreatmentCategories = allTreatmentCategories;
         this.treatmentWeekInstance = treatmentWeekInstance;
+        this.patientDashboardLegends = patientDashboardLegends;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -157,6 +161,7 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("alertTypes", new AlertTypeFilters());
         uiModel.addAttribute("alertDates", new AlertDateFilters());
         uiModel.addAttribute("flags", new FlagFilters());
+        uiModel.addAttribute("legends", patientDashboardLegends.getLegends());
         uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
         uiModel.addAttribute("lastSunday", WHPDate.date(treatmentWeekInstance.previousAdherenceWeekEndDate()).lucidValue());
     }
@@ -177,7 +182,6 @@ public class PatientController extends BaseWebController {
         uiModel.addAttribute("patient", new PatientInfo(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
-        uiModel.addAttribute("patientAlerts", patient.getPatientAlerts());
         setUpModelForRemarks(uiModel, patient);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);

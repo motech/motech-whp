@@ -36,26 +36,6 @@
 
         <#include "phaseInfo.ftl"/>
 
-        <div id = "alerts"  class="row-fluid span4">
-            <h3>Alert Details</h3>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <th>Type</th>
-                    <th>Value</th>
-                    <th>Severity</th>
-                </thead>
-
-                <tbody>
-                <#list patientAlerts.alerts?keys as alertType>
-                    <tr>
-                        <th>${alertType}</th>
-                        <td>${patientAlerts.getAlert(alertType).value}</td>
-                        <td>${patientAlerts.getAlert(alertType).alertSeverity}</td>
-                    </tr>
-                </#list>
-            </table>
-        </div>
-
         <div id="treatmentCard"></div>
 
     <br />

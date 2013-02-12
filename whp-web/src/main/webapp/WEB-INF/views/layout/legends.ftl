@@ -1,4 +1,4 @@
-<#macro legend key1 value1>
+<div class="pull-right patients-list-legend">
     <div id="legend-container">
         <table id="legend" class="table table-bordered table-condensed">
             <thead>
@@ -7,16 +7,17 @@
             </tr>
             </thead>
             <tbody>
+            <#list legends as legend>
             <tr>
                 <td>
-                    <div class="label ${key1}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    <div class="label">${legend.color}</div>
                 </td>
                 <td>
-                    <div class="text-center">${value1}</div>
+                    <div class="text-center"><@spring.message '${legend.displayText}'/></div>
                 </td>
             </tr>
+            </#list>
             </tbody>
         </table>
     </div>
-</#macro>
-
+</div>

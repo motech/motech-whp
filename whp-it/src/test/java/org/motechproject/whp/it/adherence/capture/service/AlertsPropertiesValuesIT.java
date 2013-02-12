@@ -59,7 +59,7 @@ public class AlertsPropertiesValuesIT {
 
     @Test
     public void shouldReadAdherenceMissingWeeksSeverityColors() {
-        assertThat(alertsPropertiesValues.getAdherenceMissingSeverityColors(), is(Arrays.asList("", "yellow", "pink", "red")));
+        assertThat(alertsPropertiesValues.getAdherenceMissingSeverityColors(), is(Arrays.asList("", "yellow", "orange", "red")));
     }
 
     @Test

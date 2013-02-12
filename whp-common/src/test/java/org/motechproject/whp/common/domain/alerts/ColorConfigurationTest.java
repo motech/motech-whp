@@ -26,34 +26,34 @@ public class ColorConfigurationTest {
     public void shouldGetAlertSeverityColorsForAdherenceMissingAlertType() {
         when(alertsPropertiesValues.getAdherenceMissingSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getSeverityColorFor(PatientAlertType.AdherenceMissing, 2));
+        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2));
     }
 
     @Test
     public void shouldGetAlertSeverityColorsForCumulativeMissedDosesAlertType() {
         when(alertsPropertiesValues.getCumulativeMissedDosesSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getSeverityColorFor(PatientAlertType.CumulativeMissedDoses, 2));
+        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2));
     }
 
     @Test
     public void shouldGetAlertSeverityColorsForTreatmentNotStartedAlertType() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getSeverityColorFor(PatientAlertType.TreatmentNotStarted, 2));
+        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2));
     }
 
     @Test
     public void shouldGetDefaultAlertSeverityColorForAnEdgeCaseSeverity() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getSeverityColorFor(PatientAlertType.TreatmentNotStarted, 4));
+        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 4));
     }
 
     @Test
     public void shouldGetDefaultAlertSeverityColorForInvalidSeverity() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getSeverityColorFor(PatientAlertType.TreatmentNotStarted, 6));
+        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 6));
     }
 }

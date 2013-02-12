@@ -14,11 +14,10 @@ public class ColorConfiguration {
 
     @Autowired
     public ColorConfiguration(AlertsPropertiesValues alertsPropertiesValues) {
-
         this.alertsPropertiesValues = alertsPropertiesValues;
     }
 
-    public String getSeverityColorFor(PatientAlertType alertType, int severity) {
+    public String getColorFor(PatientAlertType alertType, int severity) {
         switch (alertType) {
             case AdherenceMissing:
                 return getSeverityColor(severity, alertsPropertiesValues.getAdherenceMissingSeverityColors());
@@ -37,4 +36,6 @@ public class ColorConfiguration {
         }
         return DEFAULT_COLOR;
     }
+
+
 }
