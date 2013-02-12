@@ -59,6 +59,7 @@ public class PatientController extends BaseWebController {
     private AllTreatmentCategories allTreatmentCategories;
     private TreatmentWeekInstance treatmentWeekInstance;
     private PatientDashboardLegends patientDashboardLegends;
+    private AlertTypeFilters alertTypeFilters;
 
     @Autowired
     public PatientController(PatientService patientService,
@@ -71,7 +72,8 @@ public class PatientController extends BaseWebController {
                              ProviderRemarksService providerRemarksService,
                              AllTreatmentCategories allTreatmentCategories,
                              TreatmentWeekInstance treatmentWeekInstance,
-                             PatientDashboardLegends patientDashboardLegends) {
+                             PatientDashboardLegends patientDashboardLegends,
+                             AlertTypeFilters alertTypeFilters) {
 
         this.patientService = patientService;
         this.treatmentCardService = treatmentCardService;
@@ -83,6 +85,7 @@ public class PatientController extends BaseWebController {
         this.allTreatmentCategories = allTreatmentCategories;
         this.treatmentWeekInstance = treatmentWeekInstance;
         this.patientDashboardLegends = patientDashboardLegends;
+        this.alertTypeFilters = alertTypeFilters;
     }
 
     @RequestMapping(value = "listByProvider", method = RequestMethod.GET)
@@ -157,7 +160,6 @@ public class PatientController extends BaseWebController {
     }
 
     private void prepareModelForListView(Model uiModel) {
-        AlertTypeFilters alertTypeFilters = new AlertTypeFilters();
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
         uiModel.addAttribute("alertTypes", alertTypeFilters);
         uiModel.addAttribute("alertDates", new AlertDateFilters(alertTypeFilters));

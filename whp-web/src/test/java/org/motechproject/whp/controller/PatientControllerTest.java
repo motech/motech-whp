@@ -11,6 +11,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.builder.TreatmentWeekInstanceBuilder;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.TreatmentWeekInstance;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -84,6 +85,8 @@ public class PatientControllerTest extends BaseControllerTest {
     List<TreatmentCategory> treatmentCategories;
     @Mock
     private PatientDashboardLegends patientDashboardLegends;
+    @Mock
+    private ColorConfiguration colorConfiguration;
 
     AbstractMessageSource messageSource;
     Patient patient;
@@ -91,8 +94,9 @@ public class PatientControllerTest extends BaseControllerTest {
 
     PatientController patientController;
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
-    AlertTypeFilters alertTypes = new AlertTypeFilters();
-    AlertDateFilters alertDates = new AlertDateFilters(alertTypes);
+
+    AlertTypeFilters alertTypes;
+    AlertDateFilters alertDates;
 
     FlagFilters flags = new FlagFilters();
     private static final String LOGGED_IN_USER_NAME = "username";
@@ -113,7 +117,10 @@ public class PatientControllerTest extends BaseControllerTest {
 
         treatmentWeekInstance = TreatmentWeekInstanceBuilder.build();
 
-        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends);
+        alertTypes = new AlertTypeFilters(colorConfiguration);
+        alertDates = new AlertDateFilters(alertTypes);
+
+        patientController = new PatientController(patientService, treatmentCardService, treatmentUpdateOrchestrator, providerService, messageSource, allDistrictsCache, providerRemarksService, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends, alertTypes);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);

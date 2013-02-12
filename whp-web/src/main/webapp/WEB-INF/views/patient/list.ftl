@@ -58,7 +58,7 @@
                                     <option value=""></option>
                                     <#list alertTypes.alertTypeFilters as alertType>
                                         <option value="${alertType.name}"
-                                                ng-selected="{{isSelected('${alertType.name}', searchCriteria.alertType, 'alertType')}}"><@spring.message '${alertType.messageCode}'/></option>
+                                                ng-selected="{{isSelected('${alertType.name}', searchCriteria.alertType, 'alertType')}}"><@spring.message '${alertType.messageCode}'/> - ${alertType.color!}</option>
                                     </#list>
                                 </select>
                             </div>

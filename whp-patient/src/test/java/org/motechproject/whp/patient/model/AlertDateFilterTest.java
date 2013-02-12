@@ -2,7 +2,10 @@ package org.motechproject.whp.patient.model;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
@@ -10,12 +13,22 @@ import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.patient.model.AlertDateFilter.*;
 
 public class AlertDateFilterTest {
 
-    private final AlertTypeFilters alertTypeFilters = new AlertTypeFilters();
-    AlertDateFilters alertDateFilters = new AlertDateFilters(alertTypeFilters);
+    @Mock
+    private ColorConfiguration colorConfiguration;
+    private AlertTypeFilters alertTypeFilters;
+    private AlertDateFilters alertDateFilters;
+
+    @Before
+    public void setUp() throws Exception {
+        initMocks(this);
+        alertTypeFilters = new AlertTypeFilters(colorConfiguration);
+        alertDateFilters = new AlertDateFilters(alertTypeFilters);
+    }
 
     @Test
     public void shouldReturnDateRangesGivenTheDateFilter(){
