@@ -180,12 +180,12 @@
                                  flagValue="{{item.flag}}" class="flagImage"
                                  src="<@spring.url '/resources-${applicationVersion}/img/{{item.flag}}-star.png'/>"/>
                         </td>
-                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" class="alert-cell" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
                         </td>
                         <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" class="alert-cell"  style="background-color:{{item.adherenceMissingSeverityColor}}">
                             {{item.adherenceMissingWeeks}}
                         </td>
-                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" class="alert-cell" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
                         </td>
                         <td class="name">{{item.firstName}}</td>
                         <td>{{item.age}}</td>
