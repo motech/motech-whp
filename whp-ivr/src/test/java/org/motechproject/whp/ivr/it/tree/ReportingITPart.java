@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

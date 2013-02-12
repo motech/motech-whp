@@ -1,13 +1,13 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.junit.Test;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
+import org.motechproject.whp.ivr.it.util.KooKooIvrResponse;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
-import static org.motechproject.whp.it.ivr.matcher.IvrResponseAudioMatcher.audioList;
+import static org.motechproject.whp.ivr.it.matcher.IvrResponseAudioMatcher.audioList;
 
 public class MenuRepetitionITPart extends IvrCallFlowITPart {
 

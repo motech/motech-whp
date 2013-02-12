@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.util;
+package org.motechproject.whp.ivr.it.util;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
@@ -11,8 +11,8 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.it.ivr.matcher.IvrResponseAudioMatcher;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
+import org.motechproject.whp.ivr.it.matcher.IvrResponseAudioMatcher;
+import org.motechproject.whp.ivr.it.util.KooKooIvrResponse;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.tree.AdherenceCaptureTree;
 import org.motechproject.whp.patient.builder.PatientBuilder;
@@ -59,6 +59,7 @@ public class AdherenceCaptureTreeIT extends SpringIvrIntegrationTest {
     Patient patient1;
     Patient patient2;
     Patient patient3;
+
 
     private ReportingPublisherService reportingPublisherService;
 

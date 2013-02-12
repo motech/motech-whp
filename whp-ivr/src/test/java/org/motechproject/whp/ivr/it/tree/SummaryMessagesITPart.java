@@ -1,9 +1,8 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.joda.time.LocalDate;
 import org.junit.Test;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
+import org.motechproject.whp.ivr.it.util.KooKooIvrResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.ivr.IvrAudioFiles.*;
-import static org.motechproject.whp.it.ivr.matcher.IvrResponseAudioMatcher.audioList;
+import static org.motechproject.whp.ivr.it.matcher.IvrResponseAudioMatcher.audioList;
 
 public class SummaryMessagesITPart extends IvrCallFlowITPart {
 

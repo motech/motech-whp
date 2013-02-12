@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.URIUtil;
@@ -15,7 +15,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
+import org.motechproject.whp.ivr.it.util.KooKooIvrResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -71,7 +71,7 @@ public abstract class SpringIvrIntegrationTest extends SpringIntegrationTest {
         Context context = new Context(server, CONTEXT_PATH);
 
         dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setContextConfigLocation("classpath*:/applicationITContext.xml");
+        dispatcherServlet.setContextConfigLocation("classpath*:test-applicationIVRContext.xml");
 
         ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
         context.addServlet(servletHolder, "/*");

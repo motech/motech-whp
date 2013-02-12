@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.tree;
+package org.motechproject.whp.ivr.it.tree;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
-import org.motechproject.whp.it.ivr.util.KooKooIvrResponse;
+import org.motechproject.whp.ivr.it.util.KooKooIvrResponse;
 import org.motechproject.whp.ivr.WhpIvrMessage;
 import org.motechproject.whp.ivr.tree.AdherenceCaptureTree;
 import org.motechproject.whp.patient.builder.PatientBuilder;

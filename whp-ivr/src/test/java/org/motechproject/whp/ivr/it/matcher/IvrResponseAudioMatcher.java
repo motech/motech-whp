@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.ivr.matcher;
+package org.motechproject.whp.ivr.it.matcher;
 
 
 import org.hamcrest.Description;
