@@ -157,9 +157,10 @@ public class PatientController extends BaseWebController {
     }
 
     private void prepareModelForListView(Model uiModel) {
+        AlertTypeFilters alertTypeFilters = new AlertTypeFilters();
         uiModel.addAttribute(DISTRICT_LIST, allDistrictsCache.getAll());
-        uiModel.addAttribute("alertTypes", new AlertTypeFilters());
-        uiModel.addAttribute("alertDates", new AlertDateFilters());
+        uiModel.addAttribute("alertTypes", alertTypeFilters);
+        uiModel.addAttribute("alertDates", new AlertDateFilters(alertTypeFilters));
         uiModel.addAttribute("flags", new FlagFilters());
         uiModel.addAttribute("legends", patientDashboardLegends.getLegends());
         uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());

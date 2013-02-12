@@ -3,7 +3,6 @@ package org.motechproject.whp.patient.model;
 import lombok.Getter;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.WHPDate;
-import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,19 +76,5 @@ public enum AlertDateFilter {
         queryFields.put(alertDateFromParam(), alertDateFilter.getFrom());
         queryFields.put(alertDateToParam(), alertDateFilter.getTo());
         return queryFields;
-    }
-
-    public static Map<String, Object> getQueryFieldsForType(String enumValue, String alertType) {
-        Map<String, Object> queryFields = new HashMap<>();
-
-        AlertDateFilter alertDateFilter = AlertDateFilter.valueOf(enumValue);
-        AlertTypeFilter alertTypeFilter = AlertTypeFilter.valueOf(alertType);
-        if(alertTypeFilter != AlertTypeFilter.AllAlerts && alertTypeFilter != AlertTypeFilter.NoAlerts)
-        {
-            queryFields.put(PatientQueryDefinition.alertDateFromParamForType(alertTypeFilter.getAlertType()), alertDateFilter.getFrom());
-            queryFields.put(PatientQueryDefinition.alertDateToParamForType(alertTypeFilter.getAlertType()), alertDateFilter.getTo());
-            return queryFields;
-        }
-        return getQueryFields(enumValue);
     }
 }

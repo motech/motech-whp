@@ -92,7 +92,7 @@ public class PatientControllerTest extends BaseControllerTest {
     PatientController patientController;
     List<District> districts = asList(new District("Vaishali"), new District("Begusarai"));
     AlertTypeFilters alertTypes = new AlertTypeFilters();
-    AlertDateFilters alertDates = new AlertDateFilters();
+    AlertDateFilters alertDates = new AlertDateFilters(alertTypes);
 
     FlagFilters flags = new FlagFilters();
     private static final String LOGGED_IN_USER_NAME = "username";

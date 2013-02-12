@@ -13,8 +13,10 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.model.AlertTypeFilter;
+import org.motechproject.whp.patient.model.AlertTypeFilters;
 import org.motechproject.whp.patient.model.FlagFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.joda.time.DateTime.now;
+import static org.motechproject.whp.patient.model.AlertTypeFilters.ADHERENCE_MISSING_WITH_SEVERITY_ONE;
 
 public class PatientFilterTestPart  extends AllPatientsTestPart {
 
@@ -33,6 +36,9 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     private Patient patient4WithoutAlerts;
     private Patient inactivePatient;
     private final String UNIQUE_TREATMENT_CATEGORY_CODE = "05";
+
+    @Autowired
+    AlertTypeFilters alertTypeFilters;
 
     @Before
     public void setUp() {
@@ -273,7 +279,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         String alertDateTo = WHPDate.date(DateUtil.today().minusDays(5)).value();
         queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateFrom", alertDateFrom);
         queryParams.put(PatientAlertType.AdherenceMissing.name() + "AlertDateTo", alertDateTo);
-        queryParams.put(AlertTypeFilter.AdherenceMissingWithSeverityOne.getFilterKey(), AlertTypeFilter.AdherenceMissingWithSeverityOne.getFilterValue());
+        AlertTypeFilter filter = alertTypeFilters.getFilter(ADHERENCE_MISSING_WITH_SEVERITY_ONE);
+        queryParams.put(filter.getFilterKey(), filter.getFilterValue());
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
