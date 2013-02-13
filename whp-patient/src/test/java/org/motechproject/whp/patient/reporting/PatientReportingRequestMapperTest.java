@@ -134,9 +134,9 @@ public class PatientReportingRequestMapperTest {
             assertEquals(therapy.getPhase(Phase.IP).remainingDoses(therapy.getTreatmentCategory()), therapyDTO.getIpPillsRemaining());
             assertEquals(therapy.getPhase(Phase.EIP).remainingDoses(therapy.getTreatmentCategory()), therapyDTO.getEipPillsRemaining());
 
-            assertEquals(therapy.getTreatmentCategory().getNumberOfDosesInCP(), therapyDTO.getCpTotalDoses());
-            assertEquals(therapy.getTreatmentCategory().getNumberOfDosesInIP(), therapyDTO.getIpTotalDoses());
-            assertEquals(therapy.getTreatmentCategory().getNumberOfDosesInEIP(), therapyDTO.getEipTotalDoses());
+            assertEquals((Integer) therapy.getTotalDoesIn(Phase.CP), therapyDTO.getCpTotalDoses());
+            assertEquals((Integer) therapy.getTotalDoesIn(Phase.IP), therapyDTO.getIpTotalDoses());
+            assertEquals((Integer) therapy.getTotalDoesIn(Phase.EIP), therapyDTO.getEipTotalDoses());
 
             assertEquals(therapy.getTreatmentCategory().getName(), therapyDTO.getTreatmentCategory());
 

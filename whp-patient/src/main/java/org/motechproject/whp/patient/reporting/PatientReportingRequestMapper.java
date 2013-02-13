@@ -105,10 +105,11 @@ public class PatientReportingRequestMapper {
             therapyDTO.setIpPillsRemaining(therapy.getRemainingDoses(Phase.IP));
             therapyDTO.setEipPillsRemaining(therapy.getRemainingDoses(Phase.EIP));
 
+            therapyDTO.setCpTotalDoses(therapy.getTotalDoesIn(Phase.CP));
+            therapyDTO.setIpTotalDoses(therapy.getTotalDoesIn(Phase.IP));
+            therapyDTO.setEipTotalDoses(therapy.getTotalDoesIn(Phase.EIP));
+
             if(therapy.getTreatmentCategory() != null){
-                therapyDTO.setCpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInCP());
-                therapyDTO.setIpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInIP());
-                therapyDTO.setEipTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInEIP());
                 therapyDTO.setTreatmentCategory(therapy.getTreatmentCategory().getName());
             }
 
