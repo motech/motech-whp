@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.reporting;
 
 import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
@@ -30,8 +31,15 @@ public class PatientReportingRequestMapper {
         mapPatientAddress(patient, patientDTO);
         mapTherapies(patient, patientDTO);
         mapPatientAlerts(patient, patientDTO);
+        mapCumulativeMissedDoses(patient, patientDTO);
 
         return patientDTO;
+    }
+
+    private void mapCumulativeMissedDoses(Patient patient, PatientDTO patientDTO) {
+        TherapyDTO currentTherapyDTO = patientDTO.getTherapies().get(patientDTO.getTherapies().size() - 1);
+        int cumulativeMissedDoses = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        currentTherapyDTO.setCumulativeMissedDoses(cumulativeMissedDoses);
     }
 
     private void mapPatientAlerts(Patient patient, PatientDTO patientDTO) {

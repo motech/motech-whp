@@ -62,6 +62,13 @@ public class PatientReportingRequestMapperTest {
         PatientAlertsDTO patientAlertsDTO = patientDTO.getPatientAlerts();
         PatientAlerts patientAlerts = patient.getPatientAlerts();
         assertPatientAlerts(patientAlerts, patientAlertsDTO);
+        assertCumulativeMissedDoses(patient, patientDTO);
+    }
+
+    private void assertCumulativeMissedDoses(Patient patient, PatientDTO patientDTO) {
+        Integer expectedCumulativeMissedDose = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        TherapyDTO lastTherapyDTO = patientDTO.getTherapies().get(patientDTO.getTherapies().size() - 1);
+        assertEquals(expectedCumulativeMissedDose, lastTherapyDTO.getCumulativeMissedDoses());
     }
 
     private void assertAddress(AddressDTO addressDTO, Address patientAddress) {
@@ -138,6 +145,7 @@ public class PatientReportingRequestMapperTest {
             assertTreatments(therapy.getAllTreatments(), therapyDTO.getTreatments(), isLastTherapy);
         }
     }
+
 
     private void assertCurrentTherapyFlag(boolean lastTherapy, TherapyDTO therapyDTO) {
         String expected = lastTherapy?  YesNo.Yes.code() :  YesNo.No.code();
