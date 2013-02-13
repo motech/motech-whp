@@ -6,6 +6,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
@@ -110,8 +111,9 @@ public class PatientController extends BaseWebController {
 
     private void prepareModelForListView(Model uiModel, List<Patient> patientsForProvider) {
         List<PatientInfo> patientList = new ArrayList<>();
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
         for (Patient patient : patientsForProvider) {
-            PatientInfo patientInfo = new PatientInfo(patient);
+            PatientInfo patientInfo = patientInfoMapper.map(patient);
             patientList.add(patientInfo);
         }
         uiModel.addAttribute(PATIENT_LIST, patientList);
@@ -136,8 +138,8 @@ public class PatientController extends BaseWebController {
     private void setupPrintDashboardModel(Model uiModel, Patient patient) {
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
-
-        uiModel.addAttribute("patient", new PatientInfo(patient, provider));
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
+        uiModel.addAttribute("patient", patientInfoMapper.map(patient, provider));
         uiModel.addAttribute("treatmentCard", treatmentCardService.treatmentCard(patient));
     }
 

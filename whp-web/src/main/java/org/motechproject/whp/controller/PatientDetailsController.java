@@ -3,11 +3,11 @@ package org.motechproject.whp.controller;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.remarks.ProviderRemarksService;
-import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.PhaseStartDates;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -51,11 +51,12 @@ public class PatientDetailsController extends BaseWebController{
     }
 
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
 
-        uiModel.addAttribute("patient", new PatientInfo(patient, provider));
+        uiModel.addAttribute("patient", patientInfoMapper.map(patient, provider));
         uiModel.addAttribute("phaseStartDates", phaseStartDates);
         uiModel.addAttribute("today", WHPDate.date(today()).value());
         uiModel.addAttribute("cmfAdminRemarks", patientService.getCmfAdminRemarks(patient));

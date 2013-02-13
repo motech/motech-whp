@@ -1,28 +1,33 @@
-package org.motechproject.whp.uimodel;
+package org.motechproject.whp.mapper;
 
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.service.AlertsPropertiesValues;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.uimodel.PatientInfo;
+import org.motechproject.whp.uimodel.TestResults;
 import org.motechproject.whp.user.domain.Provider;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static java.util.Arrays.asList;
+import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
-public class PatientInfoTest {
+public class PatientInfoMapperTest {
 
+    PatientInfo patientInfo;
     String firstName = "firstName";
     String lastName = "lastName";
     String patientId = "patientid";
@@ -45,10 +50,17 @@ public class PatientInfoTest {
     Provider provider;
     Treatment currentTreatment;
     TestResults expectedTestResults;
+    ColorConfiguration colorConfiguration;
+    PatientInfoMapper patientInfoMapper;
+    PhaseRecord currentPhase;
+    Therapy therapy;
+
 
     @Before
     public void setup() {
 
+        patientInfoMapper = new PatientInfoMapper();
+        patientInfo = new PatientInfo();
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, null, null));
 
@@ -65,10 +77,12 @@ public class PatientInfoTest {
                 .withSmearTestResults(smearTestResults)
                 .withWeightStatistics(weightStatistics)
                 .build();
+        currentTreatment.setInterruptions(null);
+
         expectedTestResults = new TestResults(smearTestResults, weightStatistics);
 
         treatmentCategoryCode = "01";
-        Therapy therapy = new TherapyBuilder()
+        therapy = new TherapyBuilder()
                 .withAge(patientAge)
                 .withDiseaseClass(diseaseClass)
                 .withTherapyUid("therapyUid")
@@ -81,6 +95,7 @@ public class PatientInfoTest {
         provider = newProviderBuilder()
                 .withProviderId(providerId)
                 .withPrimaryMobileNumber(providerMobileNumber)
+                .withDistrict("providerDistrict")
                 .build();
 
 
@@ -93,15 +108,28 @@ public class PatientInfoTest {
                 .withPatientMobileNumber(patientNumber)
                 .withCurrentTherapy(therapy)
                 .withAdherenceProvidedForLastWeek()
+                .withAdherenceMissedWeeks(6, 2, DateUtil.today())
+                .withCumulativeMissedAlertValue(10, 2, DateUtil.today())
+                .withTreatmentNotStartedDays(8, 2, DateUtil.today())
                 .withPatientFlag(true)
                 .build();
 
+        currentPhase = new PhaseRecord();
+        currentPhase.setEndDate(today().plusMonths(1));
+        currentPhase.setStartDate(today());
+        currentPhase.setName(Phase.IP);
+
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
+
+        AlertsPropertiesValues alertsPropertiesValues = new AlertsPropertiesValues();
+        alertsPropertiesValues.setAdherenceMissingWeeks(asList("1", "2", "6"));
+        colorConfiguration = new ColorConfiguration(alertsPropertiesValues);
     }
 
+
     @Test
-    public void shouldCreatePatientInfoModelFromPatient() {
-        PatientInfo patientInfo = new PatientInfo(patient, provider);
+    public void shouldMapPatientToPatientInfo() {
+        patientInfo = patientInfoMapper.map(patient, provider);
 
         assertThat(patientInfo.getPatientId(), is(patientId));
         assertThat(patientInfo.getFirstName(), is(firstName));
@@ -110,8 +138,6 @@ public class PatientInfoTest {
         assertThat(patientInfo.getPhi(), is(phi));
         assertThat(patientInfo.getGender(), is(gender.getValue()));
         assertThat(patientInfo.getTbId(), is(tbId));
-        assertThat(patientInfo.getProviderId(), is(providerId));
-        assertThat(patientInfo.getProviderMobileNumber(), is(providerMobileNumber));
         assertThat(patientInfo.getTherapyStartDate(), is(startDate.toString("dd/MM/yyyy")));
         assertThat(patientInfo.getTbRegistrationNumber(), is(tbRegistrationNo));
         assertThat(patientInfo.getPatientType(), is(patientType.value()));
@@ -120,11 +146,22 @@ public class PatientInfoTest {
         assertThat(patientInfo.getTreatmentCategoryName(), is(treatmentCategory));
         assertThat(patientInfo.getTreatmentCategoryCode(), is(treatmentCategoryCode));
         assertThat(patientInfo.getAddress(), is("houseNo, landmark, block"));
+        assertThat(patientInfo.getAddressVillage(), is("village"));
         assertThat(patientInfo.getAddressState(), is("state"));
         assertThat(patientInfo.getAddressDistrict(), is("district"));
         assertThat(patientInfo.getTestResults(), is(expectedTestResults));
         assertTrue(patientInfo.isAdherenceCapturedForThisWeek());
         assertTrue(patientInfo.getFlag());
+        assertThat(patientInfo.getCurrentTreatment(), is(currentTreatment));
+
+        assertThat(patientInfo.getProviderId(), is(providerId));
+        assertThat(patientInfo.getProviderMobileNumber(), is(providerMobileNumber));
+        assertThat(patientInfo.getProviderDistrict(), is("providerDistrict"));
+
+
+        assertFalse(patientInfo.isCurrentTreatmentPaused());
+        assertFalse(patientInfo.isCurrentTreatmentClosed());
+        assertThat(patientInfo.getLongestDoseInterruption(), is("0.0"));
     }
 
     @Test
@@ -151,30 +188,39 @@ public class PatientInfoTest {
 
         patient.addTreatment(treatment, now(), now());
 
-        PatientInfo patientInfo = new PatientInfo(patient, provider);
+        PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
         assertThat(patientInfo.getTestResults().size(),is(2));
         assertThat(patientInfo.getTestResults().get(0).getSampleInstance(),is(SputumTrackingInstance.PreTreatment.getDisplayText()));
         assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSputumTrackingInstance.getDisplayText()));
     }
 
     @Test
-    public void shouldSetProviderMobileNumberToNullIfProviderNotGiven() {
-        PatientInfo patientInfo = new PatientInfo(patient);
-
-        assertNull(patientInfo.getProviderMobileNumber());
-    }
-
-
-    @Test
     public void shouldNotShowTransitionAlertWhenPatientIsOnCP() {
-        Patient patient = new PatientBuilder().withDefaults().build();
+
+        Patient patient = new PatientBuilder().withDefaults().withCurrentTherapy(therapy).build();
         patient.startTherapy(today());
         patient.endLatestPhase(today().plusMonths(1));
         patient.nextPhaseName(Phase.CP);
         patient.startNextPhase();
         patient.setNumberOfDosesTaken(patient.getCurrentPhase().getName(), 51, today());
 
-        PatientInfo patientInfo = new PatientInfo(patient);
+        PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
         assertFalse(patientInfo.isShowAlert());
+//        assertThat(patientInfo.getCurrentPhase(), is(currentPhase));
+//        assertThat(patientInfo.getNextPhaseName(), is(Phase.CP));
+//        assertNull(patientInfo.getLastCompletedPhase());
+//        assertThat(patientInfo.getPhasesNotPossibleToTransitionTo(), is(asList(Phase.IP.name())));
+//        assertFalse(patientInfo.isNearingPhaseTransition());
+//        assertFalse(patientInfo.isTransitioning());
+//        assertThat(patientInfo.getRemainingDosesInCurrentPhase(), is(51));
+
     }
+
+    @Test
+    public void shouldSetProviderMobileNumberToNullIfProviderNotGiven() {
+        PatientInfo patientInfo = patientInfoMapper.map(patient);
+
+        Assert.assertNull(patientInfo.getProviderMobileNumber());
+    }
+
 }

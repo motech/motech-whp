@@ -9,6 +9,7 @@ import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.service.WHPAdherenceService;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
 import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
@@ -99,7 +100,9 @@ public class PatientControllerTest extends BaseControllerTest {
     @Test
     public void shouldListAllPatientsForProvider() {
         List<Patient> patientsForProvider = asList(patient);
-        PatientInfo patientInfo = new PatientInfo(patient);
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
+
+        PatientInfo patientInfo = patientInfoMapper.map(patient);
         when(patientService.getAllWithActiveTreatmentForProvider(LOGGED_IN_USER_NAME)).thenReturn(patientsForProvider);
         String view = patientController.listByProvider(uiModel, request);
 
@@ -113,7 +116,9 @@ public class PatientControllerTest extends BaseControllerTest {
 
     @Test
     public void shouldReturnDashBoardPrintView() throws Exception {
-        PatientInfo patientInfo = new PatientInfo(patient, provider);
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
+        PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
+
         TreatmentCard treatmentCard = new TreatmentCard(patient);
         when(treatmentCardService.treatmentCard(patient)).thenReturn(treatmentCard);
         standaloneSetup(patientController).build()

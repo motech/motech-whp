@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TherapyRemark;
@@ -52,7 +53,6 @@ public class PatientDetailsControllerTest {
     @Mock
     HttpSession session;
 
-
     @Before
     public void setup() {
         initMocks(this);
@@ -74,7 +74,8 @@ public class PatientDetailsControllerTest {
 
     @Test
     public void shouldReturnUIModelToShowPatientDetails() throws Exception {
-        PatientInfo patientInfo = new PatientInfo(patient, provider);
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
+        PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
         standaloneSetup(patientDetailsController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
