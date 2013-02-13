@@ -101,7 +101,9 @@ public class PatientReportingRequestMapper {
                 therapyDTO.setCpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInCP());
                 therapyDTO.setIpTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInIP());
                 therapyDTO.setEipTotalDoses(therapy.getTreatmentCategory().getNumberOfDosesInEIP());
+                therapyDTO.setTreatmentCategory(therapy.getTreatmentCategory().getName());
             }
+
             therapyDTO.setCurrentTherapy(YesNo.No.code());
 
             therapyDTO.setTreatments(mapTreatmentDTOs(therapy.getAllTreatments()));

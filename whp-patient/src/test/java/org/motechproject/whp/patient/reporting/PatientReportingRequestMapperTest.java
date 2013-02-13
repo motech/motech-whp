@@ -131,6 +131,8 @@ public class PatientReportingRequestMapperTest {
             assertEquals(therapy.getTreatmentCategory().getNumberOfDosesInIP(), therapyDTO.getIpTotalDoses());
             assertEquals(therapy.getTreatmentCategory().getNumberOfDosesInEIP(), therapyDTO.getEipTotalDoses());
 
+            assertEquals(therapy.getTreatmentCategory().getName(), therapyDTO.getTreatmentCategory());
+
             assertCurrentTherapyFlag(isLastTherapy, therapyDTO);
 
             assertTreatments(therapy.getAllTreatments(), therapyDTO.getTreatments(), isLastTherapy);

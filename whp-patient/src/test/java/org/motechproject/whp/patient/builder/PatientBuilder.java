@@ -22,6 +22,7 @@ public class PatientBuilder {
     public static final String TB_ID = "tbid";
     public static final String PROVIDER_ID = "providerid";
     public static final String THERAPY_UID = "therapyUid";
+    public static final String DEFAULT_TREATMENT_CATEGORY = "RNTCP Category 1";
 
 
     List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
@@ -72,7 +73,7 @@ public class PatientBuilder {
 
     public Therapy defaultTherapy() {
         Therapy therapy = new Therapy();
-        therapy.setTreatmentCategory(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
+        therapy.setTreatmentCategory(new TreatmentCategory(DEFAULT_TREATMENT_CATEGORY, "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
         therapy.setDiseaseClass(DiseaseClass.P);
         therapy.setUid(THERAPY_UID);
         return therapy;
