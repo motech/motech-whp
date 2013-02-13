@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
 import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -52,13 +53,17 @@ public class PatientDetailsControllerTest {
     Model uiModel;
     @Mock
     HttpSession session;
+    @Mock
+    ColorConfiguration colorConfiguration;
+    @Mock
+    PatientInfoMapper patientInfoMapper;
 
     @Before
     public void setup() {
         initMocks(this);
         String providerId = "providerid";
 
-        patientDetailsController = new PatientDetailsController(patientService, treatmentUpdateOrchestrator, providerService, providerRemarksService);
+        patientDetailsController = new PatientDetailsController(patientService, treatmentUpdateOrchestrator, providerService, providerRemarksService, patientInfoMapper);
         patient = new PatientBuilder().withDefaults().withTreatmentUnderProviderId(providerId).build();
         provider = newProviderBuilder().withDefaults().withProviderId(providerId).build();
         cmfAdminRemarks = mock(List.class);
@@ -74,8 +79,10 @@ public class PatientDetailsControllerTest {
 
     @Test
     public void shouldReturnUIModelToShowPatientDetails() throws Exception {
-        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
-        PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
+        PatientInfo patientInfo = new PatientInfo();
+
+        when(patientInfoMapper.map(patient, provider)).thenReturn(patientInfo);
+
         standaloneSetup(patientDetailsController).build()
                 .perform(get("/patients/show").param("patientId", patient.getPatientId()))
                 .andExpect(status().isOk())
@@ -85,6 +92,8 @@ public class PatientDetailsControllerTest {
                 .andExpect(model().attribute("providerRemarks", auditLogs))
                 .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
                 .andExpect(forwardedUrl("patient/show"));
+
+        verify(patientInfoMapper, times(1)).map(patient, provider);
     }
 
 

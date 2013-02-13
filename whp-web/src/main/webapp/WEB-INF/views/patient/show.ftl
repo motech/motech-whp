@@ -23,22 +23,28 @@
 
 <div class="patient-info word-wrap row-fluid offset-top">
 
-        <#if message??>
+    <#if message??>
         <div class="dateUpdated-message-alert alert alert-success fade in">
             <button class="close" data-dismiss="alert">&times;</button>
         ${message}
         </div>
-        </#if>
-        <h1 class="">Patient details: ID# ${patient.patientId!}</h1>
-        <#include "phaseTransitionAlert.ftl"/>
+    </#if>
 
-        <#include "patientInfo.ftl"/>
 
-        <#include "phaseInfo.ftl"/>
 
-        <div id="treatmentCard"></div>
 
-    <br />
+
+    <h1 class="">Patient details: ID# ${patient.patientId!}</h1>
+    <#include "phaseTransitionAlert.ftl"/>
+
+    <#include "patientInfo.ftl"/>
+
+    <#include "phaseInfo.ftl"/>
+
+    <div id="treatmentCard"></div>
+
+    <br/>
+
     <div class="patients-buttons-container">
         <div class="row-fluid">
             <div class="controls  pull-left">
@@ -47,36 +53,44 @@
 
             </div>
             <div class="controls pull-right">
-                <a id="printTreatmentCard" target="_blank" class="btn btn-large btn-info" href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print icon-white"></i> Print</a>
-                <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-success  btn-large"><i class="icon-calendar icon-white"></i> Adjust Phase Start
+                <a id="printTreatmentCard" target="_blank" class="btn btn-large btn-info"
+                   href="<@spring.url '/patients/print/' + patient.patientId/>"><i class="icon-print icon-white"></i>
+                    Print</a>
+                <a id="setDateLink" data-toggle="modal" href="#setDatesModal" class="btn btn-success  btn-large"><i
+                        class="icon-calendar icon-white"></i> Adjust Phase Start
                     Dates</a>
             </div>
         </div>
     </div>
-    <br />
-       <div id="remarks" class="well" >
-            <h3>Remarks</h3>
-            <form class="remarks-form" id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>" method="post">
-                <div class="row-fluid">
-                  <div class="remarks-field">
-                      <textarea id="patientRemark" name="patientRemark" placeholder="Please enter your remarks here"></textarea>
-                  </div>
+    <br/>
 
-                   <div class="remarks-button clearfix">
-                       <button class="btn btn-info" type="submit" id='addRemark'><i class="icon-pencil icon-white"></i> Add Remark</button>
-                   </div>
+    <div id="remarks" class="well">
+        <h3>Remarks</h3>
+
+        <form class="remarks-form" id="addRemarkForm" action="<@spring.url '/patients/addRemark/' + patient.patientId/>"
+              method="post">
+            <div class="row-fluid">
+                <div class="remarks-field">
+                    <textarea id="patientRemark" name="patientRemark"
+                              placeholder="Please enter your remarks here"></textarea>
                 </div>
-            </form>
 
-            <#include "remarks.ftl"/>
-        </div>
+                <div class="remarks-button clearfix">
+                    <button class="btn btn-info" type="submit" id='addRemark'><i class="icon-pencil icon-white"></i> Add
+                        Remark
+                    </button>
+                </div>
+            </div>
+        </form>
 
+        <#include "remarks.ftl"/>
+    </div>
 
 
     <script type="text/javascript">
-        $('#ipDatePicker').datepicker({maxDate:'${today}', dateFormat:'dd/mm/yy'});
-        $('#eipDatePicker').datepicker({maxDate:'${today}', dateFormat:'dd/mm/yy'});
-        $('#cpDatePicker').datepicker({maxDate:'${today}', dateFormat:'dd/mm/yy'});
+        $('#ipDatePicker').datepicker({maxDate: '${today}', dateFormat: 'dd/mm/yy'});
+        $('#eipDatePicker').datepicker({maxDate: '${today}', dateFormat: 'dd/mm/yy'});
+        $('#cpDatePicker').datepicker({maxDate: '${today}', dateFormat: 'dd/mm/yy'});
 
         $('#treatmentCard').load('/whp/treatmentcard/show?patientId=${patient.patientId}', function () {
             setUpTreatmentCardTable();

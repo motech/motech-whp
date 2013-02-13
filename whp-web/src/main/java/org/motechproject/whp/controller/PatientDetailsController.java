@@ -33,13 +33,16 @@ public class PatientDetailsController extends BaseWebController{
     private TreatmentUpdateOrchestrator treatmentUpdateOrchestrator;
     private ProviderService providerService;
     private ProviderRemarksService providerRemarksService;
+    private PatientInfoMapper patientInfoMapper;
 
     @Autowired
-    public PatientDetailsController(PatientService patientService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, ProviderService providerService, ProviderRemarksService providerRemarksService) {
+    public PatientDetailsController(PatientService patientService, TreatmentUpdateOrchestrator treatmentUpdateOrchestrator, ProviderService providerService, ProviderRemarksService providerRemarksService, PatientInfoMapper patientInfoMapper) {
         this.patientService = patientService;
         this.treatmentUpdateOrchestrator = treatmentUpdateOrchestrator;
         this.providerService = providerService;
         this.providerRemarksService = providerRemarksService;
+        this.patientInfoMapper = patientInfoMapper;
+
     }
 
     @RequestMapping(value = "show", method = RequestMethod.GET)
@@ -51,7 +54,6 @@ public class PatientDetailsController extends BaseWebController{
     }
 
     private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
-        PatientInfoMapper patientInfoMapper = new PatientInfoMapper();
         PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
         Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
         Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
@@ -67,5 +69,4 @@ public class PatientDetailsController extends BaseWebController{
             uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
         }
     }
-
 }

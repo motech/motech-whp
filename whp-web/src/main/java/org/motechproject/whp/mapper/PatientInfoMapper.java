@@ -1,21 +1,35 @@
 package org.motechproject.whp.mapper;
 
 import org.motechproject.whp.common.domain.Phase;
+import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.alerts.PatientAlert;
 import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import org.motechproject.whp.uimodel.PatientInfo;
 import org.motechproject.whp.uimodel.TestResults;
 import org.motechproject.whp.user.domain.Provider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class PatientInfoMapper {
 
-
     private static final String COMMA = ", ";
+    ColorConfiguration colorConfiguration;
+
+    @Autowired
+    public PatientInfoMapper(ColorConfiguration colorConfiguration) {
+        this.colorConfiguration = colorConfiguration;
+    }
+
+    public PatientInfoMapper() {
+
+    }
 
     public PatientInfo map(Patient patient, Provider provider) {
         PatientInfo patientInfo = new PatientInfo();
@@ -24,7 +38,7 @@ public class PatientInfoMapper {
         Therapy latestTherapy = patient.getCurrentTherapy();
         PatientAlerts patientAlerts = patient.getPatientAlerts();
 
-        if (provider!=null){
+        if (provider != null) {
             mapProviderDetails(provider, patientInfo);
         }
 
@@ -61,13 +75,40 @@ public class PatientInfoMapper {
         patientInfo.setShowAlert((patient.isNearingPhaseTransition() || patient.isTransitioning()) && !patient.isOrHasBeenOnCp());
         patientInfo.setAdherenceCapturedForThisWeek(patient.hasAdherenceForLastReportingWeekForCurrentTherapy());
         patientInfo.setFlag(patient.getPatientFlag().isFlagSet());
-        patientInfo.setAdherenceMissingWeeks(patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue());
         patientInfo.setTestResults(setTestResults(patient));
 
 
-
+        if (colorConfiguration != null) {
+                       setPatientAlertInfo(patientInfo, patientAlerts);
+        }
         return patientInfo;
+    }
 
+    private void setPatientAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
+        setAdherenceMissingWeekAlertInfo(patientInfo, patientAlerts);
+        setCumulativeMissedDosesAlertInfo(patientInfo, patientAlerts);
+        setTreatmentNotStartedAlertInfo(patientInfo, patientAlerts);
+    }
+
+    private void setTreatmentNotStartedAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
+        PatientAlert treatmentNotStartedAlert = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted);
+        patientInfo.setTreatmentNotStartedSeverityColor(colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, treatmentNotStartedAlert.getAlertSeverity()));
+        patientInfo.setTreatmentNotStartedMessageCode();
+    }
+
+    private void setCumulativeMissedDosesAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
+        PatientAlert cumulativeMissedDoseAlert = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses);
+        patientInfo.setCumulativeMissedDosesSeverityColor(colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoseAlert.getAlertSeverity()));
+        patientInfo.setCumulativeMissedDosesMessageCode();
+    }
+
+    private void setAdherenceMissingWeekAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
+        PatientAlert adherenceAlert = patientAlerts.getAlert(PatientAlertType.AdherenceMissing);
+        int adherenceAlertSeverity = adherenceAlert.getAlertSeverity();
+        patientInfo.setAdherenceMissingWeeksSeverity(adherenceAlertSeverity);
+        patientInfo.setAdherenceMissingWeeks(adherenceAlert.getValue());
+        patientInfo.setAdherenceMissingSeverityColor(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, adherenceAlertSeverity));
+        patientInfo.setAdherenceMissingMessageCode();
     }
 
     public PatientInfo map(Patient patient) {

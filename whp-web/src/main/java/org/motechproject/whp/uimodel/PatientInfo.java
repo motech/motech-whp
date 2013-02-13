@@ -3,12 +3,9 @@ package org.motechproject.whp.uimodel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.util.WHPDate;
-import org.motechproject.whp.mapper.PatientInfoMapper;
-import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.user.domain.Provider;
+import org.motechproject.whp.patient.domain.PhaseRecord;
+import org.motechproject.whp.patient.domain.Treatment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -36,9 +33,6 @@ public class PatientInfo {
     private String addressDistrict;
     private String providerMobileNumber;
 
-    private Integer adherenceMissingWeeks;
-    private Integer adherenceMissingWeeksSeverity;
-    private String adherenceMissingSeverityColor;
 
     private Treatment currentTreatment;
     private Phase nextPhaseName;
@@ -58,8 +52,42 @@ public class PatientInfo {
 
     private boolean showAlert;
     private String providerDistrict;
-    private static final String COMMA = ", ";
     private Boolean flag;
+
+    private Integer adherenceMissingWeeks;
+    private Integer adherenceMissingWeeksSeverity;
+    private String adherenceMissingSeverityColor;
+    private String adherenceMissingMessageCode;
+    private String cumulativeMissedDosesMessageCode;
+    private String cumulativeMissedDosesSeverityColor;
+    private String treatmentNotStartedSeverityColor;
+    private String treatmentNotStartedMessageCode;
+
+
+    public void setAdherenceMissingMessageCode() {
+        String message = null;
+        switch (adherenceMissingWeeksSeverity) {
+            case 1:
+                message = "message.alert.filter.adherence.missing.severity.one.alerts";
+                break;
+            case 2:
+                message = "message.alert.filter.adherence.missing.severity.two.alerts";
+                break;
+            case 3:
+                message = "message.alert.filter.adherence.missing.severity.three.alerts";
+                break;
+        }
+        this.adherenceMissingMessageCode = message;
+    }
+
+    public void setCumulativeMissedDosesMessageCode() {
+        this.cumulativeMissedDosesMessageCode = "message.alert.filter.cumulative.missed.dose.alerts";
+    }
+
+    public void setTreatmentNotStartedMessageCode() {
+        this.treatmentNotStartedMessageCode = "message.alert.filter.treatment.not.started.alerts";
+    }
+
 
 }
 

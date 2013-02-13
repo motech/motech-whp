@@ -1,7 +1,7 @@
 package org.motechproject.whp.mapper;
 
+import junit.framework.Assert;
 import org.joda.time.LocalDate;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -18,14 +18,17 @@ import org.motechproject.whp.uimodel.TestResults;
 import org.motechproject.whp.user.domain.Provider;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientInfoMapperTest {
+    ColorConfiguration colorConfiguration;
 
     PatientInfo patientInfo;
     String firstName = "firstName";
@@ -50,7 +53,6 @@ public class PatientInfoMapperTest {
     Provider provider;
     Treatment currentTreatment;
     TestResults expectedTestResults;
-    ColorConfiguration colorConfiguration;
     PatientInfoMapper patientInfoMapper;
     PhaseRecord currentPhase;
     Therapy therapy;
@@ -59,7 +61,17 @@ public class PatientInfoMapperTest {
     @Before
     public void setup() {
 
-        patientInfoMapper = new PatientInfoMapper();
+        AlertsPropertiesValues alertsPropertiesValues = new AlertsPropertiesValues();
+        alertsPropertiesValues.setAdherenceMissingWeeks(asList("1", "2", "6"));
+        alertsPropertiesValues.setAdherenceMissingSeverityColors(asList("yellow", "orange", "red"));
+        alertsPropertiesValues.setCumulativeMissedDoses(asList("10"));
+        alertsPropertiesValues.setCumulativeMissedDosesSeverityColors(asList("blue"));
+        alertsPropertiesValues.setTreatmentNotStartedDays(asList("10"));
+        alertsPropertiesValues.setTreatmentNotStartedSeverityColors(asList("brown"));
+        colorConfiguration = new ColorConfiguration(alertsPropertiesValues);
+
+        patientInfoMapper = new PatientInfoMapper(colorConfiguration);
+
         patientInfo = new PatientInfo();
         SmearTestResults smearTestResults = new SmearTestResults();
         smearTestResults.add(new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, null, null));
@@ -109,8 +121,8 @@ public class PatientInfoMapperTest {
                 .withCurrentTherapy(therapy)
                 .withAdherenceProvidedForLastWeek()
                 .withAdherenceMissedWeeks(6, 2, DateUtil.today())
-                .withCumulativeMissedAlertValue(10, 2, DateUtil.today())
-                .withTreatmentNotStartedDays(8, 2, DateUtil.today())
+                .withCumulativeMissedAlertValue(10, 1, DateUtil.today())
+                .withTreatmentNotStartedDays(8, 1, DateUtil.today())
                 .withPatientFlag(true)
                 .build();
 
@@ -121,9 +133,7 @@ public class PatientInfoMapperTest {
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
 
-        AlertsPropertiesValues alertsPropertiesValues = new AlertsPropertiesValues();
-        alertsPropertiesValues.setAdherenceMissingWeeks(asList("1", "2", "6"));
-        colorConfiguration = new ColorConfiguration(alertsPropertiesValues);
+
     }
 
 
@@ -162,6 +172,16 @@ public class PatientInfoMapperTest {
         assertFalse(patientInfo.isCurrentTreatmentPaused());
         assertFalse(patientInfo.isCurrentTreatmentClosed());
         assertThat(patientInfo.getLongestDoseInterruption(), is("0.0"));
+
+        assertThat(patientInfo.getAdherenceMissingWeeks(), is(6));
+        assertThat(patientInfo.getAdherenceMissingWeeksSeverity(), is(2));
+        assertThat(patientInfo.getAdherenceMissingSeverityColor(), is("orange"));
+        assertThat(patientInfo.getAdherenceMissingMessageCode(), is("message.alert.filter.adherence.missing.severity.two.alerts"));
+
+        assertThat(patientInfo.getCumulativeMissedDosesSeverityColor(), is("blue"));
+        assertThat(patientInfo.getCumulativeMissedDosesMessageCode(), is("message.alert.filter.cumulative.missed.dose.alerts"));
+        assertThat(patientInfo.getTreatmentNotStartedSeverityColor(), is("brown"));
+        assertThat(patientInfo.getTreatmentNotStartedMessageCode(), is("message.alert.filter.treatment.not.started.alerts"));
     }
 
     @Test
@@ -213,14 +233,23 @@ public class PatientInfoMapperTest {
 //        assertFalse(patientInfo.isNearingPhaseTransition());
 //        assertFalse(patientInfo.isTransitioning());
 //        assertThat(patientInfo.getRemainingDosesInCurrentPhase(), is(51));
-
     }
 
     @Test
     public void shouldSetProviderMobileNumberToNullIfProviderNotGiven() {
         PatientInfo patientInfo = patientInfoMapper.map(patient);
 
-        Assert.assertNull(patientInfo.getProviderMobileNumber());
+        assertNull(patientInfo.getProviderMobileNumber());
     }
 
+    @Test
+    public void shouldSetColorValuesToNullIfColorConfigurationIsNotAvailable(){
+        Patient patient = new PatientBuilder().withDefaults().build();
+        patientInfoMapper = new PatientInfoMapper();
+        PatientInfo patientInfo = patientInfoMapper.map(patient);
+
+        Assert.assertNull(patientInfo.getAdherenceMissingSeverityColor());
+        Assert.assertNull(patientInfo.getCumulativeMissedDosesSeverityColor());
+        Assert.assertNull(patientInfo.getTreatmentNotStartedSeverityColor());
+    }
 }
