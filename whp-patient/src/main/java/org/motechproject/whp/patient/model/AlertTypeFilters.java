@@ -88,7 +88,7 @@ public class AlertTypeFilters {
                 .withMessageCode("message.alert.filter.cumulative.missed.dose.alerts")
                 .withColor(colorConfiguration.getColorFor(CumulativeMissedDoses, 1))
                 .withAlertType(PatientAlertType.CumulativeMissedDoses)
-                .withFilterValue(alertSeverityParam(CumulativeMissedDoses))
+                .withFilterKey(alertSeverityParam(CumulativeMissedDoses))
                 .withFilterValue("1");
     }
 

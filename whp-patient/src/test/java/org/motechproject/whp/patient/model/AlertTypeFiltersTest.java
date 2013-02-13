@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.*;
 import static org.motechproject.whp.patient.model.AlertTypeFilters.*;
+import static org.motechproject.whp.patient.query.PatientQueryDefinition.alertSeverityParam;
 
 public class AlertTypeFiltersTest {
 
@@ -50,6 +52,20 @@ public class AlertTypeFiltersTest {
         assertThat(alertTypeFilters.getFilter(TREATMENT_NOT_STARTED).getColor(),is("brown"));
     }
 
+    @Test
+    public void shouldVerifyFilterKeysAndValues() {
+        assertFilterKeyAndValue(alertTypeFilters.getFilter(ADHERENCE_MISSING_WITH_SEVERITY_ONE), AdherenceMissing, "1");
+        assertFilterKeyAndValue(alertTypeFilters.getFilter(ADHERENCE_MISSING_WITH_SEVERITY_TWO), AdherenceMissing, "2");
+        assertFilterKeyAndValue(alertTypeFilters.getFilter(ADHERENCE_MISSING_WITH_SEVERITY_THREE), AdherenceMissing, "3");
+        assertFilterKeyAndValue(alertTypeFilters.getFilter(CUMULATIVE_MISSED_DOSES), CumulativeMissedDoses, "1");
+        assertFilterKeyAndValue(alertTypeFilters.getFilter(TREATMENT_NOT_STARTED), TreatmentNotStarted, "1");
+    }
+
+    private void assertFilterKeyAndValue(AlertTypeFilter filter, PatientAlertType adherenceMissing, String value) {
+        assertThat(filter.getFilterKey(), is(alertSeverityParam(adherenceMissing)));
+        assertThat(filter.getFilterValue(), is(value));
+    }
+
     private void setUpDefaultColorConfiguration() {
         when(colorConfiguration.getColorFor(AdherenceMissing, 1)).thenReturn("yellow");
         when(colorConfiguration.getColorFor(AdherenceMissing, 2)).thenReturn("red");
@@ -57,7 +73,4 @@ public class AlertTypeFiltersTest {
         when(colorConfiguration.getColorFor(CumulativeMissedDoses, 1)).thenReturn("blue");
         when(colorConfiguration.getColorFor(TreatmentNotStarted, 1)).thenReturn("brown");
     }
-
-
-
 }
