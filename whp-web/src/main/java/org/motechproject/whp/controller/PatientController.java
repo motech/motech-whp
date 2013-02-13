@@ -28,10 +28,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.flash.Flash.in;
 import static org.motechproject.flash.Flash.out;
-import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 import static org.motechproject.whp.common.util.WHPDate.date;
 
@@ -78,14 +76,6 @@ public class PatientController extends BaseWebController {
     @ResponseBody
     public String updateFlag(@PathVariable("patientId") String patientId, @RequestParam("value") Boolean value) {
         return (patientService.updateFlag(patientId, value)) ? "success" : "failure";
-    }
-
-    @RequestMapping(value = "show", method = RequestMethod.GET)
-    public String show(@RequestParam("patientId") String patientId, Model uiModel, HttpServletRequest request) {
-        Patient patient = patientService.findByPatientId(patientId);
-        treatmentUpdateOrchestrator.updateDoseInterruptions(patient);
-        setupDashboardModel(uiModel, request, patient);
-        return "patient/show";
     }
 
     @RequestMapping(value = "print/{id}", method = RequestMethod.GET)
@@ -136,22 +126,6 @@ public class PatientController extends BaseWebController {
         String eipStartDate = dateMessage(phaseStartDates.getEipStartDate());
         String cpStartDate = dateMessage(phaseStartDates.getCpStartDate());
         out(WHPConstants.NOTIFICATION_MESSAGE, messageSource.getMessage("dates.changed.message", new Object[]{patientId, ipStartDate, eipStartDate, cpStartDate}, Locale.ENGLISH), httpServletRequest);
-    }
-
-    private void setupDashboardModel(Model uiModel, HttpServletRequest request, Patient patient) {
-        PhaseStartDates phaseStartDates = new PhaseStartDates(patient);
-        Treatment currentTreatment = patient.getCurrentTherapy().getCurrentTreatment();
-        Provider provider = providerService.findByProviderId(currentTreatment.getProviderId());
-
-        uiModel.addAttribute("patient", new PatientInfo(patient, provider));
-        uiModel.addAttribute("phaseStartDates", phaseStartDates);
-        uiModel.addAttribute("today", WHPDate.date(today()).value());
-        setUpModelForRemarks(uiModel, patient);
-
-        String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
-        if (isNotEmpty(messages)) {
-            uiModel.addAttribute(WHPConstants.NOTIFICATION_MESSAGE, messages);
-        }
     }
 
     private void setUpModelForRemarks(Model uiModel, Patient patient) {

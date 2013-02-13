@@ -31,8 +31,6 @@ import java.util.Locale;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -114,20 +112,6 @@ public class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void shouldReturnDashBoardView() throws Exception {
-        PatientInfo patientInfo = new PatientInfo(patient, provider);
-        standaloneSetup(patientController).build()
-                .perform(get("/patients/show").param("patientId", patient.getPatientId()))
-                .andExpect(status().isOk())
-                .andExpect(model().size(5))
-                .andExpect(model().attribute("patient", patientInfo))
-                .andExpect(model().attribute("cmfAdminRemarks", cmfAdminRemarks))
-                .andExpect(model().attribute("providerRemarks", auditLogs))
-                .andExpect(model().attribute("phaseStartDates", new PhaseStartDates(patient)))
-                .andExpect(forwardedUrl("patient/show"));
-    }
-
-    @Test
     public void shouldReturnDashBoardPrintView() throws Exception {
         PatientInfo patientInfo = new PatientInfo(patient, provider);
         TreatmentCard treatmentCard = new TreatmentCard(patient);
@@ -139,27 +123,6 @@ public class PatientControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("patient", patientInfo))
                 .andExpect(model().attribute("treatmentCard", treatmentCard))
                 .andExpect(forwardedUrl("patient/print"));
-    }
-
-    @Test
-    public void shouldDisplayAdherenceUpdatedMessageIfAdherenceWasUpdated() {
-        when(request.getAttribute("flash.in.message")).thenReturn("message");
-        patientController.show(patient.getPatientId(), uiModel, request);
-        verify(uiModel).addAttribute("message", "message");
-    }
-
-    @Test
-    public void shouldUpdateDoseInterruptionsOnPatientWhenNavigatedToDashboardPage() {
-        patientController.show(patient.getPatientId(), uiModel, request);
-
-        verify(treatmentUpdateOrchestrator, times(1)).updateDoseInterruptions(patient);
-    }
-
-    @Test
-    public void shouldNotDisplayAdherenceUpdatedMessageIfAdherenceWasNotUpdated() {
-        when(request.getAttribute(anyString())).thenReturn(null);
-        patientController.show(patient.getPatientId(), uiModel, request);
-        verify(uiModel, never()).addAttribute(eq("message"), any());
     }
 
     @Test
