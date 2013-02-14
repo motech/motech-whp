@@ -13,7 +13,7 @@
                 <a href="/whp/reports/adherence/adherenceAuditReport.xls">All adherence audit data</a>
             </li>
             <li>
-                <a href="/whp/reports/patients/patientSummaryReport.xls">All patient summary data</a>
+                <a href="/whp/patientreports/filter">Patient Reports</a>
             </li>
             <li>
                 <a href="${whpReportsURL}/reports/containerTrackingReport/containerSummary.xls">Container tracking data</a>
