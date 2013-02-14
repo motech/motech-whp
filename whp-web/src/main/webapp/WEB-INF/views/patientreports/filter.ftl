@@ -37,7 +37,7 @@
                         <div class="input-append input-prepend">
                             <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
                             <input class="dates" type="text" placeholder="From: dd/mm/yyyy"
-                                   data-date-format="dd/mm/yyyy" id="from" name="from">
+                                   data-date-format="dd/mm/yyyy" id="from" name="from" data-date-range="to">
                             <span class="add-on clear-date-button"><i class="icon-remove-sign"></i></span>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="input-append input-prepend">
                             <span class="add-on show-date-button"><i class="icon-calendar"></i></span>
                             <input class="dates" type="text" placeholder="To: dd/mm/yyyy" data-date-format="dd/mm/yyyy"
-                                   id="to" name="to">
+                                   id="to" name="to"  data-date-range="from">
                             <span class="add-on clear-date-button"><i class="icon-remove-sign"></i></span>
                         </div>
                     </div>
@@ -71,21 +71,21 @@
             dateFormat:'dd/mm/yy',
             onClose:function (selectedDate) {
                 $("#to").datepicker("option", "minDate", selectedDate);
-                $("#to").datepicker("option", "maxDate", getDate(selectedDate, 6));
+                $("#to").datepicker("option", "maxDate", getDate(selectedDate, 180));
             }
         });
         $("#to").datepicker({
             dateFormat:'dd/mm/yy',
             onClose:function (selectedDate) {
-                $("#from").datepicker("option", "minDate", getDate(selectedDate, -6));
+                $("#from").datepicker("option", "minDate", getDate(selectedDate, -180));
                 $("#from").datepicker("option", "maxDate", selectedDate);
             }
         });
 
-        getDate = function(dtString, deltaMonths){
+        getDate = function(dtString, deltaDays){
             var dateParts = dtString.split("/");
             var newDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-            newDate.setMonth(parseInt(dateParts[1]) + deltaMonths)
+            newDate.setDate(parseInt(dateParts[0]) + deltaDays)
 
             return newDate;
         }
@@ -101,7 +101,12 @@
         });
 
         $(".clear-date-button").click(function () {
-            $(this).parent().find(".dates").val("");
+            var dateElement = $(this).parent().find(".dates");
+            dateElement.val("");
+
+            var relatedDateField = $("#" + dateElement.data("date-range"));
+            relatedDateField.datepicker("option", "minDate", "");
+            relatedDateField.datepicker("option", "maxDate", "");
         });
 
         $('#download').bind('click', function (event) {
