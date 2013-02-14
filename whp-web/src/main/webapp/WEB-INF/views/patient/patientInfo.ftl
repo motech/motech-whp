@@ -33,37 +33,26 @@
         <hr/>
 
         <div>
-            <table>
+            <table class="table">
             <#if '${patient.adherenceMissingSeverityColor}'!="">
                 <tr>
-                    <td>
-                        <div class="label">${patient.adherenceMissingSeverityColor}</div>
-                    </td>
-                    <td>
-                        <@spring.message '${patient.adherenceMissingMessageCode}' />
-                    </td>
+                    <td class="alert-cell" style="background-color:${patient.adherenceMissingSeverityColor!}; text-align: center">
+                       ${patient.adherenceMissingWeeks}</td>
+                    <td><@spring.message '${patient.adherenceMissingMessageCode}' /></td>
                 </tr>
             </#if>
 
             <#if '${patient.cumulativeMissedDosesSeverityColor}'!="">
                 <tr>
-                    <td>
-                        <div class="label">${patient.cumulativeMissedDosesSeverityColor!}</div>
-                    </td>
-                    <td>
-                        <@spring.message '${patient.cumulativeMissedDosesMessageCode!}' />
-                    </td>
+                    <td class="alert-cell" style="background-color:${patient.cumulativeMissedDosesSeverityColor!}"></td>
+                    <td><@spring.message '${patient.cumulativeMissedDosesMessageCode!}'/></td>
                 </tr>
             </#if>
 
             <#if '${patient.treatmentNotStartedSeverityColor}'!="">
                 <tr>
-                    <td>
-                    ${patient.treatmentNotStartedSeverityColor!}
-                    </td>
-                    <td>
-                        <@spring.message '${patient.treatmentNotStartedMessageCode!}'></@spring.message>
-                    </td>
+                    <td class="alert-cell" style="background-color:${patient.treatmentNotStartedSeverityColor!}"></td>
+                    <td><@spring.message '${patient.treatmentNotStartedMessageCode!}'></@spring.message></td>
                 </tr>
             </#if>
             </table>
