@@ -62,6 +62,18 @@ public class SmearTestRecord implements Serializable {
     }
 
     public SmearTestResult cumulativeResult() {
+        if (smear_test_result_1 == null && smear_test_result_2 == null) {
+            return null;
+        }
+
+        if(smear_test_result_2 == null){
+            return smear_test_result_1;
+        }
+
+        if(smear_test_result_1 == null){
+            return smear_test_result_2;
+        }
+
         return smear_test_result_1.cumulativeResult(smear_test_result_2);
     }
 

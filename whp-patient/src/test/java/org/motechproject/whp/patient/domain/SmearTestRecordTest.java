@@ -19,7 +19,7 @@ public class SmearTestRecordTest {
     }
 
     @Test
-    public void shouldGiveTheCumulativeSmearTestResult(){
+    public void shouldGiveTheCumulativeSmearTestResult() {
         SmearTestRecord positivePositiveTreatmentRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, SmearTestResult.Positive, null, SmearTestResult.Positive, "labName", "labNumber");
         SmearTestRecord positiveNegativeTreatmentRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, SmearTestResult.Positive, null, SmearTestResult.Negative, "labName", "labNumber");
         SmearTestRecord positiveIndeterminateTreatmentRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, SmearTestResult.Positive, null, SmearTestResult.Indeterminate, "labName", "labNumber");
@@ -42,7 +42,7 @@ public class SmearTestRecordTest {
     }
 
     @Test
-    public void shouldCheckIfSmearTestRecordIsPreTreatment(){
+    public void shouldCheckIfSmearTestRecordIsPreTreatment() {
         SmearTestRecord preTreatmentSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, SmearTestResult.Positive, null, SmearTestResult.Positive, "labName", "labNumber");
         SmearTestRecord eipSmearTestRecord = new SmearTestRecord(SputumTrackingInstance.ExtendedIP, null, SmearTestResult.Positive, null, SmearTestResult.Positive, "labName", "labNumber");
 
@@ -51,11 +51,26 @@ public class SmearTestRecordTest {
     }
 
     @Test
-    public void shouldCheckIfSmearTestRecordIsEmpty(){
+    public void shouldCheckIfSmearTestRecordIsEmpty() {
         SmearTestRecord emptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, "labName", "labNumber");
         SmearTestRecord nonEmptySmearTestRecord = new SmearTestRecord(SputumTrackingInstance.ExtendedIP, null, SmearTestResult.Positive, null, SmearTestResult.Positive, "labName", "labNumber");
 
         assertTrue(emptySmearTestRecord.isEmpty());
         assertFalse(nonEmptySmearTestRecord.isEmpty());
     }
+
+    @Test
+    public void shouldReturnNullForCumulativeResultIfBothSmearTestResultsAreNull() {
+        SmearTestRecord preTreatmentRecord = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, null, null, null);
+        assertNull(preTreatmentRecord.cumulativeResult());
+    }
+
+    @Test
+    public void shouldReturnCumulativeResultIfOneOfTheSmearTestResultIsNull() {
+        SmearTestRecord recordWithANullSmearTestResult2 = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, SmearTestResult.Negative, null, null, null, null);
+        SmearTestRecord recordWithANullSmearTestResult1 = new SmearTestRecord(SputumTrackingInstance.PreTreatment, null, null, null, SmearTestResult.Positive, null, null);
+        assertEquals(SmearTestResult.Positive, recordWithANullSmearTestResult1.cumulativeResult());
+        assertEquals(SmearTestResult.Negative, recordWithANullSmearTestResult2.cumulativeResult());
+    }
+
 }
