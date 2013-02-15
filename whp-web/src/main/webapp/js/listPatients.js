@@ -41,7 +41,7 @@ $(function () {
             $('[type=no-results]').hide();
         }
 
-        if ($('#patientList tbody tr').attr("pausedTreatment")===true){
+        if ($('#patientList tbody tr').attr("pausedTreatment")==="true"){
             $('#patientList tbody tr').addClass("paused");
         }
     });
