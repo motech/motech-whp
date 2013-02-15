@@ -7,7 +7,6 @@ function submitOnEnter(key) {
     }
 }
 
-
 function submitFormOnEnterKey() {
     $('#providerDistrict').bind('keypress', function (event, e) {
         submitOnEnter(e);
@@ -40,6 +39,10 @@ $(function () {
         }
         else {
             $('[type=no-results]').hide();
+        }
+
+        if ($('#patientList tbody tr').attr("pausedTreatment")===true){
+            $('#patientList tbody tr').addClass("paused");
         }
     });
 
