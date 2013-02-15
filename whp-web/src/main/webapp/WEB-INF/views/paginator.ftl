@@ -7,7 +7,7 @@
         <div>
 
             <div class="result-count-info pull-left" ng-show="hasResults()">
-                <span>Found <span class="bold">{{data.totalRows}}</span> patient(s)</span> |
+                <span>Found <span class="bold">{{data.totalRows}}</span> record(s)</span> |
                 <span>Displaying: {{firstRowCount}} - {{lastRowCount}} of {{data.totalRows}} row(s)</span>
 
             </div>
