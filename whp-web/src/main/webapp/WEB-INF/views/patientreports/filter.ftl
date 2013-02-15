@@ -3,7 +3,7 @@
 <#import "../paginator.ftl" as paginator>
 <@layout.defaultLayout title="Patient Reports" entity="cmfadmin">
 
-<h1>Patients Reports Filter</h1>
+<h1>Patient Reports</h1>
 <form name="patientReportsFilter">
 
     <div class="row-fluid">
@@ -14,8 +14,8 @@
 
                     <div class="controls">
                         <select id="report" name="report">
-                            <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientSummary.xls">Patient Summary Report
-                            </option>
+                            <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientSummary.xls">Patient Summary Report</option>
+                            <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientRegistrations.xls">Patient Registrations Report</option>
                         </select>
                     </div>
 
