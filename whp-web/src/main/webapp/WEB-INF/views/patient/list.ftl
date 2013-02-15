@@ -174,7 +174,7 @@
                         containerId="{{item.patientId}}"
                         redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />"
                         open-in-new-tab="true"
-                        pausedTreatment="{{item.currentTreatmentPaused}}" >
+                        paused-treatment="{{item.currentTreatmentPaused}}" >
                         <td id="patient_{{item.patientId}}_Flag" class="row-click-exclude">
                             <img id="flag_star"
                                  endpoint="<@spring.url '/patients/{{item.patientId}}/updateFlag?value={{!item.flag}}'/>"
