@@ -13,8 +13,6 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.common.exception.WHPErrorCode;
-import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.contract.ProviderRequest;
@@ -62,7 +60,7 @@ public class ProviderServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext, allDistricts);
+        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext);
     }
 
     @Test
@@ -186,17 +184,6 @@ public class ProviderServiceTest {
 
         verify(allProviders).findByMobileNumber(mobileNumber);
         assertThat(returnedProvider, nullValue());
-    }
-
-    @Test
-    public void shouldThrowExceptionForInvalidDistrictInProviderRequest() {
-        expectedException.expect(WHPRuntimeException.class);
-        expectedException.expectMessage(WHPErrorCode.INVALID_DISTRICT.getMessage());
-
-        String invalidDistrict = "invalid_district";
-        when(allDistricts.findByName(invalidDistrict)).thenReturn(null);
-
-        providerService.registerProvider(new ProviderRequest("", invalidDistrict, "", null));
     }
 
     @Test

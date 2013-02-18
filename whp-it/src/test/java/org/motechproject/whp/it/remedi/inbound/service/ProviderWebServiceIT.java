@@ -65,6 +65,17 @@ public class ProviderWebServiceIT extends SpringIntegrationTest {
         providerWebService.createOrUpdate(invalidProviderRequest);
     }
 
+    @Test
+    public void shouldThrowExceptionWhenProviderDistrictIsInvalid() {
+        exceptionThrown.expect(OpenRosaRegistrationValidationException.class);
+        ProviderWebRequest invalidProviderRequest = new ProviderRequestBuilder()
+                .withDefaults()
+                .withDistrict("invalidDistrct")
+                .build();
+
+        providerWebService.createOrUpdate(invalidProviderRequest);
+    }
+
     @After
     public void tearDown() {
         allDistricts.remove(district);

@@ -5,6 +5,7 @@ import org.motechproject.provider.registration.contract.OpenRosaXmlRequest;
 import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.NamedConstraint;
 import org.motechproject.validation.constraints.NotNullOrEmpty;
+import org.motechproject.whp.user.validation.DistrictValidator;
 import org.motechproject.whp.webservice.validation.APIKeyValidator;
 
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public class ProviderWebRequest implements OpenRosaXmlRequest {
     private String api_key;
 
     @NotNullOrEmpty
+    @NamedConstraint(name = DistrictValidator.DISTRICT_CONSTRAINT)
     private String district;
 
     @NotNullOrEmpty
