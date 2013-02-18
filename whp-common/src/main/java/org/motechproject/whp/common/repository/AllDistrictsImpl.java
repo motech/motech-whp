@@ -17,12 +17,14 @@ import java.util.List;
 @Repository(value = "allDistricts")
 public class AllDistrictsImpl extends MotechBaseRepository<District> implements AllDistricts {
 
+    public static final String DISTRICTS_CACHE_NAME = "districts";
+
     @Autowired
     public AllDistrictsImpl(@Qualifier("whpDbConnector") CouchDbConnector dbCouchDbConnector) {
         super(District.class, dbCouchDbConnector);
     }
 
-    @Cacheable(value = "districts")
+    @Cacheable(value = DISTRICTS_CACHE_NAME)
     public List<District> getAll() {
         List<District> districts = super.getAll();
         Collections.sort(districts);
@@ -38,8 +40,19 @@ public class AllDistrictsImpl extends MotechBaseRepository<District> implements 
         return singleResult(db.queryView(find_by_name, District.class));
     }
 
-    @CacheEvict(value = "districts")
+    @CacheEvict(value = DISTRICTS_CACHE_NAME)
     public void refresh() {
+    }
+
+
+    @CacheEvict(value = DISTRICTS_CACHE_NAME, allEntries = true)
+    public void add(District district) {
+        super.add(district);
+    }
+
+    @CacheEvict(value = DISTRICTS_CACHE_NAME, allEntries = true)
+    public void remove(District district) {
+        super.remove(district);
     }
 
 }
