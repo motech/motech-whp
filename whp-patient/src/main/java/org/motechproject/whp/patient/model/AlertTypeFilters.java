@@ -2,8 +2,7 @@ package org.motechproject.whp.patient.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
-import org.motechproject.whp.common.domain.alerts.PatientAlertType;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,13 +31,13 @@ public class AlertTypeFilters {
     private List<AlertTypeFilter> alertTypeFilters = new ArrayList<>();
 
     @Autowired
-    public AlertTypeFilters(ColorConfiguration colorConfiguration) {
+    public AlertTypeFilters(AlertColorConfiguration alertColorConfiguration) {
         alertTypeFilters.add(allAlerts());
-        alertTypeFilters.add(adherenceMissingWithSeverityOneAlertType(colorConfiguration));
-        alertTypeFilters.add(adherenceMissingWithSeverityTwo(colorConfiguration));
-        alertTypeFilters.add(adherenceMissingWithSeverityThree(colorConfiguration));
-        alertTypeFilters.add(cumulativeMissedDoses(colorConfiguration));
-        alertTypeFilters.add(treatmentNotStarted(colorConfiguration));
+        alertTypeFilters.add(adherenceMissingWithSeverityOneAlertType(alertColorConfiguration));
+        alertTypeFilters.add(adherenceMissingWithSeverityTwo(alertColorConfiguration));
+        alertTypeFilters.add(adherenceMissingWithSeverityThree(alertColorConfiguration));
+        alertTypeFilters.add(cumulativeMissedDoses(alertColorConfiguration));
+        alertTypeFilters.add(treatmentNotStarted(alertColorConfiguration));
         alertTypeFilters.add(noAlerts());
     }
 
@@ -74,47 +73,47 @@ public class AlertTypeFilters {
                 .withFilterValue("false");
     }
 
-    private AlertTypeFilter treatmentNotStarted(ColorConfiguration colorConfiguration) {
+    private AlertTypeFilter treatmentNotStarted(AlertColorConfiguration alertColorConfiguration) {
         return new AlertTypeFilter(TREATMENT_NOT_STARTED)
                 .withMessageCode("message.alert.filter.treatment.not.started.alerts")
-                .withColor(colorConfiguration.getColorFor(TreatmentNotStarted, 1))
-                .withAlertType(PatientAlertType.TreatmentNotStarted)
+                .withColor(alertColorConfiguration.getColorFor(TreatmentNotStarted, 1))
+                .withAlertType(TreatmentNotStarted)
                 .withFilterKey(alertSeverityParam(TreatmentNotStarted))
                 .withFilterValue("1");
     }
 
-    private AlertTypeFilter cumulativeMissedDoses(ColorConfiguration colorConfiguration) {
+    private AlertTypeFilter cumulativeMissedDoses(AlertColorConfiguration alertColorConfiguration) {
         return new AlertTypeFilter(CUMULATIVE_MISSED_DOSES)
                 .withMessageCode("message.alert.filter.cumulative.missed.dose.alerts")
-                .withColor(colorConfiguration.getColorFor(CumulativeMissedDoses, 1))
-                .withAlertType(PatientAlertType.CumulativeMissedDoses)
+                .withColor(alertColorConfiguration.getColorFor(CumulativeMissedDoses, 1))
+                .withAlertType(CumulativeMissedDoses)
                 .withFilterKey(alertSeverityParam(CumulativeMissedDoses))
                 .withFilterValue("1");
     }
 
-    private AlertTypeFilter adherenceMissingWithSeverityOneAlertType(ColorConfiguration colorConfiguration) {
+    private AlertTypeFilter adherenceMissingWithSeverityOneAlertType(AlertColorConfiguration alertColorConfiguration) {
         return new AlertTypeFilter(ADHERENCE_MISSING_WITH_SEVERITY_ONE)
                 .withMessageCode("message.alert.filter.adherence.missing.severity.one.alerts")
                 .withAlertType(AdherenceMissing)
-                .withColor(colorConfiguration.getColorFor(AdherenceMissing, 1))
+                .withColor(alertColorConfiguration.getColorFor(AdherenceMissing, 1))
                 .withFilterKey(alertSeverityParam(AdherenceMissing))
                 .withFilterValue("1");
     }
 
-    private AlertTypeFilter adherenceMissingWithSeverityTwo(ColorConfiguration colorConfiguration) {
+    private AlertTypeFilter adherenceMissingWithSeverityTwo(AlertColorConfiguration alertColorConfiguration) {
         return new AlertTypeFilter(ADHERENCE_MISSING_WITH_SEVERITY_TWO)
                 .withMessageCode("message.alert.filter.adherence.missing.severity.two.alerts")
                 .withAlertType(AdherenceMissing)
-                .withColor(colorConfiguration.getColorFor(AdherenceMissing, 2))
+                .withColor(alertColorConfiguration.getColorFor(AdherenceMissing, 2))
                 .withFilterKey(alertSeverityParam(AdherenceMissing))
                 .withFilterValue("2");
     }
 
-    private AlertTypeFilter adherenceMissingWithSeverityThree(ColorConfiguration colorConfiguration) {
+    private AlertTypeFilter adherenceMissingWithSeverityThree(AlertColorConfiguration alertColorConfiguration) {
         return new AlertTypeFilter(ADHERENCE_MISSING_WITH_SEVERITY_THREE)
                 .withMessageCode("message.alert.filter.adherence.missing.severity.three.alerts")
                 .withAlertType(AdherenceMissing)
-                .withColor(colorConfiguration.getColorFor(AdherenceMissing, 3))
+                .withColor(alertColorConfiguration.getColorFor(AdherenceMissing, 3))
                 .withFilterKey(alertSeverityParam(AdherenceMissing))
                 .withFilterValue("3");
     }

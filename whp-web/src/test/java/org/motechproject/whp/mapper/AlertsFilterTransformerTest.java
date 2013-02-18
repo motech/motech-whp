@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.model.AlertDateFilter;
 import org.motechproject.whp.patient.model.AlertDateFilters;
@@ -21,7 +21,7 @@ import static org.motechproject.whp.patient.model.AlertTypeFilters.ADHERENCE_MIS
 public class AlertsFilterTransformerTest {
 
     @Mock
-    private ColorConfiguration colorConfiguration;
+    private AlertColorConfiguration alertColorConfiguration;
     private AlertTypeFilters alertTypeFilters;
     private AlertDateFilters alertDateFilters;
     private AlertsFilterTransformer alertsFilterTransformer;
@@ -30,7 +30,7 @@ public class AlertsFilterTransformerTest {
     public void setUp() {
         initMocks(this);
 
-        alertTypeFilters = new AlertTypeFilters(colorConfiguration);
+        alertTypeFilters = new AlertTypeFilters(alertColorConfiguration);
         alertDateFilters = new AlertDateFilters(alertTypeFilters);
         alertsFilterTransformer = new AlertsFilterTransformer(alertTypeFilters, alertDateFilters);
     }

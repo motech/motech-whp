@@ -11,49 +11,49 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
-public class ColorConfigurationTest {
+public class AlertColorConfigurationTest {
     @Mock
     private AlertsPropertiesValues alertsPropertiesValues;
-    private ColorConfiguration colorConfiguration;
+    private AlertColorConfiguration alertColorConfiguration;
 
     @Before
     public void setUp() {
         initMocks(this);
-        colorConfiguration = new ColorConfiguration(alertsPropertiesValues);
+        alertColorConfiguration = new AlertColorConfiguration(alertsPropertiesValues);
     }
 
     @Test
     public void shouldGetAlertSeverityColorsForAdherenceMissingAlertType() {
         when(alertsPropertiesValues.getAdherenceMissingSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2));
+        assertEquals("c2", alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2));
     }
 
     @Test
     public void shouldGetAlertSeverityColorsForCumulativeMissedDosesAlertType() {
         when(alertsPropertiesValues.getCumulativeMissedDosesSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2));
+        assertEquals("c2", alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2));
     }
 
     @Test
     public void shouldGetAlertSeverityColorsForTreatmentNotStartedAlertType() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals("c2", colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2));
+        assertEquals("c2", alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2));
     }
 
     @Test
     public void shouldGetDefaultAlertSeverityColorForAnEdgeCaseSeverity() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 4));
+        assertEquals(AlertColorConfiguration.DEFAULT_COLOR, alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 4));
     }
 
     @Test
     public void shouldGetDefaultAlertSeverityColorForInvalidSeverity() {
         when(alertsPropertiesValues.getTreatmentNotStartedSeverityColors()).thenReturn(asList("no_color", "c1", "c2", "c3"));
 
-        assertEquals(ColorConfiguration.DEFAULT_COLOR, colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 6));
+        assertEquals(AlertColorConfiguration.DEFAULT_COLOR, alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 6));
     }
 }

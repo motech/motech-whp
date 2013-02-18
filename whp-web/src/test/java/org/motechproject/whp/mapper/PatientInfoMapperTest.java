@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.service.AlertsPropertiesValues;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
@@ -28,7 +28,7 @@ import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
 
 public class PatientInfoMapperTest {
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     PatientInfo patientInfo;
     String firstName = "firstName";
@@ -68,9 +68,9 @@ public class PatientInfoMapperTest {
         alertsPropertiesValues.setCumulativeMissedDosesSeverityColors(asList("blue"));
         alertsPropertiesValues.setTreatmentNotStartedDays(asList("10"));
         alertsPropertiesValues.setTreatmentNotStartedSeverityColors(asList("brown"));
-        colorConfiguration = new ColorConfiguration(alertsPropertiesValues);
+        alertColorConfiguration = new AlertColorConfiguration(alertsPropertiesValues);
 
-        patientInfoMapper = new PatientInfoMapper(colorConfiguration);
+        patientInfoMapper = new PatientInfoMapper(alertColorConfiguration);
 
         patientInfo = new PatientInfo();
         SmearTestResults smearTestResults = new SmearTestResults();

@@ -1,7 +1,7 @@
 package org.motechproject.whp.mapper;
 
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.domain.*;
@@ -20,11 +20,11 @@ import java.util.List;
 public class PatientInfoMapper {
 
     private static final String COMMA = ", ";
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     @Autowired
-    public PatientInfoMapper(ColorConfiguration colorConfiguration) {
-        this.colorConfiguration = colorConfiguration;
+    public PatientInfoMapper(AlertColorConfiguration alertColorConfiguration) {
+        this.alertColorConfiguration = alertColorConfiguration;
     }
 
     public PatientInfoMapper() {
@@ -78,7 +78,7 @@ public class PatientInfoMapper {
         patientInfo.setTestResults(setTestResults(patient));
 
 
-        if (colorConfiguration != null) {
+        if (alertColorConfiguration != null) {
                        setPatientAlertInfo(patientInfo, patientAlerts);
         }
         return patientInfo;
@@ -92,13 +92,13 @@ public class PatientInfoMapper {
 
     private void setTreatmentNotStartedAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
         PatientAlert treatmentNotStartedAlert = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted);
-        patientInfo.setTreatmentNotStartedSeverityColor(colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, treatmentNotStartedAlert.getAlertSeverity()));
+        patientInfo.setTreatmentNotStartedSeverityColor(alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, treatmentNotStartedAlert.getAlertSeverity()));
         patientInfo.setTreatmentNotStartedMessageCode();
     }
 
     private void setCumulativeMissedDosesAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {
         PatientAlert cumulativeMissedDoseAlert = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses);
-        patientInfo.setCumulativeMissedDosesSeverityColor(colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoseAlert.getAlertSeverity()));
+        patientInfo.setCumulativeMissedDosesSeverityColor(alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, cumulativeMissedDoseAlert.getAlertSeverity()));
         patientInfo.setCumulativeMissedDosesMessageCode();
     }
 
@@ -107,7 +107,7 @@ public class PatientInfoMapper {
         int adherenceAlertSeverity = adherenceAlert.getAlertSeverity();
         patientInfo.setAdherenceMissingWeeksSeverity(adherenceAlertSeverity);
         patientInfo.setAdherenceMissingWeeks(adherenceAlert.getValue());
-        patientInfo.setAdherenceMissingSeverityColor(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, adherenceAlertSeverity));
+        patientInfo.setAdherenceMissingSeverityColor(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, adherenceAlertSeverity));
         patientInfo.setAdherenceMissingMessageCode();
     }
 

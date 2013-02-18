@@ -4,7 +4,7 @@ import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.paginator.service.Paging;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.mapper.AlertsFilterTransformer;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -19,13 +19,13 @@ import java.util.List;
 public class PatientPagingService implements Paging<PatientDashboardRow>{
     private AllPatients allPatients;
     private AlertsFilterTransformer alertsFilterTransformer;
-    private ColorConfiguration colorConfiguration;
+    private AlertColorConfiguration alertColorConfiguration;
 
     @Autowired
-    public PatientPagingService(AllPatients allPatients, AlertsFilterTransformer alertsFilterTransformer, ColorConfiguration colorConfiguration){
+    public PatientPagingService(AllPatients allPatients, AlertsFilterTransformer alertsFilterTransformer, AlertColorConfiguration alertColorConfiguration){
         this.allPatients = allPatients;
         this.alertsFilterTransformer = alertsFilterTransformer;
-        this.colorConfiguration = colorConfiguration;
+        this.alertColorConfiguration = alertColorConfiguration;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PatientPagingService implements Paging<PatientDashboardRow>{
     private List prepareResultsModel(List<Patient> rows) {
         ArrayList<PatientDashboardRow> patientDashboardRows = new ArrayList<>();
         for(Patient patient: rows){
-            patientDashboardRows.add(new PatientDashboardRow(patient,colorConfiguration));
+            patientDashboardRows.add(new PatientDashboardRow(patient, alertColorConfiguration));
         }
         return patientDashboardRows;
     }

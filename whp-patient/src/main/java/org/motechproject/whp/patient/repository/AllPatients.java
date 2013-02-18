@@ -36,17 +36,19 @@ import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_
 public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implements Countable {
 
     private EventContext eventContext;
+    private PatientQueryDefinition patientQueryDefinition;
 
     @Autowired
-    public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector, EventContext eventContext) {
+    public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector,
+                       EventContext eventContext,
+                       PatientQueryDefinition patientQueryDefinition) {
         super(Patient.class, whpLuceneAwareCouchDbConnector);
         this.eventContext = eventContext;
+        this.patientQueryDefinition = patientQueryDefinition;
+
         IndexUploader uploader = new IndexUploader();
-
-        PatientQueryDefinition patientQueryDefinition = new PatientQueryDefinition();
-
-        uploader.updateSearchFunctionIfNecessary(db, patientQueryDefinition.viewName(), patientQueryDefinition.searchFunctionName(), patientQueryDefinition.indexFunction());
-        new SearchFunctionUpdater().updateAnalyzer(db, patientQueryDefinition.viewName(), patientQueryDefinition.searchFunctionName(), "keyword");
+        uploader.updateSearchFunctionIfNecessary(db, this.patientQueryDefinition.viewName(), this.patientQueryDefinition.searchFunctionName(), this.patientQueryDefinition.indexFunction());
+        new SearchFunctionUpdater().updateAnalyzer(db, this.patientQueryDefinition.viewName(), this.patientQueryDefinition.searchFunctionName(), "keyword");
     }
 
     @Override
@@ -186,17 +188,16 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     }
 
     public List<Patient> filter(FilterParams queryParams, SortParams sortParams, int skip, int limit) {
-        return filter(new PatientQueryDefinition(), activePatientFilter(queryParams), sortParams, skip, limit);
+        return filter(patientQueryDefinition, activePatientFilter(queryParams), sortParams, skip, limit);
     }
 
     private FilterParams activePatientFilter(FilterParams queryParams) {
-        PatientQueryDefinition queryDefinition = new PatientQueryDefinition();
-        queryParams.put(queryDefinition.getIsActive().getName(), "true");
+        queryParams.put(patientQueryDefinition.getIsActive().getName(), "true");
         return queryParams;
     }
 
     public int count(FilterParams queryParams) {
-        return super.count(new PatientQueryDefinition(), activePatientFilter(queryParams));
+        return super.count(patientQueryDefinition, activePatientFilter(queryParams));
     }
 
     public static class PatientComparatorByFirstName implements Comparator<Patient> {

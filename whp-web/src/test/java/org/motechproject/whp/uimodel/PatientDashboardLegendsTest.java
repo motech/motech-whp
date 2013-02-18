@@ -3,7 +3,7 @@ package org.motechproject.whp.uimodel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
 import java.util.List;
@@ -16,22 +16,22 @@ public class PatientDashboardLegendsTest {
 
     PatientDashboardLegends patientDashboardLegends;
     @Mock
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     @Before
     public void setUp() {
         initMocks(this);
         setUpDefaultColorConfiguration();
 
-        patientDashboardLegends = new PatientDashboardLegends(colorConfiguration);
+        patientDashboardLegends = new PatientDashboardLegends(alertColorConfiguration);
     }
 
     private void setUpDefaultColorConfiguration() {
-        when(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 1)).thenReturn("yellow");
-        when(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("red");
-        when(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 3)).thenReturn("maroon");
-        when(colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 1)).thenReturn("blue");
-        when(colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 1)).thenReturn("brown");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 1)).thenReturn("yellow");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("red");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 3)).thenReturn("maroon");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 1)).thenReturn("blue");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 1)).thenReturn("brown");
     }
 
     @Test

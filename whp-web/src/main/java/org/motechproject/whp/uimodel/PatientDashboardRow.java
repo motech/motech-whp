@@ -2,7 +2,7 @@ package org.motechproject.whp.uimodel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Patient;
@@ -41,11 +41,11 @@ public class PatientDashboardRow {
     private Boolean flag;
 
 
-    public PatientDashboardRow(Patient patient, ColorConfiguration colorConfiguration) {
-        initializePatientDashboardRow(patient, colorConfiguration);
+    public PatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration) {
+        initializePatientDashboardRow(patient, alertColorConfiguration);
     }
 
-    private void initializePatientDashboardRow(Patient patient, ColorConfiguration colorConfiguration) {
+    private void initializePatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration) {
         currentTreatment = patient.getCurrentTreatment();
         Therapy latestTherapy = patient.getCurrentTherapy();
         patientId = patient.getPatientId();
@@ -68,12 +68,12 @@ public class PatientDashboardRow {
         PatientAlerts patientAlerts = patient.getPatientAlerts();
         cumulativeMissedDoses = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
         treatmentNotStartedSeverity = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity();
-        treatmentNotStartedSeverityColor = colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity());
+        treatmentNotStartedSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity());
         cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();
-        cumulativeMissedDosesSeverityColor = colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity());
+        cumulativeMissedDosesSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity());
         adherenceMissingWeeks = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
         adherenceMissingWeeksSeverity = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity();
-        adherenceMissingSeverityColor = colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity());
+        adherenceMissingSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity());
         flag = patient.getPatientFlag().isFlagSet();
     }
 

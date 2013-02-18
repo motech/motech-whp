@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
@@ -49,7 +49,7 @@ public class PatientDashboardRowTest {
     PatientAlerts patientAlerts;
 
     @Mock
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     @Before
     public void setup() {
@@ -104,11 +104,11 @@ public class PatientDashboardRowTest {
     @Test
     public void shouldCreatePatientDashboardRowFromPatient() {
 
-        when(colorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
-        when(colorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
-        when(colorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
+        when(alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
 
-        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, colorConfiguration);
+        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, alertColorConfiguration);
 
         assertThat(patientDashboardRow.getPatientId(), is(patientId));
         assertThat(patientDashboardRow.getFirstName(), is(firstName));

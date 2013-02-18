@@ -6,6 +6,7 @@ import org.motechproject.couchdb.lucene.query.field.Field;
 import org.motechproject.couchdb.lucene.query.field.QueryField;
 import org.motechproject.couchdb.lucene.query.field.RangeField;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.INT;
 import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
 
+@Component
 public class PatientQueryDefinition implements QueryDefinition {
 
     public static final String ALERT_SEVERITY = "AlertSeverity";

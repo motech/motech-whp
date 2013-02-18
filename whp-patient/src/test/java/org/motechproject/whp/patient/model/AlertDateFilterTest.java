@@ -5,7 +5,7 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
@@ -19,14 +19,14 @@ import static org.motechproject.whp.patient.model.AlertDateFilter.*;
 public class AlertDateFilterTest {
 
     @Mock
-    private ColorConfiguration colorConfiguration;
+    private AlertColorConfiguration alertColorConfiguration;
     private AlertTypeFilters alertTypeFilters;
     private AlertDateFilters alertDateFilters;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        alertTypeFilters = new AlertTypeFilters(colorConfiguration);
+        alertTypeFilters = new AlertTypeFilters(alertColorConfiguration);
         alertDateFilters = new AlertDateFilters(alertTypeFilters);
     }
 

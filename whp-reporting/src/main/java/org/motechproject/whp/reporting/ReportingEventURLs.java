@@ -25,63 +25,63 @@ public class ReportingEventURLs {
     private String providerUpdateURL;
 
     public String getAdherencePath() {
-        return whpReportsURL + adherencePath;
+        return adherencePath;
     }
 
     public String getCallLogURL() {
-        return whpReportsURL + callLogURL;
+        return callLogURL;
     }
 
     public String getCallStatusURL() {
-        return whpReportsURL + callStatusURL;
+        return callStatusURL;
     }
 
     public String getFlashingLogURL() {
-        return whpReportsURL + flashingLogURL;
+        return flashingLogURL;
     }
 
     public String getContainerRegistrationLogURL() {
-        return whpReportsURL + containerRegistrationURL;
+        return containerRegistrationURL;
     }
 
     public String getSputumLabResultsCaptureLogURL() {
-        return whpReportsURL + sputumLabResultsCaptureLogURL;
+        return sputumLabResultsCaptureLogURL;
     }
 
     public String getContainerStatusUpdateLogURL() {
-        return whpReportsURL + containerStatusUpdateLogURL;
+        return containerStatusUpdateLogURL;
     }
 
     public String getContainerPatientMappingLogURL() {
-        return whpReportsURL + containerPatientMappingLogURL;
+        return containerPatientMappingLogURL;
     }
 
     public String getContainerRegistrationCallDetailsLogURL() {
-        return whpReportsURL + containerRegistrationCallDetailsLogURL;
+        return containerRegistrationCallDetailsLogURL;
     }
 
     public String getProviderVerificationLogURL() {
-        return whpReportsURL + providerVerificationLogURL;
+        return providerVerificationLogURL;
     }
 
     public String getContainerVerificationLogURL() {
-        return whpReportsURL + containerVerificationLogURL;
+        return containerVerificationLogURL;
     }
 
     public String getProviderReminderCallLogURL() {
-        return whpReportsURL + providerReminderCallLogURL;
+        return providerReminderCallLogURL;
     }
 
     public String getAdherenceSubmissionURL() {
-        return whpReportsURL + adherenceSubmissionURL;
+        return adherenceSubmissionURL;
     }
 
     public String getPatientUpdateURL() {
-        return whpReportsURL + patientUpdateURL;
+        return patientUpdateURL;
     }
 
     public String getProviderUpdateURL() {
-        return whpReportsURL + providerUpdateURL;
+        return providerUpdateURL;
     }
 
     @Value("${whp.reports.adherence}")

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ColorConfiguration {
+public class AlertColorConfiguration {
 
     private AlertsPropertiesValues alertsPropertiesValues;
     public static final String DEFAULT_COLOR = "aqua";
 
     @Autowired
-    public ColorConfiguration(AlertsPropertiesValues alertsPropertiesValues) {
+    public AlertColorConfiguration(AlertsPropertiesValues alertsPropertiesValues) {
         this.alertsPropertiesValues = alertsPropertiesValues;
     }
 

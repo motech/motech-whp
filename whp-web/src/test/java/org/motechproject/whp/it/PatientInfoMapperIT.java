@@ -3,7 +3,7 @@ package org.motechproject.whp.it;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 public class PatientInfoMapperIT {
 
     @Autowired
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     @Test
     public void shouldReadColorConfigurationFromPropertyFile() {
@@ -32,7 +32,7 @@ public class PatientInfoMapperIT {
                 .withTreatmentNotStartedDays(8, 0, DateUtil.today())
                 .build();
 
-        PatientInfoMapper patientInfoMapper = new PatientInfoMapper(colorConfiguration);
+        PatientInfoMapper patientInfoMapper = new PatientInfoMapper(alertColorConfiguration);
         PatientInfo patientInfo = patientInfoMapper.map(patient);
 
         assertThat(patientInfo.getAdherenceMissingWeeks(), is(6));

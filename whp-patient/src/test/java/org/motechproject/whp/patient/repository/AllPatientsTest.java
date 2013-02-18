@@ -10,6 +10,7 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.patient.WHPPatientConstants;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -32,7 +33,7 @@ public class AllPatientsTest {
     @Before
     public void setup() {
         initMocks(this);
-        allPatients = new AllPatients(dbConnector, eventContext);
+        allPatients = new AllPatients(dbConnector, eventContext, new PatientQueryDefinition());
     }
 
     @Test

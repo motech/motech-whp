@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrchestrator;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.mapper.PatientInfoMapper;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
@@ -54,7 +54,7 @@ public class PatientDetailsControllerTest {
     @Mock
     HttpSession session;
     @Mock
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
     @Mock
     PatientInfoMapper patientInfoMapper;
 

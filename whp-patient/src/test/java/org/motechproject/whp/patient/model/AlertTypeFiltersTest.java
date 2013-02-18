@@ -3,7 +3,7 @@ package org.motechproject.whp.patient.model;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.alerts.ColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,13 +20,13 @@ public class AlertTypeFiltersTest {
     AlertTypeFilters alertTypeFilters;
 
     @Mock
-    ColorConfiguration colorConfiguration;
+    AlertColorConfiguration alertColorConfiguration;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
         setUpDefaultColorConfiguration();
-        alertTypeFilters = new AlertTypeFilters(colorConfiguration);
+        alertTypeFilters = new AlertTypeFilters(alertColorConfiguration);
     }
 
     @Test
@@ -67,10 +67,10 @@ public class AlertTypeFiltersTest {
     }
 
     private void setUpDefaultColorConfiguration() {
-        when(colorConfiguration.getColorFor(AdherenceMissing, 1)).thenReturn("yellow");
-        when(colorConfiguration.getColorFor(AdherenceMissing, 2)).thenReturn("red");
-        when(colorConfiguration.getColorFor(AdherenceMissing, 3)).thenReturn("maroon");
-        when(colorConfiguration.getColorFor(CumulativeMissedDoses, 1)).thenReturn("blue");
-        when(colorConfiguration.getColorFor(TreatmentNotStarted, 1)).thenReturn("brown");
+        when(alertColorConfiguration.getColorFor(AdherenceMissing, 1)).thenReturn("yellow");
+        when(alertColorConfiguration.getColorFor(AdherenceMissing, 2)).thenReturn("red");
+        when(alertColorConfiguration.getColorFor(AdherenceMissing, 3)).thenReturn("maroon");
+        when(alertColorConfiguration.getColorFor(CumulativeMissedDoses, 1)).thenReturn("blue");
+        when(alertColorConfiguration.getColorFor(TreatmentNotStarted, 1)).thenReturn("brown");
     }
 }
