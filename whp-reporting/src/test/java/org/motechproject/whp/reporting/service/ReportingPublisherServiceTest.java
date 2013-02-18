@@ -8,6 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
+import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -178,5 +179,16 @@ public class ReportingPublisherServiceTest {
 
         reportingPublisher.reportPatient(request);
         verify(httpClientService).post(url, request);
+    }
+
+    @Test
+    public void shouldReportProviderUpdates() {
+        String url = "url";
+        when(reportingEventURLs.getProviderUpdateURL()).thenReturn(url);
+
+        ProviderDTO providerDTO = new ProviderDTO();
+
+        reportingPublisher.reportProvider(providerDTO);
+        verify(httpClientService).post(url, providerDTO);
     }
 }

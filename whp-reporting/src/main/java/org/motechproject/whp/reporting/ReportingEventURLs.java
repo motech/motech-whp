@@ -22,6 +22,7 @@ public class ReportingEventURLs {
     private String adherenceSubmissionURL;
     private String callStatusURL;
     private String patientUpdateURL;
+    private String providerUpdateURL;
 
     public String getAdherencePath() {
         return whpReportsURL + adherencePath;
@@ -77,6 +78,10 @@ public class ReportingEventURLs {
 
     public String getPatientUpdateURL() {
         return whpReportsURL + patientUpdateURL;
+    }
+
+    public String getProviderUpdateURL() {
+        return whpReportsURL + providerUpdateURL;
     }
 
     @Value("${whp.reports.adherence}")
@@ -153,4 +158,10 @@ public class ReportingEventURLs {
     public void setPatientUpdateURL(String patientUpdateURL) {
         this.patientUpdateURL = patientUpdateURL;
     }
+
+    @Value("${whp.reports.provider.update}")
+    public void setProviderUpdateURL(String providerUpdateURL) {
+        this.providerUpdateURL = providerUpdateURL;
+    }
+
 }

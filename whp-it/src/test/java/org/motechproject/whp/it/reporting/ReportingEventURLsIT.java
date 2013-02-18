@@ -86,4 +86,9 @@ public class ReportingEventURLsIT {
     public void shouldGetPatientReportingUpdateURL() {
         assertThat(reportingEventURLs.getPatientUpdateURL(), is("http://127.0.0.1:9999/whp-reports/patient/update"));
     }
+
+    @Test
+    public void shouldGetProviderReportingUpdateURL() {
+        assertThat(reportingEventURLs.getProviderUpdateURL(), is("http://127.0.0.1:9999/whp-reports/provider/update"));
+    }
 }

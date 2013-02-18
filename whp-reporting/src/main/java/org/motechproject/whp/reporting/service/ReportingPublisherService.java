@@ -5,6 +5,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
+import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,5 +77,9 @@ public class ReportingPublisherService {
 
     public void reportPatient(PatientDTO patientDTO) {
         httpClientService.post(reportingEventURLs.getPatientUpdateURL(), patientDTO);
+    }
+
+    public void reportProvider(ProviderDTO providerDTO) {
+        httpClientService.post(reportingEventURLs.getProviderUpdateURL(), providerDTO);
     }
 }
