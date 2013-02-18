@@ -335,6 +335,10 @@
                             <value>false</value>
                         </systemProperty>
                         <systemProperty>
+                            <name>com.sun.management.jmxremote</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
                             <name>log4j.configuration</name>
                             <value>file:${basedir}/src/main/resources/log4j.xml</value>
                         </systemProperty>
@@ -395,6 +399,7 @@
                                     <classpath>
                                         <pathelement path="${compile_classpath}" />
                                     </classpath>
+                                    <sysproperty key="java.security.policy" value="${basedir}/src/main/resources/java.policy" />
                                 </java>
                                 <echo message="Seed data loading: END" />
                             </target>
