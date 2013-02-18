@@ -10,6 +10,7 @@ public class APIKeyIT extends BaseProviderIT {
     public void shouldBeValidWhenAPIKeyIsValid() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()
                 .withDefaults()
+                .withDistrict(VALID_DISTRICT)
                 .build();
         validator.validate(providerWebRequest, UpdateScope.createScope); //Can be any scope. None of the validation is scope dependent.
     }
@@ -20,7 +21,7 @@ public class APIKeyIT extends BaseProviderIT {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder()
                 .withProviderId("P00001")
                 .withDate("17/03/1990")
-                .withDistrict("district")
+                .withDistrict(VALID_DISTRICT)
                 .withPrimaryMobile("9880000000")
                 .withAPIKey("invalid_api_key")
                 .build();
