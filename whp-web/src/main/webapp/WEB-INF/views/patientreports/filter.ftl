@@ -16,6 +16,7 @@
                         <select id="report" name="report">
                             <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientSummary.xls">Patient Summary Report</option>
                             <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientRegistrations.xls">Patient Registrations Report</option>
+                            <option value="<@spring.message 'whp.reports.url'/>/patientreports/patientClosedTreatments.xls">Patient Closed Treatments Report</option>
                         </select>
                     </div>
 
@@ -23,7 +24,6 @@
 
                     <div class="controls">
                         <select id="district" name="district">
-                            <option value=""></option>
                             <#list districts as district>
                                 <option value="${district.name}">${district.name}</option>
                             </#list>
@@ -110,7 +110,7 @@
         });
 
         $('#download').bind('click', function (event) {
-            window.open($("#report").val() + "?" + $("#district, #from, #to").serialize());
+            window.open($("#report").val() + "?" + $("#district-autocomplete, #from, #to").serialize());
             return false;
         });
     });

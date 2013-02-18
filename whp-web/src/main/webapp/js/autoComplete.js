@@ -108,6 +108,7 @@
                 .addClass( "ui-widget ui-widget-content ui-corner-left" );
 
             input.attr("id", select.attr("id") + "-autocomplete");
+            input.attr("name", select.attr("id"));
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
                 return $( "<li></li>" )
                     .data( "item.autocomplete", item )
