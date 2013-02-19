@@ -25,7 +25,7 @@ public class ProviderRequestMapperTest {
     }
 
     @Test
-    public void shouldCreatePatient() {
+    public void shouldCreateProvider() {
         ProviderWebRequest providerWebRequest = new ProviderRequestBuilder().withDefaults().build();
 
         ProviderRequest provider = providerRequestMapper.map(providerWebRequest);
