@@ -24,6 +24,7 @@
 
                     <div class="controls">
                         <select id="district" name="district">
+                            <option value="">All</option>
                             <#list districts as district>
                                 <option value="${district.name}">${district.name}</option>
                             </#list>
