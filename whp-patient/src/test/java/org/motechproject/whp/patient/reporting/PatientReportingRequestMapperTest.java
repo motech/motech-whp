@@ -2,9 +2,11 @@ package org.motechproject.whp.patient.reporting;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDateUtil;
+import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalculator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -20,6 +22,8 @@ import java.util.List;
 
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.util.WHPDateUtil.toSqlDate;
 
 
@@ -27,15 +31,22 @@ public class PatientReportingRequestMapperTest {
 
     private PatientReportingRequestMapper mapper;
 
+    @Mock
+    private CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
+
     @Before
     public void setup() {
-        mapper = new PatientReportingRequestMapper();
+        initMocks(this);
+        mapper = new PatientReportingRequestMapper(cumulativeMissedDosesCalculator);
     }
 
     @Test
     public void shouldMapPatientToReportingRequest() {
         Patient patient = new PatientBuilder().withDefaults().defaultPatientAlerts().build();
         patient.addTreatment(new TreatmentBuilder().withDefaults().build(), new TherapyBuilder().withDefaults().build(), now(), now());
+
+        int expectedCumulativeMissedDoses = 12;
+        when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(expectedCumulativeMissedDoses);
 
         PatientDTO patientDTO = mapper.mapToReportingRequest(patient);
 
@@ -62,13 +73,9 @@ public class PatientReportingRequestMapperTest {
         PatientAlertsDTO patientAlertsDTO = patientDTO.getPatientAlerts();
         PatientAlerts patientAlerts = patient.getPatientAlerts();
         assertPatientAlerts(patientAlerts, patientAlertsDTO);
-        assertCumulativeMissedDoses(patient, patientDTO);
-    }
 
-    private void assertCumulativeMissedDoses(Patient patient, PatientDTO patientDTO) {
-        Integer expectedCumulativeMissedDose = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
         TherapyDTO lastTherapyDTO = patientDTO.getTherapies().get(patientDTO.getTherapies().size() - 1);
-        assertEquals(expectedCumulativeMissedDose, lastTherapyDTO.getCumulativeMissedDoses());
+        assertEquals((Integer) expectedCumulativeMissedDoses, lastTherapyDTO.getCumulativeMissedDoses());
     }
 
     private void assertAddress(AddressDTO addressDTO, Address patientAddress) {

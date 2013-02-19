@@ -1,12 +1,13 @@
 package org.motechproject.whp.patient.reporting;
 
 import org.motechproject.whp.common.domain.Phase;
-import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDateUtil;
+import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalculator;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import org.motechproject.whp.reports.contract.enums.YesNo;
 import org.motechproject.whp.reports.contract.patient.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,13 @@ import static org.motechproject.whp.common.util.WHPDateUtil.toSqlDate;
 
 @Component
 public class PatientReportingRequestMapper {
+
+    private CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
+
+    @Autowired
+    public PatientReportingRequestMapper(CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator) {
+        this.cumulativeMissedDosesCalculator = cumulativeMissedDosesCalculator;
+    }
 
     public PatientDTO mapToReportingRequest(Patient patient) {
         PatientDTO patientDTO = new PatientDTO();
@@ -38,7 +46,7 @@ public class PatientReportingRequestMapper {
 
     private void mapCumulativeMissedDoses(Patient patient, PatientDTO patientDTO) {
         TherapyDTO currentTherapyDTO = patientDTO.getTherapies().get(patientDTO.getTherapies().size() - 1);
-        int cumulativeMissedDoses = patient.getPatientAlerts().getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        int cumulativeMissedDoses = cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient);
         currentTherapyDTO.setCumulativeMissedDoses(cumulativeMissedDoses);
     }
 
