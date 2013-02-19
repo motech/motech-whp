@@ -35,6 +35,7 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         $(formElement).find("select").each(function(index, element){
             $(element).val("");
         });
+        $rootScope.searchCriteria = {};
     }
 
     $(window).bind('hashchange', function () {

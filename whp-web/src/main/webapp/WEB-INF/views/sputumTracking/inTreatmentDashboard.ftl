@@ -115,7 +115,7 @@
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
 
-                        <button id="clearFilter" type="reset" class="btn">Clear All</button>
+                        <button id="clearFilter"  ng-click="resetFormFields()" type="reset" class="btn">Clear All</button>
                         <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
                     </div>
                 </div>
