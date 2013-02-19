@@ -84,8 +84,6 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     @Before
     public void setUp() throws WebSecurityException {
-        reset(httpClientService);
-
         remediUrl = remediProperties.getUrl();
         apiKey = remediProperties.getApiKey();
         ProviderContainerMapping providerContainerMapping = new ProviderContainerMapping();
@@ -110,6 +108,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         markForDeletion(adminContainerMapping);
         markForDeletion(providerService.findByProviderId(providerId));
         markForDeletion(admin);
+
+        reset(httpClientService);
     }
 
     @Test
