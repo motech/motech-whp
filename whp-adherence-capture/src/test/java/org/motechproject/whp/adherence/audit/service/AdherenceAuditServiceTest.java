@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.reporting.AdherenceAuditLogReportingService;
 import org.motechproject.whp.adherence.audit.repository.AllAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
@@ -27,13 +28,16 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
     AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
     @Mock
     AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
+    @Mock
+    AdherenceAuditLogReportingService adherenceAuditLogReportingService;
+
     private AdherenceAuditService adherenceAuditService;
 
     @Before
     public void setUp() {
         initMocks(this);
         mockCurrentDate(DateUtil.now());
-        adherenceAuditService = new AdherenceAuditService(allWeeklyAdherenceAuditLogs, allDailyAdherenceAuditLogs, allAdherenceAuditLogs);
+        adherenceAuditService = new AdherenceAuditService(allWeeklyAdherenceAuditLogs, allDailyAdherenceAuditLogs, allAdherenceAuditLogs, adherenceAuditLogReportingService);
     }
 
     @Test
@@ -49,6 +53,6 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
 
         assertEquals(expectedAuditLogs, auditLogs);
         verify(allAdherenceAuditLogs).findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize);
-    }
 
+    }
 }

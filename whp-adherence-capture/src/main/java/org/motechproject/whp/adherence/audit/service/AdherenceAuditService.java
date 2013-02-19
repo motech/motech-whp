@@ -6,6 +6,7 @@ import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.reporting.AdherenceAuditLogReportingService;
 import org.motechproject.whp.adherence.audit.repository.AllAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllDailyAdherenceAuditLogs;
 import org.motechproject.whp.adherence.audit.repository.AllWeeklyAdherenceAuditLogs;
@@ -24,12 +25,14 @@ public class AdherenceAuditService {
     private AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs;
     private AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs;
     private AllAdherenceAuditLogs allAdherenceAuditLogs;
+    private AdherenceAuditLogReportingService adherenceAuditLogReportingService;
 
     @Autowired
-    public AdherenceAuditService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs, AllAdherenceAuditLogs allAdherenceAuditLogs) {
+    public AdherenceAuditService(AllWeeklyAdherenceAuditLogs allWeeklyAdherenceAuditLogs, AllDailyAdherenceAuditLogs allDailyAdherenceAuditLogs, AllAdherenceAuditLogs allAdherenceAuditLogs, AdherenceAuditLogReportingService adherenceAuditLogReportingService) {
         this.allWeeklyAdherenceAuditLogs = allWeeklyAdherenceAuditLogs;
         this.allDailyAdherenceAuditLogs = allDailyAdherenceAuditLogs;
         this.allAdherenceAuditLogs = allAdherenceAuditLogs;
+        this.adherenceAuditLogReportingService = adherenceAuditLogReportingService;
     }
 
     public void auditWeeklyAdherence(Patient patient, WeeklyAdherenceSummary weeklyAdherenceSummary, AuditParams auditParams) {
