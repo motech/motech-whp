@@ -19,6 +19,7 @@ import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.domain.WHPRole;
+import org.motechproject.whp.user.mapper.ProviderReportingService;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import java.util.ArrayList;
@@ -51,6 +52,9 @@ public class ProviderServiceTest {
     @Mock
     private AllDistricts allDistricts;
 
+    @Mock
+    private ProviderReportingService providerReportingService;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -60,7 +64,7 @@ public class ProviderServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext);
+        providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext, providerReportingService);
     }
 
     @Test
@@ -139,7 +143,9 @@ public class ProviderServiceTest {
         providerService.createOrUpdateProvider(providerRequest);
 
         verify(allProviders).findByProviderId(providerRequest.getProviderId());
-        verify(allProviders).addOrReplace(providerRequest.makeProvider());
+        Provider provider = providerRequest.makeProvider();
+        verify(allProviders).addOrReplace(provider);
+        verify(providerReportingService).reportProvider(provider);
     }
 
     @Test
@@ -155,6 +161,7 @@ public class ProviderServiceTest {
 
         verify(allProviders).findByProviderId(providerRequest.getProviderId());
         verify(allProviders).addOrReplace(provider);
+        verify(providerReportingService).reportProvider(provider);
     }
 
     @Test

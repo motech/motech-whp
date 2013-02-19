@@ -10,6 +10,7 @@ import org.motechproject.whp.user.contract.ProviderRequest;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.motechproject.whp.user.domain.WHPRole;
+import org.motechproject.whp.user.mapper.ProviderReportingService;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,12 +30,14 @@ public class ProviderService {
 
     private AllProviders allProviders;
     private EventContext eventContext;
+    private ProviderReportingService providerReportingService;
 
     @Autowired
-    public ProviderService(MotechAuthenticationService motechAuthenticationService, AllProviders allProviders, @Qualifier("eventContext") EventContext eventContext) {
+    public ProviderService(MotechAuthenticationService motechAuthenticationService, AllProviders allProviders, @Qualifier("eventContext") EventContext eventContext, ProviderReportingService providerReportingService) {
         this.motechAuthenticationService = motechAuthenticationService;
         this.allProviders = allProviders;
         this.eventContext = eventContext;
+        this.providerReportingService = providerReportingService;
     }
 
     public void registerProvider(ProviderRequest providerRequest) {
@@ -97,6 +100,8 @@ public class ProviderService {
                 eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
             }
         }
+
+        providerReportingService.reportProvider(provider);
 
         return docId;
     }
