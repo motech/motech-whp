@@ -8,6 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
+import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalculator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
@@ -17,6 +18,7 @@ import org.motechproject.whp.user.domain.Provider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.user.builder.ProviderBuilder.newProviderBuilder;
@@ -50,6 +52,8 @@ public class PatientDashboardRowTest {
 
     @Mock
     AlertColorConfiguration alertColorConfiguration;
+    @Mock
+    CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
 
     @Before
     public void setup() {
@@ -107,8 +111,9 @@ public class PatientDashboardRowTest {
         when(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, 2)).thenReturn("c2");
         when(alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, 2)).thenReturn("c3");
         when(alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, 2)).thenReturn("c4");
+        when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(10);
 
-        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, alertColorConfiguration);
+        PatientDashboardRow patientDashboardRow = new PatientDashboardRow(patient, alertColorConfiguration, cumulativeMissedDosesCalculator);
 
         assertThat(patientDashboardRow.getPatientId(), is(patientId));
         assertThat(patientDashboardRow.getFirstName(), is(firstName));
@@ -135,6 +140,7 @@ public class PatientDashboardRowTest {
         assertThat(patientDashboardRow.getCumulativeMissedDosesSeverityColor(), is("c3"));
         assertThat(patientDashboardRow.getTreatmentNotStartedSeverityColor(), is("c4"));
         assertThat(patientDashboardRow.getFlag(), is(true));
-    }
 
+        verify(cumulativeMissedDosesCalculator).getCumulativeMissedDoses(patient);
+    }
 }

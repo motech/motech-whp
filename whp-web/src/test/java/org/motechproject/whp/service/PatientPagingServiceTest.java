@@ -8,6 +8,7 @@ import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.paginator.response.PageResults;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.mapper.AlertsFilterTransformer;
+import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalculator;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -36,6 +37,9 @@ public class PatientPagingServiceTest {
     @Mock
     AlertColorConfiguration alertColorConfiguration;
 
+    @Mock
+    CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
+
     FilterParams filterParams;
 
     int pageNumber = 2;
@@ -48,7 +52,7 @@ public class PatientPagingServiceTest {
     public void setUp(){
         initMocks(this);
         filterParams = new FilterParams();
-        patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, alertColorConfiguration);
+        patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, alertColorConfiguration, cumulativeMissedDosesCalculator);
     }
 
     @Test
@@ -65,8 +69,10 @@ public class PatientPagingServiceTest {
         when(alertsFilterTransformer.transform(filterParams)).thenReturn(filterParams);
         when(allPatients.filter(filterParams, new SortParams(), (pageNumber - 1) * rowsPerPage, rowsPerPage)).thenReturn(patientsPerPage);
         when(allPatients.count(filterParams)).thenReturn(expectedCount);
+        when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient1)).thenReturn(12);
+        when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient2)).thenReturn(13);
 
-        PatientPagingService patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, alertColorConfiguration);
+        PatientPagingService patientPagingService = new PatientPagingService(allPatients, alertsFilterTransformer, alertColorConfiguration, cumulativeMissedDosesCalculator);
         PageResults<PatientDashboardRow> pageResults = patientPagingService.page(pageNumber, rowsPerPage, filterParams, new SortParams());
 
         assertThat(pageResults.getTotalRows(), is(expectedCount));
@@ -74,6 +80,8 @@ public class PatientPagingServiceTest {
         assertThat(pageResults.getResults().size(), is(2));
         assertThat(pageResults.getResults().get(0).getPatientId(), is("patientid1"));
         assertThat(pageResults.getResults().get(1).getPatientId(), is("patientid2"));
+        assertThat(pageResults.getResults().get(0).getCumulativeMissedDoses(), is(12));
+        assertThat(pageResults.getResults().get(1).getCumulativeMissedDoses(), is(13));
     }
 
     @Test

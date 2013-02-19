@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
+import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalculator;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
@@ -41,11 +42,11 @@ public class PatientDashboardRow {
     private Boolean flag;
 
 
-    public PatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration) {
-        initializePatientDashboardRow(patient, alertColorConfiguration);
+    public PatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration, CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator) {
+        initializePatientDashboardRow(patient, alertColorConfiguration, cumulativeMissedDosesCalculator);
     }
 
-    private void initializePatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration) {
+    private void initializePatientDashboardRow(Patient patient, AlertColorConfiguration alertColorConfiguration, CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator) {
         currentTreatment = patient.getCurrentTreatment();
         Therapy latestTherapy = patient.getCurrentTherapy();
         patientId = patient.getPatientId();
@@ -66,7 +67,7 @@ public class PatientDashboardRow {
         cpProgress = patient.getCPProgress();
 
         PatientAlerts patientAlerts = patient.getPatientAlerts();
-        cumulativeMissedDoses = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue();
+        cumulativeMissedDoses = cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient);
         treatmentNotStartedSeverity = patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity();
         treatmentNotStartedSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity());
         cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();

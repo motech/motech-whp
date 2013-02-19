@@ -1,7 +1,5 @@
 package org.motechproject.whp.patient.alerts.processor;
 
-import org.joda.time.LocalDate;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,11 @@ import static org.motechproject.whp.common.domain.alerts.PatientAlertType.Cumula
 @Component
 public class CumulativeMissedDosesAlertProcessor implements AlertProcessor {
 
-    private TreatmentWeekInstance treatmentWeekInstance;
+    private CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
 
     @Autowired
-    public CumulativeMissedDosesAlertProcessor(TreatmentWeekInstance treatmentWeekInstance) {
-        this.treatmentWeekInstance = treatmentWeekInstance;
+    public CumulativeMissedDosesAlertProcessor(CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator) {
+        this.cumulativeMissedDosesCalculator = cumulativeMissedDosesCalculator;
     }
 
     @Override
@@ -25,8 +23,7 @@ public class CumulativeMissedDosesAlertProcessor implements AlertProcessor {
             return NO_ALERT_VALUE;
         }
 
-        LocalDate tillDate = treatmentWeekInstance.previousAdherenceWeekEndDate();
-        return patient.cumulativeMissedDoses(tillDate);
+        return cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient);
     }
 
     @Override

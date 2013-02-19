@@ -1,11 +1,9 @@
 package org.motechproject.whp.patient.alerts.processor;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.common.domain.TreatmentWeekInstance;
 import org.motechproject.whp.patient.domain.Patient;
 
 import static junit.framework.Assert.assertEquals;
@@ -18,12 +16,12 @@ public class CumulativeMissedDosesAlertProcessorTest {
     CumulativeMissedDosesAlertProcessor cumulativeMissedDosesAlertProcessor;
 
     @Mock
-    private TreatmentWeekInstance treatmentWeekInstance;
+    private CumulativeMissedDosesCalculator cumulativeMissedDosesCalculator;
 
     @Before
     public void setUp() {
         initMocks(this);
-        cumulativeMissedDosesAlertProcessor  = new CumulativeMissedDosesAlertProcessor(treatmentWeekInstance);
+        cumulativeMissedDosesAlertProcessor  = new CumulativeMissedDosesAlertProcessor(cumulativeMissedDosesCalculator);
     }
 
     @Test
@@ -32,14 +30,11 @@ public class CumulativeMissedDosesAlertProcessorTest {
         int cumulativeMissedDoses = 5;
         when(patient.isCurrentTreatmentPaused()).thenReturn(false);
 
-        LocalDate previousAdherenceWeekEndDate = new LocalDate(2013, 01, 01);
-        when(treatmentWeekInstance.previousAdherenceWeekEndDate()).thenReturn(previousAdherenceWeekEndDate);
-        when(patient.cumulativeMissedDoses(any(LocalDate.class))).thenReturn(cumulativeMissedDoses);
+        when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(cumulativeMissedDoses);
 
         assertEquals(cumulativeMissedDoses, cumulativeMissedDosesAlertProcessor.process(patient));
 
-        verify(patient).cumulativeMissedDoses(previousAdherenceWeekEndDate);
-        verify(treatmentWeekInstance).previousAdherenceWeekEndDate();
+        verify(cumulativeMissedDosesCalculator).getCumulativeMissedDoses(patient);
     }
 
     @Test
@@ -54,10 +49,5 @@ public class CumulativeMissedDosesAlertProcessorTest {
     @Test
     public void shouldReturnAlertTypeAsCumulativeMissedDoses() {
         assertEquals(CumulativeMissedDoses, cumulativeMissedDosesAlertProcessor.alertType());
-    }
-
-    @After
-    public void tearDown() {
-        verifyZeroInteractions(treatmentWeekInstance);
     }
 }

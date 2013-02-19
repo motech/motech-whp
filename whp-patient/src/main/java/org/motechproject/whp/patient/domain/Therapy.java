@@ -417,7 +417,6 @@ public class Therapy implements Serializable {
         if(!hasStarted()) {
             return 0;
         }
-//        LocalDate laterDate = currentTreatment.getStartDate().isBefore(asOfDate) ? asOfDate : currentTreatment.getStartDate();
         return doseInterruptions.getCumulativeMissedDoseCount(treatmentCategory, asOfDate, tillDate);
     }
 
