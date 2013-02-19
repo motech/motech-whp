@@ -110,4 +110,8 @@ public class ProviderService {
         allProviders.addOrReplace(provider);
         return provider.getId();
     }
+
+    public List<Provider> getAll() {
+        return allProviders.getAll();
+    }
 }

@@ -202,8 +202,19 @@ public class ProviderServiceTest {
 
         List<Provider> actualProviders = providerService.findByProviderIds(providerIds);
 
-        verify(allProviders).findByProviderIds(providerIds);
         assertEquals(providers, actualProviders);
+        verify(allProviders).findByProviderIds(providerIds);
+    }
+
+    @Test
+    public void shouldGetAllProviders() {
+        List expectedProviders = mock(List.class);
+        when(allProviders.getAll()).thenReturn(expectedProviders);
+
+        List<Provider> providers = providerService.getAll();
+
+        assertEquals(expectedProviders, providers);
+        verify(allProviders).getAll();
     }
 
     @After
