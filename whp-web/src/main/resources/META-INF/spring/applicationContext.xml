@@ -11,6 +11,7 @@
     <context:property-placeholder location="classpath:message_en.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:httpClient.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:whp.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:whp-report-endpoints.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:ivr.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:dozer.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:seed.properties"  ignore-unresolvable="true"/>
