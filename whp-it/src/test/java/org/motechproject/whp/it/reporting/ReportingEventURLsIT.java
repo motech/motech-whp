@@ -91,4 +91,9 @@ public class ReportingEventURLsIT {
     public void shouldGetProviderReportingUpdateURL() {
         assertThat(reportingEventURLs.getProviderUpdateURL(), is("http://127.0.0.1:9999/whp-reports/provider/update"));
     }
+
+    @Test
+    public void shouldGetAdherenceAuditLogURL() {
+        assertThat(reportingEventURLs.getAdherenceAuditLogURL(), is("http://127.0.0.1:9999/whp-reports/adherence/auditlog"));
+    }
 }

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
+import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
 import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,9 @@ public class ReportingPublisherService {
 
     public void reportProvider(ProviderDTO providerDTO) {
         httpClientService.post(reportingEventURLs.getProviderUpdateURL(), providerDTO);
+    }
+
+    public void reportAdherenceAuditLog(AdherenceAuditLogDTO adherenceAuditLogDTO) {
+        httpClientService.post(reportingEventURLs.getAdherenceAuditLogURL(), adherenceAuditLogDTO);
     }
 }

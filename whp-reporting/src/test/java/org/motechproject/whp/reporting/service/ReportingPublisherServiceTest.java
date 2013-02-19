@@ -7,12 +7,11 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
+import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
 import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
@@ -190,5 +189,16 @@ public class ReportingPublisherServiceTest {
 
         reportingPublisher.reportProvider(providerDTO);
         verify(httpClientService).post(url, providerDTO);
+    }
+
+    @Test
+    public void shouldPublishAdherenceAuditLog() {
+        String url = "url";
+        when(reportingEventURLs.getAdherenceAuditLogURL()).thenReturn(url);
+
+        AdherenceAuditLogDTO adherenceAuditLogDTO = new AdherenceAuditLogDTO();
+
+        reportingPublisher.reportAdherenceAuditLog(adherenceAuditLogDTO);
+        verify(httpClientService).post(url, adherenceAuditLogDTO);
     }
 }
