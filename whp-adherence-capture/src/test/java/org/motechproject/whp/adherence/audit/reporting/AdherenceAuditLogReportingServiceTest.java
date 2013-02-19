@@ -3,7 +3,8 @@ package org.motechproject.whp.adherence.audit.reporting;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 
@@ -32,13 +33,25 @@ public class AdherenceAuditLogReportingServiceTest {
 
     @Test
     public void shouldReportAdherenceAuditLog() {
-        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog();
+        AuditLog auditLog = new AuditLog();
 
-        when(adherenceAuditLogMapper.map(adherenceAuditLog)).thenReturn(adherenceAuditLogDTO);
+        when(adherenceAuditLogMapper.mapFromAuditLog(auditLog)).thenReturn(adherenceAuditLogDTO);
 
-        adherenceAuditLogReportingService.reportAdherenceAuditLog(adherenceAuditLog);
+        adherenceAuditLogReportingService.reportAuditLog(auditLog);
 
-        verify(adherenceAuditLogMapper).map(adherenceAuditLog);
+        verify(adherenceAuditLogMapper).mapFromAuditLog(auditLog);
+        verify(reportingPublisherService).reportAdherenceAuditLog(adherenceAuditLogDTO);
+    }
+
+    @Test
+    public void shouldReportDailyAdherenceAuditLog() {
+        DailyAdherenceAuditLog dailyAdherenceAuditLog = new DailyAdherenceAuditLog();
+
+        when(adherenceAuditLogMapper.mapFromDailyAdherenceAuditLog(dailyAdherenceAuditLog)).thenReturn(adherenceAuditLogDTO);
+
+        adherenceAuditLogReportingService.reportDailyAdherenceAuditLog(dailyAdherenceAuditLog);
+
+        verify(adherenceAuditLogMapper).mapFromDailyAdherenceAuditLog(dailyAdherenceAuditLog);
         verify(reportingPublisherService).reportAdherenceAuditLog(adherenceAuditLogDTO);
     }
 }

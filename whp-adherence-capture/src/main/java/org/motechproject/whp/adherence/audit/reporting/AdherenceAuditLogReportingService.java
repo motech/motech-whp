@@ -1,6 +1,7 @@
 package org.motechproject.whp.adherence.audit.reporting;
 
-import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,13 @@ public class AdherenceAuditLogReportingService {
         this.adherenceAuditLogMapper = adherenceAuditLogMapper;
     }
 
-    public void reportAdherenceAuditLog(AdherenceAuditLog adherenceAuditLog) {
-       AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.map(adherenceAuditLog);
+    public void reportAuditLog(AuditLog auditLog) {
+       AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.mapFromAuditLog(auditLog);
        reportingPublisherService.reportAdherenceAuditLog(adherenceAuditLogDTO);
+    }
+
+    public void reportDailyAdherenceAuditLog(DailyAdherenceAuditLog dailyAdherenceAuditLog) {
+        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.mapFromDailyAdherenceAuditLog(dailyAdherenceAuditLog);
+        reportingPublisherService.reportAdherenceAuditLog(adherenceAuditLogDTO);
     }
 }

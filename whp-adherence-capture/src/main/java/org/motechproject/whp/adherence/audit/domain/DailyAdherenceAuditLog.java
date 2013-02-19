@@ -1,6 +1,5 @@
 package org.motechproject.whp.adherence.audit.domain;
 
-
 import lombok.Data;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.DateTime;

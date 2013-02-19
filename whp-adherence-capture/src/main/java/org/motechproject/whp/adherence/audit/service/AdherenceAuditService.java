@@ -46,6 +46,7 @@ public class AdherenceAuditService {
                 .withPatientId(weeklyAdherenceSummary.getPatientId())
                 .withTbId(currentTreatment.getTbId());
         allWeeklyAdherenceAuditLogs.add(auditLog);
+        adherenceAuditLogReportingService.reportAuditLog(auditLog);
     }
 
     public List<AuditLog> fetchWeeklyAuditLogs() {
@@ -63,6 +64,7 @@ public class AdherenceAuditService {
             auditLog.setUser(auditParams.getUser());
             auditLog.setProviderId(adherence.getProviderId());
             allDailyAdherenceAuditLogs.add(auditLog);
+            adherenceAuditLogReportingService.reportDailyAdherenceAuditLog(auditLog);
         }
     }
 

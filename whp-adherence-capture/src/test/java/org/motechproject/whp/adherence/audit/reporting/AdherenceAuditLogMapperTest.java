@@ -4,12 +4,14 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
+import org.motechproject.whp.adherence.audit.domain.AuditLog;
+import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
+import org.motechproject.whp.adherence.domain.PillStatus;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.motechproject.whp.adherence.domain.PillStatus.Taken;
 
 public class AdherenceAuditLogMapperTest {
 
@@ -24,17 +26,36 @@ public class AdherenceAuditLogMapperTest {
 
 
     @Test
-    public void shouldMapAdherenceAuditLogToAdherenceAuditLogDTO() {
+    public void shouldMapAuditLogToAdherenceAuditLogDTO() {
 
-        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patientId", "providerId", "tbId", now, now, "userId", 1, Taken, "channel");
+        AuditLog auditLog = new AuditLog(now, 2, "remarks", "channel", "patientId", "tbId", "providerId", "user");
 
-        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.map(adherenceAuditLog);
+        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.mapFromAuditLog(auditLog);
 
-        assertThat(adherenceAuditLogDTO.getChannel(), is(adherenceAuditLog.getSourceOfChange()));
-        assertThat(adherenceAuditLogDTO.getDoseDate(), is(adherenceAuditLog.getDoseDate().toDate()));
-        assertThat(new DateTime(adherenceAuditLogDTO.getCreationTime()), is(adherenceAuditLog.getDoseDate()));
-        assertThat(adherenceAuditLogDTO.getPatientId(), is(adherenceAuditLog.getPatientId()));
-        assertThat(adherenceAuditLogDTO.getProviderId(), is(adherenceAuditLog.getProviderId()));
+        assertThat(adherenceAuditLogDTO.getChannel(), is(auditLog.getSourceOfChange()));
+        assertThat(adherenceAuditLogDTO.getTbId(), is(auditLog.getTbId()));
+        assertThat(new DateTime(adherenceAuditLogDTO.getCreationTime()), is(auditLog.getCreationTime()));
+        assertThat(adherenceAuditLogDTO.getPatientId(), is(auditLog.getPatientId()));
+        assertThat(adherenceAuditLogDTO.getProviderId(), is(auditLog.getProviderId()));
+        assertThat(adherenceAuditLogDTO.getUserId(), is(auditLog.getUser()));
+    }
+
+
+    @Test
+    public void shouldMapDailyAdherenceAuditLogToAdherenceAuditLogDTO() {
+
+        DailyAdherenceAuditLog dailyAdherenceAuditLog = new DailyAdherenceAuditLog("patientId", "tbId",now.toLocalDate(), PillStatus.Taken,"user","channel", now ,"providerId");
+
+        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogMapper.mapFromDailyAdherenceAuditLog(dailyAdherenceAuditLog);
+
+        assertThat(adherenceAuditLogDTO.getChannel(), is(dailyAdherenceAuditLog.getSourceOfChange()));
+        assertThat(adherenceAuditLogDTO.getTbId(), is(dailyAdherenceAuditLog.getTbId()));
+        assertThat(new DateTime(adherenceAuditLogDTO.getCreationTime()), is(dailyAdherenceAuditLog.getCreationTime()));
+        assertThat(adherenceAuditLogDTO.getPatientId(), is(dailyAdherenceAuditLog.getPatientId()));
+        assertThat(adherenceAuditLogDTO.getProviderId(), is(dailyAdherenceAuditLog.getProviderId()));
+        assertThat(adherenceAuditLogDTO.getUserId(), is(dailyAdherenceAuditLog.getUser()));
+        assertThat(adherenceAuditLogDTO.getPillStatus(), is(dailyAdherenceAuditLog.getPillStatus().name()));
+        assertThat(adherenceAuditLogDTO.getDoseDate(), is(WHPDateUtil.toSqlDate(dailyAdherenceAuditLog.getPillDate())));
     }
 }
 
