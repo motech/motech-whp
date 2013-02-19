@@ -8,9 +8,9 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.command.CloseCurrentTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.TreatmentService;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -19,7 +19,7 @@ import static org.motechproject.util.DateUtil.now;
 public class CloseCurrentTreatmentTest extends BaseUnitTest {
 
     @Mock
-    private AllPatients allPatients;
+    private PatientService patientService;
     @Mock
     private TreatmentService treatmentService;
 
@@ -31,7 +31,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patient = new PatientBuilder().withDefaults().build();
-        closeCurrentTreatment = new CloseCurrentTreatment(allPatients, treatmentService);
+        closeCurrentTreatment = new CloseCurrentTreatment(patientService, treatmentService);
     }
 
 
@@ -44,7 +44,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService, never()).closeTreatment(patientRequest);
@@ -59,7 +59,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(someOtherTbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService, never()).closeTreatment(patientRequest);
@@ -75,7 +75,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(someOtherTbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService, never()).closeTreatment(patientRequest);
@@ -89,7 +89,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService, never()).closeTreatment(patientRequest);
@@ -101,7 +101,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         //Irrelevant as patient is passed in. Just to maintain a semblance of integrity in the test.
         patientRequest.setCase_id("caseId");
         patientRequest.setTb_id("tbId");
-        when(allPatients.findByPatientId(anyString())).thenReturn(null);
+        when(patientService.findByPatientId(anyString())).thenReturn(null);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService, never()).closeTreatment(patientRequest);
@@ -115,7 +115,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         closeCurrentTreatment.apply(patientRequest);
         verify(treatmentService).closeTreatment(patientRequest);

@@ -2,14 +2,14 @@ package org.motechproject.whp.patient.command;
 
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.domain.Treatment;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 
 import java.util.List;
 
 public abstract class TreatmentUpdate extends UpdateCommand {
 
-    protected TreatmentUpdate(AllPatients allPatients, UpdateScope command) {
-        super(allPatients, command);
+    protected TreatmentUpdate(PatientService patientService, UpdateScope command) {
+        super(patientService, command);
     }
 
     protected boolean updatingCurrentTreatment(String tbId, Treatment currentTreatment, List<WHPErrorCode> errorCodes) {

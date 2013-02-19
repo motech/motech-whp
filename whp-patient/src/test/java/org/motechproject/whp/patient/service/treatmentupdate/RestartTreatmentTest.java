@@ -9,7 +9,7 @@ import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.RestartTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.TreatmentService;
 
 import static org.mockito.Mockito.*;
@@ -19,7 +19,7 @@ import static org.motechproject.util.DateUtil.now;
 public class RestartTreatmentTest extends BaseUnitTest {
 
     @Mock
-    private AllPatients allPatients;
+    private PatientService patientService;
     @Mock
     private TreatmentService treatmentService;
     private RestartTreatment restartTreatment;
@@ -30,7 +30,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
     public void setUp() {
         initMocks(this);
         patientRequest = new PatientRequestBuilder().withDefaults().build();
-        restartTreatment = new RestartTreatment(allPatients, treatmentService);
+        restartTreatment = new RestartTreatment(patientService, treatmentService);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_IN_PROGRESS);
         restartTreatment.apply(patientRequest);
@@ -57,7 +57,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         restartTreatment.apply(patientRequest);
@@ -72,7 +72,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         restartTreatment.apply(patientRequest);
@@ -88,7 +88,7 @@ public class RestartTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         restartTreatment.apply(patientRequest);
         verify(treatmentService).restartTreatment(patientRequest);

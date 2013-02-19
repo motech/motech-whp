@@ -6,7 +6,7 @@ import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.mapper.PatientMapper;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +20,19 @@ public class SimpleUpdate extends UpdateCommand {
     private AllDistricts allDistricts;
 
     @Autowired
-    public SimpleUpdate(AllPatients allPatients, PatientMapper patientMapper, AllDistricts allDistricts) {
-        super(allPatients, UpdateScope.simpleUpdate);
+    public SimpleUpdate(PatientService patientService, PatientMapper patientMapper, AllDistricts allDistricts) {
+        super(patientService, UpdateScope.simpleUpdate);
         this.patientMapper = patientMapper;
         this.allDistricts = allDistricts;
     }
 
     @Override
     public void apply(PatientRequest patientRequest) {
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+        Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
         ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (canPerformSimpleUpdate(patient, patientRequest, errorCodes)) {
             Patient updatedPatient = patientMapper.mapUpdates(patientRequest, patient);
-            allPatients.update(updatedPatient);
+            patientService.update(updatedPatient);
         } else {
             throw new WHPRuntimeException(errorCodes);
         }

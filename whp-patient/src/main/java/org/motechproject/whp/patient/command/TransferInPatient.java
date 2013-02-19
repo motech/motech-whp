@@ -5,7 +5,7 @@ import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,13 +19,13 @@ public class TransferInPatient extends TreatmentUpdate {
     private TreatmentService treatmentService;
 
     @Autowired
-    public TransferInPatient(AllPatients allPatients, TreatmentService treatmentService) {
-        super(allPatients, UpdateScope.transferIn);
+    public TransferInPatient(PatientService patientService, TreatmentService treatmentService) {
+        super(patientService, UpdateScope.transferIn);
         this.treatmentService = treatmentService;
     }
 
     public void apply(PatientRequest patientRequest) {
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+        Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
         List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!canTransferInPatient(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);

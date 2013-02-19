@@ -4,7 +4,7 @@ import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,14 +18,14 @@ public class PauseTreatment extends TreatmentUpdate {
     private TreatmentService treatmentService;
 
     @Autowired
-    public PauseTreatment(AllPatients allPatients, TreatmentService treatmentService) {
-        super(allPatients, UpdateScope.pauseTreatment);
+    public PauseTreatment(PatientService patientService, TreatmentService treatmentService) {
+        super(patientService, UpdateScope.pauseTreatment);
         this.treatmentService = treatmentService;
     }
 
     @Override
     public void apply(PatientRequest patientRequest) {
-        Patient patient = allPatients.findByPatientId(patientRequest.getCase_id());
+        Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
         List<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
         if (!canPauseCurrentTreatment(patient, patientRequest, errorCodes)) {
             throw new WHPRuntimeException(errorCodes);

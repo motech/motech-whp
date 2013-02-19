@@ -8,9 +8,9 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.command.PauseTreatment;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.patient.service.TreatmentService;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -19,7 +19,7 @@ import static org.motechproject.util.DateUtil.now;
 public class PauseTreatmentTest extends BaseUnitTest {
 
     @Mock
-    private AllPatients allPatients;
+    private PatientService patientService;
     @Mock
     private TreatmentService treatmentService;
     private PauseTreatment pauseTreatment;
@@ -27,7 +27,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        pauseTreatment = new PauseTreatment(allPatients, treatmentService);
+        pauseTreatment = new PauseTreatment(patientService, treatmentService);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_PAUSED);
         pauseTreatment.apply(patientRequest);
@@ -54,7 +54,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TB_ID_DOES_NOT_MATCH);
         pauseTreatment.apply(patientRequest);
@@ -70,7 +70,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_PAUSED);
         pauseTreatment.apply(patientRequest);
@@ -86,7 +86,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
         pauseTreatment.apply(patientRequest);
@@ -103,7 +103,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_ALREADY_CLOSED);
         pauseTreatment.apply(patientRequest);
@@ -118,7 +118,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id(tbId);
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         pauseTreatment.apply(patientRequest);
         verify(treatmentService).pauseTreatment(patientRequest);

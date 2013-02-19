@@ -3,17 +3,17 @@ package org.motechproject.whp.patient.command;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 
 import java.util.List;
 
 public abstract class UpdateCommand {
 
-    protected AllPatients allPatients;
+    protected PatientService patientService;
     protected final UpdateScope command;
 
-    public UpdateCommand(AllPatients allPatients, UpdateScope command) {
-        this.allPatients = allPatients;
+    public UpdateCommand(PatientService patientService, UpdateScope command) {
+        this.patientService = patientService;
         this.command = command;
     }
 

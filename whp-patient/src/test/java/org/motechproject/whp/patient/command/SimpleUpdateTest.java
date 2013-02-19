@@ -12,7 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.mapper.PatientMapper;
-import org.motechproject.whp.patient.repository.AllPatients;
+import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
 import org.motechproject.whp.user.service.ProviderService;
@@ -25,7 +25,7 @@ import static org.motechproject.util.DateUtil.today;
 public class SimpleUpdateTest extends BaseUnitTest {
 
     @Mock
-    private AllPatients allPatients;
+    private PatientService patientService;
     @Mock
     private ProviderService providerService;
     @Mock
@@ -41,7 +41,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         initMocks(this);
         patientMapper = new PatientMapper(providerService);
         patient = new PatientBuilder().withDefaults().build();
-        simpleUpdate = new SimpleUpdate(allPatients, patientMapper, allDistricts);
+        simpleUpdate = new SimpleUpdate(patientService, patientMapper, allDistricts);
     }
 
     @Test
@@ -54,11 +54,11 @@ public class SimpleUpdateTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
         simpleUpdate.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(patientService, never()).update(patient);
     }
 
     @Test
@@ -70,11 +70,11 @@ public class SimpleUpdateTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("wrongTbId");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.NO_SUCH_TREATMENT_EXISTS);
         simpleUpdate.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(patientService, never()).update(patient);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
 
         expectWHPRuntimeException(WHPErrorCode.INVALID_PATIENT_CASE_ID);
         simpleUpdate.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(patientService, never()).update(patient);
     }
 
     @Test
@@ -99,12 +99,12 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setTb_id("elevenDigit");
         String invalid_district = "invalid_district";
         patientRequest.setAddress(new Address("", "", "", "", invalid_district, ""));
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
         when(allDistricts.findByName(invalid_district)).thenReturn(null);
 
         expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
         simpleUpdate.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(patientService, never()).update(patient);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
         patientRequest.setAddress(new Address(null, null, null, null, null, null));
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         simpleUpdate.apply(patientRequest);
         verify(allDistricts, never()).findByName(anyString());
@@ -133,11 +133,11 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
         patientRequest.setAddress(new Address("", "", "", "", null, ""));
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.INVALID_DISTRICT);
         simpleUpdate.apply(patientRequest);
-        verify(allPatients, never()).update(patient);
+        verify(patientService, never()).update(patient);
     }
 
     @Test
@@ -149,12 +149,12 @@ public class SimpleUpdateTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
         when(allDistricts.findByName(anyString())).thenReturn(new District());
 
 
         simpleUpdate.apply(patientRequest);
-        verify(allPatients).update(patient);
+        verify(patientService).update(patient);
     }
 
     @Test
@@ -171,11 +171,11 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
 
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
         when(allDistricts.findByName(anyString())).thenReturn(new District());
 
         simpleUpdate.apply(patientRequest);
-        verify(allPatients).update(patient);
+        verify(patientService).update(patient);
     }
 
     @Test
@@ -191,10 +191,10 @@ public class SimpleUpdateTest extends BaseUnitTest {
         patientRequest.setCase_id(patient.getPatientId());
         patientRequest.setTb_id("elevenDigit");
 
-        when(allPatients.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
+        when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
         when(allDistricts.findByName(anyString())).thenReturn(new District());
 
         simpleUpdate.apply(patientRequest);
-        verify(allPatients).update(patient);
+        verify(patientService).update(patient);
     }
 }
