@@ -37,6 +37,8 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
 
     private EventContext eventContext;
     private PatientQueryDefinition patientQueryDefinition;
+    private static final String SORT_BY_ASCENDING = "ASC";
+    private static final String SORT_BY_DESCENDING = "DESC";
 
     @Autowired
     public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector,
@@ -164,7 +166,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
 
     }
 
-
     @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
     public ProviderIds findAllProvidersWithoutAdherenceAsOf(LocalDate asOf) {
         ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf.minusDays(1)).descending(true);
@@ -188,6 +189,11 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     }
 
     public List<Patient> filter(FilterParams queryParams, SortParams sortParams, int skip, int limit) {
+
+        if(sortParams.isEmpty()){
+            sortParams.put(PatientQueryDefinition.adherenceMissingWeeksSortParam(), SORT_BY_DESCENDING);
+        }
+       sortParams.put(PatientQueryDefinition.patientIdSortParam(), SORT_BY_ASCENDING);
         return filter(patientQueryDefinition, activePatientFilter(queryParams), sortParams, skip, limit);
     }
 

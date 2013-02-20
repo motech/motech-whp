@@ -149,9 +149,9 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th><a href="#" ng-click = "sort('TreatmentNotStartedAlertValue')"><i id = "sortIcon_TreatmentNotStartedAlertValue" class="icon-minus"></i></a></th>
+                        <th><a href="#" ng-click = "sort('AdherenceMissingAlertValue', 'DESC')"><i id = "sortIcon_AdherenceMissingAlertValue" class="icon-arrow-down"></i></a></th>
+                        <th><a href="#" ng-click = "sort('CumulativeMissedDosesAlertValue')"><i id = "sortIcon_CumulativeMissedDosesAlertValue" class="icon-minus"></i></a></th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
@@ -210,7 +210,6 @@
                     </tbody>
                 </table>
             </@paginator.paginate>
-            <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
         </div>
     </div>
 </div>

@@ -70,23 +70,56 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
     }
 
     $scope.hasResults = function () {
-       if($scope.data)
-            return $scope.data.totalRows  > 0;
+        if ($scope.data)
+            return $scope.data.totalRows > 0;
         return false;
     }
 
-    $scope.sort = function(sortField) {
-        if(!$rootScope.sortCriteria){
-            $rootScope.sortCriteria = {}
+    function resetSortIconsOnAllColumns() {
+        $("[id^=sortIcon]").each(function () {
+            $(this).removeClass("icon-arrow-up");
+            $(this).removeClass("icon-arrow-down");
+            $(this).addClass("icon-minus");
+        });
+    }
+
+    function initializeSortOrderIfNotPresent(sortField, defaultSortOrder) {
+        if (!$rootScope.sortCriteria[sortField]) {
+            $rootScope.sortCriteria[sortField] = defaultSortOrder;
+        }
+    }
+
+    function toggleSortOrder(sortField) {
+        if ($rootScope.sortCriteria[sortField] == "DESC") {
+            $rootScope.sortCriteria[sortField] = "ASC";
+            $("#sortIcon_" + sortField).removeClass("icon-minus");
+            $("#sortIcon_" + sortField).addClass('icon-arrow-up');
+        } else {
+            $rootScope.sortCriteria[sortField] = "DESC";
+            $("#sortIcon_" + sortField).removeClass("icon-minus");
+            $("#sortIcon_" + sortField).addClass('icon-arrow-down');
+        }
+    }
+
+    function setCurrentSortCriteria(sortField) {
+        var sortDirection = $rootScope.sortCriteria[sortField];
+        $rootScope.sortCriteria = {};
+        $rootScope.sortCriteria[sortField] = sortDirection;
+    }
+
+    $scope.sort = function (sortField, defaultSortOrder) {
+        if (typeof(defaultSortOrder) === 'undefined') defaultSortOrder = "DESC";
+
+        resetSortIconsOnAllColumns();
+
+        if (!$rootScope.sortCriteria) {
+            $rootScope.sortCriteria = {};
         }
 
-         if($rootScope.sortCriteria[sortField] == "DESC")  {
-            $rootScope.sortCriteria[sortField] = "ASC";
-        } else {
-             $rootScope.sortCriteria[sortField] = "DESC";
-         }
+        initializeSortOrderIfNotPresent(sortField, defaultSortOrder);
+        toggleSortOrder(sortField);
+        setCurrentSortCriteria(sortField);
 
-        $("#sortIcon_" + sortField).toggleClass('icon-arrow-up icon-arrow-down');
         $scope.currentPage = 1;
         //$scope.loadPage();
     }
@@ -152,8 +185,8 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
             $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
 
-            $.each($rootScope.sortCriteria, function(sortField, sortOrder) {
-                if(sortOrder == 'ASC')
+            $.each($rootScope.sortCriteria, function (sortField, sortOrder) {
+                if (sortOrder == 'ASC')
                     $("#sortIcon_" + sortField).removeClass('icon-arrow-down').addClass('icon-arrow-up');
                 else
                     $("#sortIcon_" + sortField).removeClass('icon-arrow-up').addClass('icon-arrow-down');
@@ -163,12 +196,12 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         }
 
         var paramMap = $location.search();
-        if(paramMap[$scope.id + "-pageNo"])
+        if (paramMap[$scope.id + "-pageNo"])
             $scope.currentPage = paramMap[$scope.id + "-pageNo"]
 
     }
 
-    this.loadPage = function() {
+    this.loadPage = function () {
         $scope.loadPage();
     }
 

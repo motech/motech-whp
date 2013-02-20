@@ -51,8 +51,8 @@ public class PatientQueryDefinition implements QueryDefinition {
         fields.add(flag);
 
         for(PatientAlertType alertType : PatientAlertType.values()){
-            fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, STRING));
-            fields.add(new QueryField(alertType.name() + ALERT_VALUE, STRING));
+            fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, INT));
+            fields.add(new QueryField(alertType.name() + ALERT_VALUE, INT));
             fields.add(new RangeField(alertType.name() + ALERT_DATE, DATE, alertDateFromParamForType(alertType), alertDateToParamForType(alertType)));
             fields.add(new RangeField(ALERT_DATE, DATE, ALERT_DATE + FROM, ALERT_DATE + TO));
         }
@@ -94,8 +94,8 @@ public class PatientQueryDefinition implements QueryDefinition {
 
                     "for (var i=0; i<alertTypes.length ;i++) { " +
                         "var alertType =  alertTypes[i]; " +
-                        "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {field: alertType + '"+ ALERT_SEVERITY + "'}); "+
-                        "index.add(doc.patientAlerts.alerts[alertType].value, {field: alertType + '"+ ALERT_VALUE + "'}); "+
+                        "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {type : 'int', field: alertType + '"+ ALERT_SEVERITY + "'}); "+
+                        "index.add(doc.patientAlerts.alerts[alertType].value, {type : 'int', field: alertType + '"+ ALERT_VALUE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: alertType + '"+ ALERT_DATE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: '"+ ALERT_DATE + "'}); "+
                     "} "+
@@ -146,5 +146,13 @@ public class PatientQueryDefinition implements QueryDefinition {
 
     public static String alertDateToParamForType(PatientAlertType alertType) {
         return alertType.name() + alertDateToParam();
+    }
+
+    public static String patientIdSortParam() {
+        return patientId.getName();
+    }
+
+    public static String adherenceMissingWeeksSortParam() {
+        return PatientAlertType.AdherenceMissing.name() + ALERT_VALUE;
     }
 }
