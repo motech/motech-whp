@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,7 @@ public class HomeController extends BaseWebController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String homePage(HttpServletRequest request) {
+    public String homePage(HttpServletRequest request, HttpServletResponse response) {
         MotechUser user = loggedInUser(request);
         List<String> userRoles = user.getRoles();
         if (homePageService.homePageFor(userRoles).isEmpty()) {

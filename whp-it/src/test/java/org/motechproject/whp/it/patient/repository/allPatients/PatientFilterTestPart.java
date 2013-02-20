@@ -58,7 +58,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderId("provider1")
                 .withProviderDistrict("district")
                 .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
-                .withAdherenceMissedWeeks(5, 2, DateUtil.today().minusDays(5))
+                .withAdherenceMissedWeeks(7, 2, DateUtil.today().minusDays(5))
                 .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
 
         patient3 = new PatientBuilder().withDefaults()
@@ -66,7 +66,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderId("provider2")
                 .withProviderDistrict("district2")
                 .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
-                .withAdherenceMissedWeeks(5, 2, DateUtil.today().minusDays(5))
+                .withAdherenceMissedWeeks(7, 2, DateUtil.today().minusDays(5))
                 .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
 
         patient4WithoutAlerts = new PatientBuilder().withDefaults()
@@ -197,7 +197,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
         queryParams.put("providerId", "provider1");
-        queryParams.put(PatientAlertType.AdherenceMissing.name() + PatientQueryDefinition.ALERT_SEVERITY, "2");
+        queryParams.put(PatientAlertType.AdherenceMissing.name() + PatientQueryDefinition.ALERT_SEVERITY, 2);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
@@ -295,20 +295,6 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     public void shouldSortPatientsBasedOnCumulativeMissedDoseValue() {
         SortParams sortParams = new SortParams();
         sortParams.put(PatientAlertType.CumulativeMissedDoses.name() + "AlertValue", "DESC");
-        FilterParams queryParams = new FilterParams();
-
-        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
-
-        assertEquals(4, searchResults.size());
-        assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
-        assertEquals(patient3.getPatientId(), searchResults.get(1).getPatientId());
-        assertEquals(patient1.getPatientId(), searchResults.get(2).getPatientId());
-        assertEquals(patient4WithoutAlerts.getPatientId(), searchResults.get(3).getPatientId());
-    }
-
-    @Test
-    public void shouldSortPatientsByDefaultBasedOnAdherenceMissingValue() {
-        SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);

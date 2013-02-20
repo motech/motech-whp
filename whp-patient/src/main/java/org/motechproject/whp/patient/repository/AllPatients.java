@@ -95,7 +95,7 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     @View(name = "find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
             "emit([doc.currentTherapy.currentTreatment.providerId, doc.currentTherapy.currentTreatment.startDate], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
-        return getAllWithActiveTreatmentForAGivenPage(providerId, null , null);
+        return getAllWithActiveTreatmentForAGivenPage(providerId, null, null);
     }
 
     private List<Patient> getAllWithActiveTreatmentForAGivenPage(String selectedProvider, Integer startIndex, Integer rowsPerPage) {
@@ -107,30 +107,29 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
         ViewQuery q;
 
-        if(rowsPerPage == null || startIndex == null){
+        if (rowsPerPage == null || startIndex == null) {
             q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
                     .startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
-        }else{
+        } else {
             q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
-                .startKey(startKey).endKey(endKey)
-                .skip(startIndex * rowsPerPage).limit(rowsPerPage)
-                .includeDocs(true).inclusiveEnd(true);
+                    .startKey(startKey).endKey(endKey)
+                    .skip(startIndex * rowsPerPage).limit(rowsPerPage)
+                    .includeDocs(true).inclusiveEnd(true);
         }
         return db.queryView(q, Patient.class);
     }
 
     public List<Patient> getAllUnderActiveTreatmentInDistrict(String district) {
-        return  getAllUnderActiveTreatmentInDistrictForAGivenPage(district, null, null);
+        return getAllUnderActiveTreatmentInDistrictForAGivenPage(district, null, null);
     }
 
     @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
     public List<Patient> getAllUnderActiveTreatmentInDistrictForAGivenPage(String district, Integer startIndex, Integer rowsPerPage) {
 
         ViewQuery q;
-        if (startIndex==null || rowsPerPage==null){
+        if (startIndex == null || rowsPerPage == null) {
             q = createQuery("find_by_district_having_active_treatment_v1").key(district).includeDocs(true);
-        }
-        else {
+        } else {
             q = createQuery("find_by_district_having_active_treatment_v1").skip(startIndex * rowsPerPage).limit(rowsPerPage).key(district).includeDocs(true);
         }
         List<Patient> patients = db.queryView(q, Patient.class);
@@ -189,11 +188,7 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     }
 
     public List<Patient> filter(FilterParams queryParams, SortParams sortParams, int skip, int limit) {
-
-        if(sortParams.isEmpty()){
-            sortParams.put(PatientQueryDefinition.adherenceMissingWeeksSortParam(), SORT_BY_DESCENDING);
-        }
-       sortParams.put(PatientQueryDefinition.patientIdSortParam(), SORT_BY_ASCENDING);
+        sortParams.put(PatientQueryDefinition.patientIdSortParam(), SORT_BY_ASCENDING);
         return filter(patientQueryDefinition, activePatientFilter(queryParams), sortParams, skip, limit);
     }
 

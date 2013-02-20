@@ -151,8 +151,4 @@ public class PatientQueryDefinition implements QueryDefinition {
     public static String patientIdSortParam() {
         return patientId.getName();
     }
-
-    public static String adherenceMissingWeeksSortParam() {
-        return PatientAlertType.AdherenceMissing.name() + ALERT_VALUE;
-    }
 }

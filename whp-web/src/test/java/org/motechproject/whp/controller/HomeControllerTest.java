@@ -13,6 +13,7 @@ import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.UUID;
@@ -31,6 +32,9 @@ public class HomeControllerTest {
     AllProviders allProviders;
     @Mock
     HttpServletRequest request;
+    @Mock
+    HttpServletResponse response;
+
     @Mock
     HomePageService homePageService;
 
@@ -53,7 +57,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUserFor(provider));
         setupProvider(provider);
-        assertEquals("redirect:/patients/listByProvider", homeController.homePage(request));
+        assertEquals("redirect:/patients/listByProvider", homeController.homePage(request,response));
     }
 
     @Test
@@ -61,7 +65,7 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUser(WHPRole.IT_ADMIN));
         setupProvider(provider);
-        assertEquals("redirect:/providers/list", homeController.homePage(request));
+        assertEquals("redirect:/providers/list", homeController.homePage(request, response));
     }
 
     @Test
@@ -69,13 +73,13 @@ public class HomeControllerTest {
         Provider provider = ProviderBuilder.newProviderBuilder().withDefaults().withId(UUID.randomUUID().toString()).build();
         login(authenticatedUser(WHPRole.CMF_ADMIN));
         setupProvider(provider);
-        assertEquals("redirect:/patients/list", homeController.homePage(request));
+        assertEquals("redirect:/patients/list", homeController.homePage(request, response));
     }
 
     @Test
     public void shouldRedirectToProvidersPendingAdherencePageForFieldStaff() {
         login(authenticatedUser(WHPRole.FIELD_STAFF));
-        assertEquals("redirect:/providers/adherenceStatus", homeController.homePage(request));
+        assertEquals("redirect:/providers/adherenceStatus", homeController.homePage(request, response));
     }
 
     private void login(MotechUser authenticatedUser) {
