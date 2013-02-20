@@ -59,12 +59,12 @@ public class AdherenceAuditLogSeedTest {
         List<AdherenceAuditLog> listOfAuditLogs = asList(adherenceAuditLog);
         List<AdherenceAuditLog> emptyList = new ArrayList<>();
 
-        when(adherenceAuditService.allAuditLogs(1)).thenReturn(listOfAuditLogs);
-        when(adherenceAuditService.allAuditLogs(2)).thenReturn(emptyList);
+        when(adherenceAuditService.fetchAllAuditLogs(1)).thenReturn(listOfAuditLogs);
+        when(adherenceAuditService.fetchAllAuditLogs(2)).thenReturn(emptyList);
 
         adherenceAuditLogSeed.seed();
 
-        verify(adherenceAuditService, times(2)).allAuditLogs(anyInt());
+        verify(adherenceAuditService, times(2)).fetchAllAuditLogs(anyInt());
         verify(reportingPublisherService).reportAdherenceAuditLog(adherenceAuditLogSeed.mapToReportingRequest(adherenceAuditLog));
     }
 }

@@ -30,7 +30,7 @@ public class AdherenceDataExportService {
 
     @DataProvider
     public List<AdherenceLogSummary> adherenceAuditReport(int pageNo) {
-        return map(adherenceAuditService.allAuditLogs(pageNo));
+        return map(adherenceAuditService.fetchAllAuditLogsInLastThreeMonths(pageNo));
     }
 
     @DataProvider

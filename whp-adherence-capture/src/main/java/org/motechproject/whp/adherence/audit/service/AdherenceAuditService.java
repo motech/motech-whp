@@ -72,8 +72,12 @@ public class AdherenceAuditService {
         return allDailyAdherenceAuditLogs.getAll();
     }
 
-    public List<AdherenceAuditLog> allAuditLogs(int pageNumber) {
+    public List<AdherenceAuditLog> fetchAllAuditLogsInLastThreeMonths(int pageNumber) {
         DateTime now = DateUtil.now();
         return allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, 10000);
+    }
+
+    public List<AdherenceAuditLog> fetchAllAuditLogs(int pageNumber) {
+        return allAdherenceAuditLogs.allLogs(pageNumber - 1, 10000);
     }
 }

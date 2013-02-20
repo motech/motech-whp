@@ -57,7 +57,7 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldFetchAllAuditLogs() {
+    public void shouldFetchAllAuditLogsInLastThreeMonths() {
         DateTime now = DateUtil.now();
         int pageSize = 10000;
         int pageNumber = 1;
@@ -65,7 +65,7 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
         List<AdherenceAuditLog> expectedAuditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "providerId", "tbId", now, now, "cmfAdmin", 1, PillStatus.Taken, "WEB"));
         when(allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize)).thenReturn(expectedAuditLogs);
 
-        List<AdherenceAuditLog> auditLogs = adherenceAuditService.allAuditLogs(pageNumber);
+        List<AdherenceAuditLog> auditLogs = adherenceAuditService.fetchAllAuditLogsInLastThreeMonths(pageNumber);
 
         assertEquals(expectedAuditLogs, auditLogs);
         verify(allAdherenceAuditLogs).findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize);
@@ -116,5 +116,19 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
         adherenceAuditService.auditDailyAdherence(patient, asList(adherence), auditParams);
 
         verify(adherenceAuditLogReportingService).reportDailyAdherenceAuditLog(dailyAdherenceAuditLog);
+    }
+
+    @Test
+    public void shouldFetchAllAuditLogs() {
+        int pageSize = 10000;
+        int pageNumber = 1;
+
+        List<AdherenceAuditLog> expectedAuditLogs = mock(List.class);
+        when(allAdherenceAuditLogs.allLogs(pageNumber - 1, pageSize)).thenReturn(expectedAuditLogs);
+
+        List<AdherenceAuditLog> auditLogs = adherenceAuditService.fetchAllAuditLogs(pageNumber);
+
+        assertEquals(expectedAuditLogs, auditLogs);
+        verify(allAdherenceAuditLogs).allLogs(pageNumber - 1, pageSize);
     }
 }

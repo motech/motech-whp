@@ -30,7 +30,7 @@ public class AdherenceAuditLogSeed {
         List<AdherenceAuditLog> adherenceAuditLogList;
         int pageNumber = 1;
         do{
-            adherenceAuditLogList = adherenceAuditService.allAuditLogs(pageNumber ++);
+            adherenceAuditLogList = adherenceAuditService.fetchAllAuditLogs(pageNumber++);
             reportAuditLogs(adherenceAuditLogList);
         } while(auditLogListIsNotEmpty(adherenceAuditLogList));
 

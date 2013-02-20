@@ -72,13 +72,13 @@ public class AdherenceDataExportServiceTest extends BaseUnitTest {
     public void shouldPageAuditLogSummaries() {
         int pageNo = 1;
         List<AdherenceAuditLog> auditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "raj", "tbId", DateUtil.now(), DateUtil.now(), "cmfAdmin", 1, PillStatus.Taken, "WEB"));
-        when(adherenceAuditService.allAuditLogs(1)).thenReturn(auditLogs);
+        when(adherenceAuditService.fetchAllAuditLogsInLastThreeMonths(1)).thenReturn(auditLogs);
 
         List<AdherenceLogSummary> adherenceAuditLogSummaries = adherenceDataExportService.adherenceAuditReport(pageNo);
 
         List<AdherenceLogSummary> expectedAuditLogSummaries = Arrays.asList(new AdherenceLogSummary("patient1", "tbId", this.now.toDate(), this.now.toDate(), "cmfAdmin", 1, Taken, "WEB", "raj"));
 
         assertEquals(expectedAuditLogSummaries, adherenceAuditLogSummaries);
-        verify(adherenceAuditService).allAuditLogs(pageNo);
+        verify(adherenceAuditService).fetchAllAuditLogsInLastThreeMonths(pageNo);
     }
 }

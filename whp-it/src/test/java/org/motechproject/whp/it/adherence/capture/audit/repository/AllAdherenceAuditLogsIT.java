@@ -78,6 +78,23 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
         assertThat(adherenceAuditLogList, not(hasItems(getLog(dailyAuditLog0))));
     }
 
+
+    @Test
+    public void shouldGetAllAdherenceLogs() {
+        setUpWeeklyAuditLogs();
+        setUpDailyAuditLogs();
+
+        List<AdherenceAuditLog> adherenceAuditLogList = allAdherenceAuditLogs.allLogs(0, 10);
+        assertThat(adherenceAuditLogList.size(), is(7));
+
+        List<AdherenceAuditLog> firstPageAdherenceAuditLogList = allAdherenceAuditLogs.allLogs(0, 4);
+        assertThat(firstPageAdherenceAuditLogList.size(), is(4));
+
+        List<AdherenceAuditLog> secondPageAdherenceAuditLogList = allAdherenceAuditLogs.allLogs(1, 4);
+        assertThat(secondPageAdherenceAuditLogList.size(), is(3));
+    }
+
+
     private AdherenceAuditLog getLog(DailyAdherenceAuditLog dailyAuditLog) {
         return new AdherenceAuditLog(dailyAuditLog.getPatientId(), dailyAuditLog.getProviderId(), dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(), dailyAuditLog.getSourceOfChange());
     }
