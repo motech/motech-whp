@@ -31,4 +31,10 @@ public class AdherenceAuditLog {
         this.pillStatus = pillStatus;
         this.sourceOfChange = sourceOfChange;
     }
+
+    public String getPillStatusName(){
+        if(pillStatus == null)
+            return null;
+        return pillStatus.name();
+    }
 }

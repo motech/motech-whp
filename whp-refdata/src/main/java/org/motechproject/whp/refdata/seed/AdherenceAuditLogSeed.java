@@ -53,7 +53,7 @@ public class AdherenceAuditLogSeed {
         adherenceAuditLogDTO.setDoseDate(toSqlDate(adherenceAuditLog.getDoseDate()));
         adherenceAuditLogDTO.setNumberOfDosesTaken(adherenceAuditLog.getNumberOfDosesTaken());
         adherenceAuditLogDTO.setPatientId(adherenceAuditLog.getPatientId());
-        adherenceAuditLogDTO.setPillStatus(adherenceAuditLog.getPillStatus().name());
+        adherenceAuditLogDTO.setPillStatus(adherenceAuditLog.getPillStatusName());
         adherenceAuditLogDTO.setProviderId(adherenceAuditLog.getProviderId());
         adherenceAuditLogDTO.setTbId(adherenceAuditLog.getTbId());
         adherenceAuditLogDTO.setUserId(adherenceAuditLog.getUserId());
