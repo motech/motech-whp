@@ -9,6 +9,7 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.util.StringUtil;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,4 +71,11 @@ public class WHPDateUtil {
             return null;
         return new java.sql.Date(dateTime.toDate().getTime());
     }
+
+    public static Timestamp toSqlTimestamp(DateTime dateTime) {
+        if(dateTime == null)
+            return null;
+        return new Timestamp(dateTime.toDate().getTime());
+    }
+
 }

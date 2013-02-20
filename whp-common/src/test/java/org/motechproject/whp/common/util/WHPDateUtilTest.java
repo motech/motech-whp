@@ -1,9 +1,13 @@
 package org.motechproject.whp.common.util;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -89,5 +93,19 @@ public class WHPDateUtilTest {
     @Test
     public void shouldReturnNumberOfMondaysBetweenGivenDates() {
         assertEquals(4, WHPDateUtil.numberOf_DDD_Between(new LocalDate(2012, 6, 29), new LocalDate(2012, 7, 25), DayOfWeek.Monday));
+    }
+
+    @Test
+    public void shouldConvertToSQLDate() {
+        DateTime now = DateUtil.now();
+        long currentTimeInMillis = now.getMillis();
+        assertEquals(new Date(currentTimeInMillis), WHPDateUtil.toSqlDate(now));
+    }
+
+    @Test
+    public void shouldConvertToSQLTimestamp() {
+        DateTime now = DateUtil.now();
+        long currentTimeInMillis = now.getMillis();
+        assertEquals(new Timestamp(currentTimeInMillis), WHPDateUtil.toSqlTimestamp(now));
     }
 }

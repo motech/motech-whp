@@ -16,7 +16,7 @@ public class AdherenceLogSummary {
 
     private String patientId;
     private String tbId;
-    private Date creationDate;
+    private Date creationDateTime;
     private Date doseDate;
     private String userId;
     private Integer numberOfDosesTaken;
@@ -27,7 +27,7 @@ public class AdherenceLogSummary {
     public AdherenceLogSummary(String patientId, String tbId, Date creationDate, Date doseDate, String userId, Integer numberOfDosesTaken, PillStatus pillStatus, String sourceOfChange, String providerId) {
         this.patientId = patientId;
         this.tbId = tbId;
-        this.creationDate = creationDate;
+        this.creationDateTime = creationDate;
         this.doseDate = doseDate;
         this.userId = userId;
         this.numberOfDosesTaken = numberOfDosesTaken;
@@ -56,8 +56,8 @@ public class AdherenceLogSummary {
     }
 
     @ExportValue(index = 3, column = "Log Creation Date", format = DATE_TIME_FORMAT)
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreationDateTime() {
+        return creationDateTime;
     }
 
     @ExportValue(index = 4, column = "Adherence Date", format = DATE_FORMAT)

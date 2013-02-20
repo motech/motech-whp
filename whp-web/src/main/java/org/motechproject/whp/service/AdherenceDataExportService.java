@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.motechproject.whp.common.util.WHPDateUtil.toSqlDate;
+
 @Service
 @ExcelDataSource(name = "adherence")
 public class AdherenceDataExportService {
@@ -44,9 +46,9 @@ public class AdherenceDataExportService {
             adherenceLogSummary.setPatientId(adherenceAuditLog.getPatientId());
             adherenceLogSummary.setProviderId(adherenceAuditLog.getProviderId());
             adherenceLogSummary.setTbId(adherenceAuditLog.getTbId());
-            adherenceLogSummary.setCreationDate(adherenceAuditLog.getCreationTime().toDate());
+            adherenceLogSummary.setCreationDateTime(toSqlDate(adherenceAuditLog.getCreationTime()));
             if(adherenceAuditLog.getDoseDate() != null)
-                adherenceLogSummary.setDoseDate(adherenceAuditLog.getDoseDate().toDate());
+                adherenceLogSummary.setDoseDate(toSqlDate(adherenceAuditLog.getDoseDate()));
             adherenceLogSummary.setUserId(adherenceAuditLog.getUserId());
             adherenceLogSummary.setNumberOfDosesTaken(adherenceAuditLog.getNumberOfDosesTaken());
             adherenceLogSummary.setPillStatus(adherenceAuditLog.getPillStatus());
