@@ -2,7 +2,6 @@ package org.motechproject.whp.it.patient.repository.allPatients;
 
 import ch.lambdaj.Lambda;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
@@ -193,8 +192,6 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertTrue(hasNoInactivePatients(searchResults));
     }
 
-    // ToDo: Fix the tests for Alert Severity
-    @Ignore
     @Test
     public void shouldFilterPatientsByPatientAlertsSeverity() {
         SortParams sortParams = new SortParams();
@@ -276,9 +273,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(0, allPatients.count(queryParams));
     }
 
-    // ToDo: Fix the tests for Alert Severity
-    @Ignore
-    @Test
+        @Test
     public void shouldFilterPatientsByAlertTypeAndDateCombinedAlongWithSeverity() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
