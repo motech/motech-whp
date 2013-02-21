@@ -11,6 +11,7 @@ import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.repository.AllProviders;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,6 +81,11 @@ public class HomeControllerTest {
     public void shouldRedirectToProvidersPendingAdherencePageForFieldStaff() {
         login(authenticatedUser(WHPRole.FIELD_STAFF));
         assertEquals("redirect:/providers/adherenceStatus", homeController.homePage(request, response));
+    }
+
+    @Test
+    public void should() {
+        System.out.println(new RedirectView("/hfgf").getUrl());
     }
 
     private void login(MotechUser authenticatedUser) {

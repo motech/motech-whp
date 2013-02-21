@@ -38,7 +38,12 @@ public class HomeController extends BaseWebController {
             }
             return "redirect:/patients/listByProvider";
         } else {
-            return "redirect:" + homePageService.homePageFor(userRoles).getHomePage();
+            try {
+                response.sendRedirect(request.getContextPath() + response.encodeURL(homePageService.homePageFor(userRoles).getHomePage()));
+            } catch (Exception e) {
+
+            }
+            return "";
         }
     }
 }
