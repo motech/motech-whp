@@ -67,4 +67,8 @@ public class AdherenceLogService {
     public ProviderIds providersWithAdherence(LocalDate from, LocalDate to) {
         return allAdherenceLogs.findProvidersWithAdherence(from, to);
     }
+
+    public List<AdherenceRecord> fetchAllAdherenceRecords(int pageNumber) {
+        return allAdherenceLogs.allLogs(pageNumber - 1, 10000);
+    }
 }

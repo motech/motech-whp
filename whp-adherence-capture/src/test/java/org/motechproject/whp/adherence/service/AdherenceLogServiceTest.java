@@ -1,6 +1,7 @@
 package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -75,4 +76,19 @@ public class AdherenceLogServiceTest {
         verify(adherenceRecordReportingService).report(adherenceRecord);
         verify(allAdherenceLogs).add(any(AdherenceLog.class));
     }
+
+    @Test
+    public void shouldFetchAllAuditLogs() {
+        int pageSize = 10000;
+        int pageNumber = 1;
+
+        List<AdherenceRecord> expectedAdherenceRecords = mock(List.class);
+        when(allAdherenceLogs.allLogs(pageNumber - 1, pageSize)).thenReturn(expectedAdherenceRecords);
+
+        List<AdherenceRecord> auditLogs = adherenceLogService.fetchAllAdherenceRecords(pageNumber);
+
+        Assert.assertEquals(expectedAdherenceRecords, auditLogs);
+        verify(allAdherenceLogs).allLogs(pageNumber - 1, pageSize);
+    }
+
 }
