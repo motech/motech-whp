@@ -1,6 +1,6 @@
 <ul class="nav nav-pills pull-left">
     <li>
-        <a id="show-patients" href="/whp/patients/list#?patient_listing-searchCriteria={}&patient_listing-sortCriteria={'AdherenceMissingAlertValue':'DESC'}"><i class="icon-user icon-white"></i> Patients</a>
+        <a id="show-patients" href="/whp/patients/list#?patient_listing-searchCriteria={}&patient_listing-sortCriteria={&quot;AdherenceMissingAlertValue&quot;:&quot;DESC&quot;}"><i class="icon-user icon-white"></i> Patients</a>
     </li>
 
     <li class="dropdown">

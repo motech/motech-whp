@@ -115,7 +115,7 @@
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
 
-                        <button id="clearFilter"  ng-click="resetFormFields()" type="reset" class="btn">Clear All</button>
+                        <button id="clearFilter"  ng-click="clearFormFieldsAndSearchCriteria()" type="reset" class="btn">Clear All</button>
                         <button type="submit" id="search" class="btn btn-primary">Search <i class="icon-search icon-white"></i></button>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
             <thead>
             <tr>
                 <th>Container Id</th>
-                <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
+                <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate', 'DESC')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
                 <th>Lab Name</th>
                 <th>Result 1</th>
                 <th>Date Of Test 1</th>

@@ -129,7 +129,7 @@
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
-                        <button id="clearFilter" ng-click="resetFormFields()" type="reset" class="btn "><i class="icon-remove"></i> Clear All
+                        <button id="clearFilter" ng-click="clearFormFieldsAndSearchCriteria()" type="reset" class="btn "><i class="icon-remove"></i> Clear All
                         </button>
                         <button type="submit" id="searchButton" class="btn btn-primary">
                             Search <i class="icon-search icon-white"></i>
@@ -143,7 +143,7 @@
 <div class="row-fluid">
     <div class="results">
         <div id="patients">
-            <@paginator.paginate id = "patient_listing" entity="patient_results" filterSectionId="patient_list_filter" contextRoot="/whp" rowsPerPage="2"  stylePath="/resources-${applicationVersion}/styles">
+            <@paginator.paginate id = "patient_listing" entity="patient_results" filterSectionId="patient_list_filter" contextRoot="/whp" rowsPerPage="5"  stylePath="/resources-${applicationVersion}/styles">
                 <table id="patientList" class="table table-striped table-bordered table-condensed"
                        redirectOnRowClick="true">
                     <thead>

@@ -10,6 +10,22 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         if (paramMap[$scope.pagination_id + "-searchCriteria"]) {
             $rootScope.searchCriteria = JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
         }
+        if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
+            $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
+
+            resetSortIconsOnAllColumns();
+            $.each($rootScope.sortCriteria, function(sortField, sortOrder) {
+                if (sortOrder == "DESC") {
+                    $("#sortIcon_" + sortField).removeClass("icon-minus");
+                    $("#sortIcon_" + sortField).removeClass('icon-arrow-up');
+                    $("#sortIcon_" + sortField).addClass('icon-arrow-down');
+                } else {
+                    $("#sortIcon_" + sortField).removeClass("icon-minus");
+                    $("#sortIcon_" + sortField).removeClass('icon-arrow-down');
+                    $("#sortIcon_" + sortField).addClass('icon-arrow-up');
+                }
+            });
+        }
 
         /*Initialize the search box*/
         for (key in $rootScope.searchCriteria) {
@@ -35,6 +51,18 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         $(formElement).find("select").each(function(index, element){
             $(element).val("");
         });
+    }
+
+    function resetSortIconsOnAllColumns() {
+        $("[id^=sortIcon]").each(function () {
+            $(this).removeClass("icon-arrow-up");
+            $(this).removeClass("icon-arrow-down");
+            $(this).addClass("icon-minus");
+        });
+    }
+
+    $scope.clearFormFieldsAndSearchCriteria = function() {
+        $scope.resetFormFields();
         $rootScope.searchCriteria = {};
     }
 
