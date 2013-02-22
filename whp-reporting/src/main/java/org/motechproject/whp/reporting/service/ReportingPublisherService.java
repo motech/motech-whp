@@ -5,6 +5,7 @@ import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.adherence.AdherenceRecordDTO;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
 import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ReportingPublisherService {
     }
 
     public void reportContainerRegistration(ContainerRegistrationReportingRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerRegistrationLogURL(), request);
+        httpClientService.post(reportingEventURLs.getContainerRegistrationURL(), request);
     }
 
     public void reportLabResultsCapture(SputumLabResultsCaptureReportingRequest request) {
@@ -86,5 +87,9 @@ public class ReportingPublisherService {
 
     public void reportAdherenceAuditLog(AdherenceAuditLogDTO adherenceAuditLogDTO) {
         httpClientService.post(reportingEventURLs.getAdherenceAuditLogURL(), adherenceAuditLogDTO);
+    }
+
+    public void reportAdherenceRecord(AdherenceRecordDTO adherenceRecordDTO) {
+        httpClientService.post(reportingEventURLs.getAdherenceRecordUpdateURL(), adherenceRecordDTO);
     }
 }

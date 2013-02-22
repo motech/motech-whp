@@ -195,7 +195,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     private void verifyReportingEventPublication(MotechUser testuser, Container container) {
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
     }
 
     @After

@@ -4,13 +4,16 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.adherence.contract.AdherenceRecord;
+import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.user.domain.ProviderIds;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 
@@ -18,13 +21,15 @@ public class AdherenceLogServiceTest {
 
     @Mock
     AllAdherenceLogs allAdherenceLogs;
+    @Mock
+    AdherenceRecordReportingService adherenceRecordReportingService;
 
     AdherenceLogService adherenceLogService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceLogService = new AdherenceLogService(allAdherenceLogs);
+        adherenceLogService = new AdherenceLogService(allAdherenceLogs, adherenceRecordReportingService);
     }
 
     @Test
@@ -58,5 +63,16 @@ public class AdherenceLogServiceTest {
 
         when(allAdherenceLogs.findProvidersWithAdherence(yesterday, today)).thenReturn(providersWithAdherenceRecords);
         assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherence(yesterday, today));
+    }
+
+    @Test
+    public void shouldSaveAndReportAdherenceRecords() {
+        AdherenceRecord adherenceRecord = mock(AdherenceRecord.class);
+        List<AdherenceRecord> adherenceRecords = asList(adherenceRecord);
+
+        adherenceLogService.saveOrUpdateAdherence(adherenceRecords);
+
+        verify(adherenceRecordReportingService).report(adherenceRecord);
+        verify(allAdherenceLogs).add(any(AdherenceLog.class));
     }
 }

@@ -8,6 +8,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.reporting.ReportingEventURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.adherence.AdherenceRecordDTO;
 import org.motechproject.whp.reports.contract.patient.PatientDTO;
 import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 
@@ -83,7 +84,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishContainerRegistrationLog() throws Exception {
         String url = "url";
-        when(reportingEventURLs.getContainerRegistrationLogURL()).thenReturn(url);
+        when(reportingEventURLs.getContainerRegistrationURL()).thenReturn(url);
 
         ContainerRegistrationReportingRequest sputumTrackingRequest = new ContainerRegistrationReportingRequest();
 
@@ -201,4 +202,16 @@ public class ReportingPublisherServiceTest {
         reportingPublisher.reportAdherenceAuditLog(adherenceAuditLogDTO);
         verify(httpClientService).post(url, adherenceAuditLogDTO);
     }
+
+    @Test
+    public void shouldPublishAdherenceRecord() {
+        String url = "url";
+        when(reportingEventURLs.getAdherenceRecordUpdateURL()).thenReturn(url);
+
+        AdherenceRecordDTO adherenceRecordDTO = new AdherenceRecordDTO();
+
+        reportingPublisher.reportAdherenceRecord(adherenceRecordDTO);
+        verify(httpClientService).post(url, adherenceRecordDTO);
+    }
+
 }

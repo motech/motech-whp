@@ -15,10 +15,12 @@ import java.util.List;
 public class AdherenceLogService {
 
     private AllAdherenceLogs allAdherenceLogs;
+    private AdherenceRecordReportingService adherenceRecordReportingService;
 
     @Autowired
-    public AdherenceLogService(AllAdherenceLogs allAdherenceLogs) {
+    public AdherenceLogService(AllAdherenceLogs allAdherenceLogs, AdherenceRecordReportingService adherenceRecordReportingService) {
         this.allAdherenceLogs = allAdherenceLogs;
+        this.adherenceRecordReportingService = adherenceRecordReportingService;
     }
 
     public void saveOrUpdateAdherence(List<AdherenceRecord> record) {
@@ -29,6 +31,7 @@ public class AdherenceLogService {
             adherenceLog.providerId(adherenceRecord.providerId());
             adherenceLog.district(adherenceRecord.district());
             allAdherenceLogs.add(adherenceLog);
+            adherenceRecordReportingService.report(adherenceRecord);
         }
     }
 

@@ -38,8 +38,8 @@ public class ReportingEventURLsIT {
     }
 
     @Test
-    public void shouldGetContainerRegistrationLogMeasureURL() {
-        assertThat(reportingEventURLs.getContainerRegistrationLogURL(), is("http://127.0.0.1:9999/whp-reports/sputumTracking/containerRegistrationMeasure"));
+    public void shouldGetContainerRegistrationMeasureURL() {
+        assertThat(reportingEventURLs.getContainerRegistrationURL(), is("http://127.0.0.1:9999/whp-reports/sputumTracking/containerRegistrationMeasure"));
     }
 
     @Test
@@ -95,5 +95,10 @@ public class ReportingEventURLsIT {
     @Test
     public void shouldGetAdherenceAuditLogURL() {
         assertThat(reportingEventURLs.getAdherenceAuditLogURL(), is("http://127.0.0.1:9999/whp-reports/adherence/auditlog"));
+    }
+
+    @Test
+    public void shouldGetAdherenceRecordUpdateURL() {
+        assertThat(reportingEventURLs.getAdherenceRecordUpdateURL(), is("http://127.0.0.1:9999/whp-reports/adherence/record"));
     }
 }

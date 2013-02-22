@@ -145,7 +145,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 .withSubmitterRole(WHPRole.PROVIDER.name())
                 .withCallId("64756435684375")
                 .build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
     }
 
     @After

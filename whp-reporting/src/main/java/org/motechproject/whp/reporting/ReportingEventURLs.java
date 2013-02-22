@@ -1,10 +1,12 @@
 package org.motechproject.whp.reporting;
 
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Getter
 public class ReportingEventURLs {
 
     private String whpReportsURL;
@@ -24,70 +26,7 @@ public class ReportingEventURLs {
     private String patientUpdateURL;
     private String providerUpdateURL;
     private String adherenceAuditLogURL;
-
-    public String getAdherencePath() {
-        return adherencePath;
-    }
-
-    public String getCallLogURL() {
-        return callLogURL;
-    }
-
-    public String getCallStatusURL() {
-        return callStatusURL;
-    }
-
-    public String getFlashingLogURL() {
-        return flashingLogURL;
-    }
-
-    public String getContainerRegistrationLogURL() {
-        return containerRegistrationURL;
-    }
-
-    public String getSputumLabResultsCaptureLogURL() {
-        return sputumLabResultsCaptureLogURL;
-    }
-
-    public String getContainerStatusUpdateLogURL() {
-        return containerStatusUpdateLogURL;
-    }
-
-    public String getContainerPatientMappingLogURL() {
-        return containerPatientMappingLogURL;
-    }
-
-    public String getContainerRegistrationCallDetailsLogURL() {
-        return containerRegistrationCallDetailsLogURL;
-    }
-
-    public String getProviderVerificationLogURL() {
-        return providerVerificationLogURL;
-    }
-
-    public String getContainerVerificationLogURL() {
-        return containerVerificationLogURL;
-    }
-
-    public String getProviderReminderCallLogURL() {
-        return providerReminderCallLogURL;
-    }
-
-    public String getAdherenceSubmissionURL() {
-        return adherenceSubmissionURL;
-    }
-
-    public String getPatientUpdateURL() {
-        return patientUpdateURL;
-    }
-
-    public String getProviderUpdateURL() {
-        return providerUpdateURL;
-    }
-
-    public String getAdherenceAuditLogURL() {
-        return adherenceAuditLogURL;
-    }
+    private String adherenceRecordUpdateURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -172,6 +111,11 @@ public class ReportingEventURLs {
     @Value("${whp.reports.adherence.auditLog}")
     public void setAdherenceAuditLogURL(String adherenceAuditLogURL) {
         this.adherenceAuditLogURL = adherenceAuditLogURL;
+    }
+
+    @Value("${whp.reports.adherence.record}")
+    public void setAdherenceRecordUpdateURL(String adherenceRecordUpdateURL) {
+        this.adherenceRecordUpdateURL = adherenceRecordUpdateURL;
     }
 
 }

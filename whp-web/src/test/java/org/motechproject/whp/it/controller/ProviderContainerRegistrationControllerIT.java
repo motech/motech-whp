@@ -137,7 +137,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
 
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).withSubmitterRole(WHPRole.PROVIDER.name()).withSubmitterId(providerId).registeredThrough(ChannelId.WEB.name()).build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationLogURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
 
         markForDeletion(container);
     }

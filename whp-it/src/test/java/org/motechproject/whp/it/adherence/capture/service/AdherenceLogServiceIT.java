@@ -3,7 +3,6 @@ package org.motechproject.whp.it.adherence.capture.service;
 import junit.framework.Assert;
 import org.joda.time.LocalDate;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AdherenceLogServiceIT extends SpringIntegrationTest {
@@ -27,13 +25,8 @@ public class AdherenceLogServiceIT extends SpringIntegrationTest {
     @Autowired
     AllAdherenceLogs allAdherenceLogs;
 
+    @Autowired
     AdherenceLogService adherenceLogService;
-
-    @Before
-    public void setUp() {
-        initMocks(this);
-        adherenceLogService = new AdherenceLogService(allAdherenceLogs);
-    }
 
     @After
     public void tearDown() {
