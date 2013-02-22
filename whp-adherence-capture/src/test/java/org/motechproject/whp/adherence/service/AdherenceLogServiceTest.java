@@ -78,6 +78,16 @@ public class AdherenceLogServiceTest {
     }
 
     @Test
+    public void shouldPublishToReportingOnAddOrUpdateLogsByDoseDate() {
+        AdherenceRecord adherenceRecord = mock(AdherenceRecord.class);
+        List<AdherenceRecord> adherenceRecords = asList(adherenceRecord);
+
+        adherenceLogService.addOrUpdateLogsByDoseDate(adherenceRecords, "externalId");
+
+        verify(adherenceRecordReportingService).report(adherenceRecord);
+    }
+
+    @Test
     public void shouldFetchAllAuditLogs() {
         int pageSize = 10000;
         int pageNumber = 1;

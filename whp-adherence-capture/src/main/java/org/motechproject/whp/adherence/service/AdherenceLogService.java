@@ -47,9 +47,12 @@ public class AdherenceLogService {
         return allAdherenceLogs.findLogsInRange(externalId, treatmentId, startDate, endDate);
     }
 
-    public void addOrUpdateLogsByDoseDate(List<AdherenceRecord> adherenceRecord, String externalId) {
-        List<AdherenceLog> adherenceLogs = new AdherenceLogMapper().map(adherenceRecord);
+    public void addOrUpdateLogsByDoseDate(List<AdherenceRecord> adherenceRecords, String externalId) {
+        List<AdherenceLog> adherenceLogs = new AdherenceLogMapper().map(adherenceRecords);
         allAdherenceLogs.addOrUpdateLogsForExternalIdByDoseDate(adherenceLogs, externalId);
+        for (AdherenceRecord adherenceRecord : adherenceRecords) {
+            adherenceRecordReportingService.report(adherenceRecord);
+        }
     }
 
     public int countOfDosesTakenBetween(String patientId, String treatmentId, LocalDate from, LocalDate to) {
