@@ -51,6 +51,7 @@
     <import resource="classpath*:applicationContext-case.xml"/>
     <import resource="classpath*:applicationProviderReminderContext.xml"/>
     <import resource="classpath*:applicationWgnOutboundContext.xml"/>
+    <import resource="classpath*:applicationEventLogging.xml"/>
 
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
