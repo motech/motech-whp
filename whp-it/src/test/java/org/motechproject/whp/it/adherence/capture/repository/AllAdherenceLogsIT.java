@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
+import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.it.SpringIntegrationTest;
 import org.motechproject.whp.user.domain.ProviderIds;
@@ -347,6 +348,21 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         addAll(adherenceLogs);
 
         assertEquals(providersWithAdherence, allAdherenceLogs.findProvidersWithAdherence(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
+    }
+
+    @Test
+    public void shouldReturnLogsForGivenPages() {
+        LocalDate today = DateUtil.today();
+
+        AdherenceLog log1 = createAdherenceLogWithGivenStatus(today);
+        AdherenceLog log2 = createAdherenceLogWithGivenStatus(today.minusDays(5));
+        AdherenceLog log3 = createAdherenceLogWithGivenStatus(today.minusDays(10));
+
+        addAll(log1, log2, log3);
+
+        assertEquals(asList(log3, log2), new AdherenceLogMapper().map(allAdherenceLogs.allLogs(0, 2)));
+        assertEquals(asList(log3, log2, log1), new AdherenceLogMapper().map(allAdherenceLogs.allLogs(0, 4)));
+        assertEquals(asList(log1), new AdherenceLogMapper().map(allAdherenceLogs.allLogs(1, 2)));
     }
 
     private AdherenceLog createAdherenceLog() {

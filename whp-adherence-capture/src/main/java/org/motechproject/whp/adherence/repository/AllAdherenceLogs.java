@@ -62,10 +62,14 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return singleResult(db.queryView(q, AdherenceLog.class));
     }
 
-    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog' && doc.status !== 0 ) {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
     public List<AdherenceRecord> findLogsInRange(LocalDate startDate, LocalDate endDate, int pageNumber, int pageSize) {
-        ViewQuery q = createQuery("by_dosageDate").startKey(startDate).endKey(endDate).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
+        ViewQuery q = createQuery(viewForAdherenceLogsByDoseDate()).startKey(startDate).endKey(endDate).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
+    }
+
+    @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog' && doc.status !== 0 ) {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
+    public String viewForAdherenceLogsByDoseDate(){
+        return "by_dosageDate";
     }
 
     @View(name = "by_dateRangeExternalIdAndTherapy", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId, doc.treatmentId, doc.doseDate], {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
@@ -194,4 +198,8 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return new ArrayList<>(ids);
     }
 
+    public List<AdherenceRecord> allLogs(int pageNumber, int pageSize) {
+        ViewQuery q = createQuery(viewForAdherenceLogsByDoseDate()).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
+        return db.queryView(q, AdherenceRecord.class);
+    }
 }
