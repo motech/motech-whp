@@ -4,10 +4,14 @@ import lombok.Data;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
+import java.io.Serializable;
+
 import static org.motechproject.util.DateUtil.today;
 
 @Data
-public class PatientAlert {
+public class PatientAlert implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int value;
     private LocalDate alertDate;
     private PatientAlertType alertType;

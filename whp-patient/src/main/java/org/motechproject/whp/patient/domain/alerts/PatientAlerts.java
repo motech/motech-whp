@@ -3,15 +3,15 @@ package org.motechproject.whp.patient.domain.alerts;
 import lombok.Data;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.TreatmentNotStarted;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.*;
 
 @Data
-public class PatientAlerts {
+public class PatientAlerts implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Map<PatientAlertType, PatientAlert> alerts = new HashMap<>();
 
