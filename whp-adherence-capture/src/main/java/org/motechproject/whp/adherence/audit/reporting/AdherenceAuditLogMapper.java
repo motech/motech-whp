@@ -3,6 +3,7 @@ package org.motechproject.whp.adherence.audit.reporting;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
 import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.enums.YesNo;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -27,6 +28,7 @@ public class AdherenceAuditLogMapper {
         adherenceAuditLogDTO.setPillStatus(null);
 
         adherenceAuditLogDTO.setChannel(auditLog.getSourceOfChange());
+        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.Yes.name());
 
         return adherenceAuditLogDTO;
     }
@@ -44,6 +46,7 @@ public class AdherenceAuditLogMapper {
 
         adherenceAuditLogDTO.setPillStatus(dailyAdherenceAuditLog.getPillStatus().name());
         adherenceAuditLogDTO.setChannel(dailyAdherenceAuditLog.getSourceOfChange());
+        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.No.name());
 
         return adherenceAuditLogDTO;
     }

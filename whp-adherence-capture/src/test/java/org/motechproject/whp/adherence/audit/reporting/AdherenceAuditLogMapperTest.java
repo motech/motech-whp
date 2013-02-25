@@ -9,6 +9,7 @@ import org.motechproject.whp.adherence.audit.domain.DailyAdherenceAuditLog;
 import org.motechproject.whp.adherence.domain.PillStatus;
 import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.enums.YesNo;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -38,6 +39,7 @@ public class AdherenceAuditLogMapperTest {
         assertThat(adherenceAuditLogDTO.getPatientId(), is(auditLog.getPatientId()));
         assertThat(adherenceAuditLogDTO.getProviderId(), is(auditLog.getProviderId()));
         assertThat(adherenceAuditLogDTO.getUserId(), is(auditLog.getUser()));
+        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.Yes.name()));
     }
 
 
@@ -56,6 +58,7 @@ public class AdherenceAuditLogMapperTest {
         assertThat(adherenceAuditLogDTO.getUserId(), is(dailyAdherenceAuditLog.getUser()));
         assertThat(adherenceAuditLogDTO.getPillStatus(), is(dailyAdherenceAuditLog.getPillStatus().name()));
         assertThat(adherenceAuditLogDTO.getDoseDate(), is(WHPDateUtil.toSqlDate(dailyAdherenceAuditLog.getPillDate())));
+        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.No.name()));
     }
 }
 

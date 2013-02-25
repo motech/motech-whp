@@ -10,7 +10,7 @@
                 <a href="/whp/reports/adherence/adherenceReport.xls">All adherence data</a>
             </li>
             <li>
-                <a href="/whp/reports/adherence/adherenceAuditReport.xls">All adherence audit data</a>
+                <a href="${whpReportsURL}/auditreports/adherenceAuditLogReport.xls">All adherence audit data</a>
             </li>
             <li>
                 <a href="/whp/patientreports/filter">Patient Reports</a>
