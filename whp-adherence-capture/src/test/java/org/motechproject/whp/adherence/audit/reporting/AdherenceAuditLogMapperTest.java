@@ -39,7 +39,7 @@ public class AdherenceAuditLogMapperTest {
         assertThat(adherenceAuditLogDTO.getPatientId(), is(auditLog.getPatientId()));
         assertThat(adherenceAuditLogDTO.getProviderId(), is(auditLog.getProviderId()));
         assertThat(adherenceAuditLogDTO.getUserId(), is(auditLog.getUser()));
-        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.Yes.name()));
+        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.Yes.code()));
     }
 
 
@@ -58,7 +58,7 @@ public class AdherenceAuditLogMapperTest {
         assertThat(adherenceAuditLogDTO.getUserId(), is(dailyAdherenceAuditLog.getUser()));
         assertThat(adherenceAuditLogDTO.getPillStatus(), is(dailyAdherenceAuditLog.getPillStatus().name()));
         assertThat(adherenceAuditLogDTO.getDoseDate(), is(WHPDateUtil.toSqlDate(dailyAdherenceAuditLog.getPillDate())));
-        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.No.name()));
+        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.No.code()));
     }
 }
 

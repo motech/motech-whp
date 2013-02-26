@@ -66,6 +66,6 @@ public class AdherenceAuditLogSeed {
 
     private String isGivenByProvider(AdherenceAuditLog adherenceAuditLog) {
         return adherenceAuditLog.getProviderId().equals(adherenceAuditLog.getUserId()) ?
-                YesNo.Yes.name() : YesNo.No.name();
+                YesNo.Yes.code() : YesNo.No.code();
     }
 }

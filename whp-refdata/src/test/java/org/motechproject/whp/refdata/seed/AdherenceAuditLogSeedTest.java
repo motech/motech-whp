@@ -55,8 +55,8 @@ public class AdherenceAuditLogSeedTest {
         assertEquals(adherenceAuditLogByCmfAdmin.getProviderId(), adherenceAuditLogDTO1.getProviderId());
         assertEquals(adherenceAuditLogByCmfAdmin.getSourceOfChange(), adherenceAuditLogDTO1.getChannel());
         assertEquals(adherenceAuditLogByCmfAdmin.getUserId(), adherenceAuditLogDTO1.getUserId());
-        assertThat(adherenceAuditLogDTO1.getIsGivenByProvider(), is(YesNo.No.name()));
-        assertThat(adherenceAuditLogDTO2.getIsGivenByProvider(), is(YesNo.Yes.name()));
+        assertThat(adherenceAuditLogDTO1.getIsGivenByProvider(), is(YesNo.No.code()));
+        assertThat(adherenceAuditLogDTO2.getIsGivenByProvider(), is(YesNo.Yes.code()));
     }
 
     @Test

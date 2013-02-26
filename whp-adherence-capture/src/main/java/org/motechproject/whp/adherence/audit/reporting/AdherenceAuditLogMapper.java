@@ -28,7 +28,7 @@ public class AdherenceAuditLogMapper {
         adherenceAuditLogDTO.setPillStatus(null);
 
         adherenceAuditLogDTO.setChannel(auditLog.getSourceOfChange());
-        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.Yes.name());
+        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.Yes.code());
 
         return adherenceAuditLogDTO;
     }
@@ -46,7 +46,7 @@ public class AdherenceAuditLogMapper {
 
         adherenceAuditLogDTO.setPillStatus(dailyAdherenceAuditLog.getPillStatus().name());
         adherenceAuditLogDTO.setChannel(dailyAdherenceAuditLog.getSourceOfChange());
-        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.No.name());
+        adherenceAuditLogDTO.setIsGivenByProvider(YesNo.No.code());
 
         return adherenceAuditLogDTO;
     }
