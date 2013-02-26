@@ -104,6 +104,6 @@ public class ReportingApplicationURLsIT {
 
     @Test
     public void shouldGetProviderAdherenceStatusURL() {
-        assertThat(reportingApplicationURLs.getProviderAdherenceStatusByDistrictURL(), is("http://127.0.0.1:9999/whp-reports/providerAdherenceSummary"));
+        assertThat(reportingApplicationURLs.getProviderAdherenceStatusByDistrictURL(), is("http://127.0.0.1:9999/whp-reports/providerAdherenceSummary/{district}"));
     }
 }
