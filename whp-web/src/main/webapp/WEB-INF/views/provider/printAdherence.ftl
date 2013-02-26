@@ -20,34 +20,38 @@
                         <th class="smaller-column">Mobile Number 1</th>
                         <th class="smaller-column">Mobile Number 2</th>
                         <th class="smaller-column">Mobile Number 3</th>
+                        <th class="smaller-column">Adherence Missing Weeks Since 8 Weeks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <#if providersPendingAdherence?size == 0>
-                        <tr>
-                            <td style="text-align: center" colspan="5">
-                                No providers with pending adherence
-                            </td>
-                        </tr>
-                    <#else>
-                        <#list providersPendingAdherence as provider>
-                            <tr>
-                                <td  class="smallest-column">&#10008;</td>
-                                <td  class="providerId">
-                                    ${provider.providerId}
-                                </td>
-                                <td class="smaller-column">
-                                    ${provider.primaryMobile}
-                                </td>
-                                <td class="smaller-column">
-                                    <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
-                                </td>
-                                <td class="smaller-column">
-                                    <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
-                                </td>
-                            </tr>
-                        </#list>
-                    </#if>
+                <#if providerAdherenceStatuses.pendingAdherenceSummaryList?size == 0>
+                <tr class="provider-row">
+                    <td class="warning" style="text-align: center" colspan="5">
+                        No providers with pending adherence
+                    </td>
+                </tr>
+                <#else>
+                    <#list providerAdherenceStatuses.pendingAdherenceSummaryList as providerSummary>
+                    <tr class="provider-row adherence-status-row not-reported">
+                        <td class="adherenceNotCaptured smallest-column">&#10008;</td>
+                        <td class="providerId">
+                        ${providerSummary.providerId}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.primaryMobile}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.secondaryMobile!}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.tertiaryMobile!}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.adherenceMissingWeeks}
+                        </td>
+                    </tr>
+                    </#list>
+                </#if>
                 </tbody>
             </table>
         </div>
@@ -63,34 +67,38 @@
                         <th class="smaller-column">Mobile Number 1</th>
                         <th class="smaller-column">Mobile Number 2</th>
                         <th class="smaller-column">Mobile Number 3</th>
+                        <th class="smaller-column">Adherence Missing Weeks Since 8 Weeks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <#if providersWithAdherence?size == 0>
-                        <tr>
-                            <td style="text-align: center" colspan="5">
-                                No providers with adherence
-                            </td>
-                        </tr>
-                    <#else>
-                        <#list providersWithAdherence as provider>
-                            <tr>
-                                <td class="smallest-column">&#10004;</td>
-                                <td class="providerId">
-                                    ${provider.providerId}
-                                </td>
-                                <td class="smaller-column">
-                                    ${provider.primaryMobile}
-                                </td>
-                                <td class="smaller-column">
-                                    <#if provider.secondaryMobile?exists> ${provider.secondaryMobile}</#if>
-                                </td>
-                                <td class="smaller-column">
-                                    <#if provider.tertiaryMobile?exists> ${provider.tertiaryMobile}</#if>
-                                </td>
-                            </tr>
-                        </#list>
-                    </#if>
+                <#if providerAdherenceStatuses.adherenceGivenSummaryList?size == 0>
+                <tr class="provider-row">
+                    <td class="warning" style="text-align: center" colspan="5">
+                        No providers with adherence
+                    </td>
+                </tr>
+                <#else>
+                    <#list providerAdherenceStatuses.adherenceGivenSummaryList as providerSummary>
+                    <tr class="provider-row adherence-status-row reported">
+                        <td class="adherenceCaptured  smallest-column">&#10004;</td>
+                        <td class="providerId">
+                        ${providerSummary.providerId}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.primaryMobile}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.secondaryMobile!}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.tertiaryMobile!}
+                        </td>
+                        <td class="smaller-column">
+                        ${providerSummary.adherenceMissingWeeks}
+                        </td>
+                    </tr>
+                    </#list>
+                </#if>
                 </tbody>
             </table>
         </div>

@@ -1,7 +1,7 @@
 package org.motechproject.whp.reporting.service;
 
 import org.motechproject.whp.reporting.ReportingApplicationURLs;
-import org.motechproject.whp.reports.contract.adherence.ProviderAdherenceSummaries;
+import org.motechproject.whp.reporting.domain.ProviderAdherenceSummaries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
