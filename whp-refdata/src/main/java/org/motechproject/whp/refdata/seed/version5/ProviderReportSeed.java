@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.refdata.seed.version5;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.user.domain.Provider;
@@ -21,7 +21,7 @@ public class ProviderReportSeed {
         this.providerReportingService = providerReportingService;
     }
 
-    @Seed(version = "5.0", priority = 0)
+    @Seed(version = "5.0", priority = 4)
     public void migrateProviders() {
         List<Provider> providerList = providerService.getAll();
         for(Provider provider : providerList) {

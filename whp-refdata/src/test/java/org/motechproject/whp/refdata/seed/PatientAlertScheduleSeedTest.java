@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.seed.version5.PatientAlertScheduleSeed;
 
 import java.util.List;
 

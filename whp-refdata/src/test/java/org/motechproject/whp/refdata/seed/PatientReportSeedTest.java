@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.reporting.PatientReportingService;
 import org.motechproject.whp.patient.service.PatientService;
+import org.motechproject.whp.refdata.seed.version5.PatientReportSeed;
 
 import java.util.List;
 

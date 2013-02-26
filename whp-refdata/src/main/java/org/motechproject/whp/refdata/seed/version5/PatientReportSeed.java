@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.refdata.seed.version5;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.patient.domain.Patient;
@@ -21,7 +21,7 @@ public class PatientReportSeed {
         this.patientReportingService = patientReportingService;
     }
 
-    @Seed(priority = 0, version = "5.0")
+    @Seed(priority = 3, version = "5.0")
     public void migratePatients() {
         List<Patient> patientList = patientService.getAll();
         for (Patient patient : patientList){

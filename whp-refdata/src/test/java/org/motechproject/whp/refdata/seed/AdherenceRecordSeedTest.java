@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.service.AdherenceLogService;
 import org.motechproject.whp.adherence.service.AdherenceRecordReportingService;
+import org.motechproject.whp.refdata.seed.version5.AdherenceRecordSeed;
 
 import java.util.List;
 

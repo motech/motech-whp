@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.refdata.seed.version5;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
@@ -20,7 +20,7 @@ public class AdherenceRecordSeed {
         this.adherenceRecordReportingService = adherenceRecordReportingService;
     }
 
-    @Seed(priority = 0, version = "5.0")
+    @Seed(priority = 1, version = "5.0")
     public void reportAdherenceRecords() {
         List<AdherenceRecord> adherenceRecords;
 

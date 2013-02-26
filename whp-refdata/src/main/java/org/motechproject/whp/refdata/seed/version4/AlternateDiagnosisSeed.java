@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.refdata.seed.version4;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;

@@ -1,4 +1,4 @@
-package org.motechproject.whp.refdata.seed;
+package org.motechproject.whp.refdata.seed.version5;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
@@ -20,7 +20,7 @@ public class PatientAlertScheduleSeed {
         this.patientService = patientService;
     }
 
-    @Seed(priority = 0, version = "5.0")
+    @Seed(priority = 2, version = "5.0")
     public void scheduleActivePatients() {
         List<String> allActivePatientIds = patientService.getAllActivePatientIds();
 

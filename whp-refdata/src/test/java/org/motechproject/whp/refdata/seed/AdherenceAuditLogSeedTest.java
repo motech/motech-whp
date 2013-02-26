@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
+import org.motechproject.whp.refdata.seed.version5.AdherenceAuditLogSeed;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.motechproject.whp.reports.contract.enums.YesNo;
