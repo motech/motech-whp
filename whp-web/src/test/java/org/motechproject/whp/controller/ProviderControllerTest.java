@@ -1,18 +1,13 @@
 package org.motechproject.whp.controller;
 
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.security.authentication.LoginSuccessHandler;
-import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.testing.utils.BaseUnitTest;
-import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.repository.AllDistricts;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.ui.Model;
@@ -20,7 +15,6 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
@@ -40,8 +34,6 @@ public class ProviderControllerTest extends BaseUnitTest {
 
     @Mock
     private ProviderService providerService;
-    @Mock
-    private AdherenceSubmissionService adherenceSubmissionService;
     @Mock
     private AllDistricts allDistricts;
 
@@ -84,7 +76,7 @@ public class ProviderControllerTest extends BaseUnitTest {
         when(allDistricts.getAll()).thenReturn(districts);
 
 
-        providerController = new ProviderController(providerService, adherenceSubmissionService, allDistricts, reportsUrl);
+        providerController = new ProviderController(providerService, allDistricts, reportsUrl);
     }
 
     @Test
@@ -104,52 +96,6 @@ public class ProviderControllerTest extends BaseUnitTest {
     }
 
     @Test
-    public void shouldShowAdherenceStatus() throws Exception {
-        List<Provider> providersWithoutAdherence = asList(new ProviderBuilder().withProviderId("providerId1").build());
-        List<Provider> providersWithAdherence = asList(new ProviderBuilder().withProviderId("providerId2").build());
-
-        String loggedInDistrict = "Patna";
-        LocalDate today = new LocalDate(2012, 12, 3);
-        mockCurrentDate(today);
-
-        when(adherenceSubmissionService.providersPendingAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithoutAdherence);
-        when(adherenceSubmissionService.providersWithAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithAdherence);
-
-        loginAsDistrict(loggedInDistrict);
-        standaloneSetup(providerController).build()
-                .perform(get("/providers/adherenceStatus/").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, "26/11/2012"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "02/12/2012"))
-                .andExpect(view().name("provider/adherence"));
-    }
-
-    @Test
-    public void shouldPrintAdherenceStatus() throws Exception {
-        List<Provider> providersWithoutAdherence = asList(new ProviderBuilder().withProviderId("providerId1").build());
-        List<Provider> providersWithAdherence = asList(new ProviderBuilder().withProviderId("providerId2").build());
-
-        String loggedInDistrict = "Patna";
-        LocalDate today = new LocalDate(2012, 12, 3);
-        mockCurrentDate(today);
-
-        when(adherenceSubmissionService.providersPendingAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithoutAdherence);
-        when(adherenceSubmissionService.providersWithAdherence(eq(loggedInDistrict), any(LocalDate.class), any(LocalDate.class))).thenReturn(providersWithAdherence);
-
-        loginAsDistrict(loggedInDistrict);
-        standaloneSetup(providerController).build()
-                .perform(get("/providers/adherenceStatus/print").sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, loginAsDistrict(loggedInDistrict)))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_PENDING_ADHERENCE, providersWithoutAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDER_LIST_WITH_ADHERENCE, providersWithAdherence))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_FROM, "26/11/2012"))
-                .andExpect(model().attribute(ProviderController.PROVIDED_ADHERENCE_TO, "02/12/2012"))
-                .andExpect(view().name("provider/printAdherence"));
-    }
-
-    @Test
     public void shouldFetchAllProvidersForDistrict() throws Exception {
         List<Provider> providers = emptyList();
         when(providerService.fetchBy("Begusarai")).thenReturn(providers);
@@ -161,9 +107,5 @@ public class ProviderControllerTest extends BaseUnitTest {
                 .andExpect(model().attribute("providerList", providers))
                 .andExpect(model().attribute("reportsURL", reportsUrl))
                 .andExpect(view().name("provider/listByDistrict"));
-    }
-
-    private MotechUser loginAsDistrict(String loggedInDistrict) {
-        return new MotechUser(new MotechWebUser(loggedInDistrict, "password", loggedInDistrict, Collections.<String>emptyList()));
     }
 }
