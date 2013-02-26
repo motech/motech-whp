@@ -5,6 +5,7 @@ import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.enums.YesNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,13 @@ public class AdherenceAuditLogSeed {
         adherenceAuditLogDTO.setTbId(adherenceAuditLog.getTbId());
         adherenceAuditLogDTO.setUserId(adherenceAuditLog.getUserId());
         adherenceAuditLogDTO.setChannel(adherenceAuditLog.getSourceOfChange());
+        adherenceAuditLogDTO.setIsGivenByProvider(isGivenByProvider(adherenceAuditLog));
 
         return adherenceAuditLogDTO;
+    }
+
+    private String isGivenByProvider(AdherenceAuditLog adherenceAuditLog) {
+        return adherenceAuditLog.getProviderId().equals(adherenceAuditLog.getUserId()) ?
+                YesNo.Yes.name() : YesNo.No.name();
     }
 }

@@ -7,12 +7,15 @@ import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
+import org.motechproject.whp.reports.contract.enums.YesNo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -37,19 +40,23 @@ public class AdherenceAuditLogSeedTest {
 
     @Test
     public void shouldMapAdherenceLogSummaryToReportingRequest() {
-        AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now(), now(), "cmfAdmin", 1, Taken, "WEB");
+        AdherenceAuditLog adherenceAuditLogByCmfAdmin = new AdherenceAuditLog("patient1", "raj", "tbId", now(), now(), "cmfAdmin", null, Taken, "WEB");
+        AdherenceAuditLog adherenceAuditLogByProvider = new AdherenceAuditLog("patient1", "raj", "tbId", now(), now(), "raj", 1, Taken, "WEB");
 
-        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogSeed.mapToReportingRequest(adherenceAuditLog);
+        AdherenceAuditLogDTO adherenceAuditLogDTO1 = adherenceAuditLogSeed.mapToReportingRequest(adherenceAuditLogByCmfAdmin);
+        AdherenceAuditLogDTO adherenceAuditLogDTO2 = adherenceAuditLogSeed.mapToReportingRequest(adherenceAuditLogByProvider);
 
-        assertEquals(adherenceAuditLog.getTbId(), adherenceAuditLogDTO.getTbId());
-        assertEquals(toSqlDate(adherenceAuditLog.getDoseDate()), adherenceAuditLogDTO.getDoseDate());
-        assertEquals(toSqlTimestamp(adherenceAuditLog.getCreationTime()), adherenceAuditLogDTO.getCreationTime());
-        assertEquals(adherenceAuditLog.getNumberOfDosesTaken(), adherenceAuditLogDTO.getNumberOfDosesTaken());
-        assertEquals(adherenceAuditLog.getPatientId(), adherenceAuditLogDTO.getPatientId());
-        assertEquals(adherenceAuditLog.getPillStatus().name(), adherenceAuditLogDTO.getPillStatus());
-        assertEquals(adherenceAuditLog.getProviderId(), adherenceAuditLogDTO.getProviderId());
-        assertEquals(adherenceAuditLog.getSourceOfChange(), adherenceAuditLogDTO.getChannel());
-        assertEquals(adherenceAuditLog.getUserId(), adherenceAuditLogDTO.getUserId());
+        assertEquals(adherenceAuditLogByCmfAdmin.getTbId(), adherenceAuditLogDTO1.getTbId());
+        assertEquals(toSqlDate(adherenceAuditLogByCmfAdmin.getDoseDate()), adherenceAuditLogDTO1.getDoseDate());
+        assertEquals(toSqlTimestamp(adherenceAuditLogByCmfAdmin.getCreationTime()), adherenceAuditLogDTO1.getCreationTime());
+        assertEquals(adherenceAuditLogByCmfAdmin.getNumberOfDosesTaken(), adherenceAuditLogDTO1.getNumberOfDosesTaken());
+        assertEquals(adherenceAuditLogByCmfAdmin.getPatientId(), adherenceAuditLogDTO1.getPatientId());
+        assertEquals(adherenceAuditLogByCmfAdmin.getPillStatus().name(), adherenceAuditLogDTO1.getPillStatus());
+        assertEquals(adherenceAuditLogByCmfAdmin.getProviderId(), adherenceAuditLogDTO1.getProviderId());
+        assertEquals(adherenceAuditLogByCmfAdmin.getSourceOfChange(), adherenceAuditLogDTO1.getChannel());
+        assertEquals(adherenceAuditLogByCmfAdmin.getUserId(), adherenceAuditLogDTO1.getUserId());
+        assertThat(adherenceAuditLogDTO1.getIsGivenByProvider(), is(YesNo.No.name()));
+        assertThat(adherenceAuditLogDTO2.getIsGivenByProvider(), is(YesNo.Yes.name()));
     }
 
     @Test
