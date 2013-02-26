@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-public class ReportingEventURLs {
+public class ReportingApplicationURLs {
 
     private String whpReportsURL;
     private String adherencePath;

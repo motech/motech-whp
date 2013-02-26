@@ -24,7 +24,7 @@ import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.controller.ProviderContainerRegistrationController;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.webservice.builder.ProviderRequestBuilder;
@@ -72,7 +72,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     private AllContainers allContainers;
 
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
 
     @Autowired
     private AllDistricts allDistricts;
@@ -137,7 +137,7 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
         verify(httpClientService).post(remediUrl, expectedContainerRegistrationXML);
 
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).withSubmitterRole(WHPRole.PROVIDER.name()).withSubmitterId(providerId).registeredThrough(ChannelId.WEB.name()).build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
 
         markForDeletion(container);
     }

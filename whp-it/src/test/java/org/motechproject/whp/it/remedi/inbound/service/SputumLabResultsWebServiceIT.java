@@ -11,7 +11,7 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.repository.AllContainers;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
 import org.motechproject.whp.webservice.service.SputumLabResultsWebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
     @Autowired
     SputumLabResultsWebService sputumLabResultsWebService;
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
     @Autowired
     AllContainers allContainers;
     private Container container;
@@ -94,7 +94,7 @@ public class SputumLabResultsWebServiceIT extends SpringIntegrationTest {
 
         SputumLabResultsCaptureReportingRequest expectedReportingRequest = new SputumLabResultsCaptureReportingRequestBuilder().forContainer(container).build();
 
-        verify(httpClientService).post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), expectedReportingRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getSputumLabResultsCaptureLogURL(), expectedReportingRequest);
     }
 
     @Test

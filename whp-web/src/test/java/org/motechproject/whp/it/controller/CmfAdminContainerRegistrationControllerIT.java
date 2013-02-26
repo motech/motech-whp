@@ -27,7 +27,7 @@ import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllAdminContainerMappings;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.controller.CmfAdminContainerRegistrationController;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.CmfAdmin;
 import org.motechproject.whp.user.domain.WHPRole;
@@ -70,7 +70,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Autowired
     private RemediProperties remediProperties;
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
     @Autowired
     private AllDistricts allDistricts;
 
@@ -195,7 +195,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
 
     private void verifyReportingEventPublication(MotechUser testuser, Container container) {
         ContainerRegistrationReportingRequest expectedContainerRegistrationRequest = new ContainerRegistrationReportingRequestBuilder().forContainer(container).registeredThrough(ChannelId.WEB.name()).withSubmitterId(testuser.getUserName()).withSubmitterRole(WHPRole.CMF_ADMIN.name()).build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
     }
 
     @After

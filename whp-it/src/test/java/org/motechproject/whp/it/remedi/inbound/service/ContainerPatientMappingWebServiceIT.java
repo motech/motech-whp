@@ -18,7 +18,7 @@ import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.ContainerPatientMappingReportingRequest;
 import org.motechproject.whp.webservice.service.ContainerPatientMappingWebService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
     AllReasonForContainerClosures allReasonForContainerClosures;
 
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
 
     @ReplaceWithMock
     @Autowired
@@ -266,7 +266,7 @@ public class ContainerPatientMappingWebServiceIT extends SpringIntegrationTest {
 
     private void verifyMappingReportingEventPublication(Container container) {
         ContainerPatientMappingReportingRequest request = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
-        verify(httpClientService).post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
+        verify(httpClientService).post(reportingApplicationURLs.getContainerPatientMappingLogURL(), request);
     }
 
     private String buildMappingRequestFor(String patientId, String containerId) {

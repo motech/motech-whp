@@ -7,7 +7,7 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.controller.ContainerRegistrationCallLogController;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.ContainerRegistrationCallDetailsLogRequest;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
@@ -33,7 +33,7 @@ public class ContainerRegistrationCallLogControllerIT extends SpringIntegrationT
     private HttpClientService httpClientService;
 
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
 
     @Autowired
     private AllProviders allProviders;
@@ -74,6 +74,6 @@ public class ContainerRegistrationCallLogControllerIT extends SpringIntegrationT
         expectedRequest.setProviderId(provider.getProviderId());
         expectedRequest.setMobileNumber("0986754322");
 
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), expectedRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getContainerRegistrationCallDetailsLogURL(), expectedRequest);
     }
 }

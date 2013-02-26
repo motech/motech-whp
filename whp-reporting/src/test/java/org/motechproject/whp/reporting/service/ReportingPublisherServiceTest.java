@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.motechproject.whp.reports.contract.adherence.AdherenceRecordDTO;
@@ -24,12 +24,12 @@ public class ReportingPublisherServiceTest {
     HttpClientService httpClientService;
 
     @Mock
-    ReportingEventURLs reportingEventURLs;
+    ReportingApplicationURLs reportingApplicationURLs;
 
     @Before
     public void setUp() {
         initMocks(this);
-        reportingPublisher = new ReportingPublisherService(httpClientService, reportingEventURLs);
+        reportingPublisher = new ReportingPublisherService(httpClientService, reportingApplicationURLs);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ReportingPublisherServiceTest {
         adherenceCaptureRequest.setProviderId(providerId);
 
         reportingPublisher.reportAdherenceCapture(adherenceCaptureRequest);
-        verify(httpClientService).post(reportingEventURLs.getAdherencePath(), adherenceCaptureRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getAdherencePath(), adherenceCaptureRequest);
     }
 
     @Test
@@ -55,13 +55,13 @@ public class ReportingPublisherServiceTest {
 
         reportingPublisher.reportCallLog(callLog);
 
-        verify(httpClientService).post(reportingEventURLs.getCallLogURL(), callLog);
+        verify(httpClientService).post(reportingApplicationURLs.getCallLogURL(), callLog);
     }
 
     @Test
     public void shouldPublishCallStatus() throws Exception {
         String url = "url";
-        when(reportingEventURLs.getCallStatusURL()).thenReturn(url);
+        when(reportingApplicationURLs.getCallStatusURL()).thenReturn(url);
         AdherenceCallStatusRequest callStatusRequest = mock(AdherenceCallStatusRequest.class);
 
         reportingPublisher.reportCallStatus(callStatusRequest);
@@ -72,7 +72,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishFlashingLog() throws Exception {
         String url = "url";
-        when(reportingEventURLs.getFlashingLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getFlashingLogURL()).thenReturn(url);
         String providerId = "123456";
         FlashingLogRequest flashingLog = new FlashingLogRequest();
         flashingLog.setProviderId(providerId);
@@ -84,7 +84,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishContainerRegistrationLog() throws Exception {
         String url = "url";
-        when(reportingEventURLs.getContainerRegistrationURL()).thenReturn(url);
+        when(reportingApplicationURLs.getContainerRegistrationURL()).thenReturn(url);
 
         ContainerRegistrationReportingRequest sputumTrackingRequest = new ContainerRegistrationReportingRequest();
 
@@ -95,7 +95,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishSputumLabResultsCaptureLog() throws Exception {
         String url = "url";
-        when(reportingEventURLs.getSputumLabResultsCaptureLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getSputumLabResultsCaptureLogURL()).thenReturn(url);
 
         SputumLabResultsCaptureReportingRequest labResultsCaptureReportingRequest = new SputumLabResultsCaptureReportingRequest();
 
@@ -107,7 +107,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishContainerStatusUpdateLog() {
         String url = "url";
-        when(reportingEventURLs.getContainerStatusUpdateLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getContainerStatusUpdateLogURL()).thenReturn(url);
 
         ContainerStatusReportingRequest containerStatusReportingRequest = new ContainerStatusReportingRequest();
 
@@ -118,7 +118,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishContainerPatientMappingLog() {
         String url = "url";
-        when(reportingEventURLs.getContainerPatientMappingLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getContainerPatientMappingLogURL()).thenReturn(url);
 
         ContainerPatientMappingReportingRequest containerPatientMappingReportingRequest = new ContainerPatientMappingReportingRequest();
 
@@ -129,7 +129,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportContainerRegistrationCallDetailsLogRequest() {
         String url = "url";
-        when(reportingEventURLs.getContainerRegistrationCallDetailsLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getContainerRegistrationCallDetailsLogURL()).thenReturn(url);
 
         ContainerRegistrationCallDetailsLogRequest request = new ContainerRegistrationCallDetailsLogRequest();
 
@@ -140,7 +140,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportProviderVerificationLogRequest() {
         String url = "url";
-        when(reportingEventURLs.getProviderVerificationLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getProviderVerificationLogURL()).thenReturn(url);
 
         ProviderVerificationLogRequest request = new ProviderVerificationLogRequest();
 
@@ -151,7 +151,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportContainerVerificationLogRequest() {
         String url = "url";
-        when(reportingEventURLs.getContainerVerificationLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getContainerVerificationLogURL()).thenReturn(url);
 
         ContainerVerificationLogRequest request = new ContainerVerificationLogRequest();
 
@@ -162,7 +162,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportAdherenceSubmissionRequest() {
         String url = "url";
-        when(reportingEventURLs.getAdherenceSubmissionURL()).thenReturn(url);
+        when(reportingApplicationURLs.getAdherenceSubmissionURL()).thenReturn(url);
 
         AdherenceSubmissionRequest request = new AdherenceSubmissionRequest();
 
@@ -173,7 +173,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportPatientUpdates() {
         String url = "url";
-        when(reportingEventURLs.getPatientUpdateURL()).thenReturn(url);
+        when(reportingApplicationURLs.getPatientUpdateURL()).thenReturn(url);
 
         PatientDTO request = new PatientDTO();
 
@@ -184,7 +184,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldReportProviderUpdates() {
         String url = "url";
-        when(reportingEventURLs.getProviderUpdateURL()).thenReturn(url);
+        when(reportingApplicationURLs.getProviderUpdateURL()).thenReturn(url);
 
         ProviderDTO providerDTO = new ProviderDTO();
 
@@ -195,7 +195,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishAdherenceAuditLog() {
         String url = "url";
-        when(reportingEventURLs.getAdherenceAuditLogURL()).thenReturn(url);
+        when(reportingApplicationURLs.getAdherenceAuditLogURL()).thenReturn(url);
 
         AdherenceAuditLogDTO adherenceAuditLogDTO = new AdherenceAuditLogDTO();
 
@@ -206,7 +206,7 @@ public class ReportingPublisherServiceTest {
     @Test
     public void shouldPublishAdherenceRecord() {
         String url = "url";
-        when(reportingEventURLs.getAdherenceRecordUpdateURL()).thenReturn(url);
+        when(reportingApplicationURLs.getAdherenceRecordUpdateURL()).thenReturn(url);
 
         AdherenceRecordDTO adherenceRecordDTO = new AdherenceRecordDTO();
 

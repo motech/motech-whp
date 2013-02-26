@@ -2,7 +2,7 @@ package org.motechproject.whp.reporting.service;
 
 import org.apache.log4j.Logger;
 import org.motechproject.http.client.service.HttpClientService;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.reports.contract.adherence.AdherenceAuditLogDTO;
 import org.motechproject.whp.reports.contract.adherence.AdherenceRecordDTO;
@@ -15,81 +15,81 @@ import org.springframework.stereotype.Service;
 public class ReportingPublisherService {
 
     private HttpClientService httpClientService;
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
     private Logger logger = Logger.getLogger(ReportingPublisherService.class);
 
     @Autowired
-    public ReportingPublisherService(HttpClientService httpClientService, ReportingEventURLs reportingEventURLs) {
+    public ReportingPublisherService(HttpClientService httpClientService, ReportingApplicationURLs reportingApplicationURLs) {
         this.httpClientService = httpClientService;
-        this.reportingEventURLs = reportingEventURLs;
+        this.reportingApplicationURLs = reportingApplicationURLs;
     }
 
     public void reportAdherenceCapture(AdherenceCaptureRequest adherenceCaptureRequest) {
         logger.info("Posting adherence capture request to the queue");
-        httpClientService.post(reportingEventURLs.getAdherencePath(), adherenceCaptureRequest);
+        httpClientService.post(reportingApplicationURLs.getAdherencePath(), adherenceCaptureRequest);
     }
 
     public void reportCallLog(AdherenceCallLogRequest callLogRequest) {
-        httpClientService.post(reportingEventURLs.getCallLogURL(), callLogRequest);
+        httpClientService.post(reportingApplicationURLs.getCallLogURL(), callLogRequest);
     }
 
     public void reportFlashingRequest(FlashingLogRequest flashingLogRequest) {
-        httpClientService.post(reportingEventURLs.getFlashingLogURL(), flashingLogRequest);
+        httpClientService.post(reportingApplicationURLs.getFlashingLogURL(), flashingLogRequest);
     }
 
     public void reportContainerRegistration(ContainerRegistrationReportingRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerRegistrationURL(), request);
+        httpClientService.post(reportingApplicationURLs.getContainerRegistrationURL(), request);
     }
 
     public void reportLabResultsCapture(SputumLabResultsCaptureReportingRequest request) {
-        httpClientService.post(reportingEventURLs.getSputumLabResultsCaptureLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getSputumLabResultsCaptureLogURL(), request);
     }
 
     public void reportContainerStatusUpdate(ContainerStatusReportingRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerStatusUpdateLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getContainerStatusUpdateLogURL(), request);
     }
 
     public void reportContainerPatientMapping(ContainerPatientMappingReportingRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerPatientMappingLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getContainerPatientMappingLogURL(), request);
     }
 
     public void reportContainerRegistrationCallDetailsLog(ContainerRegistrationCallDetailsLogRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerRegistrationCallDetailsLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getContainerRegistrationCallDetailsLogURL(), request);
     }
 
     public void reportProviderVerificationDetailsLog(ProviderVerificationLogRequest request) {
-        httpClientService.post(reportingEventURLs.getProviderVerificationLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getProviderVerificationLogURL(), request);
     }
 
     public void reportContainerVerificationDetailsLog(ContainerVerificationLogRequest request) {
-        httpClientService.post(reportingEventURLs.getContainerVerificationLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getContainerVerificationLogURL(), request);
     }
 
     public void reportProviderReminderCallLog(ProviderReminderCallLogRequest request) {
-        httpClientService.post(reportingEventURLs.getProviderReminderCallLogURL(), request);
+        httpClientService.post(reportingApplicationURLs.getProviderReminderCallLogURL(), request);
     }
 
     public void reportAdherenceSubmission(AdherenceSubmissionRequest request) {
-        httpClientService.post(reportingEventURLs.getAdherenceSubmissionURL(), request);
+        httpClientService.post(reportingApplicationURLs.getAdherenceSubmissionURL(), request);
     }
 
     public void reportCallStatus(AdherenceCallStatusRequest request) {
-        httpClientService.post(reportingEventURLs.getCallStatusURL(), request);
+        httpClientService.post(reportingApplicationURLs.getCallStatusURL(), request);
     }
 
     public void reportPatient(PatientDTO patientDTO) {
-        httpClientService.post(reportingEventURLs.getPatientUpdateURL(), patientDTO);
+        httpClientService.post(reportingApplicationURLs.getPatientUpdateURL(), patientDTO);
     }
 
     public void reportProvider(ProviderDTO providerDTO) {
-        httpClientService.post(reportingEventURLs.getProviderUpdateURL(), providerDTO);
+        httpClientService.post(reportingApplicationURLs.getProviderUpdateURL(), providerDTO);
     }
 
     public void reportAdherenceAuditLog(AdherenceAuditLogDTO adherenceAuditLogDTO) {
-        httpClientService.post(reportingEventURLs.getAdherenceAuditLogURL(), adherenceAuditLogDTO);
+        httpClientService.post(reportingApplicationURLs.getAdherenceAuditLogURL(), adherenceAuditLogDTO);
     }
 
     public void reportAdherenceRecord(AdherenceRecordDTO adherenceRecordDTO) {
-        httpClientService.post(reportingEventURLs.getAdherenceRecordUpdateURL(), adherenceRecordDTO);
+        httpClientService.post(reportingApplicationURLs.getAdherenceRecordUpdateURL(), adherenceRecordDTO);
     }
 }

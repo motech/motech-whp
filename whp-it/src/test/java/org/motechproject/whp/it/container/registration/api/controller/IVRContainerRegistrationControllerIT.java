@@ -23,7 +23,7 @@ import org.motechproject.whp.containermapping.domain.ContainerRange;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.motechproject.whp.containerregistration.api.webservice.IVRContainerRegistrationController;
-import org.motechproject.whp.reporting.ReportingEventURLs;
+import org.motechproject.whp.reporting.ReportingApplicationURLs;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
 import org.motechproject.whp.user.domain.WHPRole;
 import org.motechproject.whp.user.service.ProviderService;
@@ -63,7 +63,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
     @Autowired
     private RemediProperties remediProperties;
     @Autowired
-    private ReportingEventURLs reportingEventURLs;
+    private ReportingApplicationURLs reportingApplicationURLs;
     @Autowired
     private AllDistricts allDistricts;
     @Autowired
@@ -145,7 +145,7 @@ public class IVRContainerRegistrationControllerIT extends SpringIntegrationTest 
                 .withSubmitterRole(WHPRole.PROVIDER.name())
                 .withCallId("64756435684375")
                 .build();
-        verify(httpClientService).post(reportingEventURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
+        verify(httpClientService).post(reportingApplicationURLs.getContainerRegistrationURL(), expectedContainerRegistrationRequest);
     }
 
     @After
