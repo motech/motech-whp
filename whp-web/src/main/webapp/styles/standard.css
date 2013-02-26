@@ -46,9 +46,9 @@ body.main #mainContent {
    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 
-    -webkit-box-shadow: 0 10px 7px -5px #777;
-    -moz-box-shadow: 0 10px 7px -5px #777;
-    box-shadow: 0 10px 7px -5px #777;
+    -webkit-box-shadow: 0 10px 7px -5px #000;
+    -moz-box-shadow: 0 10px 7px -5px #000;
+    box-shadow: 0 10px 7px -5px #000;
 }
 #mainContent h1 {
     color: #000;
@@ -1133,6 +1133,7 @@ pre {
     padding: 2px;
     text-align: center;
     width: 12px;
+    display: inline-block;
     -webkit-box-shadow: 0 2px 2px #777777;
     -moz-box-shadow: 0 2px 2px #777777;
     box-shadow: 0 2px 2px #777777;
@@ -1256,4 +1257,35 @@ pre {
 
 .text-value {
     padding-top: 7px;
+}
+
+.legends-list {
+    background: #f9f9f9;
+    padding: 10px 5px 1px ;
+    border-radius: 5px;
+}
+.legends-list h5 {
+   margin: 0 0 5px 0;
+}
+.legends-list ul {
+    margin: 0;
+    list-style: none;
+    overflow: hidden;
+}
+.legends-list ul .legend-brdr{
+    margin: 0 0 10px 12px;
+    padding: 5px;
+    color: #999;
+    background: #fff;
+    line-height: 1;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-left-width: 10px;
+    -moz-border-radius-topright: 10px;
+    -webkit-border-top-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.legends-list ul .legend-brdr .alert-count {
+    font-weight: bold;
+    font-size: 110%;
 }

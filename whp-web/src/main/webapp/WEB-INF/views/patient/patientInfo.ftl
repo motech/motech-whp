@@ -2,7 +2,7 @@
 <div class="default-arrow well" xmlns="http://www.w3.org/1999/html">
 
     <div class="row-fluid">
-
+      <div class="span9">
         <p class="patient">
 
         <#if patient.flag>
@@ -30,14 +30,15 @@
 
         </p>
 
-        <hr/>
+       </div>
 
-        <div>
+        <div class="span3">
+
             <table class="table">
             <#if '${patient.adherenceMissingSeverityColor}'!="">
                 <tr>
-                    <td class="alert-cell" style="background-color:${patient.adherenceMissingSeverityColor!}; text-align: center">
-                       ${patient.adherenceMissingWeeks}</td>
+                    <td class="alert-cell" style="background-color:${patient.adherenceMissingSeverityColor!}; text-align: center; width: 50px;">
+                      <span class="alert-count"> ${patient.adherenceMissingWeeks}</span></td>
                     <td><@spring.message '${patient.adherenceMissingMessageCode}' /></td>
                 </tr>
             </#if>

@@ -32,7 +32,7 @@
 <a link-type="prevPage" ng-show="currentPage > 1" class="page-link" ng-click="prevPage()" onclick="return false">Previous</a>
 <p link-type="prevPage-disabled" ng-hide="currentPage > 1" class="page-link-disabled" >Previous</p>
 
-<div class="current-page-info">{{currentPage}} out of {{numberOfPages()}} pages</div>
+<div class="current-page-info">{{currentPage}} of {{numberOfPages()}} pages</div>
 
 <a link-type="nextPage" ng-show="currentPage <  numberOfPages()" class="page-link" ng-click="nextPage()" onclick="return false">Next</a>
 <p link-type="nextPage-disabled" ng-hide="currentPage <  numberOfPages()" class="page-link-disabled">Next</p>

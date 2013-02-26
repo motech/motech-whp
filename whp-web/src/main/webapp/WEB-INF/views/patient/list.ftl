@@ -149,9 +149,9 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th><a href="#" ng-click = "sort('TreatmentNotStartedAlertValue')"><i id = "sortIcon_TreatmentNotStartedAlertValue" class="icon-minus"></i></a></th>
-                        <th><a href="#" ng-click = "sort('AdherenceMissingAlertValue', 'DESC')"><i id = "sortIcon_AdherenceMissingAlertValue" class="icon-arrow-down"></i></a></th>
-                        <th><a href="#" ng-click = "sort('CumulativeMissedDosesAlertValue')"><i id = "sortIcon_CumulativeMissedDosesAlertValue" class="icon-minus"></i></a></th>
+                        <th><a href="#" ng-click = "sort('TreatmentNotStartedAlertValue')" title="Missing Treatement Start Date"><i id = "sortIcon_TreatmentNotStartedAlertValue" class="icon-minus"></i></a></th>
+                        <th><a href="#" ng-click = "sort('AdherenceMissingAlertValue', 'DESC')" title="Adherence Missing Alert"><i id = "sortIcon_AdherenceMissingAlertValue" class="icon-arrow-down"></i></a></th>
+                        <th><a href="#" ng-click = "sort('CumulativeMissedDosesAlertValue')" title="Cumulative Missed Doses Alert"><i id = "sortIcon_CumulativeMissedDosesAlertValue" class="icon-minus"></i></a></th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
