@@ -27,6 +27,7 @@ public class ReportingApplicationURLs {
     private String providerUpdateURL;
     private String adherenceAuditLogURL;
     private String adherenceRecordUpdateURL;
+    private String providerAdherenceStatusByDistrictURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -116,6 +117,11 @@ public class ReportingApplicationURLs {
     @Value("${whp.reports.adherence.record}")
     public void setAdherenceRecordUpdateURL(String adherenceRecordUpdateURL) {
         this.adherenceRecordUpdateURL = adherenceRecordUpdateURL;
+    }
+
+    @Value("${whp.reports.provider.adherence.status.by.district}")
+    public void setProviderAdherenceStatusByDistrictURL(String providerAdherenceStatusURL) {
+        this.providerAdherenceStatusByDistrictURL = providerAdherenceStatusURL;
     }
 
 }

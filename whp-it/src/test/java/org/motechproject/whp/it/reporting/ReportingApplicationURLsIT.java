@@ -101,4 +101,9 @@ public class ReportingApplicationURLsIT {
     public void shouldGetAdherenceRecordUpdateURL() {
         assertThat(reportingApplicationURLs.getAdherenceRecordUpdateURL(), is("http://127.0.0.1:9999/whp-reports/adherence/record"));
     }
+
+    @Test
+    public void shouldGetProviderAdherenceStatusURL() {
+        assertThat(reportingApplicationURLs.getProviderAdherenceStatusByDistrictURL(), is("http://127.0.0.1:9999/whp-reports/providerAdherenceSummary"));
+    }
 }
