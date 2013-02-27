@@ -61,6 +61,15 @@ public class AdherenceAuditLogSeedTest {
     }
 
     @Test
+    public void shouldMapAdherenceLogSummaryToReportingRequest_whenProviderIdIsNull() {
+        AdherenceAuditLog adherenceAuditLogByCmfAdmin = new AdherenceAuditLog("patient1", null, "tbId", now(), now(), "cmfAdmin", null, Taken, "WEB");
+
+        AdherenceAuditLogDTO adherenceAuditLogDTO = adherenceAuditLogSeed.mapToReportingRequest(adherenceAuditLogByCmfAdmin);
+
+        assertThat(adherenceAuditLogDTO.getIsGivenByProvider(), is(YesNo.No.code()));
+    }
+
+    @Test
     public void shouldReportExistingAdherenceAuditLogs() {
         AdherenceAuditLog adherenceAuditLog = new AdherenceAuditLog("patient1", "raj", "tbId", now(), now(), "cmfAdmin", 1, Taken, "WEB");
 

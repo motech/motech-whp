@@ -1,5 +1,6 @@
 package org.motechproject.whp.refdata.seed.version5;
 
+import org.apache.commons.lang.StringUtils;
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
@@ -65,7 +66,7 @@ public class AdherenceAuditLogSeed {
     }
 
     private String isGivenByProvider(AdherenceAuditLog adherenceAuditLog) {
-        return adherenceAuditLog.getProviderId().equals(adherenceAuditLog.getUserId()) ?
+        return StringUtils.equals(adherenceAuditLog.getProviderId(), adherenceAuditLog.getUserId()) ?
                 YesNo.Yes.code() : YesNo.No.code();
     }
 }
