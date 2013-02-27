@@ -4,20 +4,18 @@ import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.patient.domain.Patient;
 import org.springframework.stereotype.Component;
 
-import static org.motechproject.whp.common.domain.alerts.PatientAlertType.TreatmentNotStarted;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CPProgress;
 
 @Component
-public class TreatmentNotStartedAlertProcessor implements AlertProcessor {
+public class CPProgressAlertProcessor implements AlertProcessor {
 
     @Override
     public double process(Patient patient) {
-        if(patient.isCurrentTreatmentPaused())
-            return NO_ALERT_VALUE;
-        return patient.getDaysSinceTherapyHasNotStarted();
+        return patient.getCPProgressPercentage();
     }
 
     @Override
     public PatientAlertType alertType() {
-        return TreatmentNotStarted;
+        return CPProgress;
     }
 }

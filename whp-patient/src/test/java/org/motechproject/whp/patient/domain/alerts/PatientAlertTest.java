@@ -26,7 +26,7 @@ public class PatientAlertTest extends BaseUnitTest {
 
         patientAlert.update(newValue, newSeverity);
 
-        assertEquals(newValue, patientAlert.getValue());
+        assertEquals((double) newValue, patientAlert.getValue());
         assertEquals(newSeverity, patientAlert.getAlertSeverity());
         assertEquals(today(), patientAlert.getAlertDate());
         assertEquals(AdherenceMissing, patientAlert.getAlertType());
@@ -46,7 +46,7 @@ public class PatientAlertTest extends BaseUnitTest {
         int newValue = 13;
         patientAlert.update(newValue, originalSeverity);
 
-        assertEquals(newValue, patientAlert.getValue());
+        assertEquals((double) newValue, patientAlert.getValue());
         assertEquals(originalSeverity, patientAlert.getAlertSeverity());
         assertEquals(originalAlertDate, patientAlert.getAlertDate());
         assertEquals(AdherenceMissing, patientAlert.getAlertType());

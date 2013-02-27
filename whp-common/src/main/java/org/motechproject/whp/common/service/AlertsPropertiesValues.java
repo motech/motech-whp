@@ -27,6 +27,12 @@ public class AlertsPropertiesValues {
     @Value("#{alertsProperties['alerts.daysOfAlertGenerationForAdherenceMissingWeeks'].split(',')}")
     private List<String> daysOfAlertGenerationForAdherenceMissingWeeks;
 
+    @Value("#{alertsProperties['alerts.daysOfAlertGenerationForIPProgress'].split(',')}")
+    private List<String> dayOfAlertGenerationForIPProgress;
+
+    @Value("#{alertsProperties['alerts.daysOfAlertGenerationForCPProgress'].split(',')}")
+    private List<String> dayOfAlertGenerationForCPProgress;
+
     @Value("#{alertsProperties['alerts.daysOfAlertGenerationForTreatmentNotStarted'].split(',')}")
     private List<String> daysOfAlertGenerationForTreatmentNotStarted;
 
@@ -38,6 +44,12 @@ public class AlertsPropertiesValues {
 
     @Value("#{alertsProperties['alerts.treatmentNotStarted.severity.colors'].split(',')}")
     private List<String> treatmentNotStartedSeverityColors;
+
+    @Value("#{alertsProperties['alerts.ipProgressThreshold']}")
+    private List<String> iPProgressThreshold;
+
+    @Value("#{alertsProperties['alerts.cpProgressThreshold']}")
+    private List<String> cPProgressThreshold;
 
 
     public AlertsPropertiesValues() {
@@ -77,6 +89,22 @@ public class AlertsPropertiesValues {
 
     public List<String> getTreatmentNotStartedSeverityColors() {
         return addColorForEverySeverity(treatmentNotStartedSeverityColors);
+    }
+
+    public List<Integer> getCPProgressThreshold() {
+        return parseToIntegerList(iPProgressThreshold);
+    }
+
+    public List<Integer> getIPProgressThreshold() {
+        return parseToIntegerList(cPProgressThreshold);
+    }
+
+    public List<DayOfWeek> getDayOfAlertGenerationForIPProgress() {
+        return getDayOfWeeks(dayOfAlertGenerationForIPProgress);
+    }
+
+    public List<DayOfWeek> getDayOfAlertGenerationForCPProgress() {
+        return getDayOfWeeks(dayOfAlertGenerationForCPProgress);
     }
 
     private List<DayOfWeek> getDayOfWeeks(List<String> dayOfAlertGeneration) {

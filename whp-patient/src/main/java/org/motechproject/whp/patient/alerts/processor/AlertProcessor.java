@@ -5,8 +5,8 @@ import org.motechproject.whp.patient.domain.Patient;
 
 public interface AlertProcessor {
 
-    public final int NO_ALERT_VALUE = 0;
+    public final double NO_ALERT_VALUE = 0.0;
 
-    int process(Patient patient);
+    double process(Patient patient);
     PatientAlertType alertType();
 }

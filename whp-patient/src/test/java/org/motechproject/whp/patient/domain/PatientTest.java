@@ -384,6 +384,43 @@ public class PatientTest {
     }
 
     @Test
+    public void shouldReturnIPProgressPercentage() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
+        patient.endLatestPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
+        assertThat(patient.getIPProgressPercentage(), is(91.67));
+
+    }
+
+    @Test
+    public void shouldReturnCPProgressPercentage() {
+        Patient patient = PatientBuilder.patient();
+        patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));
+        patient.setNumberOfDosesTaken(Phase.IP, 24, currentAdherenceCaptureWeek().startDate().minusWeeks(20));
+
+        patient.endLatestPhase(today().minusMonths(4));
+
+        patient.nextPhaseName(Phase.EIP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(Phase.EIP, 9, currentAdherenceCaptureWeek().startDate().minusWeeks(11));
+
+        patient.endLatestPhase(today().minusMonths(3));
+
+        patient.nextPhaseName(Phase.CP);
+        patient.startNextPhase();
+        patient.setNumberOfDosesTaken(Phase.CP, 35, currentAdherenceCaptureWeek().startDate().minusWeeks(1));
+
+        //(24:IP + 9:EIP) / (24:IP + 12:EIP)
+        assertThat(patient.getCPProgressPercentage(), is(64.81));
+    }
+
+    @Test
     public void shouldReturnFormattedCPProgress() {
         Patient patient = PatientBuilder.patient();
         patient.startTherapy(currentAdherenceCaptureWeek().startDate().minusWeeks(20));

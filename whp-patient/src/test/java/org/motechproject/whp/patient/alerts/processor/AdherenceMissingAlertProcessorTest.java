@@ -33,7 +33,7 @@ public class AdherenceMissingAlertProcessorTest {
         when(patient.isCurrentTreatmentPaused()).thenReturn(false);
         when(patient.getWeeksElapsedSinceLastDose(any(LocalDate.class))).thenReturn(weeksElapsedSinceLastDose);
 
-        assertEquals(weeksElapsedSinceLastDose, adherenceMissingAlertProcessor.process(patient));
+        assertEquals((double) weeksElapsedSinceLastDose, adherenceMissingAlertProcessor.process(patient));
 
         verify(patient).getWeeksElapsedSinceLastDose(any(LocalDate.class));
         verify(treatmentWeekInstance).previousAdherenceWeekEndDate();
@@ -46,7 +46,7 @@ public class AdherenceMissingAlertProcessorTest {
         when(patient.getWeeksElapsedSinceLastDose(any(LocalDate.class))).thenReturn(5);
 
         AdherenceMissingAlertProcessor adherenceMissingAlertProcessor = this.adherenceMissingAlertProcessor;
-        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(0.0, adherenceMissingAlertProcessor.process(patient));
     }
 
     @Test

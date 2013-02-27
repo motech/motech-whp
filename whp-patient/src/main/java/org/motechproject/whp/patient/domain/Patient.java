@@ -27,8 +27,8 @@ import static ch.lambdaj.Lambda.*;
 import static org.joda.time.Weeks.weeksBetween;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
-import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CumulativeMissedDoses;
+import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 
 @TypeDiscriminator("doc.type == 'Patient'")
 @Data
@@ -300,10 +300,24 @@ public class Patient extends MotechBaseDataObject {
     }
 
     @JsonIgnore
+    public double getIPProgressPercentage() {
+        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTakenInIntensivePhases();
+        int totalDoseCount = currentTherapy.getTotalDoesInIntensivePhases();
+        return calculateProgressPercentage(totalDoseCount, totalDoseTakenCount);
+    }
+
+    @JsonIgnore
     public String getCPProgress() {
         int totalDoseCount = currentTherapy.getTotalDoesIn(Phase.CP);
         int totalDoseTakenCount = currentTherapy.getNumberOfDosesTaken(Phase.CP);
         return doseCompletionMessage(totalDoseCount, totalDoseTakenCount);
+    }
+
+    @JsonIgnore
+    public double getCPProgressPercentage() {
+        int totalDoseCount = currentTherapy.getTotalDoesIn(Phase.CP);
+        int totalDoseTakenCount = currentTherapy.getNumberOfDosesTaken(Phase.CP);
+        return calculateProgressPercentage(totalDoseCount, totalDoseTakenCount);
     }
 
     public boolean currentPhaseDoseComplete() {
@@ -374,8 +388,13 @@ public class Patient extends MotechBaseDataObject {
         if (totalDoseCount == 0) {
             return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, 0.0f);
         } else {
-            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, (totalDoseTakenCount / (float) totalDoseCount) * 100);
+            return String.format("%d/%d (%.2f%%)", totalDoseTakenCount, totalDoseCount, calculateProgressPercentage(totalDoseCount, totalDoseTakenCount));
         }
+    }
+
+    private double calculateProgressPercentage(float totalDoseCount, int totalDoseTakenCount) {
+        float percentageWithoutRounding = (totalDoseTakenCount / totalDoseCount) * 100;
+        return Math.round(percentageWithoutRounding * 100.0) / 100.0;
     }
 
     @JsonIgnore
@@ -545,7 +564,7 @@ public class Patient extends MotechBaseDataObject {
         return weeksBetween(fromDate, tillDate.plusDays(1)).getWeeks();
     }
 
-    public void updatePatientAlert(PatientAlertType alertType, int value, int severity){
+    public void updatePatientAlert(PatientAlertType alertType, double value, int severity){
         patientAlerts.updateAlertStatus(alertType, value, severity);
     }
 
@@ -561,4 +580,5 @@ public class Patient extends MotechBaseDataObject {
         }
 
     }
+
 }

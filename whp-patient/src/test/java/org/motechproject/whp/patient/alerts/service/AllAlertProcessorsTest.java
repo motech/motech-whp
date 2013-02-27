@@ -23,7 +23,7 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
         AlertProcessor alertProcessor1 = mock(AlertProcessor.class);
         AlertProcessor alertProcessor2 = mock(AlertProcessor.class);
 
-        int adherenceMissingAlertValue = 5;
+        double adherenceMissingAlertValue = 5;
         int severityForAdherenceMissingAlert = 2;
         when(alertProcessor1.alertType()).thenReturn(AdherenceMissing);
         when(alertProcessor1.process(patient)).thenReturn(adherenceMissingAlertValue);
@@ -54,10 +54,10 @@ public class AllAlertProcessorsTest extends BaseUnitTest {
         AlertProcessor alertProcessor1 = mock(AlertProcessor.class);
         AlertProcessor alertProcessor2 = mock(AlertProcessor.class);
 
-        int adherenceMissingAlertValue = 5;
+        double adherenceMissingAlertValue = 5;
         int severityForAdherenceMissingAlert = 2;
         int severityForCumulativeMissedDoseAlert = 2;
-        int cumulativeMissedDoseValue = 3;
+        double cumulativeMissedDoseValue = 3;
 
         when(alertProcessor1.alertType()).thenReturn(AdherenceMissing);
         when(alertProcessor1.process(patient)).thenReturn(adherenceMissingAlertValue);

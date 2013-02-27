@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.*;
 
 @Component
 public class AllAlertConfigurations {
@@ -33,9 +33,11 @@ public class AllAlertConfigurations {
 
     private void initializeAlertConfiguration() {
         alertConfigurationMap = new HashMap<>();
-        addAlertConfiguration(PatientAlertType.AdherenceMissing, getAdherenceMissingAlertThresholds(), alertsProperties.getDaysOfAlertGenerationForAdherenceMissingWeeks());
-        addAlertConfiguration(PatientAlertType.CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), alertsProperties.getDayOfAlertGenerationForCumulativeMissedDoses());
-        addAlertConfiguration(PatientAlertType.TreatmentNotStarted, getTreatmentNotStartedAlertThresholds(), alertsProperties.getDayOfAlertGenerationForTreatmentNotStarted());
+        addAlertConfiguration(AdherenceMissing, getAdherenceMissingAlertThresholds(), alertsProperties.getDaysOfAlertGenerationForAdherenceMissingWeeks());
+        addAlertConfiguration(CumulativeMissedDoses, getCumulativeMissedDoseAlertThresholds(), alertsProperties.getDayOfAlertGenerationForCumulativeMissedDoses());
+        addAlertConfiguration(TreatmentNotStarted, getTreatmentNotStartedAlertThresholds(), alertsProperties.getDayOfAlertGenerationForTreatmentNotStarted());
+        addAlertConfiguration(IPProgress, getIPProgressAlertThresholds(), alertsProperties.getDayOfAlertGenerationForIPProgress());
+        addAlertConfiguration(CPProgress, getCPProgressAlertThresholds(), alertsProperties.getDayOfAlertGenerationForCPProgress());
     }
 
     private void addAlertConfiguration(PatientAlertType alertType, AlertThresholds alertThresholds, List<DayOfWeek> daysOfWeek) {
@@ -50,11 +52,11 @@ public class AllAlertConfigurations {
         return alertConfigurationMap.get(alertType);
     }
 
-    private AlertThreshold getThresholdFor(PatientAlertType alertType, int value){
+    private AlertThreshold getThresholdFor(PatientAlertType alertType, double value){
         return getAlertThresholds(alertType).getThreshold(value);
     }
 
-    public Integer getAlertSeverityFor(PatientAlertType alertType, int value) {
+    public Integer getAlertSeverityFor(PatientAlertType alertType, double value) {
         return getThresholdFor(alertType, value).getAlertSeverity();
     }
 
@@ -68,6 +70,14 @@ public class AllAlertConfigurations {
 
     private AlertThresholds getTreatmentNotStartedAlertThresholds() {
         return new AlertThresholds(alertsProperties.getTreatmentNotStartedDays());
+    }
+
+    private AlertThresholds getIPProgressAlertThresholds() {
+        return new AlertThresholds(alertsProperties.getIPProgressThreshold());
+    }
+
+    private AlertThresholds getCPProgressAlertThresholds() {
+        return new AlertThresholds(alertsProperties.getCPProgressThreshold());
     }
 
     public boolean shouldRunToday(PatientAlertType alertType) {

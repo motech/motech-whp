@@ -20,11 +20,11 @@ public class AdherenceMissingAlertProcessor implements AlertProcessor {
     }
 
     @Override
-    public int process(Patient patient) {
+    public double process(Patient patient) {
         if(patient.isCurrentTreatmentPaused())
             return NO_ALERT_VALUE;
         LocalDate tillDate = treatmentWeekInstance.previousAdherenceWeekEndDate();
-        return patient.getWeeksElapsedSinceLastDose(tillDate);
+        return (double)patient.getWeeksElapsedSinceLastDose(tillDate);
     }
 
     @Override

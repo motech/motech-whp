@@ -88,15 +88,15 @@ public class PatientReportingRequestMapperTest {
     }
 
     private void assertPatientAlerts(PatientAlerts patientAlerts, PatientAlertsDTO patientAlertsDTO) {
-        assertEquals(patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue(), patientAlertsDTO.getAdherenceMissingWeeks());
+        assertEquals((int) patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue(), patientAlertsDTO.getAdherenceMissingWeeks());
         assertEquals(patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity(), patientAlertsDTO.getAdherenceMissingWeeksAlertSeverity());
         assertEquals(WHPDateUtil.toSqlDate(patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertDate()), patientAlertsDTO.getAdherenceMissingWeeksAlertDate());
 
-        assertEquals(patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue(), patientAlertsDTO.getCumulativeMissedDoses());
+        assertEquals((int) patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getValue(), patientAlertsDTO.getCumulativeMissedDoses());
         assertEquals(patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity(), patientAlertsDTO.getCumulativeMissedDosesAlertSeverity());
         assertEquals(WHPDateUtil.toSqlDate(patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertDate()), patientAlertsDTO.getCumulativeMissedDosesAlertDate());
 
-        assertEquals(patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getValue(), patientAlertsDTO.getTreatmentNotStarted());
+        assertEquals((int) patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getValue(), patientAlertsDTO.getTreatmentNotStarted());
         assertEquals(patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity(), patientAlertsDTO.getTreatmentNotStartedAlertSeverity());
         assertEquals(WHPDateUtil.toSqlDate(patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertDate()), patientAlertsDTO.getTreatmentNotStartedAlertDate());
     }
@@ -152,7 +152,6 @@ public class PatientReportingRequestMapperTest {
             assertTreatments(therapy.getAllTreatments(), therapyDTO.getTreatments(), isLastTherapy);
         }
     }
-
 
     private void assertCurrentTherapyFlag(boolean lastTherapy, TherapyDTO therapyDTO) {
         String expected = lastTherapy?  YesNo.Yes.code() :  YesNo.No.code();

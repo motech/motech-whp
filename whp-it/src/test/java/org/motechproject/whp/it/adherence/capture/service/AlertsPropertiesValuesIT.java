@@ -72,4 +72,23 @@ public class AlertsPropertiesValuesIT {
         assertThat(alertsPropertiesValues.getTreatmentNotStartedSeverityColors(), is(Arrays.asList("", "brown")));
     }
 
+    @Test
+    public void shouldReadIPProgressThreshold() {
+        assertThat(alertsPropertiesValues.getIPProgressThreshold(), is(asList(100)));
+    }
+
+    @Test
+    public void shouldReadCPProgressThreshold() {
+        assertThat(alertsPropertiesValues.getCPProgressThreshold(), is(asList(100)));
+    }
+
+    @Test
+    public void shouldGetDayOfAlertGenerationForIPProgress(){
+        assertThat(alertsPropertiesValues.getDayOfAlertGenerationForIPProgress(), is(AllDaysOfWeek.allDaysOfWeek));
+    }
+
+    @Test
+    public void shouldGetDayOfAlertGenerationForCPProgress(){
+        assertThat(alertsPropertiesValues.getDayOfAlertGenerationForCPProgress(), is(AllDaysOfWeek.allDaysOfWeek));
+    }
 }

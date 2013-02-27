@@ -31,16 +31,16 @@ public class AdherenceMissingAlertProcessorScenarioTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withDoseInterruptions(doseInterruptions).build();
 
         mockCurrentDate(new LocalDate(2013, 01, 18)); //Friday
-        assertEquals(1, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(1.0, adherenceMissingAlertProcessor.process(patient));
 
         mockCurrentDate(new LocalDate(2013, 01, 25)); //Friday + 1 week
-        assertEquals(2, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(2.0, adherenceMissingAlertProcessor.process(patient));
 
         mockCurrentDate(new LocalDate(2013, 01, 15)); //Tue
-        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(0.0, adherenceMissingAlertProcessor.process(patient));
 
         mockCurrentDate(new LocalDate(2013, 01, 22)); //Tue + 1 week
-        assertEquals(1, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(1.0, adherenceMissingAlertProcessor.process(patient));
     }
 
     @Test
@@ -52,10 +52,10 @@ public class AdherenceMissingAlertProcessorScenarioTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withDoseInterruptions(doseInterruptions).build();
 
         mockCurrentDate(new LocalDate(2013, 01, 18)); //Friday
-        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(0.0, adherenceMissingAlertProcessor.process(patient));
 
         mockCurrentDate(new LocalDate(2013, 01, 25)); //Friday
-        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(0.0, adherenceMissingAlertProcessor.process(patient));
     }
 
     @Test
@@ -66,7 +66,6 @@ public class AdherenceMissingAlertProcessorScenarioTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults().withDoseInterruptions(doseInterruptions).build();
 
         mockCurrentDate(new LocalDate(2013, 01, 01));
-        assertEquals(0, adherenceMissingAlertProcessor.process(patient));
+        assertEquals(0.0, adherenceMissingAlertProcessor.process(patient));
     }
-
 }

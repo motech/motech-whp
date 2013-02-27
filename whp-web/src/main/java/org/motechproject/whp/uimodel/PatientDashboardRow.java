@@ -72,7 +72,7 @@ public class PatientDashboardRow {
         treatmentNotStartedSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.TreatmentNotStarted, patientAlerts.getAlert(PatientAlertType.TreatmentNotStarted).getAlertSeverity());
         cumulativeMissedDosesSeverity = patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity();
         cumulativeMissedDosesSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.CumulativeMissedDoses, patientAlerts.getAlert(PatientAlertType.CumulativeMissedDoses).getAlertSeverity());
-        adherenceMissingWeeks = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
+        adherenceMissingWeeks = (int)patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getValue();
         adherenceMissingWeeksSeverity = patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity();
         adherenceMissingSeverityColor = alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, patientAlerts.getAlert(PatientAlertType.AdherenceMissing).getAlertSeverity());
         flag = patient.getPatientFlag().isFlagSet();

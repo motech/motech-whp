@@ -106,7 +106,7 @@ public class PatientInfoMapper {
         PatientAlert adherenceAlert = patientAlerts.getAlert(PatientAlertType.AdherenceMissing);
         int adherenceAlertSeverity = adherenceAlert.getAlertSeverity();
         patientInfo.setAdherenceMissingWeeksSeverity(adherenceAlertSeverity);
-        patientInfo.setAdherenceMissingWeeks(adherenceAlert.getValue());
+        patientInfo.setAdherenceMissingWeeks((int) adherenceAlert.getValue());
         patientInfo.setAdherenceMissingSeverityColor(alertColorConfiguration.getColorFor(PatientAlertType.AdherenceMissing, adherenceAlertSeverity));
         patientInfo.setAdherenceMissingMessageCode();
     }

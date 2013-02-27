@@ -39,7 +39,7 @@ public class PatientAlerts implements Serializable {
         return getAlert(TreatmentNotStarted);
     }
 
-    public void updateAlertStatus(PatientAlertType alertType, int value, int severity) {
+    public void updateAlertStatus(PatientAlertType alertType, double value, int severity) {
         getAlert(alertType).update(value, severity);
         updateAlertStatus();
     }

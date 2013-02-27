@@ -54,15 +54,15 @@ public class PatientReportingRequestMapper {
         PatientAlertsDTO patientAlertsDTO = new PatientAlertsDTO();
         PatientAlerts patientAlerts = patient.getPatientAlerts();
 
-        patientAlertsDTO.setAdherenceMissingWeeks(patientAlerts.adherenceMissingAlert().getValue());
+        patientAlertsDTO.setAdherenceMissingWeeks((int) patientAlerts.adherenceMissingAlert().getValue());
         patientAlertsDTO.setAdherenceMissingWeeksAlertSeverity(patientAlerts.adherenceMissingAlert().getAlertSeverity());
         patientAlertsDTO.setAdherenceMissingWeeksAlertDate(WHPDateUtil.toSqlDate(patientAlerts.adherenceMissingAlert().getAlertDate()));
 
-        patientAlertsDTO.setCumulativeMissedDoses(patientAlerts.cumulativeMissedDoseAlert().getValue());
+        patientAlertsDTO.setCumulativeMissedDoses((int) patientAlerts.cumulativeMissedDoseAlert().getValue());
         patientAlertsDTO.setCumulativeMissedDosesAlertSeverity(patientAlerts.cumulativeMissedDoseAlert().getAlertSeverity());
         patientAlertsDTO.setCumulativeMissedDosesAlertDate(WHPDateUtil.toSqlDate(patientAlerts.cumulativeMissedDoseAlert().getAlertDate()));
 
-        patientAlertsDTO.setTreatmentNotStarted(patientAlerts.treatmentNotStartedAlert().getValue());
+        patientAlertsDTO.setTreatmentNotStarted((int) patientAlerts.treatmentNotStartedAlert().getValue());
         patientAlertsDTO.setTreatmentNotStartedAlertSeverity(patientAlerts.treatmentNotStartedAlert().getAlertSeverity());
         patientAlertsDTO.setTreatmentNotStartedAlertDate(WHPDateUtil.toSqlDate(patientAlerts.treatmentNotStartedAlert().getAlertDate()));
 

@@ -12,7 +12,7 @@ import static org.motechproject.util.DateUtil.today;
 public class PatientAlert implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int value;
+    private double value;
     private LocalDate alertDate;
     private PatientAlertType alertType;
     private int alertSeverity;
@@ -25,7 +25,7 @@ public class PatientAlert implements Serializable {
         this.alertType = alertType;
     }
 
-    public void update(int newValue, int severity) {
+    public void update(double newValue, int severity) {
         setValue(newValue);
         if(getAlertSeverity() != severity){
             setAlertDate(today());

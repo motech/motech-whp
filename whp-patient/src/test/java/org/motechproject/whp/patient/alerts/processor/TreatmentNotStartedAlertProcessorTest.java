@@ -17,7 +17,7 @@ public class TreatmentNotStartedAlertProcessorTest {
         when(patient.getDaysSinceTherapyHasNotStarted()).thenReturn(therapyNotStartedSince);
 
         TreatmentNotStartedAlertProcessor treatmentNotStartedAlertProcessor = new TreatmentNotStartedAlertProcessor();
-        assertEquals(therapyNotStartedSince, treatmentNotStartedAlertProcessor.process(patient));
+        assertEquals((double) therapyNotStartedSince, treatmentNotStartedAlertProcessor.process(patient));
 
         verify(patient).getDaysSinceTherapyHasNotStarted();
     }
@@ -29,7 +29,7 @@ public class TreatmentNotStartedAlertProcessorTest {
         when(patient.getDaysSinceTherapyHasNotStarted()).thenReturn(5);
 
         TreatmentNotStartedAlertProcessor treatmentNotStartedAlertProcessor = new TreatmentNotStartedAlertProcessor();
-        assertEquals(0, treatmentNotStartedAlertProcessor.process(patient));
+        assertEquals((double) 0, treatmentNotStartedAlertProcessor.process(patient));
     }
 
     @Test

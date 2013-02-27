@@ -32,7 +32,7 @@ public class CumulativeMissedDosesAlertProcessorTest {
 
         when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(cumulativeMissedDoses);
 
-        assertEquals(cumulativeMissedDoses, cumulativeMissedDosesAlertProcessor.process(patient));
+        assertEquals((double) cumulativeMissedDoses, cumulativeMissedDosesAlertProcessor.process(patient));
 
         verify(cumulativeMissedDosesCalculator).getCumulativeMissedDoses(patient);
     }
@@ -43,7 +43,7 @@ public class CumulativeMissedDosesAlertProcessorTest {
         when(patient.isCurrentTreatmentPaused()).thenReturn(true);
         when(patient.cumulativeMissedDoses(any(LocalDate.class))).thenReturn(5);
 
-        assertEquals(0, cumulativeMissedDosesAlertProcessor.process(patient));
+        assertEquals((double) 0, cumulativeMissedDosesAlertProcessor.process(patient));
     }
 
     @Test

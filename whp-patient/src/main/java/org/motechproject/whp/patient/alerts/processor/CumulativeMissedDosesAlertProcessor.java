@@ -18,7 +18,7 @@ public class CumulativeMissedDosesAlertProcessor implements AlertProcessor {
     }
 
     @Override
-    public int process(Patient patient) {
+    public double process(Patient patient) {
         if(patient.isCurrentTreatmentPaused()){
             return NO_ALERT_VALUE;
         }

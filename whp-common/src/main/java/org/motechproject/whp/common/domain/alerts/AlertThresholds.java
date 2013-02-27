@@ -16,7 +16,7 @@ public class AlertThresholds {
         }
     }
 
-    public AlertThreshold getThreshold(int value) {
+    public AlertThreshold getThreshold(double value) {
         AlertThreshold threshold = null;
         for(AlertThreshold alertThreshold : alertThresholds){
             if(value < alertThreshold.getThreshold()){
