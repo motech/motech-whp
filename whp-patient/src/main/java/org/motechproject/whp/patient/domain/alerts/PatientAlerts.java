@@ -15,7 +15,7 @@ public class PatientAlerts implements Serializable {
 
     private Map<PatientAlertType, PatientAlert> alerts = new HashMap<>();
 
-    private boolean hasAlerts;
+    private boolean hasNotifiableAlerts;
 
     public PatientAlert getAlert(PatientAlertType alertType) {
         if(alerts.containsKey(alertType)){
@@ -46,15 +46,15 @@ public class PatientAlerts implements Serializable {
 
     private void updateAlertStatus() {
         for(PatientAlert alert : alerts.values()){
-            if(alert.hasAlert()){
-                hasAlerts = true;
+            if(alert.hasAlert() && alert.getAlertType().isNotifiable()){
+                hasNotifiableAlerts = true;
                 return;
             }
         }
-        hasAlerts = false;
+        hasNotifiableAlerts = false;
     }
 
-    public boolean hasAlerts(){
-        return hasAlerts;
+    public boolean hasNotifiableAlerts(){
+        return hasNotifiableAlerts;
     }
 }

@@ -16,27 +16,24 @@ public class PatientAlertsTest {
         alert.setValue(1);
 
         assertEquals(alert, alerts.getAlert(AdherenceMissing));
-        assertNotSame(alert, alerts.getAlert(CumulativeMissedDoses));
-        assertNotSame(alert, alerts.getAlert(IPProgress));
     }
 
     @Test
     public void shouldReturnIfPatientHasAlert() {
         PatientAlerts alerts = new PatientAlerts();
         alerts.updateAlertStatus(AdherenceMissing, 10, 1);
-        assertTrue(alerts.hasAlerts());
+        assertTrue(alerts.hasNotifiableAlerts());
 
         alerts.updateAlertStatus(AdherenceMissing, 5, 0);
-        assertFalse(alerts.hasAlerts());
+        assertFalse(alerts.hasNotifiableAlerts());
+
+        alerts.updateAlertStatus(IPProgress, 100, 1);
+        assertFalse(alerts.hasNotifiableAlerts());
 
         alerts.updateAlertStatus(CPProgress, 95, 0);
-        assertFalse(alerts.hasAlerts());
+        assertFalse(alerts.hasNotifiableAlerts());
 
         alerts.updateAlertStatus(CumulativeMissedDoses, 11, 1);
-        assertTrue(alerts.hasAlerts());
-
-        alerts.updateAlertStatus(CumulativeMissedDoses, 5, 0);
-        alerts.updateAlertStatus(IPProgress, 100, 1);
-        assertTrue(alerts.hasAlerts());
+        assertTrue(alerts.hasNotifiableAlerts());
     }
 }

@@ -20,7 +20,7 @@ public class PatientQueryDefinitionTest {
 
     @Test
     public void shouldReturnFieldNameForPatientHasAlertsField() {
-        assertEquals("hasAlerts", PatientQueryDefinition.alertStatusFieldName());
+        assertEquals("hasNotifiableAlerts", PatientQueryDefinition.alertStatusFieldName());
     }
 
 }

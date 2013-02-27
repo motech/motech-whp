@@ -109,7 +109,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     public void shouldReturnAllActivePatientsWithAlerts() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
-        queryParams.put("hasAlerts", "true");
+        queryParams.put("hasNotifiableAlerts", "true");
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 

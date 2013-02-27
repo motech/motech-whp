@@ -34,7 +34,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     protected static final QueryField treatmentCategory = new QueryField("treatmentCategory", STRING);
     protected static final RangeField cumulativeMissedDoses = new RangeField(CUMULATIVE_MISSED_DOSES, INT, CUMULATIVE_MISSED_DOSES + FROM, CUMULATIVE_MISSED_DOSES + TO);
     protected static final RangeField adherenceMissingWeeks = new RangeField(ADHERENCE_MISSING_WEEKS, INT, ADHERENCE_MISSING_WEEKS + FROM, ADHERENCE_MISSING_WEEKS + TO);
-    protected static final QueryField hasAlerts = new QueryField("hasAlerts", STRING);
+    protected static final QueryField hasNotifiableAlerts = new QueryField("hasNotifiableAlerts", STRING);
     protected static final QueryField flag = new QueryField("flag", STRING);
 
     @Override
@@ -47,7 +47,7 @@ public class PatientQueryDefinition implements QueryDefinition {
         fields.add(treatmentCategory);
         fields.add(cumulativeMissedDoses);
         fields.add(adherenceMissingWeeks);
-        fields.add(hasAlerts);
+        fields.add(hasNotifiableAlerts);
         fields.add(flag);
 
         for(PatientAlertType alertType : PatientAlertType.values()){
@@ -77,7 +77,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "var index=new Document(); " +
                     "index.add(doc.patientId, {field: 'patientId'}); " +
                     "index.add(doc.onActiveTreatment, {field: 'isActive'}); " +
-                    "index.add(doc.patientAlerts.hasAlerts, {field: 'hasAlerts'}); " +
+                    "index.add(doc.patientAlerts.hasNotifiableAlerts, {field: 'hasNotifiableAlerts'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerId, {field: 'providerId'}); " +
                     "index.add(doc.currentTherapy.currentTreatment.providerDistrict, {field: 'providerDistrict'}); " +
                     "index.add(doc.currentTherapy.treatmentCategory.code, {field: 'treatmentCategory'}); " +
@@ -121,7 +121,7 @@ public class PatientQueryDefinition implements QueryDefinition {
     }
 
     public static String alertStatusFieldName() {
-        return hasAlerts.getName();
+        return hasNotifiableAlerts.getName();
     }
 
     public static String cumulativeMissedDosesFromParam() {
