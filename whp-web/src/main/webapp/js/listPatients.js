@@ -46,6 +46,10 @@ $(function () {
                 $(this).addClass("paused");
             }
         });
+
+        $('#achtung').each(function () {
+            $(this).attr("title", "Patient Nearing Transition!");
+        })
     });
 
     $('#patient_listing').bind('click', function(event){

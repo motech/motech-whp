@@ -7,14 +7,6 @@
 <script type="text/javascript"
         src="<@spring.url '/resources-${applicationVersion}/js/redirectOnRowClick.js'/>"></script>
 
-<script type="text/javascript">
-    $(function () {
-        $('#achtung').each(function () {
-            $(this).tooltip({title:"Patient Nearing Transition!"});
-        })
-    });
-
-</script>
 <h1>Patients Listing</h1>
 
 <div class="row-fluid">
@@ -129,7 +121,8 @@
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">
                     <div class="controls pull-right">
-                        <button id="clearFilter" ng-click="clearFormFieldsAndSearchCriteria()" type="reset" class="btn "><i class="icon-remove"></i> Clear All
+                        <button id="clearFilter" ng-click="clearFormFieldsAndSearchCriteria()" type="reset"
+                                class="btn "><i class="icon-remove"></i> Clear All
                         </button>
                         <button type="submit" id="searchButton" class="btn btn-primary">
                             Search <i class="icon-search icon-white"></i>
@@ -149,9 +142,15 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th><a href="#" ng-click = "sort('TreatmentNotStartedAlertValue')" title="Missing Treatement Start Date"><i id = "sortIcon_TreatmentNotStartedAlertValue" class="icon-minus"></i></a></th>
-                        <th><a href="#" ng-click = "sort('AdherenceMissingAlertValue', 'DESC')" title="Adherence Missing Alert"><i id = "sortIcon_AdherenceMissingAlertValue" class="icon-arrow-down"></i></a></th>
-                        <th><a href="#" ng-click = "sort('CumulativeMissedDosesAlertValue')" title="Cumulative Missed Doses Alert"><i id = "sortIcon_CumulativeMissedDosesAlertValue" class="icon-minus"></i></a></th>
+                        <th><a href="#" ng-click="sort('TreatmentNotStartedAlertValue')"
+                               title="Missing Treatement Start Date"><i id="sortIcon_TreatmentNotStartedAlertValue"
+                                                                        class="icon-minus"></i></a></th>
+                        <th><a href="#" ng-click="sort('AdherenceMissingAlertValue', 'DESC')"
+                               title="Adherence Missing Alert"><i id="sortIcon_AdherenceMissingAlertValue"
+                                                                  class="icon-arrow-down"></i></a></th>
+                        <th><a href="#" ng-click="sort('CumulativeMissedDosesAlertValue')"
+                               title="Cumulative Missed Doses Alert"><i id="sortIcon_CumulativeMissedDosesAlertValue"
+                                                                        class="icon-minus"></i></a></th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
@@ -174,24 +173,31 @@
                         containerId="{{item.patientId}}"
                         redirect-url="<@spring.url '/patients/show?patientId={{item.patientId}}' />"
                         open-in-new-tab="true"
-                        paused-treatment="{{item.currentTreatmentPaused}}" >
+                        paused-treatment="{{item.currentTreatmentPaused}}">
                         <td id="patient_{{item.patientId}}_Flag" class="row-click-exclude">
                             <img id="flag_star"
                                  endpoint="<@spring.url '/patients/{{item.patientId}}/updateFlag?value={{!item.flag}}'/>"
                                  flagValue="{{item.flag}}" class="flagImage"
                                  src="<@spring.url '/resources-${applicationVersion}/img/{{item.flag}}-star.png'/>"/>
                         </td>
-                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity" style="background-color:{{item.treatmentNotStartedSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_TreatmentNotStartedSeverity"
+                            style="background-color:{{item.treatmentNotStartedSeverityColor}}">
                         </td>
-                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" class="alert-cell"  style="background-color:{{item.adherenceMissingSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_AdherenceMissingWeekSeverityRatio" class="alert-cell"
+                            style="background-color:{{item.adherenceMissingSeverityColor}}">
                             {{item.adherenceMissingWeeks}}
                         </td>
-                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity" style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
+                        <td id="patient_{{item.patientId}}_CumulativeMissedDosesSeverity"
+                            style="background-color:{{item.cumulativeMissedDosesSeverityColor}}">
                         </td>
                         <td class="name">{{item.firstName}}</td>
                         <td>{{item.age}}</td>
                         <td id="patient_{{item.patientId}}_Gender">{{item.gender}}</td>
-                        <td class="patientId">{{item.patientId}}</td>
+                        <td class="patientId">
+                            <img id="achtung" class="pull-left" ng-show="item.showAlert == true"
+                                 src="<@spring.url '/resources-${applicationVersion}/img/smallwarning.png'/>"/>
+                            <b>{{item.patientId}}</b>
+                        </td>
                         <td class="tbId">{{item.tbId}}</td>
                         <td id="patient_{{item.patientId}}_ProviderId">{{item.currentTreatment.providerId}}</td>
                         <td id="patient_{{item.patientId}}_Village">{{item.addressVillage}}</td>
