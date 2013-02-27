@@ -51,6 +51,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withCumulativeMissedAlertValue(10, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(3, 1, DateUtil.today().minusDays(7))
                 .withTreatmentNotStartedDays(0, 0, DateUtil.today())
+                .withCpProgressAlert(110, 1, DateUtil.today())
                 .withPatientFlag(true).build();
 
         patient2 = new PatientBuilder().withDefaults()
@@ -59,7 +60,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderDistrict("district")
                 .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(7, 2, DateUtil.today().minusDays(5))
-                .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
+                .withTreatmentNotStartedDays(0, 0, DateUtil.today())
+                .withIpProgressAlert(110, 1, DateUtil.today()).build();
 
         patient3 = new PatientBuilder().withDefaults()
                 .withPatientId("789")
@@ -273,7 +275,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(0, allPatients.count(queryParams));
     }
 
-        @Test
+    @Test
     public void shouldFilterPatientsByAlertTypeAndDateCombinedAlongWithSeverity() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
@@ -305,6 +307,46 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         assertEquals(patient3.getPatientId(), searchResults.get(1).getPatientId());
         assertEquals(patient1.getPatientId(), searchResults.get(2).getPatientId());
         assertEquals(patient4WithoutAlerts.getPatientId(), searchResults.get(3).getPatientId());
+    }
+
+    @Test
+    public void shouldReturnPatientsBasedOnCPProgressAlertTypes() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put(PatientAlertType.CPProgress.name() + "AlertValueFrom", 110);
+        queryParams.put(PatientAlertType.CPProgress.name() + "AlertValueTo", Integer.MAX_VALUE);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(patient1.getPatientId(), searchResults.get(0).getPatientId());
+    }
+
+    @Test
+    public void shouldReturnPatientsBasedOnIPProgressAlertTypes() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueFrom", 110);
+        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueTo", Integer.MAX_VALUE);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(1, searchResults.size());
+        assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+    }
+
+    @Test
+    public void shouldReturnPatientsBasedOnCPAndIPProgressAlertTypes() {
+        SortParams sortParams = new SortParams();
+        FilterParams queryParams = new FilterParams();
+        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueFrom", 120);
+        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueTo", Integer.MAX_VALUE);
+        queryParams.put(PatientAlertType.CPProgress.name() + "AlertValueFrom", 120);
+        queryParams.put(PatientAlertType.CPProgress.name() + "AlertValueTo", Integer.MAX_VALUE);
+
+        List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
+
+        assertEquals(0, searchResults.size());
     }
 
     private boolean hasNoInactivePatients(List<Patient> searchResults) {

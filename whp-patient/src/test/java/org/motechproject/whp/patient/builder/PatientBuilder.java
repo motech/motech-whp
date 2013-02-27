@@ -233,6 +233,18 @@ public class PatientBuilder {
         return this;
     }
 
+    public PatientBuilder withCpProgressAlert(int cpProgress, int severity, LocalDate alertDate) {
+        patient.updatePatientAlert(PatientAlertType.CPProgress, cpProgress, severity);
+        patient.getPatientAlerts().cpProgressAlert().setAlertDate(alertDate);
+        return this;
+    }
+
+    public PatientBuilder withIpProgressAlert(int ipProgress, int severity, LocalDate alertDate) {
+        patient.updatePatientAlert(PatientAlertType.IPProgress, ipProgress, severity);
+        patient.getPatientAlerts().ipProgressAlert().setAlertDate(alertDate);
+        return this;
+    }
+
     public PatientBuilder withProviderDistrict(String district) {
         patient.getCurrentTreatment().setProviderDistrict(district);
         return this;

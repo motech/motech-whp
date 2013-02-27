@@ -6,15 +6,19 @@ import org.mockito.Mock;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
+import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.model.AlertDateFilter;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.model.ProgressFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.domain.alerts.PatientAlertType.AdherenceMissing;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.CPProgress;
+import static org.motechproject.whp.common.domain.alerts.PatientAlertType.IPProgress;
 import static org.motechproject.whp.patient.model.AlertDateFilter.Today;
 import static org.motechproject.whp.patient.model.AlertTypeFilters.ADHERENCE_MISSING_WITH_SEVERITY_THREE;
 
@@ -101,5 +105,27 @@ public class AlertsFilterTransformerTest {
         assertEquals(transformedFilterParams.get("treatmentCategory"), "01");
         assertEquals(12, transformedFilterParams.get(PatientQueryDefinition.adherenceMissingWeeksFromParam()));
         assertEquals(Integer.MAX_VALUE, transformedFilterParams.get(PatientQueryDefinition.adherenceMissingWeeksToParam()));
+    }
+
+    @Test
+    public void shouldConvertIPProgressFilterIntoDesiredQueryFields(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("progressFilter", IPProgress.name());
+
+        FilterParams transformedFilterParams = alertsFilterTransformer.transform(filterParams);
+
+        assertEquals(ProgressFilter.IPProgress.getFilterValue(), transformedFilterParams.get(PatientQueryDefinition.alertValueFromParam(PatientAlertType.IPProgress)));
+        assertEquals(Integer.MAX_VALUE, transformedFilterParams.get(PatientQueryDefinition.alertValueToParam(PatientAlertType.IPProgress)));
+    }
+
+    @Test
+    public void shouldConvertCPProgressFilterIntoDesiredQueryFields(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("progressFilter", CPProgress.name());
+
+        FilterParams transformedFilterParams = alertsFilterTransformer.transform(filterParams);
+
+        assertEquals(ProgressFilter.CPProgress.getFilterValue(), transformedFilterParams.get(PatientQueryDefinition.alertValueFromParam(PatientAlertType.CPProgress)));
+        assertEquals(Integer.MAX_VALUE, transformedFilterParams.get(PatientQueryDefinition.alertValueToParam(PatientAlertType.CPProgress)));
     }
 }

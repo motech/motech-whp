@@ -11,6 +11,7 @@ import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
 import org.motechproject.whp.patient.model.FlagFilters;
+import org.motechproject.whp.patient.model.ProgressFilters;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.PatientDashboardLegends;
 
@@ -37,6 +38,8 @@ public class PatientListControllerTest extends BaseControllerTest {
     @Mock
     AlertDateFilters alertDates;
     @Mock
+    ProgressFilters progressFilters;
+    @Mock
     private TreatmentWeekInstance treatmentWeekInstance;
     private FlagFilters flags = new FlagFilters();
 
@@ -49,7 +52,7 @@ public class PatientListControllerTest extends BaseControllerTest {
         initMocks(this);
         when(allDistrictsCache.getAll()).thenReturn(districts);
         when(allTreatmentCategories.getAll()).thenReturn(treatmentCategories);
-        patientListController = new PatientListController(allDistrictsCache, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends, alertTypes, alertDates);
+        patientListController = new PatientListController(allDistrictsCache, allTreatmentCategories, treatmentWeekInstance, patientDashboardLegends, alertTypes, alertDates, progressFilters);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class PatientListControllerTest extends BaseControllerTest {
                 .andExpect(model().attribute("flags", flags))
                 .andExpect(model().attribute("treatmentCategories", treatmentCategories))
                 .andExpect(model().attribute("legends", patientDashboardLegends.getLegends()))
+                .andExpect(model().attribute("progressFilters", progressFilters))
                 .andExpect(view().name("patient/list"));
     }
-
 }

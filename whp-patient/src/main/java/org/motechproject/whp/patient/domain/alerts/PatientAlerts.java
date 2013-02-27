@@ -39,6 +39,14 @@ public class PatientAlerts implements Serializable {
         return getAlert(TreatmentNotStarted);
     }
 
+    public PatientAlert cpProgressAlert(){
+        return getAlert(CPProgress);
+    }
+
+    public PatientAlert ipProgressAlert(){
+        return getAlert(IPProgress);
+    }
+
     public void updateAlertStatus(PatientAlertType alertType, double value, int severity) {
         getAlert(alertType).update(value, severity);
         updateAlertStatus();

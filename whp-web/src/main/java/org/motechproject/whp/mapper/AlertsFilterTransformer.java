@@ -3,6 +3,7 @@ package org.motechproject.whp.mapper;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
+import org.motechproject.whp.patient.model.ProgressFilter;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,11 @@ public class AlertsFilterTransformer {
                 case "adherenceMissingWeeks":
                     transformedFilterParams.put(PatientQueryDefinition.adherenceMissingWeeksFromParam(), entry.getValue());
                     transformedFilterParams.put(PatientQueryDefinition.adherenceMissingWeeksToParam(), Integer.MAX_VALUE);
+                    break;
+                case "progressFilter":
+                    ProgressFilter progressFilter = ProgressFilter.valueOf((String) entry.getValue());
+                    transformedFilterParams.put(PatientQueryDefinition.alertValueFromParam(progressFilter.getAlertType()), progressFilter.getFilterValue());
+                    transformedFilterParams.put(PatientQueryDefinition.alertValueToParam(progressFilter.getAlertType()), Integer.MAX_VALUE);
                     break;
                 default:
                     transformedFilterParams.put(entry.getKey(), entry.getValue());

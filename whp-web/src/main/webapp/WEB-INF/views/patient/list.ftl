@@ -117,6 +117,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="control-group span2">
+                            <label class="control-label">Phase Progress</label>
+
+                            <div class="controls">
+                                <select id="progressFilter" name="progressFilter">
+                                    <option value=""></option>
+                                    <#list progressFilters.progressFilters as progressFilter>
+                                        <option value="${progressFilter.name()}"
+                                                ng-selected="{{isSelected('${progressFilter.name()}', searchCriteria.progressFilter, 'progressFilter')}}">${progressFilter.displayText}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
                 <div class="control-group buttons-group row-fluid">

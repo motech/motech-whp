@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.couchdb.lucene.query.field.FieldType.DATE;
-import static org.motechproject.couchdb.lucene.query.field.FieldType.INT;
-import static org.motechproject.couchdb.lucene.query.field.FieldType.STRING;
+import static org.motechproject.couchdb.lucene.query.field.FieldType.*;
 
 @Component
 public class PatientQueryDefinition implements QueryDefinition {
@@ -52,7 +50,8 @@ public class PatientQueryDefinition implements QueryDefinition {
 
         for(PatientAlertType alertType : PatientAlertType.values()){
             fields.add(new QueryField(alertType.name() + ALERT_SEVERITY, INT));
-            fields.add(new QueryField(alertType.name() + ALERT_VALUE, INT));
+            fields.add(new QueryField(alertType.name() + ALERT_VALUE, DOUBLE));
+            fields.add(new RangeField(alertType.name() + ALERT_VALUE, DOUBLE, alertType.name() + ALERT_VALUE + FROM, alertType.name() + ALERT_VALUE + TO));
             fields.add(new RangeField(alertType.name() + ALERT_DATE, DATE, alertDateFromParamForType(alertType), alertDateToParamForType(alertType)));
             fields.add(new RangeField(ALERT_DATE, DATE, ALERT_DATE + FROM, ALERT_DATE + TO));
         }
@@ -95,7 +94,7 @@ public class PatientQueryDefinition implements QueryDefinition {
                     "for (var i=0; i<alertTypes.length ;i++) { " +
                         "var alertType =  alertTypes[i]; " +
                         "index.add(doc.patientAlerts.alerts[alertType].alertSeverity, {type : 'int', field: alertType + '"+ ALERT_SEVERITY + "'}); "+
-                        "index.add(doc.patientAlerts.alerts[alertType].value, {type : 'int', field: alertType + '"+ ALERT_VALUE + "'}); "+
+                        "index.add(doc.patientAlerts.alerts[alertType].value, {type : 'double', field: alertType + '"+ ALERT_VALUE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: alertType + '"+ ALERT_DATE + "'}); "+
                         "index.add(doc.patientAlerts.alerts[alertType].alertDate, {type : 'date', field: '"+ ALERT_DATE + "'}); "+
                     "} "+
@@ -118,6 +117,14 @@ public class PatientQueryDefinition implements QueryDefinition {
 
     public static String alertSeverityParam(PatientAlertType alertType) {
         return alertType.name() + ALERT_SEVERITY;
+    }
+
+    public static String alertValueFromParam(PatientAlertType alertType) {
+        return alertType.name() + ALERT_VALUE + FROM;
+    }
+
+    public static String alertValueToParam(PatientAlertType alertType) {
+        return alertType.name() + ALERT_VALUE + TO;
     }
 
     public static String alertStatusFieldName() {

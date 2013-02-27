@@ -6,13 +6,12 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.model.AlertDateFilters;
 import org.motechproject.whp.patient.model.AlertTypeFilters;
 import org.motechproject.whp.patient.model.FlagFilters;
+import org.motechproject.whp.patient.model.ProgressFilters;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.uimodel.PatientDashboardLegends;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -28,13 +27,14 @@ public class PatientListController extends BaseWebController {
     private PatientDashboardLegends patientDashboardLegends;
     private AlertTypeFilters alertTypeFilters;
     private AlertDateFilters alertDateFilters;
+    private ProgressFilters progressFilters;
 
     @Autowired
     public PatientListController(AllDistricts allDistrictsCache,
                                  AllTreatmentCategories allTreatmentCategories,
                                  TreatmentWeekInstance treatmentWeekInstance,
                                  PatientDashboardLegends patientDashboardLegends,
-                                 AlertTypeFilters alertTypeFilters, AlertDateFilters alertDateFilters) {
+                                 AlertTypeFilters alertTypeFilters, AlertDateFilters alertDateFilters, ProgressFilters progressFilters) {
 
         this.allDistrictsCache = allDistrictsCache;
         this.allTreatmentCategories = allTreatmentCategories;
@@ -42,6 +42,7 @@ public class PatientListController extends BaseWebController {
         this.patientDashboardLegends = patientDashboardLegends;
         this.alertTypeFilters = alertTypeFilters;
         this.alertDateFilters = alertDateFilters;
+        this.progressFilters = progressFilters;
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
@@ -58,5 +59,6 @@ public class PatientListController extends BaseWebController {
         uiModel.addAttribute("legends", patientDashboardLegends.getLegends());
         uiModel.addAttribute("treatmentCategories", allTreatmentCategories.getAll());
         uiModel.addAttribute("lastSunday", WHPDate.date(treatmentWeekInstance.previousAdherenceWeekEndDate()).lucidValue());
+        uiModel.addAttribute("progressFilters", progressFilters);
     }
 }
