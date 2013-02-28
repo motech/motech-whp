@@ -13,7 +13,7 @@
         <#if Session.loggedInUser?exists>
             <ul class="nav pull-right">
                 <li class="dropdown pull-right">
-                    <@security.authorize ifNotGranted="PROVIDER">
+                    <@security.authorize ifNotGranted="PROVIDER, FIELD_STAFF">
                         <a class="dropdown-toggle" data-toggle="dropdown"
                            href="#">Welcome ${Session.loggedInUser.userName}
                             <b class="caret"></b></a>
@@ -24,7 +24,7 @@
                             <li>
                         </ul>
                     </@security.authorize>
-                    <@security.authorize ifAnyGranted="PROVIDER">
+                    <@security.authorize ifAnyGranted="PROVIDER, FIELD_STAFF">
                         <a>Welcome ${Session.loggedInUser.userName}</a>
                     </@security.authorize>
 
