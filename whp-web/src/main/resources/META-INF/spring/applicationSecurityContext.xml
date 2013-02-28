@@ -62,7 +62,7 @@
 
         <!-- Both admin and providers -->
         <intercept-url pattern="/" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN', 'FIELD_STAFF')" requires-channel="any"/>
-        <intercept-url pattern="/changePassword" access="hasAnyRole('PROVIDER','CMF_ADMIN','IT_ADMIN')"
+        <intercept-url pattern="/changePassword" access="hasAnyRole('CMF_ADMIN','IT_ADMIN')"
                        requires-channel="any"/>
 
         <!-- Only providers -->
