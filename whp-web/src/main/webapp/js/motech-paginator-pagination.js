@@ -108,7 +108,7 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
     }
 
     $scope.sort = function (sortField, defaultSortOrder) {
-        if (typeof(defaultSortOrder) === 'undefined') defaultSortOrder = "DESC";
+        if (typeof(defaultSortOrder) === 'undefined') defaultSortOrder = "ASC";
 
         resetSortIconsOnAllColumns();
 
