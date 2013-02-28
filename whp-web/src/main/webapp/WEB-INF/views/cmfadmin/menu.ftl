@@ -7,19 +7,19 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Downloads <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="downloadLinks">
             <li>
-                <a href="${whpReportsURL}/adherenceRecords/adherenceReport.xls">All adherence data</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/auditreports/adherenceAuditLogReport.xls">All adherence audit data</a>
-            </li>
-            <li>
                 <a href="/whp/patientreports/filter">Patient Reports</a>
             </li>
             <li>
-                <a href="${whpReportsURL}/reports/containerTrackingReport/containerSummary.xls">Container tracking data</a>
+                <a href="${whpReportsURL}/<@spring.message 'whp.reports.adherence.report'/>">All adherence data</a>
             </li>
             <li>
-                <a href="${whpReportsURL}/reports/providerReminderCallLogs/summary.xls">Provider reminder call logs</a>
+                <a href="${whpReportsURL}/<@spring.message 'whp.reports.adherence.audit.report'/>">All adherence audit data</a>
+            </li>
+            <li>
+                <a href="${whpReportsURL}/<@spring.message 'whp.reports.container.report'/>">Container tracking data</a>
+            </li>
+            <li>
+                <a href="${whpReportsURL}/<@spring.message 'whp.reports.provider.reminder.call.report'/>">Provider reminder call logs</a>
             </li>
         </ul>
     </li>
