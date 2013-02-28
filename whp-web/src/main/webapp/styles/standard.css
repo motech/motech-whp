@@ -1128,11 +1128,14 @@ pre {
 }
 .table tbody td.alert-cell .alert-count {
     background: #FFFFFF;
-    line-height: 1;
+    line-height: 15px;
     margin: 0 3px;
-    padding: 2px;
+    padding: 1px;
     text-align: center;
-    width: 12px;
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+
     display: inline-block;
     -webkit-box-shadow: 0 2px 2px #777777;
     -moz-box-shadow: 0 2px 2px #777777;
