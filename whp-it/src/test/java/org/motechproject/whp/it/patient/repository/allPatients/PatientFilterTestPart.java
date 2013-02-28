@@ -69,7 +69,8 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withProviderDistrict("district2")
                 .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(7, 2, DateUtil.today().minusDays(5))
-                .withTreatmentNotStartedDays(0, 0, DateUtil.today()).build();
+                .withTreatmentNotStartedDays(0, 0, DateUtil.today())
+                .withIpProgressAlert(100, 1, DateUtil.today()).build();
 
         patient4WithoutAlerts = new PatientBuilder().withDefaults()
                 .withPatientId("patient4")
@@ -323,16 +324,17 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldReturnPatientsBasedOnIPProgressAlertTypes() {
+    public void shouldReturnPatientsBasedOnIPProgressValueMoreThan100AlertTypes() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
-        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueFrom", 110);
+        queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueFrom", 100.01);
         queryParams.put(PatientAlertType.IPProgress.name() + "AlertValueTo", Integer.MAX_VALUE);
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(1, searchResults.size());
         assertEquals(patient2.getPatientId(), searchResults.get(0).getPatientId());
+        //patient5 with ipProgress 100 is not returned
     }
 
     @Test
