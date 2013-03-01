@@ -1,8 +1,10 @@
 package org.motechproject.whp.reporting.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProviderAdherenceSummary {
 
     private String providerId;
