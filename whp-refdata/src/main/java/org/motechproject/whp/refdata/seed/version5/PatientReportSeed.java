@@ -2,7 +2,6 @@ package org.motechproject.whp.refdata.seed.version5;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.reporting.PatientReportingService;
 import org.motechproject.whp.patient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +12,17 @@ import java.util.List;
 public class PatientReportSeed {
 
     private final PatientService patientService;
-    private final PatientReportingService patientReportingService;
 
     @Autowired
-    public PatientReportSeed(PatientService patientService, PatientReportingService patientReportingService) {
+    public PatientReportSeed(PatientService patientService) {
         this.patientService = patientService;
-        this.patientReportingService = patientReportingService;
     }
 
     @Seed(priority = 3, version = "5.0")
     public void migratePatients() {
         List<Patient> patientList = patientService.getAll();
         for (Patient patient : patientList){
-            patientReportingService.reportPatient(patient);
+            patientService.update(patient);
         }
     }
 }

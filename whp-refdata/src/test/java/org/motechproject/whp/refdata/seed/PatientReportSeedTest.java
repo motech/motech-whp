@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.reporting.PatientReportingService;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.seed.version5.PatientReportSeed;
 
@@ -21,13 +20,10 @@ public class PatientReportSeedTest {
     @Mock
     PatientService patientService;
 
-    @Mock
-    PatientReportingService patientReportingService;
-
     @Before
     public void setUp() {
         initMocks(this);
-        patientReportSeed = new PatientReportSeed(patientService, patientReportingService);
+        patientReportSeed = new PatientReportSeed(patientService);
     }
 
     @Test
@@ -41,7 +37,7 @@ public class PatientReportSeedTest {
         patientReportSeed.migratePatients();
 
         verify(patientService).getAll();
-        verify(patientReportingService).reportPatient(patient1);
-        verify(patientReportingService).reportPatient(patient2);
+        verify(patientService).update(patient1);
+        verify(patientService).update(patient2);
     }
 }
