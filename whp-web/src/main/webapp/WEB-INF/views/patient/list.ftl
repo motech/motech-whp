@@ -69,6 +69,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="control-group span2">
+                            <label class="control-label">Phase Progress</label>
+
+                            <div class="controls">
+                                <select id="progressFilter" name="progressFilter">
+                                    <option value=""></option>
+                                    <#list progressFilters.progressFilters as progressFilter>
+                                        <option value="${progressFilter.name()}"
+                                                ng-selected="{{isSelected('${progressFilter.name()}', searchCriteria.progressFilter, 'progressFilter')}}">${progressFilter.displayText}</option>
+                                    </#list>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row-fluid sel-result">
@@ -113,19 +126,6 @@
                                     <#list flags.flagFilters as flagFilter>
                                         <option value="${flagFilter.value}"
                                                 ng-selected="{{isSelected('${flagFilter.value}', searchCriteria.flag, 'flag')}}">${flagFilter.displayText}</option>
-                                    </#list>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control-group span2">
-                            <label class="control-label">Phase Progress</label>
-
-                            <div class="controls">
-                                <select id="progressFilter" name="progressFilter">
-                                    <option value=""></option>
-                                    <#list progressFilters.progressFilters as progressFilter>
-                                        <option value="${progressFilter.name()}"
-                                                ng-selected="{{isSelected('${progressFilter.name()}', searchCriteria.progressFilter, 'progressFilter')}}">${progressFilter.displayText}</option>
                                     </#list>
                                 </select>
                             </div>
