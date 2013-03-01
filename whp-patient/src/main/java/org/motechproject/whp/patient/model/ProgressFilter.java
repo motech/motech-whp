@@ -7,7 +7,7 @@ import org.motechproject.whp.common.domain.alerts.PatientAlertType;
 public enum ProgressFilter {
 
     IPProgress("IP Progress Alert", PatientAlertType.IPProgress, 100.01),
-    CPProgress("CP Progress Alert", PatientAlertType.CPProgress, 100);
+    CPProgress("CP Progress Alert", PatientAlertType.CPProgress, 100.01);
 
     private String displayText;
     private PatientAlertType alertType;
