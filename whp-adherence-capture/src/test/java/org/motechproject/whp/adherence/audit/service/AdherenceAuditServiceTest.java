@@ -22,7 +22,6 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Therapy;
 import org.motechproject.whp.patient.domain.Treatment;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -54,22 +53,6 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
         initMocks(this);
         mockCurrentDate(DateUtil.now());
         adherenceAuditService = new AdherenceAuditService(allWeeklyAdherenceAuditLogs, allDailyAdherenceAuditLogs, allAdherenceAuditLogs, adherenceAuditLogReportingService);
-    }
-
-    @Test
-    public void shouldFetchAllAuditLogsInLastThreeMonths() {
-        DateTime now = DateUtil.now();
-        int pageSize = 10000;
-        int pageNumber = 1;
-
-        List<AdherenceAuditLog> expectedAuditLogs = Arrays.asList(new AdherenceAuditLog("patient1", "providerId", "tbId", now, now, "cmfAdmin", 1, PillStatus.Taken, "WEB"));
-        when(allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize)).thenReturn(expectedAuditLogs);
-
-        List<AdherenceAuditLog> auditLogs = adherenceAuditService.fetchAllAuditLogsInLastThreeMonths(pageNumber);
-
-        assertEquals(expectedAuditLogs, auditLogs);
-        verify(allAdherenceAuditLogs).findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, pageSize);
-
     }
 
     @Test

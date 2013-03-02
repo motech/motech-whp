@@ -8,12 +8,10 @@ import org.mockito.Mock;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
-import org.motechproject.whp.user.domain.ProviderIds;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
@@ -43,27 +41,6 @@ public class AdherenceLogServiceTest {
         adherenceLogService.countOfDosesTakenBetween(patientId, treatmentId, yesterday, today);
 
         verify(allAdherenceLogs).countOfDosesTakenBetween(patientId, treatmentId, yesterday, today);
-    }
-
-    @Test
-    public void shouldReturnProvidersWithAdherenceRecordsInADistrict() {
-        String district = "district";
-        ProviderIds providersWithAdherenceRecords = new ProviderIds(asList("providerId1"));
-        LocalDate yesterday = today().minusDays(1);
-        LocalDate today = today();
-
-        when(allAdherenceLogs.withKnownAdherenceReportedByProviders(district, yesterday, today)).thenReturn(providersWithAdherenceRecords);
-        assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherence(district, yesterday, today));
-    }
-
-    @Test
-    public void shouldReturnProvidersWithAdherence() {
-        ProviderIds providersWithAdherenceRecords = new ProviderIds(asList("providerId1"));
-        LocalDate yesterday = today().minusDays(1);
-        LocalDate today = today();
-
-        when(allAdherenceLogs.findProvidersWithAdherence(yesterday, today)).thenReturn(providersWithAdherenceRecords);
-        assertEquals(providersWithAdherenceRecords, adherenceLogService.providersWithAdherence(yesterday, today));
     }
 
     @Test

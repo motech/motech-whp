@@ -1,8 +1,5 @@
 package org.motechproject.whp.it.adherence.capture.audit.repository;
 
-import org.hamcrest.MatcherAssert;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.joda.time.DateTimeZone.UTC;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
@@ -50,36 +44,6 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
     DailyAdherenceAuditLog dailyAuditLog3 = new DailyAdherenceAuditLog("patient1", "tbId1", DateUtil.today(), PillStatus.Unknown, "cmfAdmin", AdherenceSource.WEB.name(), DateUtil.now(), providerId);
 
     @Test
-    public void shouldGetDailyAndWeeklyAdherenceAuditLogs() {
-        setUpWeeklyAuditLogs();
-
-        setUpDailyAuditLogs();
-
-        DateTime now = DateUtil.now();
-
-        //This is to fire the update
-        allAdherenceAuditLogs.getAll();
-
-        List<AdherenceAuditLog> adherenceAuditLogList = allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, 0, 10);
-        assertThat(adherenceAuditLogList.size(), is(6));
-        MatcherAssert.assertThat(adherenceAuditLogList, hasItems(getLog(weeklyAuditLog1), getLog(weeklyAuditLog2), getLog(weeklyAuditLog3)));
-        MatcherAssert.assertThat(adherenceAuditLogList, hasItems(getLog(dailyAuditLog1), getLog(dailyAuditLog2), getLog(dailyAuditLog3)));
-    }
-
-    @Test
-    public void shouldNotGetAdherenceLogsOlderThanGivenMonthsOld() {
-        setUpWeeklyAuditLogs();
-
-        setUpDailyAuditLogs();
-
-        DateTime now = DateUtil.now();
-
-        List<AdherenceAuditLog> adherenceAuditLogList = allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, 0, 10);
-        assertThat(adherenceAuditLogList, not(hasItems(getLog(dailyAuditLog0))));
-    }
-
-
-    @Test
     public void shouldGetAllAdherenceLogs() {
         setUpWeeklyAuditLogs();
         setUpDailyAuditLogs();
@@ -92,15 +56,6 @@ public class AllAdherenceAuditLogsIT extends SpringIntegrationTest {
 
         List<AdherenceAuditLog> secondPageAdherenceAuditLogList = allAdherenceAuditLogs.allLogs(1, 4);
         assertThat(secondPageAdherenceAuditLogList.size(), is(3));
-    }
-
-
-    private AdherenceAuditLog getLog(DailyAdherenceAuditLog dailyAuditLog) {
-        return new AdherenceAuditLog(dailyAuditLog.getPatientId(), dailyAuditLog.getProviderId(), dailyAuditLog.getTbId(), dailyAuditLog.getCreationTime().toDateTime(UTC), new LocalDate().toDateTimeAtStartOfDay(UTC), dailyAuditLog.getUser(), null, dailyAuditLog.getPillStatus(), dailyAuditLog.getSourceOfChange());
-    }
-
-    private AdherenceAuditLog getLog(AuditLog weeklyAuditLog) {
-        return new AdherenceAuditLog(weeklyAuditLog.getPatientId(), weeklyAuditLog.getProviderId(), weeklyAuditLog.getTbId(), weeklyAuditLog.getCreationTime().toDateTime(UTC), null, weeklyAuditLog.getUser(), weeklyAuditLog.getNumberOfDosesTaken(), null, weeklyAuditLog.getSourceOfChange());
     }
 
     private void setUpDailyAuditLogs() {

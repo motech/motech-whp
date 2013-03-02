@@ -9,7 +9,6 @@ import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
 import org.motechproject.whp.adherence.domain.AdherenceLog;
-import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -49,22 +48,10 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return db.queryView(q, AdherenceLog.class);
     }
 
-    public List<AdherenceLog> findLogsBy(String externalId, String treatmentId, LocalDate fromDate, LocalDate toDate) {
-        final ComplexKey startKey = ComplexKey.of(externalId, treatmentId, fromDate);
-        final ComplexKey endKey = ComplexKey.of(externalId, treatmentId, toDate);
-        ViewQuery q = createQuery("by_externaId_treatmentId_andDosageDate").startKey(startKey).endKey(endKey).inclusiveEnd(true).includeDocs(true);
-        return db.queryView(q, AdherenceLog.class);
-    }
-
     public AdherenceLog findLogBy(String externalId, String treatmentId, LocalDate asOf) {
         final ComplexKey key = ComplexKey.of(externalId, treatmentId, asOf);
         ViewQuery q = createQuery("by_externaId_treatmentId_andDosageDate").key(key).includeDocs(true);
         return singleResult(db.queryView(q, AdherenceLog.class));
-    }
-
-    public List<AdherenceRecord> findLogsInRange(LocalDate startDate, LocalDate endDate, int pageNumber, int pageSize) {
-        ViewQuery q = createQuery(viewForAdherenceLogsByDoseDate()).startKey(startDate).endKey(endDate).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
-        return db.queryView(q, AdherenceRecord.class);
     }
 
     @View(name = "by_dosageDate", map = "function(doc) {if (doc.type =='AdherenceLog' && doc.status !== 0 ) {emit(doc.doseDate, {externalId:doc.externalId, treatmentId:doc.treatmentId, doseDate:doc.doseDate, status:doc.status, meta:doc.meta});}}")
@@ -150,36 +137,6 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
         return doseDates;
     }
 
-    @View(name = "find_patients_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2)) {emit(doc.doseDate, doc.externalId);}}")
-    public List<String> findPatientsWithAdherence(LocalDate startDate, LocalDate endDate) {
-        ViewQuery q = createQuery("find_patients_with_adherence").startKey(startDate).endKey(endDate).inclusiveEnd(true).includeDocs(true);
-        return getValues(q);
-    }
-
-    @View(name = "belonging_to_district", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit([doc.meta.DISTRICT, doc.doseDate], doc.meta.PROVIDER_ID);}}")
-    public ProviderIds withKnownAdherenceReportedByProviders(String district, LocalDate from, LocalDate to) {
-        ViewQuery query = createQuery("belonging_to_district")
-                .startKey(ComplexKey.of(district, from))
-                .endKey(ComplexKey.of(district, to))
-                .inclusiveEnd(true)
-                .includeDocs(true);
-        return new ProviderIds(getValue(db.queryView(query).getRows()));
-    }
-
-    @View(name = "find_providers_with_adherence", map = "function(doc) {if (doc.type == 'AdherenceLog' && (doc.status == 1 || doc.status == 2) ) {emit(doc.doseDate, doc.meta.PROVIDER_ID);}}")
-    public ProviderIds findProvidersWithAdherence(LocalDate from, LocalDate to) {
-        ViewQuery q = createQuery("find_providers_with_adherence").startKey(from).endKey(to).inclusiveEnd(true).includeDocs(true);
-        return new ProviderIds(getValues(q));
-    }
-
-    private List<String> getValue(List<ViewResult.Row> rows) {
-        List<String> result = new ArrayList<>();
-        for (ViewResult.Row row : rows) {
-            result.add(row.getValue());
-        }
-        return result;
-    }
-
     public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
         int status = 1;
         ComplexKey startKey = ComplexKey.of(patientId, treatmentId, status);
@@ -187,15 +144,6 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
 
         ViewQuery q = createQuery("all_taken_logs").startKey(startKey).endKey(endKey).inclusiveEnd(true).reduce(false);
         return db.queryView(q, AdherenceRecord.class);
-    }
-
-    private List<String> getValues(ViewQuery q) {
-        Set<String> ids = new HashSet<>();
-        ViewResult result = db.queryView(q);
-        for (ViewResult.Row row : result) {
-            ids.add(row.getValue());
-        }
-        return new ArrayList<>(ids);
     }
 
     public List<AdherenceRecord> allLogs(int pageNumber, int pageSize) {

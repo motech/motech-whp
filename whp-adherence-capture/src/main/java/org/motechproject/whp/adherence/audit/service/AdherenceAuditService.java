@@ -1,7 +1,5 @@
 package org.motechproject.whp.adherence.audit.service;
 
-import org.joda.time.DateTime;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.domain.AdherenceAuditLog;
 import org.motechproject.whp.adherence.audit.domain.AuditLog;
@@ -70,11 +68,6 @@ public class AdherenceAuditService {
 
     public List<DailyAdherenceAuditLog> fetchDailyAuditLogs() {
         return allDailyAdherenceAuditLogs.getAll();
-    }
-
-    public List<AdherenceAuditLog> fetchAllAuditLogsInLastThreeMonths(int pageNumber) {
-        DateTime now = DateUtil.now();
-        return allAdherenceAuditLogs.findLogsAsOf(now.minusMonths(3), now, pageNumber - 1, 10000);
     }
 
     public List<AdherenceAuditLog> fetchAllAuditLogs(int pageNumber) {

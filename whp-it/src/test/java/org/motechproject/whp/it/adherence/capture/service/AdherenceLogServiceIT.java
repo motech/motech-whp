@@ -34,26 +34,6 @@ public class AdherenceLogServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldFetchAllAdherenceLogsWithinGivenDateAndWithinThreeMonths() {
-        LocalDate today = DateUtil.today();
-        AdherenceRecord patientOneWithinDateLimit = new AdherenceRecord("externalId1", "treatmentId", today);
-        patientOneWithinDateLimit = patientOneWithinDateLimit.status(1);
-
-        AdherenceRecord patientOneOutsideLimit = new AdherenceRecord("externalId1", "treatmentId", today.plusDays(1));
-        patientOneOutsideLimit = patientOneOutsideLimit.status(1);
-
-        AdherenceRecord patientOneOutsideLimit_BeforeThreeMonths = new AdherenceRecord("externalId1", "treatmentId", today.minusMonths(3).minusDays(2));
-        patientOneOutsideLimit_BeforeThreeMonths = patientOneOutsideLimit.status(1);
-
-        AdherenceRecord patientTwoWithinDateLimit = new AdherenceRecord("externalId2", "treatmentId", today.minusDays(1));
-        patientTwoWithinDateLimit = patientTwoWithinDateLimit.status(1);
-
-        adherenceLogService.saveOrUpdateAdherence(asList(patientOneOutsideLimit, patientOneWithinDateLimit, patientTwoWithinDateLimit, patientOneOutsideLimit_BeforeThreeMonths));
-        Assert.assertEquals(1, adherenceLogService.adherence(today, 0, 1).size());
-        Assert.assertEquals(1, adherenceLogService.adherence(today, 1, 1).size());
-    }
-
-    @Test
     public void shouldFetchAdherenceRecordsBetweenTwoDates() {
         LocalDate today = DateUtil.today();
 

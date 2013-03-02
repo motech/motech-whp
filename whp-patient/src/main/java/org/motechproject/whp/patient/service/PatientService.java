@@ -93,10 +93,6 @@ public class PatientService {
         return allPatients.getAll();
     }
 
-    public List<Patient> getAll(int pageNumber, int pageSize) {
-        return allPatients.getAll(pageNumber, pageSize);
-    }
-
     @MotechListener(subjects = EventKeys.PROVIDER_DISTRICT_CHANGE)
     public void handleProviderDistrictChange(MotechEvent motechEvent) {
         String providerId = (String) motechEvent.getParameters().get("0");

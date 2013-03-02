@@ -147,12 +147,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
         return filterProviderIds(db.queryView(query));
     }
 
-    @GenerateView
-    public List<Patient> getAll(int pageNumber, int pageSize) {
-        ViewQuery query = createQuery("by_patientId").skip(pageNumber * pageSize).limit(pageSize).includeDocs(true);
-        return db.queryView(query, Patient.class);
-    }
-
     @View(name = "with_active_patients", map = "classpath:filterProvidersWithActivePatients.js")
     public void createViewForProvidersWithActivePatients() {
     }

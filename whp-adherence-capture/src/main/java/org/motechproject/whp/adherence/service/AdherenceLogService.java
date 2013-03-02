@@ -35,14 +35,6 @@ public class AdherenceLogService {
         }
     }
 
-    public List<AdherenceRecord> adherence(LocalDate asOf, int pageNumber, int pageSize) {
-        return allAdherenceLogs.findLogsInRange(asOf.minusMonths(3), asOf, pageNumber, pageSize);
-    }
-
-    public ProviderIds providersWithAdherence(String district, LocalDate from, LocalDate to) {
-        return allAdherenceLogs.withKnownAdherenceReportedByProviders(district, from, to);
-    }
-
     public List<AdherenceRecord> adherence(String externalId, String treatmentId, LocalDate startDate, LocalDate endDate) {
         return allAdherenceLogs.findLogsInRange(externalId, treatmentId, startDate, endDate);
     }
@@ -65,10 +57,6 @@ public class AdherenceLogService {
 
     public List<AdherenceRecord> allTakenLogs(String patientId, String treatmentId) {
         return allAdherenceLogs.allTakenLogs(patientId, treatmentId);
-    }
-
-    public ProviderIds providersWithAdherence(LocalDate from, LocalDate to) {
-        return allAdherenceLogs.findProvidersWithAdherence(from, to);
     }
 
     public List<AdherenceRecord> fetchAllAdherenceRecords(int pageNumber) {

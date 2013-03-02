@@ -10,7 +10,6 @@ import org.motechproject.whp.adherence.domain.AdherenceLog;
 import org.motechproject.whp.adherence.mapping.AdherenceLogMapper;
 import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.it.SpringIntegrationTest;
-import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -18,15 +17,12 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = "classpath*:/applicationWHPAdherenceContext.xml")
 public class AllAdherenceLogsIT extends SpringIntegrationTest {
 
     @Autowired
     private AllAdherenceLogs allAdherenceLogs;
-    private LocalDate today = DateUtil.today();
-    private LocalDate yesterday = DateUtil.today().minusDays(1);
 
     @After
     public void tearDown() {
@@ -69,83 +65,6 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         );
     }
 
-    @Test
-    public void shouldReturnTakenLogsWhenFindingLogsAsOfGivenDate() {
-        LocalDate today = DateUtil.today();
-
-        AdherenceLog toBeFound = createAdherenceLogWithGivenStatus(today);
-        AdherenceLog olderLog = createAdherenceLogWithGivenStatus(today.minusDays(5));
-        AdherenceLog newerLog = createAdherenceLogWithGivenStatus(today.plusDays(5));
-        toBeFound.status(1);
-        addAll(toBeFound, olderLog, newerLog);
-        Assert.assertArrayEquals(
-                new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
-                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 5).toArray()
-        );
-    }
-
-    private AdherenceLog createAdherenceLogWithGivenStatus(LocalDate today) {
-        return new AdherenceLog("externalId", "treatmentId", today).status(1);
-    }
-
-    @Test
-    public void shouldReturnNotTakenLogsWhenFindingLogsAsOfGivenDate() {
-        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
-        toBeFound.status(2);
-
-        addAll(toBeFound);
-        Assert.assertArrayEquals(
-                new AdherenceRecord[]{new AdherenceRecord(toBeFound)},
-                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).toArray()
-        );
-    }
-
-    @Test
-    public void shouldNotReturnUnknownLogsWhenFindingLogsAsOfGivenDate() {
-        LocalDate today = DateUtil.today();
-
-        AdherenceLog toBeFound = new AdherenceLog("externalId", "treatmentId", today);
-        toBeFound.status(0);
-
-        addAll(toBeFound);
-        assertTrue(allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).isEmpty());
-    }
-
-    @Test
-    public void shouldPageAdherenceRecordsReturnedWhenFindingLogsByDate() {
-        LocalDate today = DateUtil.today();
-
-        AdherenceLog logToBeFoundForPatient1 = new AdherenceLog("externalId1", "treatmentId1", today);
-        AdherenceLog logToBeFoundForPatient2 = new AdherenceLog("externalId2", "treatmentId2", today);
-        logToBeFoundForPatient1.status(1);
-        logToBeFoundForPatient2.status(1);
-
-        addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
-        Assert.assertArrayEquals(
-                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1)},
-                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 1).toArray()
-        );
-        Assert.assertArrayEquals(
-                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient2)},
-                allAdherenceLogs.findLogsInRange(yesterday, today, 1, 1).toArray()
-        );
-    }
-
-    @Test
-    public void shouldReturnLogsForAllPatientsWhenFindingLogsAsOfGivenDate() {
-        LocalDate today = DateUtil.today();
-
-        AdherenceLog logToBeFoundForPatient1 = new AdherenceLog("externalId1", "treatmentId1", today);
-        AdherenceLog logToBeFoundForPatient2 = new AdherenceLog("externalId2", "treatmentId2", today);
-        logToBeFoundForPatient1.status(1);
-        logToBeFoundForPatient2.status(1);
-
-        addAll(logToBeFoundForPatient1, logToBeFoundForPatient2);
-        Assert.assertArrayEquals(
-                new AdherenceRecord[]{new AdherenceRecord(logToBeFoundForPatient1), new AdherenceRecord(logToBeFoundForPatient2)},
-                allAdherenceLogs.findLogsInRange(yesterday, today, 0, 2).toArray()
-        );
-    }
 
     @Test
     public void shouldFetchAllAdherenceLogsByKeyTillKeyDate() {
@@ -318,39 +237,6 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldReturnProvidersWithAdherenceReportedInADistrict() {
-        ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
-        String district = "district";
-
-        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1));
-
-        adherenceLogs.get(0).providerId("providerId1");
-        adherenceLogs.get(0).district(district);
-        adherenceLogs.get(1).providerId("providerId2");
-        adherenceLogs.get(1).district(district);
-        adherenceLogs.get(2).providerId("providerId3");
-        adherenceLogs.get(2).district(district);
-        addAll(adherenceLogs);
-
-        assertEquals(providersWithAdherence, allAdherenceLogs.withKnownAdherenceReportedByProviders(district, new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
-    }
-
-    @Test
-    public void shouldReturnProvidersWithAdherenceReported() {
-        ProviderIds providersWithAdherence = new ProviderIds(asList("providerId1", "providerId2", "providerId3"));
-
-        List<AdherenceLog> adherenceLogs = asList(createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1), 1).providerId("providerId1"),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 3), 1).providerId("providerId2"),
-                createAdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 5), 1).providerId("providerId3"));
-
-        addAll(adherenceLogs);
-
-        assertEquals(providersWithAdherence, allAdherenceLogs.findProvidersWithAdherence(new LocalDate(2012, 1, 1), new LocalDate(2012, 1, 5)));
-    }
-
-    @Test
     public void shouldReturnLogsForGivenPages() {
         LocalDate today = DateUtil.today();
 
@@ -369,21 +255,13 @@ public class AllAdherenceLogsIT extends SpringIntegrationTest {
         return new AdherenceLog("externalId", "treatmentId1", new LocalDate(2012, 1, 1));
     }
 
-    private AdherenceLog createAdherenceLog(String externalId, String treatmentId, LocalDate doseDate, int status) {
-        AdherenceLog log = new AdherenceLog(externalId, treatmentId, doseDate);
-        log.status(status);
-        return log;
-    }
-
     private void addAll(AdherenceLog... adherenceLogs) {
         for (AdherenceLog adherenceLog : adherenceLogs) {
             allAdherenceLogs.add(adherenceLog);
         }
     }
 
-    private void addAll(List<AdherenceLog> adherenceLogs) {
-        for (AdherenceLog adherenceLog : adherenceLogs) {
-            allAdherenceLogs.add(adherenceLog);
-        }
+    private AdherenceLog createAdherenceLogWithGivenStatus(LocalDate today) {
+        return new AdherenceLog("externalId", "treatmentId", today).status(1);
     }
 }

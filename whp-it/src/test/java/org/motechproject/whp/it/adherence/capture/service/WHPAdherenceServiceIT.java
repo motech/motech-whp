@@ -7,8 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         AuditAdherenceTestPart.class,
         RecordAdherenceTestPart.class,
-        StartPatientOnTreatmentTestPart.class,
-        PatientsWithAdherenceTestPart.class
+        StartPatientOnTreatmentTestPart.class
 })
 public class WHPAdherenceServiceIT {
 }

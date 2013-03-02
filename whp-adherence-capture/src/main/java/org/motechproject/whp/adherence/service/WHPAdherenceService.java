@@ -1,7 +1,6 @@
 package org.motechproject.whp.adherence.service;
 
 import org.joda.time.LocalDate;
-import org.motechproject.util.DateUtil;
 import org.motechproject.whp.adherence.audit.contract.AuditParams;
 import org.motechproject.whp.adherence.audit.service.AdherenceAuditService;
 import org.motechproject.whp.adherence.contract.AdherenceRecord;
@@ -12,7 +11,6 @@ import org.motechproject.whp.adherence.domain.WeeklyAdherenceSummary;
 import org.motechproject.whp.adherence.mapping.AdherenceMapper;
 import org.motechproject.whp.adherence.mapping.AdherenceRecordMapper;
 import org.motechproject.whp.adherence.mapping.WeeklyAdherenceSummaryMapper;
-import org.motechproject.whp.adherence.repository.AllAdherenceLogs;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequest;
 import org.motechproject.whp.adherence.request.DailyAdherenceRequests;
 import org.motechproject.whp.common.domain.TreatmentWeek;
@@ -23,7 +21,10 @@ import org.motechproject.whp.patient.domain.Treatment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
@@ -33,15 +34,12 @@ public class WHPAdherenceService {
 
     private AdherenceLogService adherenceLogService;
     private AdherenceAuditService adherenceAuditService;
-    private AllAdherenceLogs allAdherenceLogs;
 
     @Autowired
     public WHPAdherenceService(AdherenceLogService adherenceLogService,
-                               AdherenceAuditService adherenceAuditService,
-                               AllAdherenceLogs allAdherenceLogs) {
+                               AdherenceAuditService adherenceAuditService) {
         this.adherenceLogService = adherenceLogService;
         this.adherenceAuditService = adherenceAuditService;
-        this.allAdherenceLogs = allAdherenceLogs;
     }
 
     public void recordWeeklyAdherence(AdherenceList adherenceList, WeeklyAdherenceSummary weeklyAdherenceSummary, Patient patient, AuditParams auditParams) {
@@ -128,17 +126,8 @@ public class WHPAdherenceService {
         return pillDates;
     }
 
-    public List<String> patientsWithAdherence(TreatmentWeek week) {
-        return allAdherenceLogs.findPatientsWithAdherence(week.startDate(), week.endDate());
-    }
-
     public AdherenceList getAdherenceSortedByDate(String patientId, String therapyUid) {
         List<AdherenceRecord> adherenceRecords = adherenceLogService.allTakenLogs(patientId, therapyUid);
         return new AdherenceMapper().map(adherenceRecords);
-    }
-
-    public List<Adherence> allAdherenceData(int pageNumber, int pageSize) {
-        List<AdherenceRecord> adherenceData = adherenceLogService.adherence(DateUtil.today(), pageNumber, pageSize);
-        return new AdherenceMapper().map(adherenceData);
     }
 }
