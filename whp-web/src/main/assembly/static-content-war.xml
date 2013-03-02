@@ -1,0 +1,18 @@
+<assembly>
+    <id>static</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/webapp</directory>
+            <excludes>
+                <exclude>WEB-INF/**</exclude>
+                <exclude>emulator/**</exclude>
+                <exclude>faketime/**</exclude>
+            </excludes>
+            <outputDirectory>whp/resources-${project.version}</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
