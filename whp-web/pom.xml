@@ -59,10 +59,6 @@
             <artifactId>motech-platform-server-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-event-logging</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-remedi-inbound</artifactId>
             <classifier>tests</classifier>
