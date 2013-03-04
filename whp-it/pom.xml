@@ -95,7 +95,7 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.delivery-whp</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
         </dependency>
         <dependency>
@@ -178,7 +178,7 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.delivery-whp</groupId>
             <artifactId>motech-deliverytools-common</artifactId>
         </dependency>
         <dependency>

@@ -397,12 +397,12 @@
                 <version>${motech.contrib.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.delivery-whp</groupId>
                 <artifactId>motech-datetime-simulator</artifactId>
                 <version>${motech.delivery.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.motechproject</groupId>
+                <groupId>org.motechproject.delivery-whp</groupId>
                 <artifactId>motech-deliverytools-common</artifactId>
                 <version>${motech.delivery.version}</version>
             </dependency>
@@ -583,7 +583,7 @@
     <dependencies>
         <!--Platform and delivery dependencies-->
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.delivery-whp</groupId>
             <artifactId>motech-seed</artifactId>
             <version>${motech.delivery.version}</version>
         </dependency>

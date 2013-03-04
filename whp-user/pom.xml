@@ -46,7 +46,7 @@
             <artifactId>whp-reports-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>org.motechproject.delivery-whp</groupId>
             <artifactId>motech-datetime-simulator</artifactId>
         </dependency>
         <dependency>
