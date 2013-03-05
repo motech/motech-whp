@@ -11,6 +11,7 @@ import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
+import org.motechproject.couchdb.lucene.util.WhiteSpaceEscape;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
@@ -43,8 +44,9 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
     @Autowired
     public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector,
                        EventContext eventContext,
-                       PatientQueryDefinition patientQueryDefinition) {
-        super(Patient.class, whpLuceneAwareCouchDbConnector);
+                       PatientQueryDefinition patientQueryDefinition,
+                       @Qualifier("whiteSpaceEscape")WhiteSpaceEscape whiteSpaceEscape) {
+        super(Patient.class, whpLuceneAwareCouchDbConnector, whiteSpaceEscape);
         this.eventContext = eventContext;
         this.patientQueryDefinition = patientQueryDefinition;
 

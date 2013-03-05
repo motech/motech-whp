@@ -4,6 +4,7 @@ import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.couchdb.lucene.util.WhiteSpaceEscape;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.scheduler.context.EventContext;
@@ -28,12 +29,15 @@ public class AllPatientsTest {
     @Mock
     private SortParams sortParams;
 
+    @Mock
+    WhiteSpaceEscape whiteSpaceEscape;
+
     private AllPatients allPatients;
 
     @Before
     public void setup() {
         initMocks(this);
-        allPatients = new AllPatients(dbConnector, eventContext, new PatientQueryDefinition());
+        allPatients = new AllPatients(dbConnector, eventContext, new PatientQueryDefinition(), whiteSpaceEscape);
     }
 
     @Test

@@ -25,7 +25,9 @@ import static ch.lambdaj.Lambda.on;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.joda.time.DateTime.now;
+import static org.junit.Assert.assertThat;
 import static org.motechproject.whp.patient.model.AlertTypeFilters.ADHERENCE_MISSING_WITH_SEVERITY_ONE;
 
 public class PatientFilterTestPart  extends AllPatientsTestPart {
@@ -47,7 +49,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         patient1 = new PatientBuilder().withDefaults()
                 .withPatientId("123")
                 .withProviderId("provider1")
-                .withProviderDistrict("district")
+                .withProviderDistrict("this district")
                 .withCumulativeMissedAlertValue(10, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(3, 1, DateUtil.today().minusDays(7))
                 .withTreatmentNotStartedDays(0, 0, DateUtil.today())
@@ -57,7 +59,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
         patient2 = new PatientBuilder().withDefaults()
                 .withPatientId("456")
                 .withProviderId("provider1")
-                .withProviderDistrict("district")
+                .withProviderDistrict("this district")
                 .withCumulativeMissedAlertValue(11, 1, DateUtil.today())
                 .withAdherenceMissedWeeks(7, 2, DateUtil.today().minusDays(5))
                 .withTreatmentNotStartedDays(0, 0, DateUtil.today())
@@ -135,14 +137,17 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldFilterPatientsByProviderDistrict() {
+    public void shouldFilterPatientsByProviderDistrictWithSpaces() {
         SortParams sortParams = new SortParams();
         FilterParams queryParams = new FilterParams();
-        queryParams.put("providerDistrict", "district");
+        queryParams.put("providerDistrict", "this district");
 
         List<Patient> searchResults =  allPatients.filter(queryParams, sortParams, 0, 5);
 
         assertEquals(2, searchResults.size());
+        assertThat(searchResults.get(0).getPatientId(), is("123"));
+        assertThat(searchResults.get(1).getPatientId(), is("456"));
+
         assertEquals(2, allPatients.count(queryParams));
         assertTrue(hasNoInactivePatients(searchResults));
     }

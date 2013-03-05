@@ -8,6 +8,7 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
 import org.motechproject.couchdb.lucene.query.field.Field;
 import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseRepository;
+import org.motechproject.couchdb.lucene.util.WhiteSpaceEscape;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.whp.common.domain.RegistrationInstance;
@@ -16,7 +17,6 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.query.ContainerTrackingQueryDefinition;
 import org.motechproject.whp.container.query.InTreatmentContainerTrackingQueryDefinition;
 import org.motechproject.whp.container.query.PreTreatmentContainerTrackingQueryDefinition;
-import org.motechproject.whp.container.util.URLEscape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -31,8 +31,8 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
     public static final String SORT_BY_ASCENDING = "asc";
 
     @Autowired
-    public AllContainerTrackingRecords(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector) {
-        super(Container.class, whpLuceneAwareCouchDbConnector);
+    public AllContainerTrackingRecords(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector, WhiteSpaceEscape whiteSpaceEscape) {
+        super(Container.class, whpLuceneAwareCouchDbConnector, whiteSpaceEscape);
         IndexUploader uploader = new IndexUploader();
 
         ContainerTrackingQueryDefinition containerQueryDefinition = new ContainerTrackingQueryDefinition() {
@@ -77,7 +77,7 @@ public class AllContainerTrackingRecords extends LuceneAwareMotechBaseRepository
         if (queryDefinition != null) {
             filterParams.put(queryDefinition.getContainerInstanceFieldName(), instance.name());
             sortParams.put(queryDefinition.getContainerIdFieldName(), SORT_BY_ASCENDING);
-            return super.filter(queryDefinition, URLEscape.escape(filterParams), sortParams, skip, limit);
+            return super.filter(queryDefinition, filterParams, sortParams, skip, limit);
         }
         return Collections.emptyList();
     }

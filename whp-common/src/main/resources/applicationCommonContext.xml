@@ -61,4 +61,7 @@
         <constructor-arg ref="whpDbInstance"/>
     </bean>
 
+    <bean id="whiteSpaceEscape" class="org.motechproject.couchdb.lucene.util.WhiteSpaceEscape">
+    </bean>
+
 </beans>
