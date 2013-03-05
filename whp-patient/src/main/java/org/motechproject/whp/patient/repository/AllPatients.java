@@ -153,13 +153,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implem
 
 
     @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
-    public ProviderIds findAllProvidersWithAdherenceAsOf(LocalDate asOf) {
-        ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf);
-        return filterProviderIds(db.queryView(query));
-
-    }
-
-    @View(name = "providers_with_adherence_last_week", map = "classpath:filterProvidersWithAdherence.js")
     public ProviderIds findAllProvidersWithoutAdherenceAsOf(LocalDate asOf) {
         ViewQuery query = createQuery("providers_with_adherence_last_week").startKey(asOf.minusDays(1)).descending(true);
         return filterProviderIds(db.queryView(query));

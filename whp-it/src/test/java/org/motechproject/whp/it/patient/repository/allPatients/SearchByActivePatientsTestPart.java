@@ -49,24 +49,6 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
     }
 
     @Test
-    public void shouldReturnProviderIdsWithAdherenceAfterGivenDate() {
-        Patient activeProviderOnePatient1 = new PatientBuilder().withDefaults().withProviderId("provider1").withPatientId("patientId1").withAdherenceProvidedForLastWeek().build();
-        Patient activeProviderOnePatient2 = new PatientBuilder().withDefaults().withProviderId("provider2").withPatientId("patientId2").withAdherenceProvidedForLastWeek(today().minusWeeks(2)).build();
-        Patient inactiveProviderOnePatient = new PatientBuilder().withDefaults().withProviderId("provider2").withPatientId("patientId3").build();
-
-
-        allPatients.add(activeProviderOnePatient1);
-        allPatients.add(activeProviderOnePatient2);
-        allPatients.add(inactiveProviderOnePatient);
-
-
-        ProviderIds providerIds = allPatients.findAllProvidersWithAdherenceAsOf(currentAdherenceCaptureWeek().startDate());
-
-        assertThat(providerIds.asList().size(), is(1));
-        assertThat(providerIds.asList(), hasItems("provider1"));
-    }
-
-    @Test
     public void shouldReturnProviderIdsWithoutAdherenceByGivenDate() {
         Patient provider1WithPatientWithAdherence = new PatientBuilder().withDefaults().withProviderId("provider1").withPatientId("patientId1").withAdherenceProvidedForLastWeek().build();
         Patient provider1WithPatientWithoutAdherenceForLastWeek = new PatientBuilder().withDefaults().withProviderId("provider1").withPatientId("patientId2").withAdherenceProvidedForLastWeek(currentAdherenceCaptureWeek().startDate().minusDays(1)).build();
