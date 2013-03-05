@@ -12,7 +12,7 @@
                 <exclude>emulator/**</exclude>
                 <exclude>faketime/**</exclude>
             </excludes>
-            <outputDirectory>whp/resources-${project.version}</outputDirectory>
+            <outputDirectory>whp/resources-${version}</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
