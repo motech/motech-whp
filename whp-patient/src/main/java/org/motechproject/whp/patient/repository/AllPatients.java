@@ -18,7 +18,6 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.repository.Countable;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import org.motechproject.whp.user.domain.ProviderIds;
@@ -34,7 +33,7 @@ import java.util.List;
 import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
 
 @Repository
-public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> implements Countable {
+public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
 
     private EventContext eventContext;
     private PatientQueryDefinition patientQueryDefinition;

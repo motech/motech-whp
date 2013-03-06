@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ContainerTrackingController {
-
     protected ContainerService containerService;
     protected ReasonForClosureValidator reasonForClosureValidator;
 

@@ -43,7 +43,6 @@
 
         <!--Only IT Admin-->
         <intercept-url pattern="/itadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
-        <intercept-url pattern="/count/all" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/cmfadmin/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/activateUser" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/resetPassword" access="hasRole('IT_ADMIN')" requires-channel="any"/>

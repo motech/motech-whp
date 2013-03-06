@@ -54,7 +54,7 @@ public class CmfAdminContainerRegistrationController extends ContainerRegistrati
 
         out(WHPConstants.NOTIFICATION_MESSAGE, String.format("Container with id %s registered successfully.", registrationRequest.getContainerId()), servletRequest);
         String redirectedUrl = (mode == ContainerRegistrationMode.NEW_CONTAINER) ? "/new-container" : "/on-behalf-of-provider";
-        return "redirect:/containerRegistration/by_cmfAdmin" + redirectedUrl;
+        return "redirect:/containerRegistration/by_cmfAdmin" +  redirectedUrl;
     }
 
     @Override

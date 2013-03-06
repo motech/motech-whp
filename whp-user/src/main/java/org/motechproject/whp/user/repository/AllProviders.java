@@ -3,7 +3,6 @@ package org.motechproject.whp.user.repository;
 import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.BusinessIdNotUniqueException;
@@ -12,7 +11,6 @@ import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.domain.PhoneNumber;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
-import org.motechproject.whp.common.repository.Countable;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ import java.util.List;
 import static org.motechproject.whp.user.WHPUserConstants.PROVIDER_UPDATED_SUBJECT;
 
 @Repository
-public class AllProviders extends MotechBaseRepository<Provider> implements Countable {
+public class AllProviders extends MotechBaseRepository<Provider> {
 
     private EventContext eventContext;
 
@@ -56,14 +54,6 @@ public class AllProviders extends MotechBaseRepository<Provider> implements Coun
         }
     }
 
-    @View(name = "count_providers", map = "function(doc){ if(doc.type === 'Provider') { emit(null,doc._id); } }", reduce = "_count")
-    public String count() {
-        ViewQuery query = createQuery("count_providers").reduce(true);
-        ViewResult rows = db.queryView(query);
-        String firstValue = firstValue(rows);
-        return (null == firstValue) ? "0" : firstValue;
-    }
-
     @View(name = "find_by_district_and_provider_id", map = "function(doc) {if (doc.type ==='Provider') {emit([doc.district, doc.providerId], doc._id);}}")
     public List<Provider> findByDistrictAndProviderId(String district, String providerId) {
         ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district, providerId.toLowerCase())).endKey(ComplexKey.of(district, providerId.toLowerCase())).includeDocs(true);
@@ -85,10 +75,5 @@ public class AllProviders extends MotechBaseRepository<Provider> implements Coun
     public List<Provider> findByProviderIds(ProviderIds providerIds) {
         ViewQuery query = createQuery("by_providerId").keys(providerIds.asList()).includeDocs(true);
         return db.queryView(query, Provider.class);
-    }
-
-
-    private String firstValue(ViewResult rows) {
-        return (rows.getSize() > 0) ? rows.getRows().get(0).getValue() : null;
     }
 }

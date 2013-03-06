@@ -122,7 +122,6 @@ public class PatientController extends BaseWebController {
 
     }
 
-
     private void flashOutDateUpdatedMessage(String patientId, PhaseStartDates phaseStartDates, HttpServletRequest httpServletRequest) {
         String ipStartDate = dateMessage(phaseStartDates.getIpStartDate());
         String eipStartDate = dateMessage(phaseStartDates.getEipStartDate());

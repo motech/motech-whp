@@ -50,7 +50,7 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
     }
 
     private void populateProviderId(ContainerRegistrationRequest registrationRequest, HttpServletRequest request) {
-        registrationRequest.setProviderId(loggedInUser(request).getUserName());
+         registrationRequest.setProviderId(loggedInUser(request).getUserName());
     }
 
     @Override

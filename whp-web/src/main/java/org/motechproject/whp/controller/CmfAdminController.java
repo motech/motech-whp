@@ -118,7 +118,7 @@ public class CmfAdminController extends BaseWebController {
 
     private List<String> getLocations(List<CmfLocation> cmfLocations) {
         List<String> locations = new ArrayList<>();
-        for (CmfLocation cmfLocation : cmfLocations) {
+        for(CmfLocation cmfLocation : cmfLocations) {
             locations.add(cmfLocation.getLocation());
         }
         return locations;
