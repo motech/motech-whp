@@ -71,7 +71,7 @@ public class UserController extends BaseWebController {
         if (stream != null) {
             Properties prop = new Properties();
             prop.load(stream);
-            String versionProperty = prop.getProperty("Hudson-Build-Number");
+            String versionProperty = prop.getProperty("Build-Number");
             version = versionProperty == null ? "0" : versionProperty;
         }
         session.setAttribute("version", version);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>motech-whp</artifactId>
         <groupId>org.motechproject.whp</groupId>
@@ -285,6 +286,11 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Build-Number>${GO_PIPELINE_COUNTER}</Build-Number>
+                        </manifestEntries>
+                    </archive>
                     <warName>whp-${project.version}</warName>
                 </configuration>
             </plugin>
@@ -294,7 +300,7 @@
                 <version>2.5</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <outputDirectory />
+                    <outputDirectory/>
                 </configuration>
             </plugin>
             <plugin>
@@ -400,15 +406,16 @@
                         <configuration>
                             <target name="load">
                                 <!--<ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}" />-->
-                                <echo message="Seed data loading: START" />
-                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <echo message="Seed data loading: START"/>
+                                <property name="compile_classpath" refid="maven.compile.classpath"/>
                                 <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
                                     <classpath>
-                                        <pathelement path="${compile_classpath}" />
+                                        <pathelement path="${compile_classpath}"/>
                                     </classpath>
-                                    <sysproperty key="java.security.policy" value="${basedir}/src/main/resources/java.policy" />
+                                    <sysproperty key="java.security.policy"
+                                                 value="${basedir}/src/main/resources/java.policy"/>
                                 </java>
-                                <echo message="Seed data loading: END" />
+                                <echo message="Seed data loading: END"/>
                             </target>
                         </configuration>
                         <executions>
@@ -452,15 +459,15 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <target unless="skipTests">
-                                        <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}" />
-                                        <echo message="Seed data loading: START" />
-                                        <property name="compile_classpath" refid="maven.compile.classpath" />
+                                        <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}"/>
+                                        <echo message="Seed data loading: START"/>
+                                        <property name="compile_classpath" refid="maven.compile.classpath"/>
                                         <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
                                             <classpath>
-                                                <pathelement path="${compile_classpath}" />
+                                                <pathelement path="${compile_classpath}"/>
                                             </classpath>
                                         </java>
-                                        <echo message="Seed data loading: END" />
+                                        <echo message="Seed data loading: END"/>
                                     </target>
                                 </configuration>
                                 <goals>
