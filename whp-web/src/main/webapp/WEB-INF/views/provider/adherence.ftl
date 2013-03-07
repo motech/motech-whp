@@ -26,7 +26,7 @@
                 <th class="smaller-column">Mobile Number 1</th>
                 <th class="smaller-column">Mobile Number 2</th>
                 <th class="smaller-column">Mobile Number 3</th>
-                <th class="smaller-column">Adherence Missing Weeks Since 8 Weeks</th>
+                <th class="smaller-column">Number of unreported adherence weeks by provider (since 8 weeks)</th>
             </tr>
             </thead>
             <tbody>
@@ -73,7 +73,7 @@
                 <th class="smaller-column">Mobile Number 1</th>
                 <th class="smaller-column">Mobile Number 2</th>
                 <th class="smaller-column">Mobile Number 3</th>
-                <th class="smaller-column">Adherence Missing Weeks Since 8 Weeks</th>
+                <th class="smaller-column">Number of unreported adherence weeks by provider (since 8 weeks)</th>
             </tr>
             </thead>
             <tbody>
