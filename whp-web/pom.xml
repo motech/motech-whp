@@ -405,7 +405,7 @@
                         <version>1.6</version>
                         <configuration>
                             <target name="load">
-                                <!--<ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}" />-->
+                                <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}" />
                                 <echo message="Seed data loading: START"/>
                                 <property name="compile_classpath" refid="maven.compile.classpath"/>
                                 <java classname="org.motechproject.deliverytools.seed.SetupSeedData">
