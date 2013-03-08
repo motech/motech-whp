@@ -41,7 +41,9 @@ public class PatientReportSeedTest {
 
         patientReportSeed.migrateAllPatients();
 
-        verify(patientService, times(3)).getAll(anyInt(), anyInt());
+        verify(patientService).getAll(eq(1), anyInt());
+        verify(patientService).getAll(eq(2), anyInt());
+        verify(patientService).getAll(eq(3), anyInt());
         verify(patientService).update(patient1);
         verify(patientService).update(patient2);
     }

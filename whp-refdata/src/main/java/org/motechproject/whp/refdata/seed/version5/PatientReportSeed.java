@@ -26,6 +26,7 @@ public class PatientReportSeed {
         do{
             patientList = patientService.getAll(pageNumber, pageSize);
             migratePatients(patientList);
+            pageNumber++;
         } while (!patientList.isEmpty());
 
     }
