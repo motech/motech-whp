@@ -12,14 +12,23 @@ function setProviderAsActive(userName) {
 
 $(function () {
     $('#provider_pagination').bind('pageLoadSuccess', function () {
-        if ($('#providerList tbody tr').length == 1) {
+
+        function showNoResultsMessage() {
+            $('[type=no-results] td').html(noResultsMessage);
+            $('[type=no-results]').show();
+        }
+
+        if (($('[name=selectedDistrict]').val() == "") && ($('[name=selectedProvider]').val() == "")) {
+            var noResultsMessage="Please select District or Provider Id ";
+            showNoResultsMessage();
+        }
+        else if ($('#providerList tbody tr').length == 1) {
             var noResultsMessage = "No Providers found for District '" + $('[name=selectedDistrict]').val() + "'";
 
             if ($('[name=selectedProvider]').val() != '') {
                 noResultsMessage += " with provider ID: '" + $('[name=selectedProvider]').val() + "'";
             }
-            $('[type=no-results] td').html(noResultsMessage);
-            $('[type=no-results]').show();
+            showNoResultsMessage()
         }
         else {
             $('[type=no-results]').hide();
