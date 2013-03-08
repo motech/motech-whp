@@ -26,8 +26,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
@@ -38,7 +36,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
     private EventContext eventContext;
     private PatientQueryDefinition patientQueryDefinition;
     private static final String SORT_BY_ASCENDING = "ASC";
-    private static final String SORT_BY_DESCENDING = "DESC";
 
     @Autowired
     public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector,
@@ -83,14 +80,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
             return null;
         ViewQuery find_by_patientId = createQuery("by_patientId").key(patientId.toLowerCase()).includeDocs(true);
         return singleResult(db.queryView(find_by_patientId, Patient.class));
-    }
-
-    @View(name = "count_patients", map = "function(doc){ if(doc.type === 'Patient') { emit(null,doc._id); } }", reduce = "_count")
-    public String count() {
-        ViewQuery query = createQuery("count_patients").reduce(true);
-        ViewResult rows = db.queryView(query);
-        String firstValue = firstValue(rows);
-        return (null == firstValue) ? "0" : firstValue;
     }
 
     @View(name = "find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
@@ -172,24 +161,12 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
         return super.count(patientQueryDefinition, activePatientFilter(queryParams));
     }
 
-    public static class PatientComparatorByFirstName implements Comparator<Patient> {
-
-        @Override
-        public int compare(Patient patient1, Patient patient2) {
-            return patient1.getFirstName().compareTo(patient2.getFirstName());
-        }
-    }
-
     private ProviderIds filterProviderIds(ViewResult rows) {
         ProviderIds providerIds = new ProviderIds();
         for (ViewResult.Row row : rows) {
             providerIds.add(row.getValue());
         }
         return providerIds;
-    }
-
-    private String firstValue(ViewResult rows) {
-        return (rows.getSize() > 0) ? rows.getRows().get(0).getValue() : null;
     }
 
     @Override
