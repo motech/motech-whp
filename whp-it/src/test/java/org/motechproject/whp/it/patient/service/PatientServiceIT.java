@@ -371,32 +371,6 @@ public class PatientServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldSearchPatientsByProviderDistrict() {
-        String districtName1 = "Vaishali";
-        String districtName2 = "Begusarai";
-        District district1 = new District(districtName1);
-        District district2 = new District(districtName2);
-        allDistricts.add(district1);
-        allDistricts.add(district2);
-
-        createProvider("provider1", districtName1);
-        createProvider("provider2", districtName1);
-        createProvider("provider3", districtName2);
-
-        PatientRequest createPatientRequest1 = new PatientRequestBuilder().withDefaults().withCaseId("1").withProviderId("provider1").withPatientAddress("", "", "", "", "district", "").build();
-        patientService.createPatient(createPatientRequest1);
-        PatientRequest createPatientRequest2 = new PatientRequestBuilder().withDefaults().withCaseId("2").withProviderId("provider2").withPatientAddress("", "", "", "", "district", "").build();
-        patientService.createPatient(createPatientRequest2);
-        PatientRequest createPatientRequest3 = new PatientRequestBuilder().withDefaults().withCaseId("3").withProviderId("provider3").withPatientAddress("", "", "", "", "district", "").build();
-        patientService.createPatient(createPatientRequest3);
-
-        List<Patient> patientList = patientService.searchBy(districtName1);
-        allDistricts.remove(district1);
-        allDistricts.remove(district2);
-        assertPatientForRequests(asList(createPatientRequest1, createPatientRequest2), patientList);
-    }
-
-    @Test
     public void shouldSearchPatientsByProviderIdWhenBothProviderDistrictAndProviderIdArePresent() {
         String districtName1 = "Vaishali";
         String districtName2 = "Begusarai";

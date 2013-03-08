@@ -120,23 +120,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
         return db.queryView(q, Patient.class);
     }
 
-    public List<Patient> getAllUnderActiveTreatmentInDistrict(String district) {
-        return getAllUnderActiveTreatmentInDistrictForAGivenPage(district, null, null);
-    }
-
-    @View(name = "find_by_district_having_active_treatment_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {emit(doc.currentTherapy.currentTreatment.providerDistrict, doc._id);}}")
-    public List<Patient> getAllUnderActiveTreatmentInDistrictForAGivenPage(String district, Integer startIndex, Integer rowsPerPage) {
-
-        ViewQuery q;
-        if (startIndex == null || rowsPerPage == null) {
-            q = createQuery("find_by_district_having_active_treatment_v1").key(district).includeDocs(true);
-        } else {
-            q = createQuery("find_by_district_having_active_treatment_v1").skip(startIndex * rowsPerPage).limit(rowsPerPage).key(district).includeDocs(true);
-        }
-        List<Patient> patients = db.queryView(q, Patient.class);
-        Collections.sort(patients, new PatientComparatorByFirstName());
-        return patients;
-    }
 
     public ProviderIds providersWithActivePatients(ProviderIds providersToSearchFor) {
         ViewQuery query = createQuery("with_active_patients").keys(providersToSearchFor.asList());

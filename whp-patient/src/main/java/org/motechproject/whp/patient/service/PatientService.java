@@ -76,10 +76,6 @@ public class PatientService {
         patientReportingService.reportPatient(patient);
     }
 
-    public List<Patient> searchBy(String districtName) {
-        return allPatients.getAllUnderActiveTreatmentInDistrict(districtName);
-    }
-
     public void addRemark(Patient patient, String remark, String user) {
         Therapy therapy = patient.getCurrentTherapy();
         allTherapyRemarks.add(new TherapyRemark(patient.getPatientId(), therapy.getUid(), remark, user));
