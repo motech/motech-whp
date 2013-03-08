@@ -115,6 +115,9 @@ public class ProviderService {
     }
 
     public Integer count(FilterParams searchCriteria) {
+        if(searchCriteria.isEmpty()){
+            return 0;
+        }
         String selectedProvider = searchCriteria.get("selectedProvider").toString();
         if(isNotEmpty(selectedProvider)){
             return (allProviders.findByProviderId(selectedProvider) != null ? 1 : 0);

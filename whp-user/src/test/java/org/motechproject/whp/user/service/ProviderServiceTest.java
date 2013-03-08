@@ -283,4 +283,11 @@ public class ProviderServiceTest {
         assertThat(providerService.count(filterParams), is(0));
 
     }
+
+    @Test
+    public void shouldReturnZeroIfFilterIsLoadedWithNoFilterKeys(){
+        FilterParams filterParams = new FilterParams();
+
+        assertThat(providerService.count(filterParams), is(0));
+    }
 }
