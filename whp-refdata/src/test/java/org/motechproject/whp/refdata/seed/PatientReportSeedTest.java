@@ -1,5 +1,6 @@
 package org.motechproject.whp.refdata.seed;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -7,6 +8,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.refdata.seed.version5.PatientReportSeed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -30,29 +32,22 @@ public class PatientReportSeedTest {
     public void shouldMigrateExistingPatients() {
         Patient patient1 = mock(Patient.class);
         Patient patient2 = mock(Patient.class);
-        List patientList = asList(patient1, patient2);
 
-        when(patientService.getAll()).thenReturn(patientList);
+        List patientList1 = asList(patient1);
+        List patientList2 = asList(patient2);
+        List emptyList = new ArrayList();
 
-        patientReportSeed.migratePatients();
+        when(patientService.getAll(anyInt(), anyInt())).thenReturn(patientList1).thenReturn(patientList2).thenReturn(emptyList);
 
-        verify(patientService).getAll();
+        patientReportSeed.migrateAllPatients();
+
+        verify(patientService, times(3)).getAll(anyInt(), anyInt());
         verify(patientService).update(patient1);
         verify(patientService).update(patient2);
     }
 
-    @Test
-    public void shouldRetryOnException() {
-        Patient patient1 = mock(Patient.class);
-        Patient patient2 = mock(Patient.class);
-        List patientList = asList(patient1, patient2);
-
-        when(patientService.getAll()).thenThrow(new RuntimeException()).thenReturn(patientList);
-
-        patientReportSeed.migratePatients();
-
-        verify(patientService, times(2)).getAll();
-        verify(patientService).update(patient1);
-        verify(patientService).update(patient2);
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(patientService);
     }
 }

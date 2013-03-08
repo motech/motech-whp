@@ -126,4 +126,8 @@ public class PatientService {
         allPatients.update(patient);
         return true;
     }
+
+    public List<Patient> getAll(int pageNumber, int pageSize) {
+        return allPatients.getAll(pageNumber - 1, pageSize);
+    }
 }

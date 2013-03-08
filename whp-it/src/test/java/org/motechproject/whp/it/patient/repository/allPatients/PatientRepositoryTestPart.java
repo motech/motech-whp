@@ -9,11 +9,11 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientFlag;
 import org.motechproject.whp.patient.domain.SmearTestRecord;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
-public class PersistenceTestPart extends AllPatientsTestPart {
+public class PatientRepositoryTestPart extends AllPatientsTestPart {
 
     @Test
     public void shouldSavePatientInfo() {
@@ -64,5 +64,17 @@ public class PersistenceTestPart extends AllPatientsTestPart {
         Patient savedPatient = allPatients.findByPatientId(patient.getPatientId());
 
         assertTrue(savedPatient.getPatientFlag().isFlagSet());
+    }
+
+    @Test
+    public void shouldGetAllPatientsForGivenPageNumberAndPageSize() {
+        createPatient("patient1", "provider", "district");
+        createPatient("patient2", "provider", "district");
+        createPatient("patient3", "provider", "district");
+
+        assertThat(allPatients.getAll(0, 3).size(), is(3));
+        assertThat(allPatients.getAll(1, 2).size(), is(1));
+        assertThat(allPatients.getAll(2, 1).size(), is(1));
+        assertThat(allPatients.getAll(3, 2).size(), is(0));
     }
 }

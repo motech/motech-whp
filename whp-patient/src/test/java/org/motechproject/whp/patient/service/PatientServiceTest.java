@@ -228,6 +228,19 @@ public class PatientServiceTest extends BaseUnitTest {
         assertFalse(isFlagUpdated);
     }
 
+    @Test
+    public void shouldReturnPatientsForGivenPageNumberAndSize() {
+        int pageNumber = 1;
+        int pageSize = 3;
+        List expectedPatients = mock(List.class);
+        when(allPatients.getAll(pageNumber - 1, pageSize)).thenReturn(expectedPatients);
+
+        List<Patient> patients = patientService.getAll(pageNumber, pageSize);
+
+        assertEquals(expectedPatients,patients);
+        verify(allPatients).getAll(pageNumber - 1, pageSize);
+    }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(allPatients);

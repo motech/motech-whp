@@ -66,7 +66,7 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
 
     @Override
     public void update(Patient patient) {
-        ArrayList<WHPErrorCode> errorCodes = new ArrayList<WHPErrorCode>();
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<>();
         if (!patient.isValid(errorCodes)) {
             throw new WHPRuntimeException(errorCodes);
         }
@@ -173,5 +173,10 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
     protected TypeReference<CustomLuceneResult<Patient>> getTypeReference() {
         return new TypeReference<CustomLuceneResult<Patient>>() {
         };
+    }
+
+    public List<Patient> getAll(int pageNumber, int pageSize) {
+        ViewQuery q = createQuery("all").skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true).includeDocs(true);
+        return db.queryView(q, Patient.class);
     }
 }
