@@ -52,10 +52,10 @@ public class ProviderPaginationServiceTest {
         String district = "d1";
         Provider provider1 = new ProviderBuilder().withProviderId("p1").withDistrict(district).build();
         Provider provider2 = new ProviderBuilder().withProviderId("p2").withDistrict(district).build();
+        Provider provider3 = new ProviderBuilder().withProviderId("p3").withDistrict(district).build();
 
-        filterParams.put("selectedDistrict", district);
-        filterParams.put("selectedProvider", "");
-        rowsPerPage = 1;
+        filterParams.put("district", district);
+        filterParams.put("providerId", "");
 
         int startIndex = 0;
 
@@ -63,21 +63,31 @@ public class ProviderPaginationServiceTest {
         Map<String, MotechUser> userMap = new HashMap<>();
         userMap.put(motechUser.getUserName(), motechUser);
 
-        when(providerService.fetchByFilterParams(startIndex, rowsPerPage, district, "")).thenReturn(asList(provider1));
-        when(providerService.count(filterParams)).thenReturn(2);
+        when(providerService.fetchByFilterParams(startIndex, rowsPerPage, district, "")).thenReturn(asList(provider1, provider2));
+        when(providerService.count(filterParams)).thenReturn(3);
         when(providerService.fetchAllWebUsers()).thenReturn(userMap);
 
         PageResults<ProviderRow> pageResults = providerPaginationService.page(pageNumber, rowsPerPage, filterParams, new SortParams());
 
-        assertThat(pageResults.getTotalRows(), is(2));
+        assertThat(pageResults.getTotalRows(), is(3));
         assertThat(pageResults.getPageNo(), is(pageNumber));
-        assertThat(pageResults.getResults().size(), is(1));
+        assertThat(pageResults.getResults().size(), is(2));
         assertThat(pageResults.getResults().get(0).getProviderId(), is("p1"));
         assertThat(pageResults.getResults().get(0).getDistrict(), is(district));
 
-
         verify(providerService).count(filterParams);
         verify(providerService).fetchByFilterParams(startIndex, rowsPerPage, district, "");
+
+        pageNumber = 2;
+        startIndex = 1;
+        when(providerService.fetchByFilterParams(startIndex, rowsPerPage, district, "")).thenReturn(asList(provider3));
+        pageResults = providerPaginationService.page(pageNumber, rowsPerPage, filterParams, new SortParams());
+        assertThat(pageResults.getTotalRows(), is(3));
+        assertThat(pageResults.getPageNo(), is(pageNumber));
+        assertThat(pageResults.getResults().size(), is(1));
+        assertThat(pageResults.getResults().get(0).getProviderId(), is("p3"));
+
+        verify(providerService).fetchByFilterParams(1,rowsPerPage, district, "");
     }
 
     @Test
@@ -86,8 +96,8 @@ public class ProviderPaginationServiceTest {
         String providerId = "p1";
         Provider provider = new ProviderBuilder().withProviderId(providerId).withDistrict(district).build();
 
-        filterParams.put("selectedDistrict", district);
-        filterParams.put("selectedProvider", providerId);
+        filterParams.put("district", district);
+        filterParams.put("providerId", providerId);
         rowsPerPage = 1;
 
         int startIndex = 0;

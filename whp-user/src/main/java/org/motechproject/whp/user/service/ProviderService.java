@@ -118,12 +118,12 @@ public class ProviderService {
         if(searchCriteria.isEmpty()){
             return 0;
         }
-        String selectedProvider = searchCriteria.get("selectedProvider").toString();
+        String selectedProvider = searchCriteria.get("providerId").toString();
         if(isNotEmpty(selectedProvider)){
             return (allProviders.findByProviderId(selectedProvider) != null ? 1 : 0);
         }
 
-        String selectedDistrict = searchCriteria.get("selectedDistrict").toString();
+        String selectedDistrict = searchCriteria.get("district").toString();
         if(isNotEmpty(selectedDistrict)) {
             return Integer.parseInt(allProviders.findCountByDistrict(selectedDistrict));
         }

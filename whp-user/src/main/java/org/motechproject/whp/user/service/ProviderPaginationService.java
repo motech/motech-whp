@@ -29,9 +29,8 @@ public class ProviderPaginationService implements Paging {
 
     @Override
     public PageResults page(Integer pageNo, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
-        int startIndex = (pageNo - 1) * rowsPerPage;
-        List<Provider> providers = providerService.fetchByFilterParams(startIndex, rowsPerPage, (String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
-
+        int startIndex = pageNo - 1;
+        List<Provider> providers = providerService.fetchByFilterParams(startIndex, rowsPerPage, (String) searchCriteria.get("district"), (String) searchCriteria.get("providerId"));
 
         PageResults pageResults = new PageResults();
         pageResults.setTotalRows(providerService.count(searchCriteria));

@@ -239,22 +239,22 @@ public class ProviderServiceTest {
     public void shouldReturnPaginatedCountIfFilterByDistrict(){
         FilterParams filterParams = new FilterParams();
         String district = "d1";
-        filterParams.put("selectedDistrict", district);
-        filterParams.put("selectedProvider", "");
+        filterParams.put("district", district);
+        filterParams.put("providerId", "");
 
         when(allProviders.findCountByDistrict(district)).thenReturn("4");
 
         assertThat(providerService.count(filterParams), is(4));
 
-        verify(allProviders).findCountByDistrict(filterParams.get("selectedDistrict").toString());
+        verify(allProviders).findCountByDistrict(filterParams.get("district").toString());
 
     }
 
     @Test
     public void shouldReturnOneIfFilterByProviderIdAndOrDistrictReturnProvider(){
         FilterParams filterParams = new FilterParams();
-        filterParams.put("selectedDistrict", "");
-        filterParams.put("selectedProvider", "p1");
+        filterParams.put("district", "");
+        filterParams.put("providerId", "p1");
         when(allProviders.findByProviderId("p1")).thenReturn(new Provider());
 
         assertThat(providerService.count(filterParams), is(1));
@@ -265,8 +265,8 @@ public class ProviderServiceTest {
     @Test
     public void shouldReturnZeroIfFilterByProviderIdAndOrDistrictDoesNotReturnProvider(){
         FilterParams filterParams = new FilterParams();
-        filterParams.put("selectedDistrict", "");
-        filterParams.put("selectedProvider", "p1");
+        filterParams.put("district", "");
+        filterParams.put("providerId", "p1");
         when(allProviders.findByProviderId("p1")).thenReturn(null);
 
         assertThat(providerService.count(filterParams), is(0));
@@ -277,8 +277,8 @@ public class ProviderServiceTest {
     @Test
     public void shouldReturnZeroIfFilterByNothing(){
         FilterParams filterParams = new FilterParams();
-        filterParams.put("selectedDistrict", "");
-        filterParams.put("selectedProvider", "");
+        filterParams.put("district", "");
+        filterParams.put("providerId", "");
 
         assertThat(providerService.count(filterParams), is(0));
 

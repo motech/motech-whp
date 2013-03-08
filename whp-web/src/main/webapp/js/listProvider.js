@@ -18,15 +18,20 @@ $(function () {
             $('[type=no-results]').show();
         }
 
-        if (($('[name=selectedDistrict]').val() == "") && ($('[name=selectedProvider]').val() == "")) {
-            var noResultsMessage="Please select District or Provider Id ";
-            showNoResultsMessage();
-        }
-        else if ($('#providerList tbody tr').length == 1) {
-            var noResultsMessage = "No Providers found for District '" + $('[name=selectedDistrict]').val() + "'";
+        var noResultsMessage ="";
 
-            if ($('[name=selectedProvider]').val() != '') {
-                noResultsMessage += " with provider ID: '" + $('[name=selectedProvider]').val() + "'";
+        if ($('#providerList tbody tr').length == 1) {
+            if (($('#district-autocomplete').val() == "") && ($('[name=providerId]').val() == "")) {
+                noResultsMessage="Please select District or Provider ID ";
+            }
+            else if (($('[name=district]').val() == '')&&($('[name=providerId]').val() != '')) {
+                noResultsMessage = "No Provider found for Provider ID '" + $('[name=providerId]').val() + "'";
+            }
+            else{
+                var noResultsMessage = "No Providers found for District '" + $('[name=district]').val() + "'";
+                if($('[name=providerId]').val()!=''){
+                    noResultsMessage += " with provider ID: '" + $('[name=providerId]').val() + "'";
+                }
             }
             showNoResultsMessage()
         }
