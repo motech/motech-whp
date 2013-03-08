@@ -21,11 +21,9 @@ public class ProviderPaginationService implements Paging {
 
     private Logger logger = Logger.getLogger(ProviderPaginationService.class);
     private ProviderService providerService;
-    private AllProviders allProviders;
 
     @Autowired
     public ProviderPaginationService(AllProviders allProviders, ProviderService providerService) {
-        this.allProviders = allProviders;
         this.providerService = providerService;
     }
 
