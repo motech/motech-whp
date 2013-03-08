@@ -40,4 +40,19 @@ public class PatientReportSeedTest {
         verify(patientService).update(patient1);
         verify(patientService).update(patient2);
     }
+
+    @Test
+    public void shouldRetryOnException() {
+        Patient patient1 = mock(Patient.class);
+        Patient patient2 = mock(Patient.class);
+        List patientList = asList(patient1, patient2);
+
+        when(patientService.getAll()).thenThrow(new RuntimeException()).thenReturn(patientList);
+
+        patientReportSeed.migratePatients();
+
+        verify(patientService, times(2)).getAll();
+        verify(patientService).update(patient1);
+        verify(patientService).update(patient2);
+    }
 }
