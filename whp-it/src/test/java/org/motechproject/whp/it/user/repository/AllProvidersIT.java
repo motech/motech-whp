@@ -66,6 +66,12 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void findByProviderIdShouldReturnNullNoProvidersFound() {
+        addAndMarkForDeletion(provider);
+        assertEquals(null, allProviders.findByProviderId("p1"));
+    }
+
+    @Test
     public void shouldListProviders_ByDistrict() {
         Provider provider1 = new Provider("ab", "984567876", "districtA",
                 forPattern(DATE_TIME_FORMAT).parseDateTime("12/01/2012 10:10:10"));
@@ -191,6 +197,35 @@ public class AllProvidersIT extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldGetAllProvidersByDistrictAccordingToPageSize(){
+        String district = "district";
+        Provider provider1 = new ProviderBuilder().withDefaults().withProviderId("1234").withDistrict(district).build();
+        Provider provider2 = new ProviderBuilder().withDefaults().withProviderId("5678").withDistrict(district).build();
+        Provider provider3 = new ProviderBuilder().withDefaults().withProviderId("9012").withDistrict(district).build();
+        Provider provider4 = new ProviderBuilder().withDefaults().withProviderId("3456").withDistrict("district2").build();
+
+        addAndMarkForDeletion(provider1);
+        addAndMarkForDeletion(provider2);
+        addAndMarkForDeletion(provider3);
+        addAndMarkForDeletion(provider4);
+
+        Integer startIndex = 0;
+        Integer rowsPerPage = 2;
+        List<Provider> providersOnFirstPage = allProviders.paginateByDistrict(startIndex, rowsPerPage, district);
+
+        assertThat(providersOnFirstPage.size(), is(2));
+        assertThat(providersOnFirstPage.get(0).getProviderId(), is(provider1.getProviderId()));
+        assertThat(providersOnFirstPage.get(1).getProviderId(), is(provider2.getProviderId()));
+
+        startIndex = 1;
+        rowsPerPage = 2;
+        List<Provider> providersOnSecondPage = allProviders.paginateByDistrict(startIndex, rowsPerPage, district);
+
+        assertThat(providersOnSecondPage.size(), is(1));
+        assertThat(providersOnSecondPage.get(0).getProviderId(), is(provider3.getProviderId()));
+    }
+
+    @Test
     public void shouldReturnProvidersGivenProviderIds() {
         Provider provider1 = new ProviderBuilder().withDefaults().withProviderId("1234").build();
         Provider provider2 = new ProviderBuilder().withDefaults().withProviderId("5678").build();
@@ -205,5 +240,31 @@ public class AllProvidersIT extends SpringIntegrationTest {
         assertEquals(2, providers.size());
         assertEquals(asList(provider1, provider3), providers);
     }
+
+    @Test
+    public void shouldReturnCountOfAllProvidersForAGivenDistrict(){
+        String district = "district";
+        Provider provider1 = new ProviderBuilder().withDefaults().withProviderId("1234").withDistrict(district).build();
+        Provider provider2 = new ProviderBuilder().withDefaults().withProviderId("5678").withDistrict(district).build();
+        Provider provider4 = new ProviderBuilder().withDefaults().withProviderId("3456").withDistrict("district2").build();
+
+        addAndMarkForDeletion(provider1);
+        addAndMarkForDeletion(provider2);
+        addAndMarkForDeletion(provider4);
+
+        assertThat(allProviders.findCountByDistrict(district), is("2"));
+    }
+
+    @Test
+    public void shouldReturnZeroCountOfAllProvidersForAGivenDistrict(){
+        String district = "district";
+        Provider provider4 = new ProviderBuilder().withDefaults().withProviderId("3456").withDistrict("district2").build();
+
+        addAndMarkForDeletion(provider4);
+
+        assertThat(allProviders.findCountByDistrict(district), is("0"));
+    }
+
+
 }
 

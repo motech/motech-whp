@@ -29,22 +29,18 @@ public class ProviderPaginationService implements Paging {
 
     @Override
     public PageResults page(Integer pageNo, Integer rowsPerPage, FilterParams searchCriteria, SortParams sortCriteria) {
-        List<Provider> allProviders = providerService.fetchBy((String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
-
         int startIndex = (pageNo - 1) * rowsPerPage;
+        List<Provider> providers = providerService.fetchByFilterParams(startIndex, rowsPerPage, (String) searchCriteria.get("selectedDistrict"), (String) searchCriteria.get("selectedProvider"));
 
-        int endIndex = (pageNo * rowsPerPage);
-        endIndex = allProviders.size() < endIndex ? allProviders.size() : endIndex;
 
-        List<Provider> providers = (startIndex == endIndex) ? new ArrayList<Provider>() : allProviders.subList(startIndex, endIndex);
         PageResults pageResults = new PageResults();
-        pageResults.setTotalRows(allProviders.size());
+        pageResults.setTotalRows(providerService.count(searchCriteria));
         pageResults.setPageNo(pageNo);
         pageResults.setResults(prepareResultsModel(providers));
         return pageResults;
     }
 
-    private List<ProviderRow> prepareResultsModel(List<Provider> matchingProviders) {
+    protected List<ProviderRow> prepareResultsModel(List<Provider> matchingProviders) {
         Map<String, MotechUser> users = providerService.fetchAllWebUsers();
 
         List<ProviderRow> providerRows = new ArrayList<ProviderRow>();

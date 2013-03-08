@@ -3,6 +3,7 @@ package org.motechproject.whp.user.repository;
 import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
+import org.ektorp.ViewResult;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.motechproject.dao.BusinessIdNotUniqueException;
@@ -54,14 +55,14 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         }
     }
 
-    @View(name = "find_by_district_and_provider_id", map = "function(doc) {if (doc.type ==='Provider') {emit([doc.district, doc.providerId], doc._id);}}")
+    @View(name = "find_by_district_and_provider_id", map = "function(doc) {if (doc.type ==='Provider') {emit([doc.district, doc.providerId], doc._id);}}", reduce = "_count")
     public List<Provider> findByDistrictAndProviderId(String district, String providerId) {
-        ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district, providerId.toLowerCase())).endKey(ComplexKey.of(district, providerId.toLowerCase())).includeDocs(true);
+        ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district, providerId.toLowerCase())).endKey(ComplexKey.of(district, providerId.toLowerCase())).includeDocs(true).reduce(false);
         return db.queryView(q, Provider.class);
     }
 
     public List<Provider> findByDistrict(String district) {
-        ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district)).endKey(ComplexKey.of(district, ComplexKey.emptyObject())).includeDocs(true);
+        ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district)).endKey(ComplexKey.of(district, ComplexKey.emptyObject())).includeDocs(true).reduce(false);
         return db.queryView(q, Provider.class);
     }
 
@@ -76,4 +77,26 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         ViewQuery query = createQuery("by_providerId").keys(providerIds.asList()).includeDocs(true);
         return db.queryView(query, Provider.class);
     }
+
+    public List<Provider> paginateByDistrict(Integer startIndex, Integer rowsPerPage, String district) {
+        ViewQuery query = createQuery("find_by_district_and_provider_id")
+                .startKey(ComplexKey.of(district))
+                .endKey(ComplexKey.of(district, ComplexKey.emptyObject()))
+                .skip(startIndex * rowsPerPage).limit(rowsPerPage)
+                .reduce(false)
+                .includeDocs(true);
+        return db.queryView(query, Provider.class);
+    }
+
+    public String findCountByDistrict(String district) {
+        ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district)).endKey(ComplexKey.of(district, ComplexKey.emptyObject())).inclusiveEnd(true).reduce(true);
+        ViewResult rows = db.queryView(q);
+        return firstValue(rows);
+    }
+
+
+    private String firstValue(ViewResult rows) {
+        return (rows.getSize() > 0) ? rows.getRows().get(0).getValue() : "0";
+    }
+
 }

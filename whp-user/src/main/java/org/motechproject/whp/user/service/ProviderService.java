@@ -1,6 +1,7 @@
 package org.motechproject.whp.user.service;
 
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
 import org.motechproject.security.service.MotechUser;
@@ -16,11 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
@@ -43,21 +44,21 @@ public class ProviderService {
     public void registerProvider(ProviderRequest providerRequest) {
         String providerDocId = createOrUpdateProvider(providerRequest);
         try {
-            motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, Arrays.asList(WHPRole.PROVIDER.name()), false);
+            motechAuthenticationService.register(providerRequest.getProviderId(), "password", providerDocId, asList(WHPRole.PROVIDER.name()), false);
         } catch (Exception e) {
             throw new WHPRuntimeException(WHPErrorCode.WEB_ACCOUNT_REGISTRATION_ERROR, e.getMessage());
         }
     }
 
-    public List<Provider> fetchBy(String district, String providerId) {
-        if (StringUtils.isEmpty(providerId) && StringUtils.isEmpty(district)) {
-            return allProviders.getAll();
+    public List<Provider> fetchByFilterParams(Integer startIndex, Integer rowsPerPage, String district, String providerId) {
+        if (isEmpty(providerId) && isEmpty(district)) {
+            return new ArrayList<>();
         }
 
-        if (StringUtils.isEmpty(providerId)) {
-            return fetchBy(district);
+        if (isEmpty(providerId)) {
+            return allProviders.paginateByDistrict(startIndex, rowsPerPage, district);
         }
-        return allProviders.findByDistrictAndProviderId(district, providerId);
+        return asList(allProviders.findByProviderId(providerId));
     }
 
     public List<Provider> fetchBy(String district) {
@@ -100,9 +101,7 @@ public class ProviderService {
                 eventContext.send(PROVIDER_DISTRICT_CHANGE, provider.getProviderId());
             }
         }
-
         providerReportingService.reportProvider(provider);
-
         return docId;
     }
 
@@ -113,5 +112,18 @@ public class ProviderService {
 
     public List<Provider> getAll() {
         return allProviders.getAll();
+    }
+
+    public Integer count(FilterParams searchCriteria) {
+        String selectedProvider = searchCriteria.get("selectedProvider").toString();
+        if(isNotEmpty(selectedProvider)){
+            return (allProviders.findByProviderId(selectedProvider) != null ? 1 : 0);
+        }
+
+        String selectedDistrict = searchCriteria.get("selectedDistrict").toString();
+        if(isNotEmpty(selectedDistrict)) {
+            return Integer.parseInt(allProviders.findCountByDistrict(selectedDistrict));
+        }
+        return 0;
     }
 }

@@ -8,6 +8,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechAuthenticationService;
@@ -59,30 +60,40 @@ public class ProviderServiceTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     private ProviderService providerService;
+    Integer startIndex;
+    Integer rowsPerPage;
 
 
     @Before
     public void setUp() {
         initMocks(this);
         providerService = new ProviderService(motechAuthenticationService, allProviders, eventContext, providerReportingService);
+        startIndex = 0;
+        rowsPerPage = 2;
     }
 
     @Test
-    public void shouldFetchProvidersByDistrictAndProviderId() {
-        providerService.fetchBy("district", "providerId");
-        verify(allProviders).findByDistrictAndProviderId("district", "providerId");
+    public void shouldFetchProviderByDistrictAndProviderId() {
+        providerService.fetchByFilterParams(startIndex, rowsPerPage, "district", "providerId");
+        verify(allProviders).findByProviderId("providerId");
     }
 
     @Test
     public void shouldFetchProvidersByOnlyDistrict_WhenProviderIdIsEmpty() {
-        providerService.fetchBy("district", "");
-        verify(allProviders).findByDistrict("district");
+        providerService.fetchByFilterParams(startIndex, rowsPerPage, "district", "");
+        verify(allProviders).paginateByDistrict(startIndex, rowsPerPage, "district");
     }
 
     @Test
-    public void shouldFetchProvidersByOnlyDistrict() {
-        providerService.fetchBy("district");
-        verify(allProviders).findByDistrict("district");
+    public void shouldNotReturnProvidersForNoCriteria(){
+        providerService.fetchByFilterParams(startIndex, rowsPerPage, "", "");
+        verifyNoMoreInteractions(allProviders);
+    }
+
+    @Test
+    public void shouldFetchProviderByProviderId(){
+        providerService.fetchByFilterParams(startIndex, rowsPerPage, "", "providerId");
+        verify(allProviders).findByProviderId("providerId");
     }
 
     @Test
@@ -222,5 +233,54 @@ public class ProviderServiceTest {
         verifyNoMoreInteractions(allProviders);
         verifyNoMoreInteractions(eventContext);
         verifyNoMoreInteractions(motechAuthenticationService);
+    }
+
+    @Test
+    public void shouldReturnPaginatedCountIfFilterByDistrict(){
+        FilterParams filterParams = new FilterParams();
+        String district = "d1";
+        filterParams.put("selectedDistrict", district);
+        filterParams.put("selectedProvider", "");
+
+        when(allProviders.findCountByDistrict(district)).thenReturn("4");
+
+        assertThat(providerService.count(filterParams), is(4));
+
+        verify(allProviders).findCountByDistrict(filterParams.get("selectedDistrict").toString());
+
+    }
+
+    @Test
+    public void shouldReturnOneIfFilterByProviderIdAndOrDistrictReturnProvider(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("selectedDistrict", "");
+        filterParams.put("selectedProvider", "p1");
+        when(allProviders.findByProviderId("p1")).thenReturn(new Provider());
+
+        assertThat(providerService.count(filterParams), is(1));
+
+        verify(allProviders).findByProviderId("p1");
+    }
+
+    @Test
+    public void shouldReturnZeroIfFilterByProviderIdAndOrDistrictDoesNotReturnProvider(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("selectedDistrict", "");
+        filterParams.put("selectedProvider", "p1");
+        when(allProviders.findByProviderId("p1")).thenReturn(null);
+
+        assertThat(providerService.count(filterParams), is(0));
+        verify(allProviders).findByProviderId("p1");
+
+    }
+
+    @Test
+    public void shouldReturnZeroIfFilterByNothing(){
+        FilterParams filterParams = new FilterParams();
+        filterParams.put("selectedDistrict", "");
+        filterParams.put("selectedProvider", "");
+
+        assertThat(providerService.count(filterParams), is(0));
+
     }
 }
