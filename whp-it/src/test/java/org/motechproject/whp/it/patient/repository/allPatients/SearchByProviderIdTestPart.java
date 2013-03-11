@@ -45,7 +45,7 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient requiredPatient = createPatient("patientId1", providerId, PROVIDER_DISTRICT);
 
         Patient patientWithTreatmentClosed = createPatient("patientId2", providerId, PROVIDER_DISTRICT);
-        patientWithTreatmentClosed.closeCurrentTreatment(TreatmentOutcome.Died, DateUtil.now());
+        patientWithTreatmentClosed.closeCurrentTreatment(TreatmentOutcome.Died, null, DateUtil.now());
         allPatients.update(patientWithTreatmentClosed);
 
         assertPatientEquals(new Patient[]{requiredPatient}, allPatients.getAllWithActiveTreatmentFor(providerId).toArray());
@@ -67,13 +67,13 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     @Test
     public void shouldFetchPatientsForAProviderWithActiveTreatment() {
         Patient withoutActiveTreatment1 = createPatient("patientId1", "providerId1", PROVIDER_DISTRICT);
-        withoutActiveTreatment1.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment1.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
         allPatients.update(withoutActiveTreatment1);
 
         Patient withActiveTreatment1 = createPatient("patientId2", "providerId1", PROVIDER_DISTRICT);
 
         Patient withoutActiveTreatment2 = createPatient("patientId3", "providerId2", PROVIDER_DISTRICT);
-        withoutActiveTreatment2.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        withoutActiveTreatment2.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
         allPatients.update(withoutActiveTreatment2);
 
         Patient withActiveTreatment2 = createPatient("patientId4", "providerId2", PROVIDER_DISTRICT);

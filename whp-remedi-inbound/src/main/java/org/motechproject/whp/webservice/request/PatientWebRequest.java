@@ -154,6 +154,8 @@ public class PatientWebRequest implements CaseXmlRequest{
     @Scope(scope = {UpdateScope.createScope, UpdateScope.simpleUpdateScope})
     private String age;
 
+    private String remarks;
+
     public PatientWebRequest() {
     }
 

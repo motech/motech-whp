@@ -19,10 +19,24 @@ public class TreatmentTest {
         DateTime now = now();
 
         Treatment treatment = new Treatment();
-        treatment.close(TreatmentOutcome.Cured, now);
+        String closeTreatmentRemarks = "testRemarks";
+        treatment.close(TreatmentOutcome.Cured, closeTreatmentRemarks, now);
 
         assertEquals(today(), treatment.getEndDate());
         assertEquals(TreatmentOutcome.Cured, treatment.getTreatmentOutcome());
+        assertEquals(closeTreatmentRemarks, treatment.getCloseTreatmentRemarks());
+    }
+
+    @Test
+    public void shouldAcceptNullCloseTreatmentRemarks() {
+        DateTime now = now();
+
+        Treatment treatment = new Treatment();
+        treatment.close(TreatmentOutcome.Cured, null, now);
+
+        assertEquals(today(), treatment.getEndDate());
+        assertEquals(TreatmentOutcome.Cured, treatment.getTreatmentOutcome());
+        assertNull(treatment.getCloseTreatmentRemarks());
     }
 
     @Test

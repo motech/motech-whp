@@ -77,7 +77,7 @@ public class OpenNewTreatmentTest extends BaseUnitTest {
     @Test
     public void shouldOpenTreatmentIfNewTreatmentCanBeOpenedForPatient() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());

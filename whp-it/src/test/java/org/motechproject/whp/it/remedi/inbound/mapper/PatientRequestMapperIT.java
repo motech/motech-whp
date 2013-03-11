@@ -76,6 +76,17 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
     }
 
+    @Test
+    public void shouldMapCloseTreatmentRequest(){
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaultsForCloseTreatment().build();
+        PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
+
+        assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
+        assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
+        assertEquals(patientWebRequest.getRemarks(), patientRequest.getRemarks());
+        assertEquals(patientWebRequest.getTreatment_outcome(), patientRequest.getTreatment_outcome().getOutcome());
+    }
+
     private void assertBasicPatientInfo(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
         assertEquals(patientWebRequest.getFirst_name(), patientRequest.getFirst_name());

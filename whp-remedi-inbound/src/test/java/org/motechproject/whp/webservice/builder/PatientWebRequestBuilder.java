@@ -104,6 +104,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setTb_registration_date("15/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setTb_id(TB_ID);
+        patientWebRequest.setRemarks("testRemarks");
         return this;
     }
 
@@ -243,6 +244,11 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withPatientAddress(String houseNumber, String landmark, String block, String village, String district, String state) {
         patientWebRequest.setPatientAddress(houseNumber, landmark, block, village, district, state);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withRemarks(String remarks) {
+        patientWebRequest.setRemarks(remarks);
         return this;
     }
 }

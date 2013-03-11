@@ -89,7 +89,7 @@ public class PatientFilterTestPart  extends AllPatientsTestPart {
                 .withPatientId("patient5")
                 .withProviderId("provider3")
                 .withProviderDistrict("district3").build();
-        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         allPatients.add(patient1);
         allPatients.add(patient2);

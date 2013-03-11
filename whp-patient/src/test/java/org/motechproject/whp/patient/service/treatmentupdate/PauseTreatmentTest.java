@@ -81,7 +81,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
     public void shouldNotPauseTreatmentIfCurrentTreatmentIsClosed() {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
@@ -98,7 +98,7 @@ public class PauseTreatmentTest extends BaseUnitTest {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
         patient.pauseCurrentTreatment("paws", now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());

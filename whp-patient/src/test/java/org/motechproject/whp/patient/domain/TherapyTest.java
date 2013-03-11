@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
@@ -15,6 +16,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.AllDaysOfWeek.allDaysOfWeek;
@@ -22,6 +24,7 @@ import static org.motechproject.whp.common.domain.Phase.*;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.*;
+import static org.motechproject.whp.patient.domain.TreatmentOutcome.TreatmentCompleted;
 
 public class TherapyTest {
 
@@ -32,6 +35,21 @@ public class TherapyTest {
         assertEquals(today(), therapy.getCloseDate());
         assertEquals(TherapyStatus.Closed, therapy.getStatus());
     }
+
+
+    @Test
+    public void shouldCloseTreatment() {
+        Therapy therapy = new Therapy();
+        Treatment currentTreatment = mock(Treatment.class);
+        therapy.setCurrentTreatment(currentTreatment);
+        DateTime now = DateTime.now();
+        String remarks = "testRemarks";
+        therapy.closeCurrentTreatment(TreatmentCompleted, remarks, now);
+        assertEquals(today(), therapy.getCloseDate());
+        assertEquals(TherapyStatus.Closed, therapy.getStatus());
+        verify(currentTreatment).close(TreatmentCompleted, remarks, now);
+    }
+
 
     @Test
     public void shouldStartTherapy() {

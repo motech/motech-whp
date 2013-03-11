@@ -40,6 +40,7 @@ public class PatientRequest {
     private DateTime date_modified;
     private boolean migrated;
     private TreatmentUpdateScenario treatmentUpdate;
+    private String remarks;
 
     public PatientRequest() {
     }

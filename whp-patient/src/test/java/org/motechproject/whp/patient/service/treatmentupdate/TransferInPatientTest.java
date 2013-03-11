@@ -54,7 +54,7 @@ public class TransferInPatientTest extends BaseUnitTest {
     @Test
     public void shouldTransferInPatientTreatmentAndUpdatePatientAndReviveLastTreatment() {
         Patient patient = new PatientBuilder().withDefaults().build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, now());
 
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
@@ -75,7 +75,7 @@ public class TransferInPatientTest extends BaseUnitTest {
         patientRequest.setDisease_class(patient.getCurrentTherapy().getDiseaseClass());
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
         patientRequest.setTreatment_category(new TreatmentCategory("Some Random Category", "11", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
         when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         expectWHPRuntimeException(WHPErrorCode.TREATMENT_DETAILS_DO_NOT_MATCH);
@@ -91,7 +91,7 @@ public class TransferInPatientTest extends BaseUnitTest {
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setDisease_class(patient.getCurrentTherapy().getDiseaseClass());
         patientRequest.setTreatment_category(patient.getCurrentTherapy().getTreatmentCategory());
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
         when(patientService.findByPatientId(patientRequest.getCase_id())).thenReturn(patient);
 
         transferInPatient.apply(patientRequest);

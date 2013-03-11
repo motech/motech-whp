@@ -186,7 +186,7 @@ public class PatientInfoMapperTest {
 
     @Test
     public void shouldMapTestResultsAcrossTreatments() {
-        patient.closeCurrentTreatment(TreatmentOutcome.TransferredOut, DateUtil.now());
+        patient.closeCurrentTreatment(TreatmentOutcome.TransferredOut, null, DateUtil.now());
 
         SmearTestResults smearTestResults = new SmearTestResults();
         SputumTrackingInstance newSputumTrackingInstance = SputumTrackingInstance.ExtendedIP;
@@ -226,13 +226,6 @@ public class PatientInfoMapperTest {
 
         PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
         assertFalse(patientInfo.isShowAlert());
-//        assertThat(patientInfo.getCurrentPhase(), is(currentPhase));
-//        assertThat(patientInfo.getNextPhaseName(), is(Phase.CP));
-//        assertNull(patientInfo.getLastCompletedPhase());
-//        assertThat(patientInfo.getPhasesNotPossibleToTransitionTo(), is(asList(Phase.IP.name())));
-//        assertFalse(patientInfo.isNearingPhaseTransition());
-//        assertFalse(patientInfo.isTransitioning());
-//        assertThat(patientInfo.getRemainingDosesInCurrentPhase(), is(51));
     }
 
     @Test

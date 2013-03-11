@@ -4,5 +4,6 @@
         <treatment_update>Close</treatment_update>
         <tb_id>%s</tb_id>
         <treatment_outcome>TransferredOut</treatment_outcome>
+        <remarks>Remark</remarks>
     </update>
 </case>

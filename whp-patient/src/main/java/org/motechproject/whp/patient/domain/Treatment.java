@@ -28,6 +28,7 @@ public class Treatment implements Serializable {
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
+    private String closeTreatmentRemarks;
 
     public Treatment() {
     }
@@ -39,9 +40,10 @@ public class Treatment implements Serializable {
         setPatientType(patientType);
     }
 
-    public void close(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
+    public void close(TreatmentOutcome treatmentOutcome, String closeTreatmentRemarks, DateTime dateModified) {
         endDate = dateModified.toLocalDate();
         this.treatmentOutcome = treatmentOutcome;
+        this.closeTreatmentRemarks = closeTreatmentRemarks;
     }
 
     public void pause(String reasonForPause, DateTime dateModified) {

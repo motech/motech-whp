@@ -162,7 +162,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
         Patient patient = new PatientBuilder().withDefaults()
                 .withTbId("elevenDigit")
                 .build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         SmearTestResults str = new SmearTestResults();

@@ -25,7 +25,7 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         Patient patientWithCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
 
         Patient patientWithoutCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
-        patientWithoutCurrentTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, DateUtil.now());
+        patientWithoutCurrentTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, null, DateUtil.now());
 
         allPatients.add(patientWithCurrentTreatment);
         allPatients.add(patientWithoutCurrentTreatment);
@@ -40,7 +40,7 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
         Patient patientWithCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId1").build();
 
         Patient patientWithoutCurrentTreatment = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
-        patientWithoutCurrentTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, DateUtil.now());
+        patientWithoutCurrentTreatment.closeCurrentTreatment(TreatmentOutcome.Cured, null, DateUtil.now());
 
         allPatients.add(patientWithCurrentTreatment);
         allPatients.add(patientWithoutCurrentTreatment);
@@ -74,7 +74,7 @@ public class SearchByActivePatientsTestPart extends AllPatientsTestPart {
     public void shouldFetchAllActivePatients() {
         Patient activePatient = new PatientBuilder().withDefaults().withPatientId("patientId1").withAdherenceProvidedForLastWeek().build();
         Patient inactivePatient = new PatientBuilder().withDefaults().withPatientId("patientId2").build();
-        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Died, DateUtil.now());
+        inactivePatient.closeCurrentTreatment(TreatmentOutcome.Died, null, DateUtil.now());
 
         allPatients.add(activePatient);
         allPatients.add(inactivePatient);

@@ -206,8 +206,8 @@ public class Therapy implements Serializable {
         return null;
     }
 
-    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
-        currentTreatment.close(treatmentOutcome, dateModified);
+    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, String closeTreatmentRemarks, DateTime dateModified) {
+        currentTreatment.close(treatmentOutcome, closeTreatmentRemarks, dateModified);
         close(dateModified);
     }
 

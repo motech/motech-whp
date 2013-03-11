@@ -7,13 +7,12 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.builder.PatientBuilder;
+import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.mapper.PatientMapper;
 import org.motechproject.whp.user.service.ProviderService;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.patient.builder.PatientBuilder.PATIENT_ID;
@@ -43,20 +42,21 @@ public class TreatmentServiceTest {
     @Test
     public void shouldCloseTreatment() {
         Patient patient = mock(Patient.class);
-        PatientRequest patientRequest = mock(PatientRequest.class);
-        String caseId = "caseId";
-        String patientId = "patientId";
+        DateTime dateModified = DateTime.now();
+        PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment()
+                .withCloseTreatmentRemarks("remarks")
+                .withCaseId(PATIENT_ID)
+                .withDateModified(dateModified).build();
 
-        when(patientRequest.getCase_id()).thenReturn(caseId);
-        when(patientService.findByPatientId(caseId)).thenReturn(patient);
-        when(patient.getPatientId()).thenReturn(patientId);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        when(patient.getPatientId()).thenReturn(PATIENT_ID);
 
         treatmentService.closeTreatment(patientRequest);
 
         InOrder order = inOrder(patient, patientService, patientAlertScheduler);
-        order.verify(patient).closeCurrentTreatment(any(TreatmentOutcome.class), any(DateTime.class));
+        order.verify(patient).closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), dateModified);
         order.verify(patientService).update(patient);
-        order.verify(patientAlertScheduler).unscheduleJob(patientId);
+        order.verify(patientAlertScheduler).unscheduleJob(PATIENT_ID);
     }
 
     @Test

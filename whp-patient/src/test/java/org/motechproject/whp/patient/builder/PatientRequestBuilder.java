@@ -208,4 +208,9 @@ public class PatientRequestBuilder {
         patientRequest.setAddress(new Address("house number", "landmark", "block", "village", district, "state"));
         return this;
     }
+
+    public PatientRequestBuilder withCloseTreatmentRemarks(String remarks) {
+        patientRequest.setRemarks(remarks);
+        return this;
+    }
 }

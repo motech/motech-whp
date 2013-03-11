@@ -67,12 +67,18 @@ public class PatientTest {
     }
 
     @Test
-    public void shouldUpdateLastModifiedDateWhenTreatmentIsClosed() {
+    public void shouldCloseCurrentTreatment() {
+        Therapy currentTherapy = mock(Therapy.class);
         DateTime now = now();
         Patient patient = patient();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now);
+        patient.setCurrentTherapy(currentTherapy);
+
+        String closeTreatmentRemarks = "test remarks";
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, closeTreatmentRemarks, now);
 
         assertEquals(now, patient.getLastModifiedDate());
+        assertFalse(patient.isOnActiveTreatment());
+        verify(currentTherapy).closeCurrentTreatment(TreatmentOutcome.Cured, closeTreatmentRemarks, now);
     }
 
     @Test
@@ -185,10 +191,10 @@ public class PatientTest {
     @Test
     public void shouldGetCurrentTreatment_WhenDateIsTheStartDayOfCurrentTreatment() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
         patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
@@ -199,10 +205,10 @@ public class PatientTest {
     @Test
     public void shouldGetCurrentTreatment_WhenDateIsAfterStartDayOfCurrentTreatment() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
         patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
@@ -214,10 +220,10 @@ public class PatientTest {
     public void shouldGetFirstTreatment_WhenDateIsSameAsEndDate() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         Treatment firstTreatment = patient.getCurrentTreatment();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         patient.addTreatment(new TreatmentBuilder().withDefaults().build(), dateTime(2012, 1, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1), now());
 
@@ -227,11 +233,11 @@ public class PatientTest {
     @Test
     public void shouldGetLatestTreatment_WhenTreatmentIsCloseAndOpenedOnSameDay() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         Treatment secondTreatment = new TreatmentBuilder().withDefaults().build();
         patient.addTreatment(secondTreatment, dateTime(2011, 12, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         patient.addTreatment(new TreatmentBuilder().withDefaults().withTbId("current").build(), dateTime(2012, 4, 1), now());
 
@@ -253,14 +259,6 @@ public class PatientTest {
         patient.addTreatment(treatment, now(), now());
 
         assertTrue(patient.isOnActiveTreatment());
-    }
-
-    @Test
-    public void shouldUnSetOnActiveTreatmentWhenTreatmentIsClosed() {
-        Patient patient = patient();
-        patient.closeCurrentTreatment(TreatmentOutcome.TreatmentCompleted, now());
-
-        assertFalse(patient.isOnActiveTreatment());
     }
 
     @Test
@@ -540,11 +538,11 @@ public class PatientTest {
     public void shouldGetTreatmentHistoryFromCurrentTherapy() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         Treatment treatment1 = patient.getCurrentTreatment();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
         patient.addTreatment(treatment2, dateTime(2012, 1, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
         patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
@@ -557,11 +555,11 @@ public class PatientTest {
     public void shouldGetAllTreatmentsFromCurrentTherapy() {
         Patient patient = new PatientBuilder().withDefaults().withCurrentTreatmentStartDate(date(2011, 10, 1)).build();
         Treatment treatment1 = patient.getCurrentTreatment();
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2011, 12, 1));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2011, 12, 1));
 
         Treatment treatment2 = new TreatmentBuilder().withDefaults().build();
         patient.addTreatment(treatment2, dateTime(2012, 1, 1), now());
-        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, dateTime(2012, 3, 15));
+        patient.closeCurrentTreatment(TreatmentOutcome.Defaulted, null, dateTime(2012, 3, 15));
 
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("current").build();
         patient.addTreatment(currentTreatment, dateTime(2012, 4, 1), now());
@@ -617,7 +615,7 @@ public class PatientTest {
         // Current Therapy
         Treatment closedTreatment = new TreatmentBuilder().withDefaults().build();
         closedTreatment.setTbId(currentTherapyPreviousTreatment);
-        closedTreatment.close(TreatmentOutcome.Cured, now());
+        closedTreatment.close(TreatmentOutcome.Cured, null, now());
         patient.getCurrentTherapy().addTreatment(closedTreatment, now());
 
         // Historised Therapy
@@ -626,7 +624,7 @@ public class PatientTest {
         currentTreatment.setTbId(closedTherapyCurrentTreatment);
         closedTreatment = new TreatmentBuilder().withDefaults().build();
         closedTreatment.setTbId(closedTherapyPreviousTreatment);
-        closedTreatment.close(TreatmentOutcome.Cured, now());
+        closedTreatment.close(TreatmentOutcome.Cured, null, now());
         closedTherapy.addTreatment(closedTreatment, now());
         closedTherapy.addTreatment(currentTreatment, now());
 

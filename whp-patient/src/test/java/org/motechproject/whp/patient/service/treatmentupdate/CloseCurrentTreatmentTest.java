@@ -39,7 +39,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
     public void shouldNotCloseCurrentTreatmentIfPatientTreatmentIsAlreadyClosed() {
         String tbId = "tbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());
@@ -70,7 +70,7 @@ public class CloseCurrentTreatmentTest extends BaseUnitTest {
         String tbId = "tbId";
         String someOtherTbId = "someOtherTbId";
         Patient patient = new PatientBuilder().withDefaults().withTbId(tbId).build();
-        patient.closeCurrentTreatment(TreatmentOutcome.Cured, now());
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, null, now());
 
         PatientRequest patientRequest = new PatientRequest();
         patientRequest.setCase_id(patient.getPatientId());

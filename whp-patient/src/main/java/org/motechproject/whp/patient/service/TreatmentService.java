@@ -31,7 +31,7 @@ public class TreatmentService {
 
     public void closeTreatment(PatientRequest patientRequest) {
         Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
-        patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getDate_modified());
+        patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), patientRequest.getDate_modified());
         patientService.update(patient);
         patientAlertScheduler.unscheduleJob(patient.getPatientId());
     }

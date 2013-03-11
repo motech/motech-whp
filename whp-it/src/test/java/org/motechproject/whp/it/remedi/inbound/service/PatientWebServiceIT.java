@@ -36,6 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.now;
 
@@ -255,6 +257,36 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertFalse(updatedPatient.getCurrentTreatment().isPaused());
     }
+
+    @Test
+    public void shouldCloseTreatment() {
+        // Creating a patient
+        String caseId = "12341234";
+        String tbId = "elevendigit";
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTbId(tbId)
+                .withCaseId(caseId)
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+
+        // Closing current treatment
+        String remarks = "remarks";
+        PatientWebRequest closeTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withTbId(tbId)
+                .withCaseId(caseId).withTreatmentOutcome(TreatmentOutcome.Cured.name())
+                .withRemarks(remarks)
+                .build();
+
+        patientWebService.updateCase(closeTreatmentRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(caseId);
+        assertThat(updatedPatient.getCurrentTreatment().getCloseTreatmentRemarks(), is(remarks));
+        assertThat(updatedPatient.getCurrentTreatment().getTbId(), is(closeTreatmentRequest.getTb_id()));
+        assertThat(updatedPatient.getCurrentTreatment().getTreatmentOutcome(), is(TreatmentOutcome.Cured));
+    }
+
 
     @Test
     public void shouldPerformSimpleUpdateOnClosedTreatment() {

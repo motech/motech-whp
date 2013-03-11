@@ -118,8 +118,8 @@ public class Patient extends MotechBaseDataObject {
         currentTherapy.revive();
     }
 
-    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, DateTime dateModified) {
-        currentTherapy.closeCurrentTreatment(treatmentOutcome, dateModified);
+    public void closeCurrentTreatment(TreatmentOutcome treatmentOutcome, String closeTreatmentRemarks, DateTime dateModified) {
+        currentTherapy.closeCurrentTreatment(treatmentOutcome, closeTreatmentRemarks, dateModified);
         onActiveTreatment = false;
         setLastModifiedDate(dateModified);
     }
