@@ -26,7 +26,8 @@ public class PatientWebRequestBuilder {
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
                 .setSmearTestResults("PreTreatment", "19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name(), "labName", "labNumber")
                 .setWeightStatistics(SputumTrackingInstance.PreTreatment.name(), "99.7")
-                .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber");
+                .setTreatmentData("01", TB_ID, "providerId", "P", "40", "registrationNumber")
+                .setTreatmentDetails("hiv_status", "6", "provider_name", "dot_centre", "provider_type", "cmf_doctor", "contact_person_name", "contact_person_phone_number" );
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("10/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");

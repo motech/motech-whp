@@ -297,4 +297,16 @@ public class PatientWebRequest implements CaseXmlRequest{
     public String getType() {
         return "Patient: " + updateScope().name();
     }
+
+    public PatientWebRequest setTreatmentDetails(String hiv_status, String members_below_six_years, String provider_name, String dot_centre, String provider_type, String cmf_doctor, String contact_person_name, String contact_person_phone_number) {
+        this.hiv_status = hiv_status;
+        this.members_below_six_years = members_below_six_years;
+        this.provider_name = provider_name;
+        this.dot_centre = dot_centre;
+        this.provider_type = provider_type;
+        this.cmf_doctor = cmf_doctor;
+        this.contact_person_name = contact_person_name;
+        this.contact_person_phone_number = contact_person_phone_number;
+        return this;
+    }
 }
