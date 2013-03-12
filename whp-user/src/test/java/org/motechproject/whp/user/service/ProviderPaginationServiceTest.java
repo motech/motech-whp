@@ -44,7 +44,7 @@ public class ProviderPaginationServiceTest {
     public void setUp(){
         initMocks(this);
         filterParams = new FilterParams();
-        providerPaginationService = new ProviderPaginationService(allProviders, providerService);
+        providerPaginationService = new ProviderPaginationService(providerService);
     }
 
     @Test
