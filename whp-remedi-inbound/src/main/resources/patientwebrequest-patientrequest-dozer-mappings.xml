@@ -70,5 +70,13 @@
             <a>age</a>
             <b>age</b>
         </field>
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+            <a>hiv_test_date</a>
+            <b>hiv_test_date</b>
+        </field>
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+            <a>xpert_test_date</a>
+            <b>xpert_test_date</b>
+        </field>
     </mapping>
 </mappings>

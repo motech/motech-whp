@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.mapper.PatientMapper;
+import org.motechproject.whp.patient.mapper.TreatmentDetailsMapper;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.patient.service.TreatmentService;
 import org.motechproject.whp.patient.service.treatmentupdate.BaseUnitTest;
@@ -32,6 +33,9 @@ public class SimpleUpdateTest extends BaseUnitTest {
     private TreatmentService treatmentService;
     @Mock
     private AllDistricts allDistricts;
+    @Mock
+    TreatmentDetailsMapper treatmentDetailsMapper;
+
     private SimpleUpdate simpleUpdate;
     private Patient patient;
     private PatientMapper patientMapper;
@@ -39,7 +43,7 @@ public class SimpleUpdateTest extends BaseUnitTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper(providerService);
+        patientMapper = new PatientMapper(providerService, treatmentDetailsMapper);
         patient = new PatientBuilder().withDefaults().build();
         simpleUpdate = new SimpleUpdate(patientService, patientMapper, allDistricts);
     }

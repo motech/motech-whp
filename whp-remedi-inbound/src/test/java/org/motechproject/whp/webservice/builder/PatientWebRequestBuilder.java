@@ -55,7 +55,32 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setTb_registration_date("15/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setPatient_type("TransferredIn");
+
+
+        setDefaultTreatmentDetails();
         return this;
+    }
+
+    private void setDefaultTreatmentDetails() {
+        patientWebRequest.setDistrict_with_code("district_with_code");
+        patientWebRequest.setTb_id_unit_with_code("tb_with_code");
+        patientWebRequest.setEp_site("ep_site");
+        patientWebRequest.setOther_investigations("others");
+        patientWebRequest.setPrevious_treatment_history("treatment_history");
+        patientWebRequest.setHiv_status("hiv_status");
+        patientWebRequest.setHiv_test_date("15/10/2010");
+        patientWebRequest.setMembers_below_six_years("6");
+        patientWebRequest.setPhc_referred("phc_referred");
+        patientWebRequest.setProvider_name("provider_name");
+        patientWebRequest.setDot_centre("dot_center");
+        patientWebRequest.setProvider_type("provider_type");
+        patientWebRequest.setCmf_doctor("cmf doctor");
+        patientWebRequest.setContact_person_name("person name");
+        patientWebRequest.setContact_person_phone_number("phone number");
+        patientWebRequest.setXpert_test_result("xpert test result");
+        patientWebRequest.setXpert_device_number("xpert device number");
+        patientWebRequest.setXpert_test_date("15/10/2010");
+        patientWebRequest.setRif_resistance_result("rif resistance result");
     }
 
     public PatientWebRequestBuilder withDefaultsForTransferIn() {
@@ -69,6 +94,25 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setTb_registration_date("15/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         patientWebRequest.setPatient_type("TransferredIn");
+
+        setDefaultTreatmentDetails();
+
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDefaultsForNewTreatment() {
+        patientWebRequest = new PatientWebRequest()
+                .setTreatmentUpdateData("New", null)
+                .setTreatmentData("01", NEW_TB_ID, "newProviderId", "P", null, null)
+                .setSmearTestResults(SputumTrackingInstance.EndTreatment.name(), "19/07/2010", SmearTestResult.Negative.name(), "21/09/2010", SmearTestResult.Negative.name(), "labName", "labNumber")
+                .setWeightStatistics(SputumTrackingInstance.EndTreatment.name(), "99.7");
+        patientWebRequest.setCase_id(CASE_ID);
+        patientWebRequest.setDate_modified("15/10/2010 10:10:10");
+        patientWebRequest.setTb_registration_date("15/10/2010");
+        patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setPatient_type("New");
+        setDefaultTreatmentDetails();
+
         return this;
     }
 
@@ -249,6 +293,11 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withRemarks(String remarks) {
         patientWebRequest.setRemarks(remarks);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withTreatmentStatus(String status) {
+        patientWebRequest.setTreatment_update(status);
         return this;
     }
 }

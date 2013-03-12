@@ -13,6 +13,7 @@ import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.command.UpdateCommandFactory;
@@ -35,10 +36,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
@@ -68,11 +67,12 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
     PatientWebService patientWebService;
     private District district;
+    private String defaultProviderId;
 
     @Before
     public void setUpDefaultProvider() {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        String defaultProviderId = patientWebRequest.getProvider_id();
+        defaultProviderId = patientWebRequest.getProvider_id();
         Provider defaultProvider = new Provider(defaultProviderId, "1234567890", "chambal", DateUtil.now());
         allProviders.add(defaultProvider);
     }
@@ -196,7 +196,51 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
         assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
+
+        assertTreatmentDetails(transferInRequest, updatedPatient.getCurrentTreatment().getTreatmentDetails());
     }
+
+    @Test
+    public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsNewTreatment() {
+        List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
+        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
+
+        PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
+        patientWebService.createCase(createPatientWebRequest);
+        Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
+
+        DateTime dateModified = DateUtil.now();
+        DateTime tbRegistrationDate = new DateTime(2012, 11, 11, 0, 0, 0);
+
+        //first closing current treatment
+        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
+                .build();
+        patientWebService.updateCase(closeRequest);
+
+        PatientWebRequest newTreatmentRequest = new PatientWebRequestBuilder()
+                .withDefaultsForNewTreatment()
+                .withDate_Modified(dateModified)
+                .withTbRegistartionDate(tbRegistrationDate)
+                .build();
+        Provider newProvider = new Provider(newTreatmentRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
+        allProviders.add(newProvider);
+
+        patientWebService.updateCase(newTreatmentRequest);
+
+        Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
+
+        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
+        assertEquals(newTreatmentRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
+        assertEquals(tbRegistrationDate.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
+
+        assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
+        assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
+
+        assertTreatmentDetails(newTreatmentRequest, updatedPatient.getCurrentTreatment().getTreatmentDetails());
+    }
+
 
     @Test
     public void shouldUpdatePatientTreatment() {
@@ -456,6 +500,40 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
 
         assertFalse(patientWebService.canBeTransferred(createPatientRequest.getCase_id()));
     }
+
+    public static void assertTreatmentDetails(PatientWebRequest patientRequest, TreatmentDetails treatmentDetails){
+        assertEquals(patientRequest.getDistrict_with_code(), treatmentDetails.getDistrictWithCode());
+        assertEquals(patientRequest.getTb_id_unit_with_code(), treatmentDetails.getTbIdWithCode());
+        assertEquals(patientRequest.getEp_site(), treatmentDetails.getEpSite());
+        assertEquals(patientRequest.getOther_investigations(), treatmentDetails.getOtherInvestigations());
+        assertEquals(patientRequest.getPrevious_treatment_history(), treatmentDetails.getPreviousTreatmentHistory());
+        assertEquals(patientRequest.getHiv_status(), treatmentDetails.getHivStatus());
+
+        if(patientRequest.getHiv_test_date() != null){
+            assertEquals(patientRequest.getHiv_test_date(), treatmentDetails.getHivTestDate().toString(WHPDate.DATE_FORMAT));
+        } else {
+            assertNull(treatmentDetails.getHivTestDate());
+        }
+
+        assertEquals(Integer.valueOf(patientRequest.getMembers_below_six_years()), treatmentDetails.getMembersBelowSixYears());
+        assertEquals(patientRequest.getPhc_referred() , treatmentDetails.getPhcReferred());
+        assertEquals(patientRequest.getProvider_name(), treatmentDetails.getProviderName());
+        assertEquals(patientRequest.getDot_centre(), treatmentDetails.getDotCentre());
+        assertEquals(patientRequest.getProvider_type(), treatmentDetails.getProviderType());
+        assertEquals(patientRequest.getCmf_doctor(), treatmentDetails.getCmfDoctor());
+        assertEquals(patientRequest.getContact_person_name(), treatmentDetails.getContactPersonName());
+        assertEquals(patientRequest.getContact_person_phone_number() , treatmentDetails.getContactPersonPhoneNumber());
+        assertEquals(patientRequest.getXpert_test_result() , treatmentDetails.getXpertTestResult());
+        assertEquals(patientRequest.getXpert_device_number() , treatmentDetails.getXpertDeviceNumber());
+
+        if(patientRequest.getXpert_test_date() != null)
+            assertEquals(patientRequest.getXpert_test_date() , treatmentDetails.getXpertTestDate().toString(WHPDate.DATE_FORMAT));
+        else
+            assertNull(treatmentDetails.getXpertTestDate());
+
+        assertEquals(patientRequest.getRif_resistance_result(), treatmentDetails.getRifResistanceResult());
+    }
+
 
     @After
     public void tearDown() {

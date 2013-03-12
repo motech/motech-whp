@@ -29,6 +29,7 @@ public class Treatment implements Serializable {
     private WeightStatistics weightStatistics = new WeightStatistics();
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
     private String closeTreatmentRemarks;
+    private TreatmentDetails treatmentDetails = new TreatmentDetails();
 
     public Treatment() {
     }

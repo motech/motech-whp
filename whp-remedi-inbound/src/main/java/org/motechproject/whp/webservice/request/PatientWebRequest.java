@@ -156,6 +156,62 @@ public class PatientWebRequest implements CaseXmlRequest{
 
     private String remarks;
 
+    private String district_with_code;
+    private String tb_id_unit_with_code;
+    private String ep_site;
+    private String other_investigations;
+    private String previous_treatment_history;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String hiv_status;
+
+    @DateTimeFormat(pattern = DATE_FORMAT)
+    private String hiv_test_date;
+
+    @NotNullOrEmpty
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number of members below six years must be a number")
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String members_below_six_years;
+
+    private String phc_referred;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String provider_name;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String dot_centre;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String provider_type;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String cmf_doctor;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String contact_person_name;
+
+    @NotNullOrEmpty
+    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    private String contact_person_phone_number;
+
+    private String xpert_test_result;
+
+    private String xpert_device_number;
+
+    @DateTimeFormat(pattern = DATE_FORMAT)
+    private String xpert_test_date;
+
+    private String rif_resistance_result;
+
+
+
+
     public PatientWebRequest() {
     }
 

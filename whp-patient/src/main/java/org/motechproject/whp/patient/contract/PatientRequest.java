@@ -42,6 +42,27 @@ public class PatientRequest {
     private TreatmentUpdateScenario treatmentUpdate;
     private String remarks;
 
+    //treatment details
+    private String district_with_code;
+    private String tb_id_unit_with_code;
+    private String ep_site;
+    private String other_investigations;
+    private String previous_treatment_history;
+    private String hiv_status;
+    private DateTime hiv_test_date;
+    private Integer members_below_six_years;
+    private String phc_referred;
+    private String provider_name;
+    private String dot_centre;
+    private String provider_type;
+    private String cmf_doctor;
+    private String contact_person_name;
+    private String contact_person_phone_number;
+    private String xpert_test_result;
+    private String xpert_device_number;
+    private DateTime xpert_test_date;
+    private String rif_resistance_result;
+
     public PatientRequest() {
     }
 

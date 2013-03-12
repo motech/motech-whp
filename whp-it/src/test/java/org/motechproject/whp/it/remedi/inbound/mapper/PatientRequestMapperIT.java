@@ -19,7 +19,9 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
@@ -74,6 +76,30 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
         assertEquals(patientWebRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(patientWebRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
+
+        assertTreatmentDetails(patientWebRequest, patientRequest);
+    }
+
+    private void assertTreatmentDetails(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
+        assertThat(patientWebRequest.getDistrict_with_code(),is(patientRequest.getDistrict_with_code()));           
+        assertThat(patientWebRequest.getTb_id_unit_with_code(),is(patientRequest.getTb_id_unit_with_code()));         
+        assertThat(patientWebRequest.getEp_site(),is(patientRequest.getEp_site()));                      
+        assertThat(patientWebRequest.getOther_investigations(),is(patientRequest.getOther_investigations()));         
+        assertThat(patientWebRequest.getPrevious_treatment_history(),is(patientRequest.getPrevious_treatment_history()));
+        assertThat(patientWebRequest.getHiv_status(),is(patientRequest.getHiv_status()));                   
+        assertThat(patientWebRequest.getHiv_test_date(),is(patientRequest.getHiv_test_date().toString(DATE_FORMAT)));
+        assertThat(Integer.parseInt(patientWebRequest.getMembers_below_six_years()), is(patientRequest.getMembers_below_six_years()));
+        assertThat(patientWebRequest.getPhc_referred() ,is(patientRequest.getPhc_referred()));                 
+        assertThat(patientWebRequest.getProvider_name(),is(patientRequest.getProvider_name()));                
+        assertThat(patientWebRequest.getDot_centre(), is(patientRequest.getDot_centre()));                   
+        assertThat(patientWebRequest.getProvider_type(),is(patientRequest.getProvider_type()));                
+        assertThat(patientWebRequest.getCmf_doctor(),is(patientRequest.getCmf_doctor()));                   
+        assertThat(patientWebRequest.getContact_person_name(),is(patientRequest.getContact_person_name()));          
+        assertThat(patientWebRequest.getContact_person_phone_number() ,is(patientRequest.getContact_person_phone_number()));  
+        assertThat(patientWebRequest.getXpert_test_result() ,is(patientRequest.getXpert_test_result()));            
+        assertThat(patientWebRequest.getXpert_device_number() ,is(patientRequest.getXpert_device_number()));          
+        assertThat(patientWebRequest.getXpert_test_date() ,is(patientRequest.getXpert_test_date().toString(DATE_FORMAT)));
+        assertThat(patientWebRequest.getRif_resistance_result(),is(patientRequest.getRif_resistance_result()));
     }
 
     @Test

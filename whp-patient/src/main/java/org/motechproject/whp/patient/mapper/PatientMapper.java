@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 public class PatientMapper {
 
     ProviderService providerService;
+    TreatmentDetailsMapper treatmentDetailsMapper;
 
     @Autowired
-    public PatientMapper(ProviderService providerService) {
+    public PatientMapper(ProviderService providerService, TreatmentDetailsMapper treatmentDetailsMapper) {
         this.providerService = providerService;
+        this.treatmentDetailsMapper = treatmentDetailsMapper;
     }
 
     public Patient mapPatient(PatientRequest patientRequest) {
@@ -79,7 +81,6 @@ public class PatientMapper {
         return patient;
     }
 
-
     Treatment createTreatment(PatientRequest patientRequest, Address address) {
         String providerId = patientRequest.getProvider_id();
         Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
@@ -87,6 +88,7 @@ public class PatientMapper {
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
         treatment.setWeightStatistics(patientRequest.getWeightStatistics());
+        treatmentDetailsMapper.map(patientRequest, treatment);
 
         setPatientAddress(treatment, address);
 

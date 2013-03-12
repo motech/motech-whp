@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
+import static org.motechproject.whp.patient.mapper.AssertTreatmentDetails.assertTreatmentDetails;
 
 public class PatientMapperTest {
 
@@ -24,13 +25,15 @@ public class PatientMapperTest {
 
     @Mock
     private ProviderService providerService;
+    private TreatmentDetailsMapper treatmentDetailsMapper;
     private String providerId = "provider-id";
     private String providerDistrict;
 
     @Before
     public void setUp() {
         initMocks(this);
-        patientMapper = new PatientMapper(providerService);
+        treatmentDetailsMapper = new TreatmentDetailsMapper();
+        patientMapper = new PatientMapper(providerService, treatmentDetailsMapper);
         providerDistrict = "district";
         when(providerService.findByProviderId(providerId)).thenReturn(new ProviderBuilder()
                 .withDefaults()
@@ -100,6 +103,7 @@ public class PatientMapperTest {
                 .withTbId("newTbId")
                 .withPatientAge(60)
                 .withPatientType(PatientType.Relapse)
+                .withDefaultTreatmentDetails()
                 .build();
 
         String newProviderDistrictName = "new-district";
@@ -117,6 +121,7 @@ public class PatientMapperTest {
         assertTherapy(openNewTreatmentUpdateRequest, patient.getAge(), patient.getCurrentTherapy());
         assertTreatment(openNewTreatmentUpdateRequest, oldTreatment.getPatientAddress(), patient.getCurrentTreatment());
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(newProviderDistrictName));
+
         verify(providerService).findByProviderId(providerId);
         verify(providerService).findByProviderId(newProviderId);
     }
@@ -141,6 +146,7 @@ public class PatientMapperTest {
                 .withPatientAge(60)
                 .withProviderId(NEW_PROVIDER_ID)
                 .withDiseaseClass(DiseaseClass.E)
+                .withDefaultTreatmentDetails()
                 .build();
 
         String newDistrictName = "new-district";
@@ -234,6 +240,7 @@ public class PatientMapperTest {
 
         assertSmearTests(patientRequest, treatment);
         assertWeightStatistics(patientRequest, treatment);
+        assertTreatmentDetails(patientRequest, treatment.getTreatmentDetails());
     }
 
     private void assertTherapy(PatientRequest patientRequest, Integer expectedPatientAge, Therapy therapy) {

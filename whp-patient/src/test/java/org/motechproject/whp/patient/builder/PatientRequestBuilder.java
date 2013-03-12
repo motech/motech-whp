@@ -213,4 +213,27 @@ public class PatientRequestBuilder {
         patientRequest.setRemarks(remarks);
         return this;
     }
+
+    public PatientRequestBuilder withDefaultTreatmentDetails() {
+        patientRequest.setDistrict_with_code("district_with_code");
+        patientRequest.setTb_id_unit_with_code("tb_with_code");
+        patientRequest.setEp_site("ep_site");
+        patientRequest.setOther_investigations("others");
+        patientRequest.setPrevious_treatment_history("treatment_history");
+        patientRequest.setHiv_status("hiv_status");
+        patientRequest.setHiv_test_date(DateTime.now());
+        patientRequest.setMembers_below_six_years(6);
+        patientRequest.setPhc_referred("phc_referred");
+        patientRequest.setProvider_name("provider_name");
+        patientRequest.setDot_centre("dot_center");
+        patientRequest.setProvider_type("provider_type");
+        patientRequest.setCmf_doctor("cmf doctor");
+        patientRequest.setContact_person_name("person name");
+        patientRequest.setContact_person_phone_number("phone number");
+        patientRequest.setXpert_test_result("xpert test result");
+        patientRequest.setXpert_device_number("xpert device number");
+        patientRequest.setXpert_test_date(DateTime.now());
+        patientRequest.setRif_resistance_result("rif resistance result");
+        return this;
+    }
 }

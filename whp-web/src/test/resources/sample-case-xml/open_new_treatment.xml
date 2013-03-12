@@ -17,5 +17,24 @@
         <provider_id>%s</provider_id>
         <patient_type>Relapse</patient_type>
         <tb_registration_date>01/03/2012</tb_registration_date>
+        <district_with_code>Begusarai 0087</district_with_code>
+        <tb_id_unit_with_code>Info to be given by PHC</tb_id_unit_with_code>
+        <ep_site>Cervical lymphadenitis</ep_site>
+        <other_investigations>Chest Xray 20/9/2011 reported cavity right apex</other_investigations>
+        <previous_treatment_history>No history of TB treatment prior to current</previous_treatment_history>
+        <hiv_status>Positive</hiv_status>
+        <hiv_test_date>12/01/2013</hiv_test_date>
+        <members_below_six_years>5</members_below_six_years>
+        <phc_referred>Yes</phc_referred>
+        <provider_name>Raja Singh</provider_name>
+        <dot_centre>MURWA SkyHealth Centre</dot_centre>
+        <provider_type>TPC</provider_type>
+        <cmf_doctor>Arun nath</cmf_doctor>
+        <xpert_device_number>WHP-03</xpert_device_number>
+        <xpert_test_date>12/02/2013</xpert_test_date>
+        <xpert_test_result>MTB Detected Medium</xpert_test_result>
+        <rif_resistance_result>Rif Resistance Detected</rif_resistance_result>
+        <contact_person_name>Raja sahu</contact_person_name>
+        <contact_person_phone_number>9999999999</contact_person_phone_number>
     </update>
 </case>
