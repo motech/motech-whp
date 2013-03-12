@@ -1,10 +1,14 @@
 package org.motechproject.whp.container.validation;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerId;
@@ -14,9 +18,13 @@ import org.motechproject.whp.containermapping.service.ProviderContainerMappingSe
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -33,6 +41,13 @@ public class CommonContainerRegistrationValidatorTest {
     private ProviderService providerService;
     @Mock
     private ProviderContainerMappingService providerContainerMappingService;
+
+    @Mock
+    ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     private CommonContainerRegistrationValidator registrationRequestValidator;
     private Provider validProvider;
 
@@ -41,7 +56,7 @@ public class CommonContainerRegistrationValidatorTest {
         validProvider = new Provider("validProvider", "123", "dist", now());
         initMocks(this);
         when(providerService.findByProviderId(validProvider.getProviderId())).thenReturn(validProvider);
-        registrationRequestValidator = new CommonContainerRegistrationValidator(containerService, providerService);
+        registrationRequestValidator = new CommonContainerRegistrationValidator(containerService, providerService, containerRegistrationValidationPropertyValues);
     }
 
     @Test
@@ -139,21 +154,80 @@ public class CommonContainerRegistrationValidatorTest {
     }
 
     @Test
-    public void shouldValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider() {
+    public void shouldValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider_ForValidPatientName() {
         ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
         registrationRequest.setPatientName("patientName");
         registrationRequest.setPatientId("patientId");
         registrationRequest.setAge(98);
         registrationRequest.setGender(Gender.F);
+        String patientFieldName = "patientName";
+
+        when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(asList("patientName"));
+
+        List<ErrorWithParameters> validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(containerRegistrationValidationPropertyValues).getMandatoryFields();
+    }
+
+    @Test
+    public void shouldValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider_ForInvalidPatientName() {
+        ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
+        registrationRequest.setPatientName("");
+        registrationRequest.setPatientId("patientId");
+        registrationRequest.setAge(98);
+        registrationRequest.setGender(Gender.F);
+
+        when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(asList("patientName"));
+
+        List<ErrorWithParameters> validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
+        assertTrue(!validationErrors.isEmpty());
+        assertTrue(validationErrors.contains(new ErrorWithParameters("invalid.patientName.error", "")));
+        verify(containerRegistrationValidationPropertyValues).getMandatoryFields();
+    }
+
+    @Test
+    public void shouldNotValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider_ForZeroMandatoryFields() {
+        ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
+        registrationRequest.setPatientName("");
+        registrationRequest.setPatientId("patientId");
+        registrationRequest.setAge(98);
+        registrationRequest.setGender(Gender.F);
+
+        when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(new ArrayList<String>());
 
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
         assertTrue(validationErrors.isEmpty());
+        verify(containerRegistrationValidationPropertyValues).getMandatoryFields();
+    }
 
+    @Test
+    public void shouldValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider_ForTwoMandatoryFields() {
+        ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
         registrationRequest.setPatientName("");
+        registrationRequest.setPatientId("patientId");
+        registrationRequest.setGender(Gender.F);
 
-        validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
-        assertTrue(!validationErrors.isEmpty());
-        assertTrue(validationErrors.contains(new ErrorWithParameters("invalid.patient.name.error","")));
+        when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(asList("patientName", "age"));
+
+        List<ErrorWithParameters> validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
+        assertThat(validationErrors.size(), is(2));
+        verify(containerRegistrationValidationPropertyValues).getMandatoryFields();
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenInvalidFieldIsConfiguredForContainerRegistrationValidation() {
+        ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
+        registrationRequest.setPatientName("");
+        registrationRequest.setPatientId("patientId");
+        registrationRequest.setGender(Gender.F);
+
+        expectedException.expect(WHPRuntimeException.class);
+        expectedException.expectMessage("Invalid field name : invalidField");
+
+        when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(asList("invalidField", "age"));
+
+        registrationRequestValidator.validatePatientDetails(registrationRequest);
     }
 
     private ContainerRegistrationRequest createContainerRegistrationRequest(String containerId) {

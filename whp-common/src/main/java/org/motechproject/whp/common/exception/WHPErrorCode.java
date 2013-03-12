@@ -31,7 +31,8 @@ public enum WHPErrorCode {
     INVALID_PHASE("Phase should be one of [PreTreatment, InTreatment]"),
     NULL_VALUE_IN_TB_REGISTRATION_DATE("TB Registration date is expected for PreTreatment phase"),
     INVALID_TB_REGISTRATION_DATE("TB Registration date should be of format dd/MM/yyyy"),
-    INVALID_DISTRICT("Invalid district name");
+    INVALID_DISTRICT("Invalid district name"),
+    INVALID_FIELD_FOR_CONTAINER_REGISTRATION("Invalid field name");
 
     private String message;
 

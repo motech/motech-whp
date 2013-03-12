@@ -1,8 +1,12 @@
 package org.motechproject.whp.container.validation;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.exception.WHPErrorCode;
+import org.motechproject.whp.common.exception.WHPRuntimeException;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.ContainerId;
 import org.motechproject.whp.container.service.ContainerService;
@@ -20,13 +24,16 @@ import static org.apache.commons.lang.StringUtils.length;
 @Component
 public class CommonContainerRegistrationValidator {
 
+    public static final String PATIENT_FIELD_NAME = "patientName";
     private ContainerService containerService;
     private ProviderService providerService;
+    private ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues;
 
     @Autowired
-    public CommonContainerRegistrationValidator(ContainerService containerService, ProviderService providerService) {
+    public CommonContainerRegistrationValidator(ContainerService containerService, ProviderService providerService, ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues) {
         this.containerService = containerService;
         this.providerService = providerService;
+        this.containerRegistrationValidationPropertyValues = containerRegistrationValidationPropertyValues;
     }
 
     public List<ErrorWithParameters> validate(ContainerRegistrationRequest registrationRequest) {
@@ -51,18 +58,23 @@ public class CommonContainerRegistrationValidator {
     }
 
     public List<ErrorWithParameters> validatePatientDetails(ContainerRegistrationRequest registrationRequest) {
-
         ArrayList<ErrorWithParameters> errors = new ArrayList();
-        String patientName = registrationRequest.getPatientName();
+        List<String> mandatoryFieldNames = containerRegistrationValidationPropertyValues.getMandatoryFields();
 
-        if(StringUtils.isBlank(patientName))
-            errors.add(new ErrorWithParameters("invalid.patient.name.error", patientName));
-
+        for (String fieldName : mandatoryFieldNames) {
+            try {
+                String value = BeanUtils.getProperty(registrationRequest, fieldName);
+                if (StringUtils.isBlank(value))
+                    errors.add(new ErrorWithParameters("invalid." + fieldName + ".error", value));
+            } catch (Exception e) {
+                throw new WHPRuntimeException(WHPErrorCode.INVALID_FIELD_FOR_CONTAINER_REGISTRATION, "Invalid field name : " + fieldName);
+            }
+        }
         return errors;
     }
 
     private boolean validateContainerId(ContainerRegistrationRequest registrationRequest, String containerIdSequence, String providerId, ArrayList<ErrorWithParameters> errors) {
-        if(isContainerLengthIsInvalid(registrationRequest)){
+        if (isContainerLengthIsInvalid(registrationRequest)) {
             errors.add(new ErrorWithParameters("container.id.length.error", valueOf(registrationRequest.getContainerRegistrationMode().getValidContainerIdLength())));
             return true;
         }

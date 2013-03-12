@@ -14,6 +14,7 @@
     <util:properties id="remediProperty" location="classpath:/remedi.properties"/>
     <util:properties id="adherenceProperties" location="classpath:adherence.properties"/>
     <util:properties id="alertsProperties" location="classpath:patientAlerts.properties"/>
+    <util:properties id="containerRegistrationValidationProperties" location="classpath:containerRegistrationValidation.properties"/>
 
     <util:properties id="whpProperties" location="classpath:/whp.properties"/>
     <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
