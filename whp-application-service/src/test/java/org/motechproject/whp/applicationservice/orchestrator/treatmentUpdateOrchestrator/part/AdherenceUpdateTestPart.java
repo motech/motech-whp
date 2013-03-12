@@ -19,7 +19,7 @@ import org.motechproject.whp.applicationservice.orchestrator.TreatmentUpdateOrch
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.TreatmentWeek;
 import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.service.PatientService;

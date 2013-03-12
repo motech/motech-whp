@@ -3,7 +3,7 @@ package org.motechproject.whp.it.remedi.inbound.request.patient;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.command.UpdateScope;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;

@@ -103,6 +103,23 @@ public class ProviderContainerRegistrationValidatorTest {
         verifyZeroInteractions(providerContainerMappingService);
     }
 
+    @Test
+    public void shouldValidatePatientDetails() {
+        String containerId = "11111111111";
+        String providerId = validProvider.getProviderId();
+        ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(providerId, containerId, RegistrationInstance.InTreatment.getDisplayText(), ChannelId.WEB.name(), null);
+        registrationRequest.setPatientName("patientName");
+
+        when(providerContainerMappingService.isValidContainerForProvider(providerId, containerId)).thenReturn(true);
+        when(containerRegistrationRequestValidator.validate(registrationRequest)).thenReturn(new ArrayList<ErrorWithParameters>());
+
+        List<ErrorWithParameters> validationErrors = validator.validate(registrationRequest);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(containerRegistrationRequestValidator).validatePatientDetails(registrationRequest);
+        verify(providerContainerMappingService).isValidContainerForProvider(providerId, containerId);
+    }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(providerContainerMappingService);

@@ -170,9 +170,16 @@ public class ContainerServiceTest extends BaseUnitTest {
         Provider provider = new Provider(providerId, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
+        String patientName = "patientName";
+        String patientId = "patientid";
+        Integer age = 21;
+        Gender gender = Gender.M;
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
+        containerRegistrationRequest.setPatientName(patientName);
+        containerRegistrationRequest.setAge(age);
+        containerRegistrationRequest.setPatientId(patientId);
+        containerRegistrationRequest.setGender(gender);
         containerService.registerContainer(containerRegistrationRequest);
-
 
         verify(allContainers).findByContainerId(anyString());
         String expectedContainerId = new ContainerId(providerId, containerId, ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER).value();
@@ -188,6 +195,10 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(instance, actualContainer.getInstance());
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertEquals(district, actualContainer.getDistrict());
+        assertEquals(patientName, actualContainer.getPatientName());
+        assertEquals(patientId, actualContainer.getPatientId());
+        assertEquals(age, actualContainer.getAge());
+        assertEquals(gender, actualContainer.getGender());
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(expectedContainerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);

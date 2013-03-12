@@ -115,6 +115,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     @Test
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_OnBehalfOfProvider() throws Exception {
         String containerId = "10000";
+        String name = "p1";
         RegistrationInstance inTreatment = RegistrationInstance.InTreatment;
 
         ArrayList<String> roles = new ArrayList<>();
@@ -124,6 +125,7 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
+                        .param("patientName", name)
                         .param("instance", inTreatment.getDisplayText()).param("providerId", providerId)
                         .param("containerRegistrationMode", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER.name())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))

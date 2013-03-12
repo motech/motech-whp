@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.PatientFlag;
 import org.motechproject.whp.patient.domain.SmearTestRecord;

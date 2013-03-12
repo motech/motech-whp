@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.importer.csv.request.ImportPatientRequest;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
 
 import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;

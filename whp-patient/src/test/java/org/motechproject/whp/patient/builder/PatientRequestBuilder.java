@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.contract.PatientRequest;

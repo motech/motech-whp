@@ -86,6 +86,11 @@ public class ContainerService {
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);
         container.setDiagnosis(Pending);
+        container.setPatientName(registrationRequest.getPatientName());
+        container.setPatientId(registrationRequest.getPatientId());
+        container.setAge(registrationRequest.getAge());
+        container.setGender(registrationRequest.getGender());
+
         allContainers.add(container);
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(container.getContainerId(), container.getProviderId(), container.getInstance(), creationTime);

@@ -19,7 +19,7 @@ import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.repository.AllPatients;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;

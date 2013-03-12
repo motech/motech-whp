@@ -50,6 +50,17 @@ public class CommonContainerRegistrationValidator {
         return errors;
     }
 
+    public List<ErrorWithParameters> validatePatientDetails(ContainerRegistrationRequest registrationRequest) {
+
+        ArrayList<ErrorWithParameters> errors = new ArrayList();
+        String patientName = registrationRequest.getPatientName();
+
+        if(StringUtils.isBlank(patientName))
+            errors.add(new ErrorWithParameters("invalid.patient.name.error", patientName));
+
+        return errors;
+    }
+
     private boolean validateContainerId(ContainerRegistrationRequest registrationRequest, String containerIdSequence, String providerId, ArrayList<ErrorWithParameters> errors) {
         if(isContainerLengthIsInvalid(registrationRequest)){
             errors.add(new ErrorWithParameters("container.id.length.error", valueOf(registrationRequest.getContainerRegistrationMode().getValidContainerIdLength())));

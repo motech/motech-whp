@@ -8,6 +8,7 @@ import org.motechproject.security.authentication.LoginSuccessHandler;
 import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
@@ -44,6 +45,7 @@ public class CmfAdminContainerRegistrationControllerTest {
     private CmfAdminContainerRegistrationValidator containerRegistrationValidator;
 
     List<String> INSTANCES = new ArrayList<>();
+    Gender[] GENDERS = Gender.values();
 
     @Before
     public void setUp() {
@@ -90,8 +92,9 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(2))
+                .andExpect(model().size(3))
                 .andExpect(model().attribute("instances", INSTANCES))
+                .andExpect(model().attribute("genders", GENDERS))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
     }
@@ -105,7 +108,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
@@ -130,6 +133,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("errors", errors))
                 .andExpect(model().attribute("instances", INSTANCES))
+                .andExpect(model().attribute("genders", GENDERS))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
 
         verify(containerRegistrationValidator).validate(any(CmfAdminContainerRegistrationRequest.class));

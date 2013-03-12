@@ -7,6 +7,7 @@ import org.motechproject.importer.annotation.CSVImporter;
 import org.motechproject.importer.annotation.Post;
 import org.motechproject.importer.annotation.Validate;
 import org.motechproject.importer.domain.ValidationResponse;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.mapping.StringToDateTime;

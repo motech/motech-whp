@@ -7,10 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.util.DateUtil;
-import org.motechproject.whp.common.domain.ContainerStatus;
-import org.motechproject.whp.common.domain.Diagnosis;
-import org.motechproject.whp.common.domain.RegistrationInstance;
-import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.domain.*;
 
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.Diagnosis.Positive;
@@ -38,8 +35,6 @@ public class Container extends MotechBaseDataObject {
 
     private ContainerStatus status;
 
-    private String patientId;
-
     private String tbId;
 
     private String reasonForClosure;
@@ -53,6 +48,14 @@ public class Container extends MotechBaseDataObject {
     private LocalDate containerIssuedDate;
 
     private DateTime closureDate;
+
+    private String patientName;
+
+    private String patientId;
+
+    private Integer age;
+
+    private Gender gender;
 
     // Required for ektorp
     public Container() {

@@ -8,7 +8,7 @@ import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.mapping.StringToEnumeration;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.DiseaseClass;
-import org.motechproject.whp.patient.domain.Gender;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.user.validation.DistrictValidator;

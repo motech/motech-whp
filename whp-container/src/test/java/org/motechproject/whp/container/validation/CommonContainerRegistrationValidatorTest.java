@@ -3,6 +3,7 @@ package org.motechproject.whp.container.validation;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.error.ErrorWithParameters;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
@@ -135,6 +136,24 @@ public class CommonContainerRegistrationValidatorTest {
         validationErrors = registrationRequestValidator.validate(registrationRequest);
         assertTrue(!validationErrors.isEmpty());
         assertTrue(validationErrors.contains(new ErrorWithParameters("container.id.length.error", String.valueOf(NEW_CONTAINER.getValidContainerIdLength()))));
+    }
+
+    @Test
+    public void shouldValidatePatientDetailsInCMFAdminContainerRegistrationRequestOnBehalfOfProvider() {
+        ContainerRegistrationRequest registrationRequest = createCMFAdminContainerRegistrationRequest("12345");
+        registrationRequest.setPatientName("patientName");
+        registrationRequest.setPatientId("patientId");
+        registrationRequest.setAge(98);
+        registrationRequest.setGender(Gender.F);
+
+        List<ErrorWithParameters> validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
+        assertTrue(validationErrors.isEmpty());
+
+        registrationRequest.setPatientName("");
+
+        validationErrors = registrationRequestValidator.validatePatientDetails(registrationRequest);
+        assertTrue(!validationErrors.isEmpty());
+        assertTrue(validationErrors.contains(new ErrorWithParameters("invalid.patient.name.error","")));
     }
 
     private ContainerRegistrationRequest createContainerRegistrationRequest(String containerId) {

@@ -45,6 +45,11 @@ public class CmfAdminContainerRegistrationValidator implements ContainerRegistra
         }
 
         if(request.getContainerRegistrationMode() == ON_BEHALF_OF_PROVIDER){
+            errors.addAll(containerRegistrationRequestValidator.validatePatientDetails(request));
+            if(!errors.isEmpty()){
+                return errors;
+            }
+
             if(!providerContainerMappingService.isValidContainerForProvider(request.getProviderId(), request.getContainerId())) {
                 errors.add(new ErrorWithParameters("on.behalf.of.provider.container.id.invalid.error", request.getContainerId()));
             }

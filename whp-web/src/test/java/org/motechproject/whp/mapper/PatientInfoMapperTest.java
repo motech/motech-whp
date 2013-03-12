@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;

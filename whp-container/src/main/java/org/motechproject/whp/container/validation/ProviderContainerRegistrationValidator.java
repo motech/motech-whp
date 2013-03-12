@@ -23,6 +23,8 @@ public class ProviderContainerRegistrationValidator implements ContainerRegistra
 
     public List<ErrorWithParameters> validate(ContainerRegistrationRequest registrationRequest) {
         List<ErrorWithParameters> errors =  this.containerRegistrationRequestValidator.validate(registrationRequest);
+        errors.addAll(this.containerRegistrationRequestValidator.validatePatientDetails(registrationRequest));
+
         if(!errors.isEmpty()){
             return errors;
         }

@@ -104,13 +104,14 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     @Test
     public void shouldRegisterContainer() throws Exception {
         String containerId = "10000";
+        String name = "p1";
         RegistrationInstance inTreatmentInstance = RegistrationInstance.InTreatment;
 
         List<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(providerContainerRegistrationController).build()
-                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("instance", inTreatmentInstance.getDisplayText())
+                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("patientName", name).param("instance", inTreatmentInstance.getDisplayText())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk());
 

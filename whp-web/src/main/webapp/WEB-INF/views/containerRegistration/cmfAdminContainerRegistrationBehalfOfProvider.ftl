@@ -51,6 +51,45 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Patient Name</label>
+
+                        <div class="controls">
+                            <@spring.bind "containerRegistrationRequest.patientName" />
+                            <input id="patientName" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient Name"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Patient ID</label>
+
+                        <div class="controls">
+                            <@spring.bind "containerRegistrationRequest.patientId" />
+                            <input id="patientId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient ID"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Age</label>
+
+                        <div class="controls">
+                            <@spring.bind "containerRegistrationRequest.age" />
+                            <input id="age" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Gender</label>
+                        <div class="controls">
+                            <@spring.bind "containerRegistrationRequest.gender" />
+                            <select id="gender" name="${spring.status.expression}">
+                                <option value=""></option>
+                                <#list genders as gender>
+                                    <option value="${gender.name()}" <#if spring.status.value?default("") == gender.name()>selected="true"</#if>>${gender.getValue()}</option>
+                                </#list>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="control-group pull-right">
                     <div class="controls">

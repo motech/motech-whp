@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.common.domain.alerts.AlertColorConfiguration;
 import org.motechproject.whp.common.domain.alerts.PatientAlertType;

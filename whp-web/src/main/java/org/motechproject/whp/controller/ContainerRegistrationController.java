@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
@@ -20,6 +21,7 @@ import static org.motechproject.flash.Flash.in;
 public abstract class ContainerRegistrationController extends BaseWebController {
 
     public static final String INSTANCES = "instances";
+    public static final String GENDERS = "genders";
     protected ContainerService containerService;
     protected ContainerRegistrationValidator containerRegistrationValidator;
 
@@ -46,6 +48,7 @@ public abstract class ContainerRegistrationController extends BaseWebController 
         for (RegistrationInstance instance : RegistrationInstance.values())
             instances.add(instance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
+        uiModel.addAttribute(GENDERS, Gender.values());
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotBlank(messages)) {
