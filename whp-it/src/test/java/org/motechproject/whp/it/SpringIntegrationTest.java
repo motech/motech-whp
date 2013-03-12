@@ -27,7 +27,7 @@ public abstract class SpringIntegrationTest {
     public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Qualifier("adherenceDbConnector")
-    @Autowired
+    @Autowired(required = false)
     protected CouchDbConnector adherenceDbConnector;
 
     protected ArrayList<BulkDeleteDocument> toDelete;
@@ -43,7 +43,7 @@ public abstract class SpringIntegrationTest {
     }
 
     protected void deleteAll() {
-        if (toDelete.size() > 0)
+        if (toDelete.size() > 0 && adherenceDbConnector != null)
             adherenceDbConnector.executeBulk(toDelete);
         toDelete.clear();
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Registration api_key="3F2504E04F8911D39A0C0305E82C3301" xmlns="http://openrosa.org/user/registration">
+    <username/>
+    <password/>
+    <uuid/>
+    <date>20/02/2012 10:10:15</date>
+    <user_data>
+        <data key="primary_mobile">9880123456</data>
+        <data key="secondary_mobile">9880123457</data>
+        <data key="tertiary_mobile">9880123458</data>
+        <data key="provider_id">cha011</data>
+        <data key="district">Muzaffarpur</data>
+    </user_data>
+</Registration>

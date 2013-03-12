@@ -16,7 +16,6 @@ import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
-import org.motechproject.whp.patient.command.UpdateCommandFactory;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.repository.AllPatients;
@@ -26,7 +25,6 @@ import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
 import org.motechproject.whp.user.service.ProviderService;
 import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
-import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.mapper.PatientRequestMapper;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.motechproject.whp.webservice.service.PatientWebService;
@@ -62,9 +60,8 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     PatientRequestMapper patientRequestMapper;
     @Autowired
     private AllDistricts allDistricts;
-    @Autowired
-    private UpdateCommandFactory updateCommandFactory;
 
+    @Autowired
     PatientWebService patientWebService;
     private District district;
     private String defaultProviderId;
@@ -81,42 +78,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     public void setUp() {
         district = new District("district");
         allDistricts.add(district);
-        patientWebService = new PatientWebService(patientService, validator, patientRequestMapper, updateCommandFactory);
-    }
-
-    @Test
-    public void shouldNotCreatePatientWhenDistrictIsInvalid() {
-        exceptionThrown.expect(WHPCaseException.class);
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebRequest.setAddress_district("invalid");
-        patientWebService.createCase(patientWebRequest);
-    }
-
-
-    @Test
-    public void shouldCreatePatient() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebService.createCase(patientWebRequest);
-        assertNotNull(allPatients.findByPatientId(patientWebRequest.getCase_id()));
-    }
-
-    @Test
-    public void migratedValueShouldBeFalseOnCreate() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebService.createCase(patientWebRequest);
-        assertFalse(allPatients.findByPatientId(patientWebRequest.getCase_id()).isMigrated());
-    }
-
-    @Test
-    public void shouldRecordTreatmentsWhenCreatingPatient() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-
-        patientWebService.createCase(patientWebRequest);
-
-        Patient recordedPatient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-        for (Treatment treatment : recordedPatient.getTreatmentHistory()) {
-            assertNotNull(recordedPatient.getCurrentTherapy());
-        }
     }
 
     @Test
@@ -542,4 +503,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         markForDeletion(allPatients.getAll().toArray());
         markForDeletion(allProviders.getAll().toArray());
     }
+
+
 }
