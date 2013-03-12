@@ -149,7 +149,7 @@
 <div class="row-fluid">
     <div class="results">
         <div id="patients">
-            <@paginator.paginate id = "patient_listing" entity="patient_results" filterSectionId="patient_list_filter" contextRoot="/whp" rowsPerPage="5"  stylePath="/resources-${applicationVersion}/styles">
+            <@paginator.paginate id = "patient_listing" entity="patient_results" filterSectionId="patient_list_filter" contextRoot="/whp" rowsPerPage="20"  stylePath="/resources-${applicationVersion}/styles">
                 <table id="patientList" class="table table-striped table-bordered table-condensed"
                        redirectOnRowClick="true">
                     <thead>
