@@ -10,7 +10,7 @@ public class AssertTreatmentDetails {
 
     public static void assertTreatmentDetails(PatientRequest patientRequest, TreatmentDetails treatmentDetails){
         assertEquals(patientRequest.getDistrict_with_code(), treatmentDetails.getDistrictWithCode());
-        assertEquals(patientRequest.getTb_id_unit_with_code(), treatmentDetails.getTbIdWithCode());
+        assertEquals(patientRequest.getTb_unit_with_code(), treatmentDetails.getTbUnitWithCode());
         assertEquals(patientRequest.getEp_site(), treatmentDetails.getEpSite());
         assertEquals(patientRequest.getOther_investigations(), treatmentDetails.getOtherInvestigations());
         assertEquals(patientRequest.getPrevious_treatment_history(), treatmentDetails.getPreviousTreatmentHistory());

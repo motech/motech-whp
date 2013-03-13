@@ -82,7 +82,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
 
     private void assertTreatmentDetails(PatientWebRequest patientWebRequest, PatientRequest patientRequest) {
         assertThat(patientWebRequest.getDistrict_with_code(),is(patientRequest.getDistrict_with_code()));           
-        assertThat(patientWebRequest.getTb_id_unit_with_code(),is(patientRequest.getTb_id_unit_with_code()));         
+        assertThat(patientWebRequest.getTb_unit_with_code(),is(patientRequest.getTb_unit_with_code()));
         assertThat(patientWebRequest.getEp_site(),is(patientRequest.getEp_site()));                      
         assertThat(patientWebRequest.getOther_investigations(),is(patientRequest.getOther_investigations()));         
         assertThat(patientWebRequest.getPrevious_treatment_history(),is(patientRequest.getPrevious_treatment_history()));

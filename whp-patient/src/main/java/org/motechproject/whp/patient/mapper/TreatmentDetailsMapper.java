@@ -12,7 +12,7 @@ public class TreatmentDetailsMapper {
         TreatmentDetails treatmentDetails = treatment.getTreatmentDetails();
         treatmentDetails.setEpSite(patientRequest.getEp_site());
         treatmentDetails.setDistrictWithCode(patientRequest.getDistrict_with_code());
-        treatmentDetails.setTbIdWithCode(patientRequest.getTb_id_unit_with_code());
+        treatmentDetails.setTbUnitWithCode(patientRequest.getTb_unit_with_code());
         treatmentDetails.setOtherInvestigations(patientRequest.getOther_investigations());
         treatmentDetails.setPreviousTreatmentHistory(patientRequest.getPrevious_treatment_history());
         treatmentDetails.setHivStatus(patientRequest.getHiv_status());

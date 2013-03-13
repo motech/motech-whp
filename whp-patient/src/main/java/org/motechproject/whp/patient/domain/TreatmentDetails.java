@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class TreatmentDetails implements Serializable {
 
     private String districtWithCode;
-    private String tbIdWithCode;
+    private String tbUnitWithCode;
     private String epSite;
     private String otherInvestigations;
     private String previousTreatmentHistory;

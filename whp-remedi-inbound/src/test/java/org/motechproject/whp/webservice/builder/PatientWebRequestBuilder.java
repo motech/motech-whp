@@ -64,7 +64,7 @@ public class PatientWebRequestBuilder {
 
     private void setDefaultTreatmentDetails() {
         patientWebRequest.setDistrict_with_code("district_with_code");
-        patientWebRequest.setTb_id_unit_with_code("tb_with_code");
+        patientWebRequest.setTb_unit_with_code("tb_with_code");
         patientWebRequest.setEp_site("ep_site");
         patientWebRequest.setOther_investigations("others");
         patientWebRequest.setPrevious_treatment_history("treatment_history");

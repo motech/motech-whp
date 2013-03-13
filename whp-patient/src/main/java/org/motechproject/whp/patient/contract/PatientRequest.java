@@ -45,7 +45,7 @@ public class PatientRequest {
 
     //treatment details
     private String district_with_code;
-    private String tb_id_unit_with_code;
+    private String tb_unit_with_code;
     private String ep_site;
     private String other_investigations;
     private String previous_treatment_history;

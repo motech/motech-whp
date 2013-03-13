@@ -38,7 +38,7 @@ public class TreatmentDetailsMapperTest {
         patientRequest.setPhc_referred(null);
         patientRequest.setHiv_test_date(null);
         patientRequest.setDistrict_with_code(null);
-        patientRequest.setTb_id_unit_with_code(null);
+        patientRequest.setTb_unit_with_code(null);
         patientRequest.setEp_site(null);
         patientRequest.setOther_investigations(null);
         patientRequest.setPrevious_treatment_history(null);
@@ -49,7 +49,7 @@ public class TreatmentDetailsMapperTest {
         TreatmentDetails treatmentDetails = treatment.getTreatmentDetails();
 
         assertThat(patientRequest.getDistrict_with_code(),is(treatmentDetails.getDistrictWithCode()));
-        assertThat(patientRequest.getTb_id_unit_with_code(),is(treatmentDetails.getTbIdWithCode()));
+        assertThat(patientRequest.getTb_unit_with_code(),is(treatmentDetails.getTbUnitWithCode()));
         assertThat(patientRequest.getEp_site(),is(treatmentDetails.getEpSite()));
         assertThat(patientRequest.getOther_investigations(),is(treatmentDetails.getOtherInvestigations()));
         assertThat(patientRequest.getPrevious_treatment_history(),is(treatmentDetails.getPreviousTreatmentHistory()));

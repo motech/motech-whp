@@ -217,7 +217,7 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withDefaultTreatmentDetails() {
         patientRequest.setDistrict_with_code("district_with_code");
-        patientRequest.setTb_id_unit_with_code("tb_with_code");
+        patientRequest.setTb_unit_with_code("tb_with_code");
         patientRequest.setEp_site("ep_site");
         patientRequest.setOther_investigations("others");
         patientRequest.setPrevious_treatment_history("treatment_history");
