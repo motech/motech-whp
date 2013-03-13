@@ -111,7 +111,8 @@
         });
 
         $('#download').bind('click', function (event) {
-            window.open($("#report").val() + "?" + $("#district-autocomplete, #from, #to").serialize());
+            $("#district").val($("#district-autocomplete").val());
+            window.open($("#report").val() + "?" + $("#district, #from, #to").serialize());
             return false;
         });
     });
