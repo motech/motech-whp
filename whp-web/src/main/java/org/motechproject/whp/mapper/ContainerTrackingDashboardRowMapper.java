@@ -53,6 +53,7 @@ public class ContainerTrackingDashboardRowMapper {
     private void extractPatientInformation(Container container) {
         if (container != null) {
             row.setPatientId(container.getPatientId());
+            row.setPatientName(container.getPatientName());
         }
     }
 

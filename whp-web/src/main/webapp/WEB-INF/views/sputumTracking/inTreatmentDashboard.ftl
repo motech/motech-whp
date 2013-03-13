@@ -140,6 +140,7 @@
                 <th>Result 2</th>
                 <th>Date Of Test 2</th>
                 <th>Instance</th>
+                <th>Patient Name</th>
                 <th>Patient ID</th>
                 <th>District</th>
                 <th>Provider Id</th>
@@ -160,6 +161,7 @@
                 <td>{{item.consultationTwoResult}}</td>
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.mappingInstance}}</td>
+                <td>{{item.patientName}}</td>
                 <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}'/>" target="_new">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>

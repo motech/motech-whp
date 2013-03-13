@@ -64,21 +64,21 @@
                         <label class="control-label">Patient ID</label>
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.patientId" />
-                            <input id="patientId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient ID"/>
+                            <input id="patientId" class="span" name="${spring.status.expression}" validate="required:${validationProperties.isMandatory("patientId")?string}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient ID"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Age</label>
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.age" />
-                            <input id="age" class="span" name="${spring.status.expression}" type="text" validate="number:true"  value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
+                            <input id="age" class="span" name="${spring.status.expression}" type="text" validate="number:true, required:${validationProperties.isMandatory("age")?string}""  value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Gender</label>
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.gender" />
-                            <select id="gender" name="${spring.status.expression}">
+                            <select id="gender" name="${spring.status.expression}" validate="required:${validationProperties.isMandatory("gender")?string}">
                                 <option value=""></option>
                                 <#list genders as gender>
                                     <option value="${gender.name()}" <#if spring.status.value?default("") == gender.name()>selected="true"</#if>>${gender.getValue()}</option>

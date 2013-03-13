@@ -71,7 +71,9 @@ public class ContainerTrackingDashboardRowMapperTest {
 
 
         String patientId = "patientid";
+        String patientName = "patientName";
         container.setPatientId(patientId);
+        container.setPatientName(patientName);
 
         String providerId = "providerid";
         String district = "district";
@@ -99,6 +101,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         assertEquals(SmearTestResult.Positive.name(), row.getConsultationOneResult());
         assertEquals(SmearTestResult.Negative.name(), row.getConsultationTwoResult());
         assertEquals(Action.Close.name(), row.getAction());
+        assertEquals(patientName, row.getPatientName());
     }
 
     @Test

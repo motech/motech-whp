@@ -150,6 +150,7 @@
                 <th>Date Of Test 2</th>
                 <th>Consultation Date</th>
                 <th>TB Diagnosis</th>
+                <th>Patient Name</th>
                 <th>Patient ID</th>
                 <th>Provider District</th>
                 <th>Provider Id</th>
@@ -171,6 +172,7 @@
                 <td>{{item.consultationTwoDate}}</td>
                 <td>{{item.consultation}}</td>
                 <td id="diagnosisValue">{{item.diagnosis}}</td>
+                <td>{{item.patientName}}</td>
                 <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}' />"  target="_blank">{{item.patientId}}</a></td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>

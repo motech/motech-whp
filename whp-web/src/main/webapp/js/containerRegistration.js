@@ -20,6 +20,18 @@ $().ready(function() {
 		    },
 			instance: {
 				required: "Please select the instance"
+			},
+			patientName: {
+				required: "Please select the patient name"
+			},
+			patientId: {
+				required: "Please select the patient id"
+			},
+			gender: {
+				required: "Please select the gender"
+			},
+			age: {
+				required: "Please select the age"
 			}
 		}
 	});
