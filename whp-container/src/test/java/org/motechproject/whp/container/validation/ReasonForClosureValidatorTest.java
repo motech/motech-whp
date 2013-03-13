@@ -54,8 +54,8 @@ public class ReasonForClosureValidatorTest {
         List<String> errors = reasonForClosureValidator.validate(containerClosureRequest);
 
         assertEquals(2, errors.size());
-        assertTrue(StringUtils.contains(errors.get(0), "Enter alternate diagnosis"));
-        assertTrue(StringUtils.contains(errors.get(1), "Enter consultation date"));
+        assertTrue(StringUtils.contains(errors.get(0), "Alternate diagnosis is not valid here"));
+        assertTrue(StringUtils.contains(errors.get(1), "Consultation date is not valid here"));
     }
 
     @Test

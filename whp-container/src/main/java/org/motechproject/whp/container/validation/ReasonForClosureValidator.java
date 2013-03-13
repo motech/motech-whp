@@ -32,9 +32,9 @@ public class ReasonForClosureValidator {
                 errors.add("Enter consultation date");
         } else {
             if (!StringUtils.isEmpty(containerClosureRequest.getAlternateDiagnosis()))
-                errors.add("Enter alternate diagnosis");
+                errors.add("Alternate diagnosis is not valid here");
             if (!StringUtils.isEmpty(containerClosureRequest.getConsultationDate()))
-                errors.add("Enter consultation date");
+                errors.add("Consultation date is not valid here");
         }
 
         return errors;
