@@ -41,7 +41,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
-@ContextConfiguration(locations = "classpath*:/applicationWebServiceContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class PatientRemediAPITest extends SpringIntegrationTest {
 
     public static final String DEFAULT_CASE_ID = "12341234";
@@ -121,6 +121,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getGender(),patient.getGender().name());
         assertEquals(patientWebRequest.getMobile_number(),patient.getPhoneNumber());
         assertEquals(patientWebRequest.getPhi(),patient.getPhi());
+        assertEquals(patientWebRequest.getDate_of_birth(),patient.getDateOfBirth().toString(WHPDate.DATE_FORMAT));
         assertEquals(patientWebRequest.getTreatment_category(), patient.getCurrentTherapy().getTreatmentCategory().getCode());
 
         assertPatientAddress(patientWebRequest, currentTreatment);

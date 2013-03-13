@@ -31,6 +31,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("10/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        patientWebRequest.setDate_of_birth("10/10/1981");
         setDefaultTreatmentDetails();
         return this;
     }

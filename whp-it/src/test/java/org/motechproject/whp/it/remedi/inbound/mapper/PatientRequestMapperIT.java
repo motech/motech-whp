@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
@@ -121,6 +122,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobile_number());
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
+        assertEquals(patientWebRequest.getDate_of_birth(), patientRequest.getDate_of_birth().toString(WHPDate.DATE_FORMAT));
     }
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {

@@ -43,6 +43,8 @@ public class PatientRequest {
     private TreatmentUpdateScenario treatmentUpdate;
     private String remarks;
 
+    private DateTime date_of_birth;
+
     //treatment details
     private String district_with_code;
     private String tb_unit_with_code;

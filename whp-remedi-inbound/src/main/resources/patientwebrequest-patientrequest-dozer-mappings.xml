@@ -78,5 +78,9 @@
             <a>xpert_test_date</a>
             <b>xpert_test_date</b>
         </field>
+        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+            <a>date_of_birth</a>
+            <b>date_of_birth</b>
+        </field>
     </mapping>
 </mappings>

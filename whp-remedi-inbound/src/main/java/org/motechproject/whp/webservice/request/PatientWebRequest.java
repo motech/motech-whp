@@ -154,6 +154,9 @@ public class PatientWebRequest implements CaseXmlRequest{
     @Scope(scope = {UpdateScope.createScope, UpdateScope.simpleUpdateScope})
     private String age;
 
+    @DateTimeFormat(pattern = DATE_FORMAT)
+    private String date_of_birth;
+
     private String remarks;
 
     private String district_with_code;

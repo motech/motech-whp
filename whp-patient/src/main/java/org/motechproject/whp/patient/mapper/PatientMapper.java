@@ -78,6 +78,10 @@ public class PatientMapper {
         patient.setLastModifiedDate(patientRequest.getDate_modified());
         patient.setMigrated(patientRequest.isMigrated());
 
+        if(patientRequest.getDate_of_birth() != null){
+            patient.setDateOfBirth(patientRequest.getDate_of_birth().toLocalDate());
+        }
+
         return patient;
     }
 

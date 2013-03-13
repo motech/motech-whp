@@ -13,6 +13,7 @@
         <last_name>${last_name}</last_name>
         <age>${age}</age>
         <gender>${gender}</gender>
+        <date_of_birth>${date_of_birth}</date_of_birth>
         <smear_sample_instance>${smear_sample_instance}</smear_sample_instance>
         <smear_test_date_1>${smear_test_date_1}</smear_test_date_1>
         <smear_test_result_1>${smear_test_result_1}</smear_test_result_1>

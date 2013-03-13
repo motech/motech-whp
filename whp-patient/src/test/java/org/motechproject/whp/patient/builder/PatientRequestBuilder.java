@@ -39,6 +39,7 @@ public class PatientRequestBuilder {
                 .setWeightStatistics(SputumTrackingInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
                 .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
                 .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
+        patientRequest.setDate_of_birth(DateUtil.newDateTime(1981, 3, 17, 4, 55, 0));
         return this;
     }
 

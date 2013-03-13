@@ -51,9 +51,11 @@ public class Patient extends MotechBaseDataObject {
 
     private LocalDate lastAdherenceWeekStartDate;
     private PatientAlerts patientAlerts = new PatientAlerts();
-
     private boolean migrated;
+
     private String version = "V2";
+
+    private LocalDate dateOfBirth;
 
     public Patient() {
     }

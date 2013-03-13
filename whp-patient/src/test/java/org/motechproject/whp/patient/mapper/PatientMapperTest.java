@@ -8,7 +8,6 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
-import org.motechproject.whp.patient.domain.PatientType;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -52,6 +51,22 @@ public class PatientMapperTest {
         assertTreatment(patientRequest, patientRequest.getAddress(), patient.getCurrentTreatment());
         assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
+        verify(providerService).findByProviderId(providerId);
+    }
+
+    @Test
+    public void shouldMapPatientRequestToPatientDomain_whenDateOfBirthIsNull() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
+                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .build();
+        patientRequest.setDate_of_birth(null);
+
+        Patient patient = patientMapper.mapPatient(patientRequest);
+        assertBasicPatientInfo(patient, patientRequest);
+        assertTreatment(patientRequest, patientRequest.getAddress(), patient.getCurrentTreatment());
+        assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
+        assertNull(patient.getDateOfBirth());
         verify(providerService).findByProviderId(providerId);
     }
 
@@ -228,6 +243,8 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getGender(), patient.getGender());
         assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(patientRequest.getPhi(), patient.getPhi());
+        if(patientRequest.getDate_of_birth() != null)
+            assertEquals(patientRequest.getDate_of_birth().toLocalDate(), patient.getDateOfBirth());
     }
 
     private void assertTreatment(PatientRequest patientRequest, Address address, Treatment treatment) {
