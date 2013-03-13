@@ -19,7 +19,6 @@
     </div>
     </#if>
 <h1>Container Registration</h1>
-
 <div id="container-registration">
     <form id="container-registration-form" autocomplete="off"
           action="<@spring.url '/containerRegistration/by_provider/register'/>" class="well form-horizontal" input
@@ -29,7 +28,6 @@
                 <td>
                     <div class="control-group">
                         <label class="control-label">Container ID*</label>
-
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.containerId" />
                             <input id="containerId" class="span" name="${spring.status.expression}" type="text"
@@ -58,43 +56,48 @@
                 </td>
             </tr>
             <tr>
+                <td>
                 <div class="control-group">
-                    <label class="control-label">Patient Name</label>
-
+                    <label class="control-label">Patient Name*</label>
                     <div class="controls">
                         <@spring.bind "containerRegistrationRequest.patientName" />
                         <input id="patientName" class="span" name="${spring.status.expression}" type="text"
+                               validate="required:${validationProperties.isMandatory("patientName")?string}"
                                value="${spring.status.value?default("")}" placeholder="Enter patient Name"/>
                     </div>
                 </div>
+                </td>
             </tr>
             <tr>
+                <td>
                 <div class="control-group">
                     <label class="control-label">Patient ID</label>
-
                     <div class="controls">
                         <@spring.bind "containerRegistrationRequest.patientId" />
-                        <input id="patientId" class="span" name="${spring.status.expression}" type="text"
+                        <input id="patientId" validate="required:${validationProperties.isMandatory("patientId")?string}" class="span" name="${spring.status.expression}" type="text"
                                value="${spring.status.value?default("")}" placeholder="Enter patient ID"/>
                     </div>
                 </div>
+                </td>
             </tr>
             <tr>
+                <td>
                 <div class="control-group">
                     <label class="control-label">Age</label>
-
                     <div class="controls">
                         <@spring.bind "containerRegistrationRequest.age" />
-                        <input id="age" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
+                        <input id="age" class="span" name="${spring.status.expression}" type="text" validate="number:true, required:${validationProperties.isMandatory("age")?string}" value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
                     </div>
                 </div>
+                </td>
             </tr>
             <tr>
+                <td>
                 <div class="control-group">
                     <label class="control-label">Gender</label>
                     <div class="controls">
                         <@spring.bind "containerRegistrationRequest.gender" />
-                        <select id="gender" name="${spring.status.expression}">
+                        <select id="gender" name="${spring.status.expression}" validate="required:${validationProperties.isMandatory("gender")?string}">
                             <option value=""></option>
                             <#list genders as gender>
                                 <option value="${gender.name()}"
@@ -103,8 +106,8 @@
                         </select>
                     </div>
                 </div>
+                </td>
             </tr>
-
             <tr>
                 <td>
                     <div class="control-group pull-down">

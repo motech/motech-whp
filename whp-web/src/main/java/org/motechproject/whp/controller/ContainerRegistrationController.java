@@ -6,6 +6,7 @@ import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ContainerRegistrationValidator;
@@ -22,12 +23,15 @@ public abstract class ContainerRegistrationController extends BaseWebController 
 
     public static final String INSTANCES = "instances";
     public static final String GENDERS = "genders";
+    public static final String VALIDATION_PROPERTIES = "validationProperties";
     protected ContainerService containerService;
     protected ContainerRegistrationValidator containerRegistrationValidator;
+    private ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues;
 
-    public ContainerRegistrationController(ContainerService containerService, ContainerRegistrationValidator containerRegistrationValidator) {
+    public ContainerRegistrationController(ContainerService containerService, ContainerRegistrationValidator containerRegistrationValidator, ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues) {
         this.containerService = containerService;
         this.containerRegistrationValidator = containerRegistrationValidator;
+        this.containerRegistrationValidationPropertyValues = containerRegistrationValidationPropertyValues;
     }
 
     protected boolean validate(Model uiModel, ContainerRegistrationRequest registrationRequest) {
@@ -49,6 +53,7 @@ public abstract class ContainerRegistrationController extends BaseWebController 
             instances.add(instance.getDisplayText());
         uiModel.addAttribute(INSTANCES, instances);
         uiModel.addAttribute(GENDERS, Gender.values());
+        uiModel.addAttribute(VALIDATION_PROPERTIES, containerRegistrationValidationPropertyValues);
 
         String messages = in(WHPConstants.NOTIFICATION_MESSAGE, request);
         if (isNotBlank(messages)) {

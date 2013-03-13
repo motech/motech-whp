@@ -17,7 +17,6 @@
             </div>
     </#if>
         <h1>Register on behalf of provider</h1>
-
         <div id="container-registration" class="offset1-fixed">
             <form id="container-registration-form"  autocomplete="off" action="<@spring.url '/containerRegistration/by_cmfAdmin/register'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
                 <div class="well">
@@ -53,17 +52,16 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">Patient Name</label>
+                        <label class="control-label">Patient Name*</label>
 
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.patientName" />
-                            <input id="patientName" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient Name"/>
+                            <input id="patientName" validate="required:${validationProperties.isMandatory("patientName")?string}" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient Name"/>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">Patient ID</label>
-
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.patientId" />
                             <input id="patientId" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter patient ID"/>
@@ -71,10 +69,9 @@
                     </div>
                     <div class="control-group">
                         <label class="control-label">Age</label>
-
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.age" />
-                            <input id="age" class="span" name="${spring.status.expression}" type="text" value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
+                            <input id="age" class="span" name="${spring.status.expression}" type="text" validate="number:true"  value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
                         </div>
                     </div>
                     <div class="control-group">

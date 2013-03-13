@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import freemarker.template.TemplateException;
 import org.motechproject.whp.common.domain.WHPConstants;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
@@ -23,8 +24,8 @@ public class ProviderContainerRegistrationController extends ContainerRegistrati
 
     @Autowired
     public ProviderContainerRegistrationController(ContainerService containerService,
-                                                   ProviderContainerRegistrationValidator providerContainerRegistrationValidator) {
-        super(containerService, providerContainerRegistrationValidator);
+                                                   ProviderContainerRegistrationValidator providerContainerRegistrationValidator, ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues) {
+        super(containerService, providerContainerRegistrationValidator, containerRegistrationValidationPropertyValues);
     }
 
     @RequestMapping(method = RequestMethod.GET)

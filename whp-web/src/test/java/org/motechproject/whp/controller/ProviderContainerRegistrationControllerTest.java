@@ -12,6 +12,7 @@ import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ProviderContainerRegistrationValidator;
@@ -39,6 +40,9 @@ public class ProviderContainerRegistrationControllerTest {
     private ContainerService containerService;
     @Mock
     private ProviderContainerRegistrationValidator containerRegistrationValidator;
+
+    @Mock
+    private ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues;
     private String providerId;
     List<String> INSTANCES = new ArrayList<>();
     Gender[] GENDERS = Gender.values();
@@ -49,7 +53,7 @@ public class ProviderContainerRegistrationControllerTest {
         INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
         INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
         providerId = "providerId";
-        containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator);
+        containerRegistrationController = new ProviderContainerRegistrationController(containerService, containerRegistrationValidator, containerRegistrationValidationPropertyValues);
     }
 
     @Test
@@ -62,7 +66,7 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("genders", GENDERS))
@@ -78,7 +82,7 @@ public class ProviderContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_provider").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(5))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/showForProvider"));

@@ -12,6 +12,7 @@ import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.WHPConstants;
 import org.motechproject.whp.common.error.ErrorWithParameters;
+import org.motechproject.whp.common.service.ContainerRegistrationValidationPropertyValues;
 import org.motechproject.whp.container.contract.CmfAdminContainerRegistrationRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.service.ContainerService;
@@ -44,6 +45,9 @@ public class CmfAdminContainerRegistrationControllerTest {
     @Mock
     private CmfAdminContainerRegistrationValidator containerRegistrationValidator;
 
+    @Mock
+    private ContainerRegistrationValidationPropertyValues containerRegistrationValidationPropertyValues;
+
     List<String> INSTANCES = new ArrayList<>();
     Gender[] GENDERS = Gender.values();
 
@@ -52,7 +56,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         initMocks(this);
         INSTANCES.add(RegistrationInstance.PreTreatment.getDisplayText());
         INSTANCES.add(RegistrationInstance.InTreatment.getDisplayText());
-        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator);
+        containerRegistrationController = new CmfAdminContainerRegistrationController(containerService, containerRegistrationValidator, containerRegistrationValidationPropertyValues);
     }
 
     @Test
@@ -92,9 +96,10 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(4))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("genders", GENDERS))
+                .andExpect(model().attribute("validationProperties", containerRegistrationValidationPropertyValues))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
     }
@@ -108,7 +113,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .perform(get("/containerRegistration/by_cmfAdmin/new-container").requestAttr(CONTRIB_FLASH_IN_PREFIX + WHPConstants.NOTIFICATION_MESSAGE, "success")
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(null, null, null, roles))))
                 .andExpect(status().isOk())
-                .andExpect(model().size(4))
+                .andExpect(model().size(5))
                 .andExpect(model().attributeExists("containerRegistrationRequest"))
                 .andExpect(model().attribute(WHPConstants.NOTIFICATION_MESSAGE, "success"))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
@@ -134,6 +139,7 @@ public class CmfAdminContainerRegistrationControllerTest {
                 .andExpect(model().attribute("errors", errors))
                 .andExpect(model().attribute("instances", INSTANCES))
                 .andExpect(model().attribute("genders", GENDERS))
+                .andExpect(model().attribute("validationProperties", containerRegistrationValidationPropertyValues))
                 .andExpect(forwardedUrl("containerRegistration/cmfAdminNewContainerRegistration"));
 
         verify(containerRegistrationValidator).validate(any(CmfAdminContainerRegistrationRequest.class));
@@ -192,4 +198,5 @@ public class CmfAdminContainerRegistrationControllerTest {
         assertEquals(instance, actualRegistrationRequest.getInstance());
         assertEquals(ChannelId.WEB.name(), actualRegistrationRequest.getChannelId());
     }
+
 }
