@@ -3,6 +3,8 @@ package org.motechproject.whp.it.remedi.inbound.util;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.motechproject.whp.webservice.request.PatientWebRequest;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -11,37 +13,51 @@ import java.util.Map;
 
 public class CaseXMLBuilder {
     private String templateFile;
-    public Map<String, String> params = new HashMap<>();
+    public Map<String, Object> params = new HashMap<>();
 
     public CaseXMLBuilder(String templateFile) {
         this.templateFile = templateFile;
     }
 
-    public CaseXMLBuilder withCaseId(String caseId){
-        params.put("caseId", caseId);
-        return this;
+    public static CaseXMLBuilder createPatientRequest(){
+        return new CaseXMLBuilder("create_patient.xml");
     }
 
-    public CaseXMLBuilder withParam(String key, String value){
-        params.put(key, value);
-        return this;
+    public static  CaseXMLBuilder updatePatientRequestWithOnlyMandatoryFields() {
+        return new CaseXMLBuilder("update_patient_with_only_mandatory_fields.xml");
+    }
+
+    public static  CaseXMLBuilder updatePatientRequestWithNoMandatoryTreatmentDetails() {
+        return new CaseXMLBuilder("update_patient_no_mandatory_treatment_fields.xml");
+    }
+
+    public static CaseXMLBuilder updatePatientRequest(){
+        return new CaseXMLBuilder("update_patient.xml");
+    }
+
+    public static CaseXMLBuilder pauseTreatmentRequest() {
+        return new CaseXMLBuilder("pause_treatment.xml");
+    }
+
+    public static CaseXMLBuilder restartTreatmentRequest() {
+        return new CaseXMLBuilder("restart_treatment.xml");
+    }
+
+    public static CaseXMLBuilder closeTreatmentRequest() {
+        return new CaseXMLBuilder("close_treatment.xml");
     }
 
     public String build() {
         try {
             Template template = getXmlTemplate(templateFile);
-            return processTemplate(params, template);
+            CharArrayWriter writer = new CharArrayWriter();
+            template.process(params, writer);
+            return writer.toString();
         } catch (TemplateException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-    private String processTemplate(Map<String, String> modelMap, Template template) throws TemplateException, IOException {
-        CharArrayWriter writer = new CharArrayWriter();
-        template.process(modelMap, writer);
-        return writer.toString();
-    }
 
     private Template getXmlTemplate(String fileName) throws IOException {
         Configuration cfg = new Configuration();
@@ -49,18 +65,18 @@ public class CaseXMLBuilder {
         return cfg.getTemplate(fileName);
     }
 
-    public CaseXMLBuilder withDistrict(String districtName) {
-        params.put("district", districtName);
+
+    private CaseXMLBuilder withParams(Map params){
+        this.params.putAll(params);
         return this;
     }
 
-    public CaseXMLBuilder withTreatmentData(String category, String tbId, String providerId, String diseaseClass, String patientAge, String registrationNumber) {
-        params.put("category", category);
-        params.put("tbId", tbId);
-        params.put("providerId", providerId);
-        params.put("diseaseClass", diseaseClass);
-        params.put("patientAge", patientAge);
-        params.put("registrationNumber", registrationNumber);
-        return this;
+    public CaseXMLBuilder withRequest(PatientWebRequest patientWebRequest){
+        try {
+            return this.withParams(PropertyUtils.describe(patientWebRequest));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

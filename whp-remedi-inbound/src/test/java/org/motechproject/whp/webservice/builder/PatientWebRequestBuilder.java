@@ -31,6 +31,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setDate_modified("10/10/2010 10:10:10");
         patientWebRequest.setTb_registration_date("10/10/2010");
         patientWebRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
+        setDefaultTreatmentDetails();
         return this;
     }
 
@@ -97,8 +98,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setPatient_type("TransferredIn");
 
         setDefaultTreatmentDetails();
-
-        return this;
+        return withDefaultAddress().withDefaultMobileNumber();
     }
 
     public PatientWebRequestBuilder withDefaultsForNewTreatment() {
@@ -114,7 +114,7 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setPatient_type("New");
         setDefaultTreatmentDetails();
 
-        return this;
+        return withDefaultAddress().withDefaultMobileNumber();
     }
 
     public PatientWebRequestBuilder withDefaultsForPauseTreatment() {
@@ -189,11 +189,6 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withSmearTestDate2(String smearTestDate2) {
         patientWebRequest.setSmear_test_date_2(smearTestDate2);
-        return this;
-    }
-
-    public PatientWebRequestBuilder withMobileNumber(String mobileNumber) {
-        patientWebRequest.setMobile_number(mobileNumber);
         return this;
     }
 
@@ -299,6 +294,58 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withTreatmentStatus(String status) {
         patientWebRequest.setTreatment_update(status);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withTbRegistrationNumber(String tbRegistrationNumber) {
+        patientWebRequest.setTb_registration_number(tbRegistrationNumber);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withPatientDistrict(String district) {
+        patientWebRequest.setAddress_district(district);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDefaultAddress() {
+        patientWebRequest.setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state");
+        return this;
+    }
+
+    public PatientWebRequestBuilder withDefaultMobileNumber() {
+        patientWebRequest.setMobile_number("1234567890");
+        return this;
+    }
+
+    public PatientWebRequestBuilder withMobileNumber(String mobileNumber) {
+        patientWebRequest.setMobile_number(mobileNumber);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withOptionalTreatmentDetailsAsNull() {
+        patientWebRequest.setDistrict_with_code(null);
+        patientWebRequest.setTb_unit_with_code(null);
+        patientWebRequest.setEp_site(null);
+        patientWebRequest.setOther_investigations(null);
+        patientWebRequest.setPrevious_treatment_history(null);
+        patientWebRequest.setHiv_test_date(null);
+        patientWebRequest.setPhc_referred(null);
+        patientWebRequest.setXpert_test_result(null);
+        patientWebRequest.setXpert_device_number(null);
+        patientWebRequest.setXpert_test_date(null);
+        patientWebRequest.setRif_resistance_result(null);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withMandatoryTreatmentDetailsAsNull() {
+        patientWebRequest.setHiv_status(null);
+        patientWebRequest.setMembers_below_six_years(null);
+        patientWebRequest.setProvider_name(null);
+        patientWebRequest.setDot_centre(null);
+        patientWebRequest.setProvider_type(null);
+        patientWebRequest.setCmf_doctor(null);
+        patientWebRequest.setContact_person_name(null);
+        patientWebRequest.setContact_person_phone_number(null);
         return this;
     }
 }

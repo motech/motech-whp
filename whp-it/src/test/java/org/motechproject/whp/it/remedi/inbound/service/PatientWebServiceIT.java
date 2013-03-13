@@ -1,12 +1,10 @@
 package org.motechproject.whp.it.remedi.inbound.service;
 
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
@@ -17,7 +15,10 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.SmearTestRecord;
+import org.motechproject.whp.patient.domain.TreatmentDetails;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patient.repository.AllTreatmentCategories;
 import org.motechproject.whp.patient.service.PatientService;
@@ -31,10 +32,6 @@ import org.motechproject.whp.webservice.service.PatientWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.motechproject.util.DateUtil.now;
 
@@ -80,30 +77,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         allDistricts.add(district);
     }
 
-    @Test
-    public void shouldUpdatePatient() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTbId("elevenDigit")
-                .withCaseId("12341234")
-                .build();
-        patientWebService.createCase(patientWebRequest);
-
-        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-
-        District new_district = new District("new_district");
-        allDistricts.add(new_district);
-        PatientWebRequest simpleUpdateWebRequest = new PatientWebRequestBuilder().withSimpleUpdateFields()
-                .withCaseId("12341234")
-                .withTbId("elevenDigit")
-                .build();
-        patientWebService.updateCase(simpleUpdateWebRequest);
-
-        allDistricts.remove(new_district);
-        Patient updatedPatient = allPatients.findByPatientId(simpleUpdateWebRequest.getCase_id());
-
-        assertNotSame(patient.getPhoneNumber(), updatedPatient.getPhoneNumber());
-        assertNotSame(patient.getCurrentTherapy(), updatedPatient.getCurrentTherapy());
-    }
 
     @Test
     public void shouldNotSetMigratedOnUpdate() {
@@ -117,91 +90,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertFalse(updatedPatient.isMigrated());
 
     }
-
-    @Test
-    public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsTransferIn() {
-        //For the mapping to take place [allTreatmentCategories.findByCode()]
-        List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
-        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
-
-        PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebService.createCase(createPatientWebRequest);
-        Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
-
-        DateTime dateModified = DateUtil.now();
-        DateTime tbRegistrationDate = new DateTime(2012, 11, 11, 0, 0, 0);
-
-        //first closing current treatment
-        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
-                .build();
-        patientWebService.updateCase(closeRequest);
-
-        PatientWebRequest transferInRequest = new PatientWebRequestBuilder()
-                .withDefaultsForTransferIn()
-                .withDate_Modified(dateModified)
-                .withTbRegistartionDate(tbRegistrationDate)
-                .build();
-        Provider newProvider = new Provider(transferInRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
-        allProviders.add(newProvider);
-
-        patientWebService.updateCase(transferInRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
-
-        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
-        assertEquals(transferInRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-        assertEquals(tbRegistrationDate.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-        assertEquals(patient.getCurrentTherapy().getUid(), updatedPatient.getCurrentTherapy().getUid());
-
-        assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
-        assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
-
-        assertTreatmentDetails(transferInRequest, updatedPatient.getCurrentTreatment().getTreatmentDetails());
-    }
-
-    @Test
-    public void shouldUpdatePatientsProvider_WhenTreatmentUpdateTypeIsNewTreatment() {
-        List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);
-        allTreatmentCategories.add(new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, threeDaysAWeek));
-
-        PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults().build();
-        patientWebService.createCase(createPatientWebRequest);
-        Patient patient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
-
-        DateTime dateModified = DateUtil.now();
-        DateTime tbRegistrationDate = new DateTime(2012, 11, 11, 0, 0, 0);
-
-        //first closing current treatment
-        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
-                .build();
-        patientWebService.updateCase(closeRequest);
-
-        PatientWebRequest newTreatmentRequest = new PatientWebRequestBuilder()
-                .withDefaultsForNewTreatment()
-                .withDate_Modified(dateModified)
-                .withTbRegistartionDate(tbRegistrationDate)
-                .build();
-        Provider newProvider = new Provider(newTreatmentRequest.getProvider_id(), "1234567890", "chambal", DateUtil.now());
-        allProviders.add(newProvider);
-
-        patientWebService.updateCase(newTreatmentRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(createPatientWebRequest.getCase_id());
-
-        assertEquals(newProvider.getProviderId().toLowerCase(), updatedPatient.getCurrentTreatment().getProviderId());
-        assertEquals(newTreatmentRequest.getTb_id().toLowerCase(), updatedPatient.getCurrentTreatment().getTbId());
-        assertEquals(tbRegistrationDate.toLocalDate(), updatedPatient.getCurrentTreatment().getStartDate());
-
-        assertNotSame(patient.getCurrentTreatment().getProviderId(), updatedPatient.getCurrentTreatment().getProviderId());
-        assertNotSame(patient.getCurrentTreatment().getTbId(), updatedPatient.getCurrentTreatment().getTbId());
-
-        assertTreatmentDetails(newTreatmentRequest, updatedPatient.getCurrentTreatment().getTreatmentDetails());
-    }
-
 
     @Test
     public void shouldUpdatePatientTreatment() {
@@ -225,73 +113,6 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         assertNotSame(patient.getCurrentTreatment().getEndDate(), updatedPatient.getCurrentTreatment().getEndDate());
         assertNotSame(patient.getCurrentTherapy(), updatedPatient.getCurrentTherapy());
     }
-
-    @Test
-    public void shouldPauseAndRestartPatientTreatment() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTbId("elevenDigit")
-                .withCaseId("12341234")
-                .build();
-
-        patientWebService.createCase(patientWebRequest);
-
-        Patient patient = allPatients.findByPatientId(patientWebRequest.getCase_id());
-        assertFalse(patient.getCurrentTreatment().isPaused());
-
-        PatientWebRequest pauseTreatmentRequest = new PatientWebRequestBuilder()
-                .withDefaultsForPauseTreatment()
-                .withTbId("elevenDigit")
-                .withCaseId("12341234")
-                .build();
-
-        patientWebService.updateCase(pauseTreatmentRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
-
-        assertTrue(updatedPatient.getCurrentTreatment().isPaused());
-
-        PatientWebRequest restartTreatmentRequest = new PatientWebRequestBuilder()
-                .withDefaultsForRestartTreatment()
-                .withTbId("elevenDigit")
-                .withCaseId("12341234")
-                .build();
-
-        patientWebService.updateCase(restartTreatmentRequest);
-
-        updatedPatient = allPatients.findByPatientId(pauseTreatmentRequest.getCase_id());
-
-        assertFalse(updatedPatient.getCurrentTreatment().isPaused());
-    }
-
-    @Test
-    public void shouldCloseTreatment() {
-        // Creating a patient
-        String caseId = "12341234";
-        String tbId = "elevendigit";
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTbId(tbId)
-                .withCaseId(caseId)
-                .build();
-
-        patientWebService.createCase(patientWebRequest);
-
-        // Closing current treatment
-        String remarks = "remarks";
-        PatientWebRequest closeTreatmentRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withTbId(tbId)
-                .withCaseId(caseId).withTreatmentOutcome(TreatmentOutcome.Cured.name())
-                .withRemarks(remarks)
-                .build();
-
-        patientWebService.updateCase(closeTreatmentRequest);
-
-        Patient updatedPatient = allPatients.findByPatientId(caseId);
-        assertThat(updatedPatient.getCurrentTreatment().getCloseTreatmentRemarks(), is(remarks));
-        assertThat(updatedPatient.getCurrentTreatment().getTbId(), is(closeTreatmentRequest.getTb_id()));
-        assertThat(updatedPatient.getCurrentTreatment().getTreatmentOutcome(), is(TreatmentOutcome.Cured));
-    }
-
 
     @Test
     public void shouldPerformSimpleUpdateOnClosedTreatment() {
@@ -343,7 +164,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldPerformSimpleUpdateOnHistorisedTreatment() {
+    public void shouldPerformSimpleUpdateOnPreviousTreatment() {
         // Creating a patient
         String caseId = "12341234";
         String tbId = "elevenDigit";
@@ -373,7 +194,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
         allProviders.add(newProvider);
         patientWebService.updateCase(transferInRequest);
 
-        // Updating historised treatment
+        // Updating previous treatment
         String resultDate = "04/09/2012";
         SmearTestResult testResult = SmearTestResult.Positive;
         SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;

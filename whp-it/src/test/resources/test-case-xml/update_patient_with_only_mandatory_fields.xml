@@ -1,18 +1,13 @@
 <?xml version="1.0"?>
-<case xmlns="http://openrosa.org/javarosa" case_id="${case_id}" date_modified="${date_modified}" user_id="system" api_key="3F2504E04F8911D39A0C0305E82C3301" >
-    <create>
-        <case_type>whp_tb_patient</case_type>
-        <case_name>Raju Singh</case_name>
-    </create>
+<case xmlns="http://openrosa.org/javarosa" case_id="${case_id}" date_modified="${date_modified}" user_id="system" api_key="3F2504E04F8911D39A0C0305E82C3301">
     <update>
         <tb_id>${tb_id}</tb_id>
-        <tb_registration_number>${tb_registration_number}</tb_registration_number>
-        <provider_id>${provider_id}</provider_id>
+        <tb_registration_number>${tb_registration_number!}</tb_registration_number>
+        <tb_registration_date>${tb_registration_date}</tb_registration_date>
+        <treatment_update>${treatment_update}</treatment_update>
         <patient_type>${patient_type}</patient_type>
-        <first_name>${first_name}</first_name>
-        <last_name>${last_name}</last_name>
-        <age>${age}</age>
-        <gender>${gender}</gender>
+        <treatment_category>${treatment_category}</treatment_category>
+        <provider_id>${provider_id}</provider_id>
         <smear_sample_instance>${smear_sample_instance}</smear_sample_instance>
         <smear_test_date_1>${smear_test_date_1}</smear_test_date_1>
         <smear_test_result_1>${smear_test_result_1}</smear_test_result_1>
@@ -22,7 +17,7 @@
         <lab_number>${lab_number}</lab_number>
         <weight_instance>${weight_instance}</weight_instance>
         <weight>${weight}</weight>
-        <treatment_category>${treatment_category}</treatment_category>
+        <disease_class>${disease_class}</disease_class>
         <address_location>${address_location}</address_location>
         <address_landmark>${address_landmark}</address_landmark>
         <address_village>${address_village}</address_village>
@@ -30,26 +25,12 @@
         <address_district>${address_district}</address_district>
         <address_state>${address_state}</address_state>
         <mobile_number>${mobile_number}</mobile_number>
-        <phi>${phi}</phi>
-        <disease_class>${disease_class}</disease_class>
-        <tb_registration_date>${tb_registration_date}</tb_registration_date>
-        <district_with_code>${district_with_code}</district_with_code>
-        <tb_unit_with_code>${tb_unit_with_code}</tb_unit_with_code>
-        <ep_site>${ep_site}</ep_site>
-        <other_investigations>${other_investigations}</other_investigations>
-        <previous_treatment_history>${previous_treatment_history}</previous_treatment_history>
         <hiv_status>${hiv_status}</hiv_status>
-        <hiv_test_date>${hiv_test_date}</hiv_test_date>
         <members_below_six_years>${members_below_six_years}</members_below_six_years>
-        <phc_referred>${phc_referred}</phc_referred>
         <provider_name>${provider_name}</provider_name>
         <dot_centre>${dot_centre}</dot_centre>
         <provider_type>${provider_type}</provider_type>
         <cmf_doctor>${cmf_doctor}</cmf_doctor>
-        <xpert_device_number>${xpert_device_number}</xpert_device_number>
-        <xpert_test_date>${xpert_test_date}</xpert_test_date>
-        <xpert_test_result>${xpert_test_result}</xpert_test_result>
-        <rif_resistance_result>${rif_resistance_result}</rif_resistance_result>
         <contact_person_name>${contact_person_name}</contact_person_name>
         <contact_person_phone_number>${contact_person_phone_number}</contact_person_phone_number>
     </update>
