@@ -34,6 +34,17 @@ public class Treatment implements Serializable {
     public Treatment() {
     }
 
+    public Treatment(Treatment treatment) {
+        this.providerId = treatment.getProviderId();
+        this.providerId = treatment.getProviderId();
+        this.providerId = treatment.getProviderId();
+        this.providerId = treatment.getProviderId();
+        this.providerId = treatment.getProviderId();
+        this.providerId = treatment.getProviderId();
+
+    }
+
+
     public Treatment(String providerId, String providerDistrict, String tbId, PatientType patientType) {
         setProviderId(providerId);
         setProviderDistrict(providerDistrict);

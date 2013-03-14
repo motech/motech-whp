@@ -35,7 +35,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.motechproject.whp.it.remedi.inbound.util.CaseXMLBuilder.*;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
@@ -280,7 +279,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
     }
 
     @Test
-    public void shouldUpdatePatient() throws Exception {
+    public void shouldSimpleUpdatePatient() throws Exception {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
                 .withCaseId(DEFAULT_CASE_ID)
                 .withDefaultMobileNumber()
@@ -295,6 +294,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
         PatientWebRequest updatedPatientWebRequest = new PatientWebRequestBuilder().withDefaults()
                 .withCaseId(DEFAULT_CASE_ID)
                 .withDefaultMobileNumber()
+                .withNewTreatmentDetails()
                 .withPatientDistrict(new_district.getName())
                 .build();
         String updatePatientXML = new CaseXMLBuilder("patient_simple_update.xml")
@@ -317,7 +317,41 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
         assertLabResults(updatedPatientWebRequest, updatedPatient);
         assertPatientAddress(updatedPatientWebRequest, currentTreatment);
         assertThat(updatedPatient.getPhoneNumber(), is(newMobileNumber));
+        assertTreatmentDetails(updatedPatientWebRequest, currentTreatment.getTreatmentDetails());
         allDistricts.remove(new_district);
+    }
+
+    @Test
+    public void shouldNotUpdateTreatmentDetailsWhenRequestFieldsAreNullInSimpleUpdatePatientScope() throws Exception {
+        PatientWebRequest createPatientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withDefaultMobileNumber()
+                .build();
+        patientWebService.createCase(createPatientWebRequest);
+
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
+
+
+        PatientWebRequest updatedPatientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withDefaultMobileNumber()
+                .withAllTreatmentDetailsAsNull()
+                .build();
+
+        String simpleUpdateXML = new CaseXMLBuilder("patient_simple_update_with_no_treatment_details.xml")
+                .withRequest(updatedPatientWebRequest)
+                .build();
+
+        standaloneSetup(patientWebService)
+                .build()
+                .perform(post("/patient/process").body(simpleUpdateXML.getBytes())
+                        .contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk());
+
+        Patient patientAfterUpdate = allPatients.findByPatientId(DEFAULT_CASE_ID);
+
+        assertTreatmentDetails(createPatientWebRequest, patientAfterUpdate.getCurrentTreatment().getTreatmentDetails());
     }
 
     @Test
@@ -344,6 +378,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
 
         PatientWebRequest transferInRequest = new PatientWebRequestBuilder()
                 .withDefaultsForTransferIn()
+                .withNewTreatmentDetails()
                 .withTbId("tbId")
                 .withDate_Modified(dateModified)
                 .withTbRegistartionDate(tbRegistrationDate)

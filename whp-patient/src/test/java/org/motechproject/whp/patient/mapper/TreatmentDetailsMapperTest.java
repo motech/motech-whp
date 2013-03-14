@@ -2,13 +2,12 @@ package org.motechproject.whp.patient.mapper;
 
 import org.junit.Test;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.TreatmentDetails;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.motechproject.whp.patient.mapper.AssertTreatmentDetails.assertTreatmentDetails;
 
 public class TreatmentDetailsMapperTest {
@@ -20,52 +19,38 @@ public class TreatmentDetailsMapperTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaultTreatmentDetails().build();
         
         Treatment treatment = new Treatment();
-        treatmentDetailsMapper.map(patientRequest, treatment);
 
-        TreatmentDetails treatmentDetails = treatment.getTreatmentDetails();
+        TreatmentDetails treatmentDetails = treatmentDetailsMapper.map(patientRequest, treatment);
 
         assertTreatmentDetails(patientRequest, treatmentDetails);
     }
 
     @Test
-    public void shouldUpdateTreatmentDetails_whenOptionalFieldsAreNull() {
+    public void shouldConsiderOnlyFieldsWhichAreNotNullInPatientRequest() {
+        PatientRequest patientRequest = new PatientRequestBuilder().build();
+        Treatment treatment = new TreatmentBuilder().withDefaultTreatmentDetails().build();
 
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaultTreatmentDetails().build();
-        patientRequest.setXpert_test_date(null);
-        patientRequest.setXpert_device_number(null);
-        patientRequest.setXpert_test_result(null);
-        patientRequest.setRif_resistance_result(null);
-        patientRequest.setPhc_referred(null);
-        patientRequest.setHiv_test_date(null);
-        patientRequest.setDistrict_with_code(null);
-        patientRequest.setTb_unit_with_code(null);
-        patientRequest.setEp_site(null);
-        patientRequest.setOther_investigations(null);
-        patientRequest.setPrevious_treatment_history(null);
+        TreatmentDetails treatmentDetails = treatmentDetailsMapper.mapWithNullCheck(patientRequest, treatment);
 
-        Treatment treatment = new Treatment();
-        treatmentDetailsMapper.map(patientRequest, treatment);
-
-        TreatmentDetails treatmentDetails = treatment.getTreatmentDetails();
-
-        assertThat(patientRequest.getDistrict_with_code(),is(treatmentDetails.getDistrictWithCode()));
-        assertThat(patientRequest.getTb_unit_with_code(),is(treatmentDetails.getTbUnitWithCode()));
-        assertThat(patientRequest.getEp_site(),is(treatmentDetails.getEpSite()));
-        assertThat(patientRequest.getOther_investigations(),is(treatmentDetails.getOtherInvestigations()));
-        assertThat(patientRequest.getPrevious_treatment_history(),is(treatmentDetails.getPreviousTreatmentHistory()));
-        assertThat(patientRequest.getHiv_status(),is(treatmentDetails.getHivStatus()));
-        assertNull(treatmentDetails.getHivTestDate());
-        assertThat(patientRequest.getMembers_below_six_years(), is(treatmentDetails.getMembersBelowSixYears()));
-        assertThat(patientRequest.getPhc_referred() ,is(treatmentDetails.getPhcReferred()));
-        assertThat(patientRequest.getProvider_name(),is(treatmentDetails.getProviderName()));
-        assertThat(patientRequest.getDot_centre(), is(treatmentDetails.getDotCentre()));
-        assertThat(patientRequest.getProvider_type(),is(treatmentDetails.getProviderType()));
-        assertThat(patientRequest.getCmf_doctor(),is(treatmentDetails.getCmfDoctor()));
-        assertThat(patientRequest.getContact_person_name(),is(treatmentDetails.getContactPersonName()));
-        assertThat(patientRequest.getContact_person_phone_number() ,is(treatmentDetails.getContactPersonPhoneNumber()));
-        assertThat(patientRequest.getXpert_test_result() ,is(treatmentDetails.getXpertTestResult()));
-        assertThat(patientRequest.getXpert_device_number() ,is(treatmentDetails.getXpertDeviceNumber()));
-        assertNull(treatmentDetails.getXpertTestDate());
-        assertThat(patientRequest.getRif_resistance_result(),is(treatmentDetails.getRifResistanceResult()));
+        assertNotNull(treatmentDetails.getCmfDoctor());
+        assertNotNull(treatmentDetails.getDistrictWithCode());
+        assertNotNull(treatmentDetails.getTbUnitWithCode());
+        assertNotNull(treatmentDetails.getEpSite());
+        assertNotNull(treatmentDetails.getOtherInvestigations());
+        assertNotNull(treatmentDetails.getPreviousTreatmentHistory());
+        assertNotNull(treatmentDetails.getHivStatus());
+        assertNotNull(treatmentDetails.getHivTestDate());
+        assertNotNull(treatmentDetails.getMembersBelowSixYears());
+        assertNotNull(treatmentDetails.getPhcReferred());
+        assertNotNull(treatmentDetails.getProviderName());
+        assertNotNull(treatmentDetails.getDotCentre());
+        assertNotNull(treatmentDetails.getProviderType());
+        assertNotNull(treatmentDetails.getCmfDoctor());
+        assertNotNull(treatmentDetails.getContactPersonName());
+        assertNotNull(treatmentDetails.getContactPersonPhoneNumber());
+        assertNotNull(treatmentDetails.getXpertTestResult());
+        assertNotNull(treatmentDetails.getXpertDeviceNumber());
+        assertNotNull(treatmentDetails.getXpertTestDate());
+        assertNotNull(treatmentDetails.getRifResistanceResult());
     }
 }

@@ -338,6 +338,29 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+    public PatientWebRequestBuilder withAllTreatmentDetailsAsNull() {
+        patientWebRequest.setHiv_status(null);
+        patientWebRequest.setMembers_below_six_years(null);
+        patientWebRequest.setProvider_name(null);
+        patientWebRequest.setDot_centre(null);
+        patientWebRequest.setProvider_type(null);
+        patientWebRequest.setCmf_doctor(null);
+        patientWebRequest.setContact_person_name(null);
+        patientWebRequest.setContact_person_phone_number(null);
+        patientWebRequest.setDistrict_with_code(null);
+        patientWebRequest.setTb_unit_with_code(null);
+        patientWebRequest.setEp_site(null);
+        patientWebRequest.setOther_investigations(null);
+        patientWebRequest.setPrevious_treatment_history(null);
+        patientWebRequest.setHiv_test_date(null);
+        patientWebRequest.setPhc_referred(null);
+        patientWebRequest.setXpert_test_result(null);
+        patientWebRequest.setXpert_device_number(null);
+        patientWebRequest.setXpert_test_date(null);
+        patientWebRequest.setRif_resistance_result(null);
+        return this;
+    }
+
     public PatientWebRequestBuilder withMandatoryTreatmentDetailsAsNull() {
         patientWebRequest.setHiv_status(null);
         patientWebRequest.setMembers_below_six_years(null);
@@ -352,6 +375,11 @@ public class PatientWebRequestBuilder {
 
     public PatientWebRequestBuilder withDateOfBirth(String dateOfBirth) {
         patientWebRequest.setDate_of_birth(dateOfBirth);
+        return this;
+    }
+
+    public PatientWebRequestBuilder withNewTreatmentDetails() {
+        patientWebRequest.setTreatmentDetails("new_hiv_status", "10", "new_provider", "new_dot_center", "new_provider_type", "new_cmf_doctor", "new_contact_person_name", "new_contact_person_phone_number");
         return this;
     }
 }

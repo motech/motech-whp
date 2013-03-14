@@ -58,6 +58,8 @@ public class PatientMapper {
         if (patientRequest.getTb_registration_date() != null)
             treatment.setStartDate(patientRequest.getTb_registration_date().toLocalDate());
 
+        treatmentDetailsMapper.mapWithNullCheck(patientRequest, patient.getCurrentTreatment());
+
         setPatientAddress(treatment, patientRequest.getAddress());
         updateTestResults(patientRequest, treatment);
 

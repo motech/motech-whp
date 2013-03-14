@@ -21,25 +21,6 @@
         <address_district>${address_district}</address_district>
         <address_state>${address_state}</address_state>
         <mobile_number>${mobile_number}</mobile_number>
-        <district_with_code>${district_with_code}</district_with_code>
-        <tb_unit_with_code>${tb_unit_with_code}</tb_unit_with_code>
-        <ep_site>${ep_site}</ep_site>
-        <other_investigations>${other_investigations}</other_investigations>
-        <previous_treatment_history>${previous_treatment_history}</previous_treatment_history>
-        <hiv_status>${hiv_status}</hiv_status>
-        <hiv_test_date>${hiv_test_date}</hiv_test_date>
-        <members_below_six_years>${members_below_six_years}</members_below_six_years>
-        <phc_referred>${phc_referred}</phc_referred>
-        <provider_name>${provider_name}</provider_name>
-        <dot_centre>${dot_centre}</dot_centre>
-        <provider_type>${provider_type}</provider_type>
-        <cmf_doctor>${cmf_doctor}</cmf_doctor>
-        <xpert_device_number>${xpert_device_number}</xpert_device_number>
-        <xpert_test_date>${xpert_test_date}</xpert_test_date>
-        <xpert_test_result>${xpert_test_result}</xpert_test_result>
-        <rif_resistance_result>${rif_resistance_result}</rif_resistance_result>
-        <contact_person_name>${contact_person_name}</contact_person_name>
-        <contact_person_phone_number>${contact_person_phone_number}</contact_person_phone_number>
     </update>
 </case>
 

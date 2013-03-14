@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.patient.builder.PatientRequestBuilder.NEW_PROVIDER_ID;
-import static org.motechproject.whp.patient.mapper.AssertTreatmentDetails.assertTreatmentDetails;
 
 public class PatientMapperTest {
 
@@ -24,6 +23,8 @@ public class PatientMapperTest {
 
     @Mock
     private ProviderService providerService;
+
+    @Mock
     private TreatmentDetailsMapper treatmentDetailsMapper;
     private String providerId = "provider-id";
     private String providerDistrict;
@@ -31,7 +32,6 @@ public class PatientMapperTest {
     @Before
     public void setUp() {
         initMocks(this);
-        treatmentDetailsMapper = new TreatmentDetailsMapper();
         patientMapper = new PatientMapper(providerService, treatmentDetailsMapper);
         providerDistrict = "district";
         when(providerService.findByProviderId(providerId)).thenReturn(new ProviderBuilder()
@@ -52,6 +52,7 @@ public class PatientMapperTest {
         assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
         verify(providerService).findByProviderId(providerId);
+        verify(treatmentDetailsMapper).map(patientRequest, patient.getCurrentTreatment());
     }
 
     @Test
@@ -68,6 +69,7 @@ public class PatientMapperTest {
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
         assertNull(patient.getDateOfBirth());
         verify(providerService).findByProviderId(providerId);
+        verify(treatmentDetailsMapper).map(patientRequest, patient.getCurrentTreatment());
     }
 
     @Test
@@ -139,6 +141,7 @@ public class PatientMapperTest {
 
         verify(providerService).findByProviderId(providerId);
         verify(providerService).findByProviderId(newProviderId);
+        verify(treatmentDetailsMapper).map(openNewTreatmentUpdateRequest, patient.getCurrentTreatment());
     }
 
     @Test
@@ -178,6 +181,7 @@ public class PatientMapperTest {
         assertEquals(DiseaseClass.E, patient.getCurrentTherapy().getDiseaseClass());
         verify(providerService).findByProviderId(NEW_PROVIDER_ID);
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(newDistrictName));
+        verify(treatmentDetailsMapper).map(transferInRequest, patient.getCurrentTreatment());
     }
 
     @Test
@@ -197,6 +201,8 @@ public class PatientMapperTest {
                 .withPatientAge(60)
                 .build();
 
+        when(treatmentDetailsMapper.mapWithNullCheck(updateRequest, patient.getCurrentTreatment())).thenReturn(new TreatmentDetails());
+
         patientMapper.mapUpdates(updateRequest, patient);
 
         Therapy therapy = patient.getCurrentTherapy();
@@ -214,6 +220,9 @@ public class PatientMapperTest {
 
         assertEquals(updateRequest.getWeightStatistics().size() + 1, treatment.getWeightStatistics().size());
         assertEquals(updateRequest.getWeightStatistics().get(0), treatment.getWeightStatistics().get(1));
+
+
+        verify(treatmentDetailsMapper).mapWithNullCheck(updateRequest, treatment);
     }
 
     @Test
@@ -229,7 +238,6 @@ public class PatientMapperTest {
         assertThat(treatment.getProviderDistrict(), is(providerDistrict));
         verify(providerService).findByProviderId(providerId);
     }
-
 
     @After
     public void tearDown() {
@@ -257,7 +265,6 @@ public class PatientMapperTest {
 
         assertSmearTests(patientRequest, treatment);
         assertWeightStatistics(patientRequest, treatment);
-        assertTreatmentDetails(patientRequest, treatment.getTreatmentDetails());
     }
 
     private void assertTherapy(PatientRequest patientRequest, Integer expectedPatientAge, Therapy therapy) {
