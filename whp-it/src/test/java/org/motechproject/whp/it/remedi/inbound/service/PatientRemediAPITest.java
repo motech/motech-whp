@@ -132,6 +132,28 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldCreatePatientWithBlankDateOfBirth() throws Exception {
+
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withDiseaseClass(DISEASECLASS)
+                .withTreatmentCategory(TREATMENTCATEGORY)
+                .withDateOfBirth("")
+                .build();
+        String createPatientXML = createPatientRequest().withRequest(patientWebRequest).build();
+
+        standaloneSetup(patientWebService)
+                .build()
+                .perform(post("/patient/process").body(createPatientXML.getBytes())
+                        .contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk());
+
+        Patient patient = allPatients.findByPatientId(DEFAULT_CASE_ID);
+        assertNotNull(patient);
+    }
+
+
+    @Test
     public void shouldValidateForMandatoryTreatmentDetailFieldsForCreatePatientScope() throws Exception {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
                 .withCaseId(DEFAULT_CASE_ID)

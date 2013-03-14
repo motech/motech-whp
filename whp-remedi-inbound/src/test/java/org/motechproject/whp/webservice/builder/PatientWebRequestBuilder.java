@@ -349,4 +349,9 @@ public class PatientWebRequestBuilder {
         patientWebRequest.setContact_person_phone_number(null);
         return this;
     }
+
+    public PatientWebRequestBuilder withDateOfBirth(String dateOfBirth) {
+        patientWebRequest.setDate_of_birth(dateOfBirth);
+        return this;
+    }
 }

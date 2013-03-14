@@ -42,7 +42,7 @@ public class PatientWebRequest implements CaseXmlRequest{
     private String tb_registration_number;
 
     @NotNullOrEmpty
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     @Scope(scope = {UpdateScope.createScope, UpdateScope.openTreatmentScope})
     private String tb_registration_date;
 
@@ -109,13 +109,13 @@ public class PatientWebRequest implements CaseXmlRequest{
     @Enumeration(type = SputumTrackingInstance.class)
     private String smear_sample_instance;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String smear_test_date_1;
 
     @Enumeration(type = SmearTestResult.class)
     private String smear_test_result_1;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String smear_test_date_2;
 
     @Enumeration(type = SmearTestResult.class)
@@ -154,7 +154,7 @@ public class PatientWebRequest implements CaseXmlRequest{
     @Scope(scope = {UpdateScope.createScope, UpdateScope.simpleUpdateScope})
     private String age;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String date_of_birth;
 
     private String remarks;
@@ -169,7 +169,7 @@ public class PatientWebRequest implements CaseXmlRequest{
     @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String hiv_status;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String hiv_test_date;
 
     @NotNullOrEmpty
@@ -207,7 +207,7 @@ public class PatientWebRequest implements CaseXmlRequest{
 
     private String xpert_device_number;
 
-    @DateTimeFormat(pattern = DATE_FORMAT)
+    @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String xpert_test_date;
 
     private String rif_resistance_result;
