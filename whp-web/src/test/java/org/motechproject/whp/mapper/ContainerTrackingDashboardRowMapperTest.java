@@ -34,6 +34,10 @@ public class ContainerTrackingDashboardRowMapperTest {
 
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     private DateTime now = DateUtil.now();
+    private final String patientId = "patientid";
+    private final String patientName = "patientName";
+    private final String givenPatientId = "givenId";
+
     @Mock
     private AllReasonForContainerClosures allReasonForContainerClosures;
     @Mock
@@ -70,10 +74,10 @@ public class ContainerTrackingDashboardRowMapperTest {
         container.setStatus(Open);
 
 
-        String patientId = "patientid";
-        String patientName = "patientName";
+
         container.setPatientId(patientId);
         container.getContainerRegistrationDetails().setPatientName(patientName);
+        container.getContainerRegistrationDetails().setPatientId(givenPatientId);
 
         String providerId = "providerid";
         String district = "district";
@@ -101,7 +105,8 @@ public class ContainerTrackingDashboardRowMapperTest {
         assertEquals(SmearTestResult.Positive.name(), row.getConsultationOneResult());
         assertEquals(SmearTestResult.Negative.name(), row.getConsultationTwoResult());
         assertEquals(Action.Close.name(), row.getAction());
-        assertEquals(patientName, row.getPatientName());
+        assertEquals(patientName, row.getGivenPatientName());
+        assertEquals(givenPatientId, row.getGivenPatientId());
     }
 
     @Test

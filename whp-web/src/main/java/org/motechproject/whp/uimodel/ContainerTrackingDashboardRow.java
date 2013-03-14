@@ -14,7 +14,8 @@ public class ContainerTrackingDashboardRow {
     private String consultation;
     private String diagnosis;
     private String patientId;
-    private String patientName;
+    private String givenPatientId;
+    private String givenPatientName;
     private String district;
     private String providerId;
     private String labName;
