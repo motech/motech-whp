@@ -23,6 +23,14 @@ public class CaseXMLBuilder {
         return new CaseXMLBuilder("create_patient.xml");
     }
 
+    public static CaseXMLBuilder createPatientRequestWithNoMandatoryFields() {
+        return new CaseXMLBuilder("create_patient_with_no_mandatory_fields.xml");
+    }
+
+    public static CaseXMLBuilder createPatientRequestWithOnlyMandatoryFields() {
+        return new CaseXMLBuilder("create_patient_with_only_mandatory_fields.xml");
+    }
+
     public static  CaseXMLBuilder updatePatientRequestWithOnlyMandatoryFields() {
         return new CaseXMLBuilder("update_patient_with_only_mandatory_fields.xml");
     }

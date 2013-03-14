@@ -166,7 +166,7 @@ public class PatientWebRequest implements CaseXmlRequest{
     private String previous_treatment_history;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String hiv_status;
 
     @DateTimeFormat(pattern = DATE_FORMAT)
@@ -174,33 +174,33 @@ public class PatientWebRequest implements CaseXmlRequest{
 
     @NotNullOrEmpty
     @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number of members below six years must be a number")
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String members_below_six_years;
 
     private String phc_referred;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String provider_name;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String dot_centre;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String provider_type;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String cmf_doctor;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String contact_person_name;
 
     @NotNullOrEmpty
-    @Scope(scope = {UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     private String contact_person_phone_number;
 
     private String xpert_test_result;

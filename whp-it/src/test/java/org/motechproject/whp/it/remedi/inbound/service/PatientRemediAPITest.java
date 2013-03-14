@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
@@ -127,6 +128,63 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
         assertPatientAddress(patientWebRequest, currentTreatment);
         assertTreatment(patientWebRequest, currentTreatment);
         assertLabResults(patientWebRequest, patient);
+        assertTreatmentDetails(patientWebRequest, currentTreatment.getTreatmentDetails());
+    }
+
+    @Test
+    public void shouldValidateForMandatoryTreatmentDetailFieldsForCreatePatientScope() throws Exception {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withDiseaseClass(DISEASECLASS)
+                .withTreatmentStatus("New")
+                .withTreatmentCategory(TREATMENTCATEGORY)
+                .withMandatoryTreatmentDetailsAsNull().build();
+
+        String patientWithNullMandatoryFieldsXML = createPatientRequestWithNoMandatoryFields().withRequest(patientWebRequest).build();
+
+        standaloneSetup(patientWebService)
+                .build()
+                .perform(post("/patient/process").body(patientWithNullMandatoryFieldsXML.getBytes())
+                        .contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(
+                        allOf(
+                                containsString("hiv_status"),
+                                containsString("members_below_six_years"),
+                                containsString("provider_name"),
+                                containsString("dot_centre"),
+                                containsString("provider_type"),
+                                containsString("cmf_doctor"),
+                                containsString("contact_person_name"),
+                                containsString("contact_person_phone_number")
+                        )));
+    }
+
+    @Test
+    public void shouldCreatePatientWithOnlyMandatoryTreatmentDetailFields() throws Exception {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withDiseaseClass(DISEASECLASS)
+                .withTreatmentStatus("New")
+                .withGender(Gender.F.name())
+                .withAge("40")
+                .withOptionalTreatmentDetailsAsNull()
+                .withTreatmentCategory(TREATMENTCATEGORY).build();
+        String patientWithMandatoryFiledXML = createPatientRequestWithOnlyMandatoryFields().withRequest(patientWebRequest).build();
+
+        standaloneSetup(patientWebService)
+                .build()
+                .perform(post("/patient/process").body(patientWithMandatoryFiledXML.getBytes())
+                        .contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk());
+
+        Patient patient = allPatients.findByPatientId(DEFAULT_CASE_ID);
+        assertNotNull(patient);
+        assertNotNull(patient.getCurrentTherapy());
+
+        Therapy currentTherapy = patient.getCurrentTherapy();
+        Treatment currentTreatment = currentTherapy.getCurrentTreatment();
+
         assertTreatmentDetails(patientWebRequest, currentTreatment.getTreatmentDetails());
     }
 
