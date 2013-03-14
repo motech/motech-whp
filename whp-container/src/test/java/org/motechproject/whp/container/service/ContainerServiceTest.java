@@ -15,7 +15,6 @@ import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.container.InvalidContainerIdException;
-import org.motechproject.whp.container.WHPContainerConstants;
 import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.builder.request.ContainerPatientMappingReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.ContainerRegistrationReportingRequestBuilder;
@@ -55,8 +54,6 @@ import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
 import static org.motechproject.whp.common.domain.SmearTestResult.Negative;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
-import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.InTreatment;
-import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.PreTreatment;
 
 public class ContainerServiceTest extends BaseUnitTest {
 
@@ -74,6 +71,11 @@ public class ContainerServiceTest extends BaseUnitTest {
     private ProviderService providerService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
+
+    private static final String patientName = "patientName";
+    private static final String patientId = "patientid";
+    private static final Integer age = 21;
+    private static final Gender gender = Gender.M;
 
     @Before
     public void setUp() {
@@ -98,41 +100,6 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(Pending, container.getDiagnosis());
 
         verifyRegistrationReportingEventPublication(containerRegistrationRequest, container);
-    }
-
-    @Test
-    public void shouldGetAllReasonsForClosureForPreTreatment() {
-        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.withTreatmentPhase(PreTreatment)).thenReturn(reasonForContainerClosures);
-
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllReasonsPreTreatmentClosureReasons();
-
-        Assert.assertEquals(3, allClosureReasonsForAdmin.size());
-        Assert.assertEquals("reason number one", allClosureReasonsForAdmin.get(0).getName());
-        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(1).getName());
-        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(2).getName());
-        Assert.assertEquals("0", allClosureReasonsForAdmin.get(0).getCode());
-        Assert.assertEquals("2", allClosureReasonsForAdmin.get(1).getCode());
-        Assert.assertEquals("3", allClosureReasonsForAdmin.get(2).getCode());
-    }
-
-    @Test
-    public void shouldGetAllReasonsForInTreatment() {
-        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number one", "0"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.withTreatmentPhase(InTreatment)).thenReturn(reasonForContainerClosures);
-
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllInTreatmentClosureReasons();
-
-        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
-        Assert.assertEquals("reason number one", allClosureReasonsForAdmin.get(0).getName());
-        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
-        Assert.assertEquals("0", allClosureReasonsForAdmin.get(0).getCode());
-        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
     }
 
     @Rule
@@ -170,15 +137,8 @@ public class ContainerServiceTest extends BaseUnitTest {
         Provider provider = new Provider(providerId, null, district, null);
         when(providerService.findByProviderId(providerId)).thenReturn(provider);
 
-        String patientName = "patientName";
-        String patientId = "patientid";
-        Integer age = 21;
-        Gender gender = Gender.M;
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest(providerId, containerId, instance.getDisplayText(), ChannelId.IVR.name(), "callId");
-        containerRegistrationRequest.setPatientName(patientName);
-        containerRegistrationRequest.setAge(age);
-        containerRegistrationRequest.setPatientId(patientId);
-        containerRegistrationRequest.setGender(gender);
+        setRegistrationDetails(containerRegistrationRequest);
         containerService.registerContainer(containerRegistrationRequest);
 
         verify(allContainers).findByContainerId(anyString());
@@ -195,16 +155,28 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertEquals(instance, actualContainer.getInstance());
         assertEquals(Diagnosis.Pending, actualContainer.getDiagnosis());
         assertEquals(district, actualContainer.getDistrict());
-        assertEquals(patientName, actualContainer.getPatientName());
-        assertEquals(patientId, actualContainer.getPatientId());
-        assertEquals(age, actualContainer.getAge());
-        assertEquals(gender, actualContainer.getGender());
+        ContainerRegistrationDetails containerRegistrationDetails = actualContainer.getContainerRegistrationDetails();
+        assertContainerRegistrationDetails(containerRegistrationDetails);
 
         ContainerRegistrationModel containerRegistrationModel = new ContainerRegistrationModel(expectedContainerId, providerId, instance, creationTime);
         verify(remediService).sendContainerRegistrationResponse(containerRegistrationModel);
         verify(providerService).findByProviderId(providerId);
 
         verifyRegistrationReportingEventPublication(containerRegistrationRequest, actualContainer);
+    }
+
+    private void setRegistrationDetails(ContainerRegistrationRequest containerRegistrationRequest) {
+        containerRegistrationRequest.setPatientName(patientName);
+        containerRegistrationRequest.setAge(age);
+        containerRegistrationRequest.setPatientId(patientId);
+        containerRegistrationRequest.setGender(gender);
+    }
+
+    private void assertContainerRegistrationDetails(ContainerRegistrationDetails containerRegistrationDetails) {
+        assertEquals(patientName, containerRegistrationDetails.getPatientName());
+        assertEquals(patientId, containerRegistrationDetails.getPatientId());
+        assertEquals(age, containerRegistrationDetails.getPatientAge());
+        assertEquals(gender, containerRegistrationDetails.getPatientGender());
     }
 
     @Test
@@ -372,49 +344,6 @@ public class ContainerServiceTest extends BaseUnitTest {
 
         Assert.assertEquals(alternateDiagnosises, actualDiagnosises);
         verify(allAlternateDiagnosis).getAll();
-    }
-
-    @Test
-    public void shouldGetAllPreTreatmentContainerClosureReasonsForAdmin() {
-        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, PreTreatment)).thenReturn(reasonForContainerClosures);
-
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllPreTreatmentClosureReasonsForAdmin();
-
-        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
-        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(0).getName());
-        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
-        Assert.assertEquals("2", allClosureReasonsForAdmin.get(0).getCode());
-        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
-    }
-
-    @Test
-    public void shouldGetAllInTreatmentContainerClosureReasonsForAdmin() {
-        ArrayList<ReasonForContainerClosure> reasonForContainerClosures = new ArrayList<>();
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number two", "2"));
-        reasonForContainerClosures.add(new ReasonForContainerClosure("reason number three", "3"));
-        when(allReasonForContainerClosures.withTreatmentPhase(InTreatment)).thenReturn(reasonForContainerClosures);
-
-        List<ReasonForContainerClosure> allClosureReasonsForAdmin = containerService.getAllInTreatmentClosureReasons();
-
-        Assert.assertEquals(2, allClosureReasonsForAdmin.size());
-        Assert.assertEquals("reason number two", allClosureReasonsForAdmin.get(0).getName());
-        Assert.assertEquals("reason number three", allClosureReasonsForAdmin.get(1).getName());
-        Assert.assertEquals("2", allClosureReasonsForAdmin.get(0).getCode());
-        Assert.assertEquals("3", allClosureReasonsForAdmin.get(1).getCode());
-    }
-
-    @Test
-    public void shouldGetContainerClosureReasonForMapping() {
-        ReasonForContainerClosure reason = new ReasonForContainerClosure("not for admin", "0");
-        when(allReasonForContainerClosures.findByCode(WHPContainerConstants.CLOSURE_DUE_TO_MAPPING)).thenReturn(reason);
-
-        ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
-
-        Assert.assertEquals("not for admin", closureReasonForMapping.getName());
-        Assert.assertEquals("0", closureReasonForMapping.getCode());
     }
 
     @Test

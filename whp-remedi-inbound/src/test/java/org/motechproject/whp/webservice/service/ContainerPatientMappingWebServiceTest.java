@@ -12,6 +12,7 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.ReasonsForClosureService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
@@ -41,11 +42,14 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
     @Mock
     private RequestValidator requestValidator;
 
+    @Mock
+    private ReasonsForClosureService reasonsForClosureService;
+
     @Before
     public void setup() {
         initMocks(this);
         validator = new ContainerPatientMappingRequestValidator(containerService, patientService, requestValidator);
-        webService = new ContainerPatientMappingWebService(containerService, validator);
+        webService = new ContainerPatientMappingWebService(containerService, reasonsForClosureService, validator);
     }
 
     @Test
@@ -106,13 +110,13 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
 
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(container.getContainerId())).thenReturn(container);
-        when(containerService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
+        when(reasonsForClosureService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
         when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
 
         webService.updateCase(request);
 
         verify(containerService, times(2)).getContainer(request.getCase_id());
-        verify(containerService).getClosureReasonForMapping();
+        verify(reasonsForClosureService).getClosureReasonForMapping();
 
         Container fetchedContainer = containerService.getContainer(request.getCase_id());
         assertEquals(request.getPatient_id(),fetchedContainer.getPatientId());
@@ -144,13 +148,13 @@ public class ContainerPatientMappingWebServiceTest extends BaseWebServiceTest {
 
         when(containerService.exists(request.getCase_id())).thenReturn(true);
         when(containerService.getContainer(container.getContainerId())).thenReturn(container);
-        when(containerService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
+        when(reasonsForClosureService.getClosureReasonForMapping()).thenReturn(reasonForContainerClosure);
         when(patientService.findByPatientId(request.getPatient_id())).thenReturn(patient);
 
         webService.updateCase(request);
 
         verify(containerService, times(2)).getContainer(request.getCase_id());
-        verify(containerService).getClosureReasonForMapping();
+        verify(reasonsForClosureService).getClosureReasonForMapping();
 
         Container fetchedContainer = containerService.getContainer(request.getCase_id());
         assertEquals(request.getPatient_id(),fetchedContainer.getPatientId());

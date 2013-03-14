@@ -73,7 +73,7 @@ public class ContainerTrackingDashboardRowMapperTest {
         String patientId = "patientid";
         String patientName = "patientName";
         container.setPatientId(patientId);
-        container.setPatientName(patientName);
+        container.getContainerRegistrationDetails().setPatientName(patientName);
 
         String providerId = "providerid";
         String district = "district";

@@ -13,6 +13,7 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.ContainerTrackingService;
+import org.motechproject.whp.container.service.ReasonsForClosureService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.motechproject.whp.uimodel.InTreatmentSputumTrackingInstance;
 
@@ -49,11 +50,13 @@ public class InTreatmentContainerTrackingControllerTest {
 
     @Mock
     private ReasonForClosureValidator reasonForClosureValidator;
+    @Mock
+    private ReasonsForClosureService reasonsForClosureService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingController = new InTreatmentContainerTrackingController(containerService, reasonForClosureValidator, allDistricts);
+        containerTrackingController = new InTreatmentContainerTrackingController(containerService, allDistricts, reasonForClosureValidator, reasonsForClosureService);
     }
 
     @Test
@@ -62,8 +65,8 @@ public class InTreatmentContainerTrackingControllerTest {
         List<ReasonForContainerClosure> reasonsForFilter = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
-        when(containerService.getAllInTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
-        when(containerService.getAllInTreatmentClosureReasons()).thenReturn(reasonsForFilter);
+        when(reasonsForClosureService.getAllInTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(reasonsForClosureService.getAllInTreatmentClosureReasons()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
@@ -77,7 +80,7 @@ public class InTreatmentContainerTrackingControllerTest {
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(INSTANCES, InTreatmentSputumTrackingInstance.values()));
 
-        verify(containerService).getAllInTreatmentClosureReasonsForAdmin();
+        verify(reasonsForClosureService).getAllInTreatmentClosureReasonsForAdmin();
     }
 
     @Test
@@ -87,7 +90,7 @@ public class InTreatmentContainerTrackingControllerTest {
         when(reasonForClosureValidator.validate(any(ContainerClosureRequest.class))).thenReturn(errors);
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
-        when(containerService.getAllInTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(reasonsForClosureService.getAllInTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
 
         standaloneSetup(containerTrackingController).build()
                 .perform(post("/sputum-tracking/in-treatment/close-container"))

@@ -15,10 +15,7 @@ import org.motechproject.whp.container.builder.request.ContainerStatusReportingR
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
-import org.motechproject.whp.container.domain.AlternateDiagnosis;
-import org.motechproject.whp.container.domain.Container;
-import org.motechproject.whp.container.domain.ContainerId;
-import org.motechproject.whp.container.domain.ReasonForContainerClosure;
+import org.motechproject.whp.container.domain.*;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
@@ -43,9 +40,6 @@ import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.common.domain.ContainerStatus.Closed;
 import static org.motechproject.whp.common.domain.ContainerStatus.Open;
 import static org.motechproject.whp.common.domain.Diagnosis.Pending;
-import static org.motechproject.whp.container.WHPContainerConstants.CLOSURE_DUE_TO_MAPPING;
-import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.InTreatment;
-import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.PreTreatment;
 
 @Service
 public class ContainerService {
@@ -57,7 +51,6 @@ public class ContainerService {
     private final AllAlternateDiagnosis allAlternateDiagnosis;
     private ProviderService providerService;
     private ReportingPublisherService reportingPublisherService;
-
 
     @Autowired
     public ContainerService(AllContainers allContainers, RemediService remediService, ReportingPublisherService reportingPublisherService, AllReasonForContainerClosures allReasonForContainerClosures, AllAlternateDiagnosis allAlternateDiagnosis, ProviderService providerService) {
@@ -86,10 +79,7 @@ public class ContainerService {
         container.setStatus(Open);
         container.setCurrentTrackingInstance(instance);
         container.setDiagnosis(Pending);
-        container.setPatientName(registrationRequest.getPatientName());
-        container.setPatientId(registrationRequest.getPatientId());
-        container.setAge(registrationRequest.getAge());
-        container.setGender(registrationRequest.getGender());
+        setContainerRegistrationDetails(container, registrationRequest);
 
         allContainers.add(container);
 
@@ -149,29 +139,10 @@ public class ContainerService {
         publishContainerStatusUpdateReportingEvent(container);
     }
 
-    public List<ReasonForContainerClosure> getAllReasonsPreTreatmentClosureReasons() {
-        return allReasonForContainerClosures.withTreatmentPhase(PreTreatment);
-    }
-
-    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasons() {
-        return allReasonForContainerClosures.withTreatmentPhase(InTreatment);
-    }
-
-    public List<ReasonForContainerClosure> getAllPreTreatmentClosureReasonsForAdmin() {
-        return allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, PreTreatment);
-    }
-
-    public List<ReasonForContainerClosure> getAllInTreatmentClosureReasonsForAdmin() {
-        return allReasonForContainerClosures.withApplicableToAdminAndWithPhase(true, InTreatment);
-    }
-
-    public ReasonForContainerClosure getClosureReasonForMapping() {
-        return allReasonForContainerClosures.findByCode(CLOSURE_DUE_TO_MAPPING);
-    }
-
     public List<AlternateDiagnosis> getAllAlternateDiagnosis() {
         return allAlternateDiagnosis.getAll();
     }
+
 
     private void resetContainerDiagnosisData(Container container) {
         if (container.getDiagnosis() == Diagnosis.Negative) {
@@ -185,6 +156,14 @@ public class ContainerService {
         container.setAlternateDiagnosis(alternateDiagnosis.getCode());
         container.setConsultationDate(parseDate(reasonForClosureRequest.getConsultationDate()));
         container.setDiagnosis(Diagnosis.Negative);
+    }
+
+    private void setContainerRegistrationDetails(Container container, ContainerRegistrationRequest registrationRequest) {
+        ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
+        containerRegistrationDetails.setPatientName(registrationRequest.getPatientName());
+        containerRegistrationDetails.setPatientId(registrationRequest.getPatientId());
+        containerRegistrationDetails.setPatientAge(registrationRequest.getAge());
+        containerRegistrationDetails.setPatientGender(registrationRequest.getGender());
     }
 
 

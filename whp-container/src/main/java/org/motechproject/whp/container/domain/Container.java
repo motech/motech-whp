@@ -49,13 +49,9 @@ public class Container extends MotechBaseDataObject {
 
     private DateTime closureDate;
 
-    private String patientName;
-
     private String patientId;
 
-    private Integer age;
-
-    private Gender gender;
+    private ContainerRegistrationDetails containerRegistrationDetails = new ContainerRegistrationDetails();
 
     // Required for ektorp
     public Container() {

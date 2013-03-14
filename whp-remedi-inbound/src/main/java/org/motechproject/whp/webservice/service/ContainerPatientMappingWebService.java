@@ -13,6 +13,7 @@ import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.ReasonsForClosureService;
 import org.motechproject.whp.webservice.exception.WHPCaseException;
 import org.motechproject.whp.webservice.request.ContainerPatientMappingWebRequest;
 import org.motechproject.whp.webservice.validation.ContainerPatientMappingRequestValidator;
@@ -29,12 +30,14 @@ import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 public class ContainerPatientMappingWebService extends CaseService<ContainerPatientMappingWebRequest> {
 
     private ContainerService containerService;
+    private ReasonsForClosureService reasonsForClosureService;
     private ContainerPatientMappingRequestValidator containerPatientMappingRequestValidator;
 
     @Autowired
-    public ContainerPatientMappingWebService(ContainerService containerService, ContainerPatientMappingRequestValidator validator) {
+    public ContainerPatientMappingWebService(ContainerService containerService, ReasonsForClosureService reasonsForClosureService, ContainerPatientMappingRequestValidator validator) {
         super(ContainerPatientMappingWebRequest.class);
         this.containerService = containerService;
+        this.reasonsForClosureService = reasonsForClosureService;
         this.containerPatientMappingRequestValidator = validator;
     }
 
@@ -48,7 +51,7 @@ public class ContainerPatientMappingWebService extends CaseService<ContainerPati
         if (!request.isMappingRequest()) {
             container.unMap();
         } else {
-            ReasonForContainerClosure closureReasonForMapping = containerService.getClosureReasonForMapping();
+            ReasonForContainerClosure closureReasonForMapping = reasonsForClosureService.getClosureReasonForMapping();
             container.mapWith(request.getPatient_id(), request.getTb_id(), SputumTrackingInstance.getInstanceByName(request.getSmear_sample_instance()), closureReasonForMapping, getTbRegistrationDate(request), getDateTimeFor(request.getDate_modified()));
         }
         containerService.updatePatientMapping(container);

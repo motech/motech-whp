@@ -15,6 +15,7 @@ import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.ContainerTrackingService;
+import org.motechproject.whp.container.service.ReasonsForClosureService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 
 import java.util.ArrayList;
@@ -50,11 +51,13 @@ public class PreTreatmentContainerTrackingControllerTest {
 
     @Mock
     private ReasonForClosureValidator reasonForClosureValidator;
+    @Mock
+    private ReasonsForClosureService reasonsForClosureService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        containerTrackingController = new PreTreatmentContainerTrackingController(containerService, reasonForClosureValidator, allDistricts);
+        containerTrackingController = new PreTreatmentContainerTrackingController(containerService, allDistricts, reasonForClosureValidator, reasonsForClosureService);
     }
 
     @Test
@@ -64,9 +67,9 @@ public class PreTreatmentContainerTrackingControllerTest {
         ArrayList<AlternateDiagnosis> alternateDiagnosises = new ArrayList<>();
         List<District> districts = asList(new District("D1"), new District("D2"));
 
-        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasonsForClosureForm);
+        when(reasonsForClosureService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasonsForClosureForm);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosises);
-        when(containerService.getAllReasonsPreTreatmentClosureReasons()).thenReturn(reasonsForFilter);
+        when(reasonsForClosureService.getAllReasonsPreTreatmentClosureReasons()).thenReturn(reasonsForFilter);
         when(allDistricts.getAll()).thenReturn(districts);
 
         standaloneSetup(containerTrackingController).build()
@@ -81,7 +84,7 @@ public class PreTreatmentContainerTrackingControllerTest {
                 .andExpect(model().attribute(DISTRICTS, allDistricts.getAll()))
                 .andExpect(model().attribute(ALTERNATE_DIAGNOSIS_LIST, alternateDiagnosises));
 
-        verify(containerService).getAllPreTreatmentClosureReasonsForAdmin();
+        verify(reasonsForClosureService).getAllPreTreatmentClosureReasonsForAdmin();
         verify(containerService).getAllAlternateDiagnosis();
     }
 
@@ -93,7 +96,7 @@ public class PreTreatmentContainerTrackingControllerTest {
 
         List<ReasonForContainerClosure> reasons = new ArrayList<>();
         List<AlternateDiagnosis> alternateDiagnosis = new ArrayList<>();
-        when(containerService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
+        when(reasonsForClosureService.getAllPreTreatmentClosureReasonsForAdmin()).thenReturn(reasons);
         when(containerService.getAllAlternateDiagnosis()).thenReturn(alternateDiagnosis);
 
         standaloneSetup(containerTrackingController).build()

@@ -8,17 +8,20 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ContainerId;
+import org.motechproject.whp.container.domain.ContainerRegistrationDetails;
 import org.motechproject.whp.container.domain.LabResults;
 import org.motechproject.whp.container.repository.AllContainers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.motechproject.whp.container.domain.ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER;
 
@@ -42,6 +45,7 @@ public class AllContainersIT extends SpringIntegrationTest {
         now = DateUtil.now();
         containerId = new ContainerId(providerId, containerIdNumber, ON_BEHALF_OF_PROVIDER);
         container = new Container(providerId, containerId, RegistrationInstance.PreTreatment, now, "d1");
+        container.setContainerRegistrationDetails(new ContainerRegistrationDetails("name", "id", 99, Gender.O));
     }
 
     @Test
@@ -55,6 +59,18 @@ public class AllContainersIT extends SpringIntegrationTest {
         Assert.assertEquals(now.toString(WHPDate.DATE_TIME_FORMAT), containerReturned.getCreationTime().toString(WHPDate.DATE_TIME_FORMAT));
         Assert.assertEquals("Pre-treatment", containerReturned.getInstance().getDisplayText());
         Assert.assertEquals("d1", containerReturned.getDistrict());
+
+        assertContainerDetails(container, containerReturned);
+    }
+
+    private void assertContainerDetails(Container expected, Container actual) {
+        ContainerRegistrationDetails expectedDetails = expected.getContainerRegistrationDetails();
+        ContainerRegistrationDetails actualDetails = actual.getContainerRegistrationDetails();
+
+        assertEquals(expectedDetails.getPatientId(), actualDetails.getPatientId());
+        assertEquals(expectedDetails.getPatientName(), actualDetails.getPatientName());
+        assertEquals(expectedDetails.getPatientAge(), actualDetails.getPatientAge());
+        assertEquals(expectedDetails.getPatientGender(), actualDetails.getPatientGender());
     }
 
     @Test

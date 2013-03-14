@@ -6,6 +6,7 @@ import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
+import org.motechproject.whp.container.service.ReasonsForClosureService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.motechproject.whp.reponse.WHPResponse;
 import org.motechproject.whp.uimodel.InTreatmentSputumTrackingInstance;
@@ -24,8 +25,10 @@ import java.util.List;
 @RequestMapping(value = "/sputum-tracking/in-treatment/")
 public class InTreatmentContainerTrackingController extends ContainerTrackingController {
 
-    public static final String CONTAINER_STATUS_LIST = "containerStatusList";
     private AllDistricts allDistricts;
+    private ReasonsForClosureService reasonsForClosureService;
+
+    public static final String CONTAINER_STATUS_LIST = "containerStatusList";
     public static final String REASONS_FOR_FILTER = "reasonsForFilter";
 
     public static final String REASONS = "reasons";
@@ -34,9 +37,10 @@ public class InTreatmentContainerTrackingController extends ContainerTrackingCon
     public static final String INSTANCES = "instances";
 
     @Autowired
-    public InTreatmentContainerTrackingController(ContainerService containerService, ReasonForClosureValidator reasonForClosureValidator, AllDistricts allDistricts) {
+    public InTreatmentContainerTrackingController(ContainerService containerService, AllDistricts allDistricts, ReasonForClosureValidator reasonForClosureValidator, ReasonsForClosureService reasonsForClosureService) {
         super(reasonForClosureValidator, containerService);
         this.allDistricts = allDistricts;
+        this.reasonsForClosureService = reasonsForClosureService;
     }
 
     @RequestMapping(value = "/close-container", method = RequestMethod.POST)
@@ -53,10 +57,10 @@ public class InTreatmentContainerTrackingController extends ContainerTrackingCon
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String showContainerTrackingDashBoard(Model uiModel) {
-        List<ReasonForContainerClosure> allClosureReasons = containerService.getAllInTreatmentClosureReasonsForAdmin();
+        List<ReasonForContainerClosure> allClosureReasons = reasonsForClosureService.getAllInTreatmentClosureReasonsForAdmin();
 
         uiModel.addAttribute(INSTANCES, InTreatmentSputumTrackingInstance.values());
-        uiModel.addAttribute(REASONS_FOR_FILTER, containerService.getAllInTreatmentClosureReasons());
+        uiModel.addAttribute(REASONS_FOR_FILTER, reasonsForClosureService.getAllInTreatmentClosureReasons());
         uiModel.addAttribute(REASONS, allClosureReasons);
         uiModel.addAttribute(LAB_RESULTS, SmearTestResult.allNames());
         uiModel.addAttribute(CONTAINER_STATUS_LIST, ContainerStatus.allNames());
