@@ -140,7 +140,7 @@
                 <th>Result 2</th>
                 <th>Date Of Test 2</th>
                 <th>Instance</th>
-                <th>Patient Name</th>
+                <th>Given Patient Name</th>
                 <th>Patient ID</th>
                 <th>District</th>
                 <th>Provider Id</th>

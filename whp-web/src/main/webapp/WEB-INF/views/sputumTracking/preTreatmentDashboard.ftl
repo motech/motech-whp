@@ -150,7 +150,7 @@
                 <th>Date Of Test 2</th>
                 <th>Consultation Date</th>
                 <th>TB Diagnosis</th>
-                <th>Patient Name</th>
+                <th>Given Patient Name</th>
                 <th>Patient ID</th>
                 <th>Provider District</th>
                 <th>Provider Id</th>
