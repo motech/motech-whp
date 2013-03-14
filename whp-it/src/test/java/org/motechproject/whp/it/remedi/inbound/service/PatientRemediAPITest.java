@@ -94,7 +94,6 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
 
     @Test
     public void shouldCreatePatient() throws Exception {
-
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
                 .withCaseId(DEFAULT_CASE_ID)
                 .withDiseaseClass(DISEASECLASS)
@@ -116,15 +115,9 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
 
         assertEquals(currentTherapy.getDiseaseClass().name(), DISEASECLASS.name());
         assertEquals(currentTherapy.getTreatmentCategory().getCode(), TREATMENTCATEGORY);
-        assertEquals(patientWebRequest.getFirst_name(),patient.getFirstName());
-        assertEquals(patientWebRequest.getLast_name(),patient.getLastName());
-        assertEquals(patientWebRequest.getAge(),currentTherapy.getPatientAge().toString());
-        assertEquals(patientWebRequest.getGender(),patient.getGender().name());
-        assertEquals(patientWebRequest.getMobile_number(),patient.getPhoneNumber());
-        assertEquals(patientWebRequest.getPhi(),patient.getPhi());
-        assertEquals(patientWebRequest.getDate_of_birth(),patient.getDateOfBirth().toString(WHPDate.DATE_FORMAT));
         assertEquals(patientWebRequest.getTreatment_category(), patient.getCurrentTherapy().getTreatmentCategory().getCode());
-
+        assertEquals(patientWebRequest.getAge(),currentTherapy.getPatientAge().toString());
+        assertPatientDetails(patientWebRequest, patient);
         assertPatientAddress(patientWebRequest, currentTreatment);
         assertTreatment(patientWebRequest, currentTreatment);
         assertLabResults(patientWebRequest, patient);
@@ -269,27 +262,6 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
                                 containsString("contact_person_name"),
                                 containsString("contact_person_phone_number")
                         )));
-    }
-
-    private void closePatientWithDefaults() {
-        //first closing current treatment
-        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
-                .withDefaultsForCloseTreatment()
-                .withCaseId(DEFAULT_CASE_ID)
-                .withTbId(DEFAULT_TB_ID)
-                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
-                .build();
-        patientWebService.updateCase(closeRequest);
-    }
-
-    private void assertPatientAddress(PatientWebRequest patientWebRequest, Treatment treatment) {
-        Address patientAddress = treatment.getPatientAddress();
-        assertEquals(patientWebRequest.getAddress_location(), patientAddress.getAddress_location());
-        assertEquals(patientWebRequest.getAddress_landmark(), patientAddress.getAddress_landmark());
-        assertEquals(patientWebRequest.getAddress_village(), patientAddress.getAddress_village());
-        assertEquals(patientWebRequest.getAddress_block(), patientAddress.getAddress_block());
-        assertEquals(patientWebRequest.getAddress_district(), patientAddress.getAddress_district());
-        assertEquals(patientWebRequest.getAddress_state(), patientAddress.getAddress_state());
     }
 
     @Test
@@ -494,16 +466,6 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
     }
 
 
-    private PatientWebRequest createPatientWithDefaults() {
-        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
-                .withTbId(DEFAULT_TB_ID)
-                .withCaseId(DEFAULT_CASE_ID)
-                .build();
-
-        patientWebService.createCase(patientWebRequest);
-        return patientWebRequest;
-    }
-
     @Test
     public void shouldCloseTreatment() throws Exception {
         createPatientWithDefaults();
@@ -529,6 +491,27 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
         assertThat(updatedPatient.getCurrentTreatment().getCloseTreatmentRemarks(), is(remarks));
         assertThat(updatedPatient.getCurrentTreatment().getTbId(), is(closeTreatmentRequest.getTb_id()));
         assertThat(updatedPatient.getCurrentTreatment().getTreatmentOutcome(), is(TreatmentOutcome.Cured));
+    }
+
+    private PatientWebRequest createPatientWithDefaults() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withTbId(DEFAULT_TB_ID)
+                .withCaseId(DEFAULT_CASE_ID)
+                .build();
+
+        patientWebService.createCase(patientWebRequest);
+        return patientWebRequest;
+    }
+
+    private void closePatientWithDefaults() {
+        //first closing current treatment
+        PatientWebRequest closeRequest = new PatientWebRequestBuilder()
+                .withDefaultsForCloseTreatment()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withTbId(DEFAULT_TB_ID)
+                .withTreatmentOutcome(TreatmentOutcome.TransferredOut.name())
+                .build();
+        patientWebService.updateCase(closeRequest);
     }
 
     private void assertTreatment(PatientWebRequest transferInRequest, Treatment currentTreatment) {
@@ -584,6 +567,26 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
             assertNull(treatmentDetails.getXpertTestDate());
 
         assertEquals(patientRequest.getRif_resistance_result(), treatmentDetails.getRifResistanceResult());
+    }
+
+
+    private void assertPatientAddress(PatientWebRequest patientWebRequest, Treatment treatment) {
+        Address patientAddress = treatment.getPatientAddress();
+        assertEquals(patientWebRequest.getAddress_location(), patientAddress.getAddress_location());
+        assertEquals(patientWebRequest.getAddress_landmark(), patientAddress.getAddress_landmark());
+        assertEquals(patientWebRequest.getAddress_village(), patientAddress.getAddress_village());
+        assertEquals(patientWebRequest.getAddress_block(), patientAddress.getAddress_block());
+        assertEquals(patientWebRequest.getAddress_district(), patientAddress.getAddress_district());
+        assertEquals(patientWebRequest.getAddress_state(), patientAddress.getAddress_state());
+    }
+
+    private void assertPatientDetails(PatientWebRequest patientWebRequest, Patient patient) {
+        assertEquals(patientWebRequest.getFirst_name(),patient.getFirstName());
+        assertEquals(patientWebRequest.getLast_name(),patient.getLastName());
+        assertEquals(patientWebRequest.getGender(),patient.getGender().name());
+        assertEquals(patientWebRequest.getMobile_number(),patient.getPhoneNumber());
+        assertEquals(patientWebRequest.getPhi(),patient.getPhi());
+        assertEquals(patientWebRequest.getDate_of_birth(),patient.getDateOfBirth().toString(WHPDate.DATE_FORMAT));
     }
 
     private void addTreatmentCategory(TreatmentCategory treatmentCategory) {
