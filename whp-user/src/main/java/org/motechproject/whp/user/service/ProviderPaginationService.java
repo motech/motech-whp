@@ -45,7 +45,7 @@ public class ProviderPaginationService implements Paging {
         for (Provider provider : matchingProviders) {
             boolean isActive = false;
             if(users.containsKey(provider.getProviderId()))
-                isActive = users.get(provider.getProviderId()).isActive();
+                 isActive = users.get(provider.getProviderId()).isActive();
             else
                 logger.error(String.format("No motech user found for provider: %s", provider.getProviderId()));
 

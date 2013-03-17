@@ -87,6 +87,10 @@ public class ContainerServiceTest extends BaseUnitTest {
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
         when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "12345", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
+        containerRegistrationRequest.setPatientName("name");
+        containerRegistrationRequest.setPatientId("id");
+        containerRegistrationRequest.setGender(Gender.F);
+        containerRegistrationRequest.setAge(98);
         containerService.registerContainer(containerRegistrationRequest);
 
         verify(allContainers).findByContainerId(anyString());

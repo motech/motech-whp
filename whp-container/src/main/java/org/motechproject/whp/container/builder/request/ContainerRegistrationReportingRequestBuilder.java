@@ -1,7 +1,9 @@
 package org.motechproject.whp.container.builder.request;
 
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerRegistrationDetails;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
+import org.motechproject.whp.reports.contract.UserGivenPatientDetails;
 
 public class ContainerRegistrationReportingRequestBuilder {
     private Container container;
@@ -22,6 +24,18 @@ public class ContainerRegistrationReportingRequestBuilder {
         containerRegistrationReportingRequest.setDiagnosis(container.getDiagnosis().name());
         containerRegistrationReportingRequest.setProviderId(container.getProviderId());
         containerRegistrationReportingRequest.setProviderDistrict(container.getDistrict());
+        setUserGivenDetails();
+    }
+
+    private void setUserGivenDetails() {
+        ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
+        UserGivenPatientDetails userGivenPatientDetails = new UserGivenPatientDetails();
+        userGivenPatientDetails.setPatientId(containerRegistrationDetails.getPatientId());
+        userGivenPatientDetails.setPatientName(containerRegistrationDetails.getPatientName());
+        userGivenPatientDetails.setPatientAge(containerRegistrationDetails.getPatientAge());
+        userGivenPatientDetails.setGender(containerRegistrationDetails.getPatientGender().name());
+
+        containerRegistrationReportingRequest.setUserGivenPatientDetails(userGivenPatientDetails);
     }
 
     public ContainerRegistrationReportingRequestBuilder registeredThrough(String channelId) {

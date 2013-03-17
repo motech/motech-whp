@@ -3,6 +3,7 @@ package org.motechproject.whp.container.builder;
 import org.joda.time.LocalDate;
 import org.motechproject.whp.common.domain.*;
 import org.motechproject.whp.container.domain.Container;
+import org.motechproject.whp.container.domain.ContainerRegistrationDetails;
 import org.motechproject.whp.container.domain.LabResults;
 
 public class ContainerBuilder {
@@ -104,6 +105,15 @@ public class ContainerBuilder {
 
     public ContainerBuilder withMappingInstance(SputumTrackingInstance instance) {
         container.setMappingInstance(instance);
+        return this;
+    }
+
+    public ContainerBuilder withContainerRegistrationDetails(String patientName, String patientId, Integer age, Gender gender){
+        ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
+        containerRegistrationDetails.setPatientName(patientName);
+        containerRegistrationDetails.setPatientId(patientId);
+        containerRegistrationDetails.setPatientAge(age);
+        containerRegistrationDetails.setPatientGender(gender);
         return this;
     }
 }
