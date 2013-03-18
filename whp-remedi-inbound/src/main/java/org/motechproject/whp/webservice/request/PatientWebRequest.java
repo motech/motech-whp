@@ -172,9 +172,9 @@ public class PatientWebRequest implements CaseXmlRequest{
     @DateTimeFormat(pattern = DATE_FORMAT, validateEmptyString = false)
     private String hiv_test_date;
 
-    @NotNullOrEmpty
+    @NotNullOrEmpty(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
     @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Number of members below six years must be a number")
-    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope})
+    @Scope(scope = {UpdateScope.createScope, UpdateScope.transferInScope, UpdateScope.openTreatmentScope, UpdateScope.simpleUpdateScope})
     private String members_below_six_years;
 
     private String phc_referred;

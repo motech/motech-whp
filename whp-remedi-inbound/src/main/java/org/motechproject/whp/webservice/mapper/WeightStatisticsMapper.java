@@ -18,10 +18,16 @@ public class WeightStatisticsMapper {
             LocalDate measuringDate = WHPDateTime.date(patientWebRequest.getDate_modified()).dateTime().toLocalDate();
             statistics.add(
                     SputumTrackingInstance.valueOf(patientWebRequest.getWeight_instance()),
-                    Double.valueOf(patientWebRequest.getWeight()),
+                    getWeight(patientWebRequest),
                     measuringDate
             );
         }
         return statistics;
+    }
+
+    private Double getWeight(PatientWebRequest patientWebRequest) {
+        if(patientWebRequest.getWeight() != null)
+            return Double.valueOf(patientWebRequest.getWeight());
+        return null;
     }
 }
