@@ -29,8 +29,8 @@ public class AdherenceSubmissionRequestBuilderTest extends BaseUnitTest {
     public void shouldCreateAdherenceSubmissionRequestForNonAdherenceDay() {
         String providerId = "providerId";
         String submittedBy = "submittedBy";
-        mockCurrentDate(DateTime.now());
         LocalDate date = DateTime.now().withDayOfWeek(DayOfWeek.Thursday.getValue()).toLocalDate();
+        mockCurrentDate(date);
 
         AdherenceSubmissionRequest adherenceSubmissionRequest = AdherenceSubmissionRequestBuilder.createAdherenceSubmissionRequest(providerId, submittedBy, now(), date);
         assertEquals(providerId, adherenceSubmissionRequest.getProviderId());
