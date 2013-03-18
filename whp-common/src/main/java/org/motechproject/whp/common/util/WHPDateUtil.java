@@ -78,4 +78,10 @@ public class WHPDateUtil {
         return new Timestamp(dateTime.toDate().getTime());
     }
 
+    public static DateTime toDateTime(String date) {
+        if (date!= null){
+            return WHPDateTime.date(date+ " 00:00:00").dateTime();
+        }
+        return null;
+    }
 }

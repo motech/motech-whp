@@ -65,7 +65,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .withPatientAge(50)
                 .withTbId(TB_ID)
                 .build();

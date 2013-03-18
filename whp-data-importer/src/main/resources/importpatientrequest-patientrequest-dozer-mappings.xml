@@ -7,15 +7,15 @@
     <mapping wildcard="true">
         <class-a>org.motechproject.whp.importer.csv.request.ImportPatientRequest</class-a>
         <class-b>org.motechproject.whp.patient.contract.PatientRequest</class-b>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>date_modified</a>
             <b>treatmentCreationDate</b>
         </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>tb_registration_date</a>
             <b>tb_registration_date</b>
         </field>

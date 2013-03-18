@@ -19,7 +19,8 @@ public class ImportPatientRequestBuilder {
                 .withSmearTestResults("19/07/2000", SmearTestResult.Positive.name(), "21/09/2000", SmearTestResult.Positive.name())
                 .withWeightStatistics("22/09/2000", "99.7")
                 .withTreatmentData("01", "12345678901", "123456", "P", "40", "registrationNumber")
-                .withLastModifiedDate("10/10/2010");
+                .withLastModifiedDate("10/10/2010")
+                .withTbRegistrationDate("10/10/2010");
     }
 
     public ImportPatientRequestBuilder withSimpleUpdateFields() {
@@ -333,5 +334,10 @@ public class ImportPatientRequestBuilder {
 
     public ImportPatientRequest build() {
         return importPatientRequest;
+    }
+
+    private ImportPatientRequestBuilder withTbRegistrationDate(String tbRegistrationDate) {
+        importPatientRequest.setTb_registration_date(tbRegistrationDate);
+        return this;
     }
 }

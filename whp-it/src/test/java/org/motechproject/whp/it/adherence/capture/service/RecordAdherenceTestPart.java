@@ -13,6 +13,8 @@ import org.motechproject.whp.adherence.domain.*;
 import org.motechproject.whp.adherence.mapping.AdherenceListMapper;
 import org.motechproject.whp.adherence.util.AssertAdherence;
 import org.motechproject.whp.common.domain.TreatmentWeek;
+import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
@@ -90,7 +92,7 @@ public class RecordAdherenceTestPart extends WHPAdherenceServiceTestPart {
         assertValidAdherence(weeklyAdherenceSummary, PatientBuilder.TB_ID, PatientBuilder.PROVIDER_ID);
 
         patientWebService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForCloseTreatment().build());
-        patientWebService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForTransferInTreatment().withTbRegistrationDate(DateUtil.now().minusDays(10)).withDateModified(DateUtil.now().minusDays(10)).build());
+        patientWebService.update(new PatientRequestBuilder().withDefaults().withMandatoryFieldsForTransferInTreatment().withTbRegistrationDate(WHPDate.date(DateUtil.now().minusDays(10).toLocalDate()).value()).withDateModified(WHPDateTime.date(DateUtil.now().minusDays(10)).value()).build());
         recordAdherence();
 
         assertValidAdherence(weeklyAdherenceSummary, PatientRequestBuilder.NEW_TB_ID, PatientRequestBuilder.NEW_PROVIDER_ID);

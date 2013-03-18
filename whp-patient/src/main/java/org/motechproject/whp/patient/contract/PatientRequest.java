@@ -1,14 +1,16 @@
 package org.motechproject.whp.patient.contract;
 
 import lombok.Data;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.motechproject.validation.constraints.DateTimeFormat;
 import org.motechproject.validation.constraints.Scope;
 import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.patient.command.UpdateScope;
 import org.motechproject.whp.patient.domain.*;
+
+import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @Data
 public class PatientRequest {
@@ -28,22 +30,22 @@ public class PatientRequest {
 
     private String tb_id;
     private TreatmentCategory treatment_category;
-    private DateTime treatmentCreationDate;
+    private String treatmentCreationDate;
     private DiseaseClass disease_class;
     private String tb_registration_number;
-    private DateTime tb_registration_date;
+    private String tb_registration_date;
 
     private SmearTestResults smearTestResults = new SmearTestResults();
     private WeightStatistics weightStatistics = new WeightStatistics();
 
     private TreatmentOutcome treatment_outcome;
     private String reason;
-    private DateTime date_modified;
+    private String date_modified;
     private boolean migrated;
     private TreatmentUpdateScenario treatmentUpdate;
     private String remarks;
 
-    private DateTime date_of_birth;
+    private String date_of_birth;
 
     //treatment details
     private String district_with_code;
@@ -52,7 +54,7 @@ public class PatientRequest {
     private String other_investigations;
     private String previous_treatment_history;
     private String hiv_status;
-    private DateTime hiv_test_date;
+    private String hiv_test_date;
     private Integer members_below_six_years;
     private String phc_referred;
     private String provider_name;
@@ -63,7 +65,7 @@ public class PatientRequest {
     private String contact_person_phone_number;
     private String xpert_test_result;
     private String xpert_device_number;
-    private DateTime xpert_test_date;
+    private String xpert_test_date;
     private String rif_resistance_result;
 
     public PatientRequest() {
@@ -102,7 +104,7 @@ public class PatientRequest {
                                            DiseaseClass diseaseClass,
                                            int patientAge,
                                            String registrationNumber,
-                                           DateTime treatmentStartDate) {
+                                           String treatmentStartDate) {
         this.treatment_category = category;
         this.tb_id = tbId;
         this.provider_id = providerId;
@@ -127,16 +129,6 @@ public class PatientRequest {
         if (SputumTrackingInstance != null) {
             weightStatistics.add(new WeightStatisticsRecord(SputumTrackingInstance, weight, measuringDate));
         }
-        return this;
-    }
-
-    public PatientRequest setDateModified(DateTime dateModified) {
-        this.date_modified = dateModified;
-        return this;
-    }
-
-    public PatientRequest setTbRegistrationDate(DateTime tb_registration_date) {
-        this.tb_registration_date = tb_registration_date;
         return this;
     }
 

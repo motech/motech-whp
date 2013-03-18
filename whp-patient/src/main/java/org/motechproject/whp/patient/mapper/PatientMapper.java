@@ -1,5 +1,8 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateTime;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.user.service.ProviderService;
@@ -22,17 +25,17 @@ public class PatientMapper {
         Patient patient = mapBasicInfo(patientRequest);
 
         Therapy therapy = new Therapy(patientRequest.getTreatment_category(), patientRequest.getDisease_class(), patientRequest.getAge());
-        therapy.setCreationDate(patientRequest.getTreatmentCreationDate());
+        therapy.setCreationDate(WHPDateTime.date(patientRequest.getTreatmentCreationDate()).dateTime());
 
         Treatment treatment = createTreatment(patientRequest, patientRequest.getAddress());
-        patient.addTreatment(treatment, therapy, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
+        patient.addTreatment(treatment, therapy,WHPDateUtil.toDateTime(patientRequest.getTb_registration_date()), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
         return patient;
     }
 
     public void mapNewTreatmentForCategoryChange(PatientRequest patientRequest, Patient patient) {
         Therapy newTherapy = new Therapy(patientRequest.getTreatment_category(), patientRequest.getDisease_class(), patient.getAge());
         Treatment treatment = createTreatment(patientRequest, patient.getCurrentTreatment().getPatientAddress());
-        patient.addTreatment(treatment, newTherapy, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
+        patient.addTreatment(treatment, newTherapy, WHPDateUtil.toDateTime(patientRequest.getTb_registration_date()), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
     }
 
     public void mapTreatmentForTransferIn(PatientRequest patientRequest, Patient patient) {
@@ -42,7 +45,7 @@ public class PatientMapper {
             patient.getCurrentTherapy().setDiseaseClass(patientRequest.getDisease_class());
         }
 
-        patient.addTreatment(newTreatment, patientRequest.getTb_registration_date(), patientRequest.getDate_modified());
+        patient.addTreatment(newTreatment, WHPDateUtil.toDateTime(patientRequest.getTb_registration_date()), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
     }
 
     public Patient mapUpdates(PatientRequest patientRequest, Patient patient) {
@@ -56,14 +59,14 @@ public class PatientMapper {
         if (patientRequest.getTb_registration_number() != null)
             patient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
         if (patientRequest.getTb_registration_date() != null)
-            treatment.setStartDate(patientRequest.getTb_registration_date().toLocalDate());
+            treatment.setStartDate(WHPDateUtil.toDateTime(patientRequest.getTb_registration_date()).toLocalDate());
 
         treatmentDetailsMapper.mapWithNullCheck(patientRequest, patient.getCurrentTreatment());
 
         setPatientAddress(treatment, patientRequest.getAddress());
         updateTestResults(patientRequest, treatment);
 
-        patient.setLastModifiedDate(patientRequest.getDate_modified());
+        patient.setLastModifiedDate(WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
 
         return patient;
     }
@@ -77,11 +80,11 @@ public class PatientMapper {
                 patientRequest.getMobile_number());
 
         patient.setPhi(patientRequest.getPhi());
-        patient.setLastModifiedDate(patientRequest.getDate_modified());
+        patient.setLastModifiedDate(WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
         patient.setMigrated(patientRequest.isMigrated());
 
         if(patientRequest.getDate_of_birth() != null){
-            patient.setDateOfBirth(patientRequest.getDate_of_birth().toLocalDate());
+            patient.setDateOfBirth(WHPDate.date(patientRequest.getDate_of_birth()).date());
         }
 
         return patient;
@@ -90,7 +93,7 @@ public class PatientMapper {
     Treatment createTreatment(PatientRequest patientRequest, Address address) {
         String providerId = patientRequest.getProvider_id();
         Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
-        treatment.setStartDate(patientRequest.getTb_registration_date().toLocalDate());
+        treatment.setStartDate(WHPDate.date(patientRequest.getTb_registration_date()).date());
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
         treatment.setWeightStatistics(patientRequest.getWeightStatistics());

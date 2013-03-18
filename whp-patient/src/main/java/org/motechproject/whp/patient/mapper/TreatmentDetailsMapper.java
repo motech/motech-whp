@@ -1,5 +1,7 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateUtil;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Treatment;
 import org.motechproject.whp.patient.domain.TreatmentDetails;
@@ -18,7 +20,7 @@ public class TreatmentDetailsMapper {
         treatmentDetails.setHivStatus(patientRequest.getHiv_status());
 
         if(patientRequest.getHiv_test_date() != null){
-            treatmentDetails.setHivTestDate(patientRequest.getHiv_test_date().toLocalDate());
+            treatmentDetails.setHivTestDate(WHPDate.date(patientRequest.getHiv_test_date()).date());
         }
 
         treatmentDetails.setMembersBelowSixYears(patientRequest.getMembers_below_six_years());
@@ -33,7 +35,7 @@ public class TreatmentDetailsMapper {
         treatmentDetails.setXpertDeviceNumber(patientRequest.getXpert_device_number());
 
         if(patientRequest.getXpert_test_date() != null){
-            treatmentDetails.setXpertTestDate(patientRequest.getXpert_test_date().toLocalDate());
+            treatmentDetails.setXpertTestDate(WHPDate.date(patientRequest.getXpert_test_date()).date());
         }
         treatmentDetails.setRifResistanceResult(patientRequest.getRif_resistance_result());
         return treatmentDetails;
@@ -55,7 +57,7 @@ public class TreatmentDetailsMapper {
         if (patientRequest.getHiv_status() != null)
             treatmentDetails.setHivStatus(patientRequest.getHiv_status());
         if (patientRequest.getHiv_test_date() != null)
-            treatmentDetails.setHivTestDate(patientRequest.getHiv_test_date().toLocalDate());
+            treatmentDetails.setHivTestDate(WHPDateUtil.toDateTime(patientRequest.getHiv_test_date()).toLocalDate());
         if (patientRequest.getMembers_below_six_years() != null)
             treatmentDetails.setMembersBelowSixYears(patientRequest.getMembers_below_six_years());
         if (patientRequest.getPhc_referred() != null)
@@ -77,7 +79,7 @@ public class TreatmentDetailsMapper {
         if (patientRequest.getXpert_device_number() != null)
             treatmentDetails.setXpertDeviceNumber(patientRequest.getXpert_device_number());
         if (patientRequest.getXpert_test_date() != null)
-            treatmentDetails.setXpertTestDate(patientRequest.getXpert_test_date().toLocalDate());
+            treatmentDetails.setXpertTestDate(WHPDateUtil.toDateTime(patientRequest.getXpert_test_date()).toLocalDate());
         if (patientRequest.getRif_resistance_result() != null)
             treatmentDetails.setRifResistanceResult(patientRequest.getRif_resistance_result());
 

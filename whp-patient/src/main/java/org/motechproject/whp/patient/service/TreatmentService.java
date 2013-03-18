@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.service;
 
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Patient;
@@ -31,20 +32,20 @@ public class TreatmentService {
 
     public void closeTreatment(PatientRequest patientRequest) {
         Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
-        patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), patientRequest.getDate_modified());
+        patient.closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
         patientService.update(patient);
         patientAlertScheduler.unscheduleJob(patient.getPatientId());
     }
 
     public void pauseTreatment(PatientRequest patientRequest) {
         Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
-        patient.pauseCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
+        patient.pauseCurrentTreatment(patientRequest.getReason(), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
         patientService.update(patient);
     }
 
     public void restartTreatment(PatientRequest patientRequest) {
         Patient patient = patientService.findByPatientId(patientRequest.getCase_id());
-        patient.restartCurrentTreatment(patientRequest.getReason(), patientRequest.getDate_modified());
+        patient.restartCurrentTreatment(patientRequest.getReason(), WHPDateTime.date(patientRequest.getDate_modified()).dateTime());
         patientService.update(patient);
     }
 

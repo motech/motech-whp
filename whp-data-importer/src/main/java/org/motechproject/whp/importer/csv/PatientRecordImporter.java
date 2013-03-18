@@ -9,6 +9,7 @@ import org.motechproject.importer.domain.ValidationResponse;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.mapping.StringToDateTime;
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.validation.RequestValidator;
 import org.motechproject.whp.importer.csv.exceptions.WHPImportException;
 import org.motechproject.whp.importer.csv.logger.ImporterLogger;
@@ -87,7 +88,7 @@ public class PatientRecordImporter {
 
     private void setDefaultValuesIfEmpty(ImportPatientRequest request) {
         if (StringUtils.isBlank(request.getWeightDate(SputumTrackingInstance.PreTreatment))) {
-            LocalDate registrationDate = (LocalDate) stringToDateTime.convert(request.getDate_modified(), LocalDate.class);
+            LocalDate registrationDate = WHPDate.date(request.getDate_modified()).date();
             request.setPreTreatmentWeightDate(registrationDate.toString(DATE_FORMAT));
         }
         if (StringUtils.isBlank(request.getPatient_type()))

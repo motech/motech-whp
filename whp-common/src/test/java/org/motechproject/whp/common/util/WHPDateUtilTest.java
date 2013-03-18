@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class WHPDateUtilTest {
 
@@ -107,5 +107,15 @@ public class WHPDateUtilTest {
         DateTime now = DateUtil.now();
         long currentTimeInMillis = now.getMillis();
         assertEquals(new Timestamp(currentTimeInMillis), WHPDateUtil.toSqlTimestamp(now));
+    }
+
+    @Test
+    public void shouldConvertStringDateToDateTime(){
+        String date ="17/03/1990";
+        assertThat(WHPDateUtil.toDateTime(date), is(new DateTime(1990, 3, 17, 0, 0, 0)));
+
+        date = null;
+        assertNull(WHPDateUtil.toDateTime(date));
+
     }
 }

@@ -154,7 +154,7 @@ public abstract class WHPAdherenceServiceTestPart extends SpringIntegrationTest 
         WeeklyAdherenceSummary weeklyAdherenceSummary = new WeeklyAdherenceSummaryBuilder().withDosesTaken(3).build();
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withPatientType(PatientType.New)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .build();
         Patient patient = createPatient(patientRequest);
         AdherenceList adherenceList = AdherenceListMapper.map(patient, weeklyAdherenceSummary);

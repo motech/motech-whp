@@ -244,7 +244,7 @@ public class PatientWebServiceIT extends SpringIntegrationTest {
                 .build();
         patientWebRequest.setTreatmentData(null, simpleUpdateRequest.getTb_id(), null, null, "50", null);
         simpleUpdateRequest.setDate_modified("15/10/2010 10:10:10");
-        simpleUpdateRequest.setTb_registration_date("17/10/2010 10:10:10");
+        simpleUpdateRequest.setTb_registration_date("17/10/2010");
         simpleUpdateRequest.setApi_key("3F2504E04F8911D39A0C0305E82C3301");
         simpleUpdateRequest.setPatientInfo(simpleUpdateRequest.getCase_id(), null, null, null, null, "9087654321", null);
         District new_district = new District("new_district");

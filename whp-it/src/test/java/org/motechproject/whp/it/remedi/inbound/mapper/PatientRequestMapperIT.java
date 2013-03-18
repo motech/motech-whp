@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
-import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.Address;
 import org.motechproject.whp.patient.domain.TreatmentCategory;
@@ -25,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
-import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
@@ -71,7 +69,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         PatientRequest patientRequest = patientRequestMapper.map(patientWebRequest);
 
         assertEquals(patientWebRequest.getCase_id(), patientRequest.getCase_id());
-        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified().toString(DATE_TIME_FORMAT));
+        assertEquals(patientWebRequest.getDate_modified(), patientRequest.getDate_modified());
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getProvider_id(), patientRequest.getProvider_id());
         assertEquals(TreatmentOutcome.valueOf(patientWebRequest.getTreatment_outcome()), patientRequest.getTreatment_outcome());
@@ -88,7 +86,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertThat(patientWebRequest.getOther_investigations(),is(patientRequest.getOther_investigations()));         
         assertThat(patientWebRequest.getPrevious_treatment_history(),is(patientRequest.getPrevious_treatment_history()));
         assertThat(patientWebRequest.getHiv_status(),is(patientRequest.getHiv_status()));                   
-        assertThat(patientWebRequest.getHiv_test_date(),is(patientRequest.getHiv_test_date().toString(DATE_FORMAT)));
+        assertThat(patientWebRequest.getHiv_test_date(),is(patientRequest.getHiv_test_date()));
         assertThat(Integer.parseInt(patientWebRequest.getMembers_below_six_years()), is(patientRequest.getMembers_below_six_years()));
         assertThat(patientWebRequest.getPhc_referred() ,is(patientRequest.getPhc_referred()));                 
         assertThat(patientWebRequest.getProvider_name(),is(patientRequest.getProvider_name()));                
@@ -99,7 +97,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertThat(patientWebRequest.getContact_person_phone_number() ,is(patientRequest.getContact_person_phone_number()));  
         assertThat(patientWebRequest.getXpert_test_result() ,is(patientRequest.getXpert_test_result()));            
         assertThat(patientWebRequest.getXpert_device_number() ,is(patientRequest.getXpert_device_number()));          
-        assertThat(patientWebRequest.getXpert_test_date() ,is(patientRequest.getXpert_test_date().toString(DATE_FORMAT)));
+        assertThat(patientWebRequest.getXpert_test_date() ,is(patientRequest.getXpert_test_date()));
         assertThat(patientWebRequest.getRif_resistance_result(),is(patientRequest.getRif_resistance_result()));
     }
 
@@ -122,7 +120,7 @@ public class PatientRequestMapperIT extends SpringIntegrationTest {
         assertEquals(patientWebRequest.getPatient_type(), patientRequest.getPatient_type().name());
         assertEquals(patientWebRequest.getMobile_number(), patientRequest.getMobile_number());
         assertEquals(patientWebRequest.getPhi(), patientRequest.getPhi());
-        assertEquals(patientWebRequest.getDate_of_birth(), patientRequest.getDate_of_birth().toString(WHPDate.DATE_FORMAT));
+        assertEquals(patientWebRequest.getDate_of_birth(), patientRequest.getDate_of_birth());
     }
 
     private void assertTreatment(PatientRequest patientRequest, PatientWebRequest patientWebRequest) {

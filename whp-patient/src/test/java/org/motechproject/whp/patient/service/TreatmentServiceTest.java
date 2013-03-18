@@ -1,10 +1,10 @@
 package org.motechproject.whp.patient.service;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.alerts.scheduler.PatientAlertScheduler;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
@@ -42,7 +42,7 @@ public class TreatmentServiceTest {
     @Test
     public void shouldCloseTreatment() {
         Patient patient = mock(Patient.class);
-        DateTime dateModified = DateTime.now();
+        String dateModified = "25/11/1986 00:00:00";
         PatientRequest patientRequest = new PatientRequestBuilder().withMandatoryFieldsForCloseTreatment()
                 .withCloseTreatmentRemarks("remarks")
                 .withCaseId(PATIENT_ID)
@@ -54,7 +54,7 @@ public class TreatmentServiceTest {
         treatmentService.closeTreatment(patientRequest);
 
         InOrder order = inOrder(patient, patientService, patientAlertScheduler);
-        order.verify(patient).closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), dateModified);
+        order.verify(patient).closeCurrentTreatment(patientRequest.getTreatment_outcome(), patientRequest.getRemarks(), WHPDateTime.date(dateModified).dateTime());
         order.verify(patientService).update(patient);
         order.verify(patientAlertScheduler).unscheduleJob(PATIENT_ID);
     }

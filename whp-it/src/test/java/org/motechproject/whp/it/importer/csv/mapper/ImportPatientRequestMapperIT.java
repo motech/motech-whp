@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
-import static org.motechproject.whp.common.util.WHPDate.DATE_TIME_FORMAT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
@@ -43,7 +42,7 @@ public class ImportPatientRequestMapperIT {
         assertEquals(importPatientRequest.getAddress_state(), patientRequest.getAddress().getAddress_state());
         assertEquals(importPatientRequest.getAddress_village(), patientRequest.getAddress().getAddress_village());
         assertEquals(importPatientRequest.getAge(), patientRequest.getAge().toString());
-        assertEquals(importPatientRequest.getDate_modified() +" 00:00:00", patientRequest.getDate_modified().toString(DATE_TIME_FORMAT));
+        assertEquals(importPatientRequest.getDate_modified(), patientRequest.getDate_modified());
         assertEquals(importPatientRequest.getDisease_class(), patientRequest.getDisease_class().name());
         assertEquals(importPatientRequest.getFirst_name(), patientRequest.getFirst_name());
         assertEquals(importPatientRequest.getGender(), patientRequest.getGender().name());
@@ -52,6 +51,7 @@ public class ImportPatientRequestMapperIT {
         assertEquals(importPatientRequest.getPhi(), patientRequest.getPhi());
         assertEquals(importPatientRequest.getTb_id(), patientRequest.getTb_id());
         assertEquals(importPatientRequest.getTb_registration_number(), patientRequest.getTb_registration_number());
+        assertEquals(importPatientRequest.getTb_registration_date(), patientRequest.getTb_registration_date());
         assertEquals(importPatientRequest.getTreatment_category(), patientRequest.getTreatment_category().getCode());
         assertEquals(importPatientRequest.getProvider_id(), patientRequest.getProvider_id());
     }

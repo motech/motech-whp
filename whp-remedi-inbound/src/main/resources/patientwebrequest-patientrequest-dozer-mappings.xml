@@ -6,15 +6,15 @@
     <mapping wildcard="true">
         <class-a>org.motechproject.whp.webservice.request.PatientWebRequest</class-a>
         <class-b>org.motechproject.whp.patient.contract.PatientRequest</class-b>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>date_modified</a>
             <b>date_modified</b>
         </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>tb_registration_date</a>
             <b>tb_registration_date</b>
         </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
+        <field>
             <a>date_modified</a>
             <b>treatmentCreationDate</b>
         </field>
@@ -69,18 +69,6 @@
         <field>
             <a>age</a>
             <b>age</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
-            <a>hiv_test_date</a>
-            <b>hiv_test_date</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
-            <a>xpert_test_date</a>
-            <b>xpert_test_date</b>
-        </field>
-        <field custom-converter="org.motechproject.whp.common.mapping.StringToDateTime">
-            <a>date_of_birth</a>
-            <b>date_of_birth</b>
         </field>
     </mapping>
 </mappings>

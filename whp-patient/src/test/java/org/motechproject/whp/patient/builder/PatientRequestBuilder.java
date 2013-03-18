@@ -1,19 +1,19 @@
 package org.motechproject.whp.patient.builder;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
+import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.contract.TreatmentUpdateScenario;
 import org.motechproject.whp.patient.domain.*;
 
 import java.util.Arrays;
 
-import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.patient.builder.PatientBuilder.*;
 
@@ -21,6 +21,8 @@ public class PatientRequestBuilder {
 
     public static final String NEW_TB_ID = "newtbid";
     public static final String NEW_PROVIDER_ID = "newproviderid";
+    public static final String TODAY_DATE = WHPDate.date(DateUtil.now().toLocalDate()).value();
+    public static final String TODAY_DATE_TIME = WHPDateTime.date(DateUtil.now()).value();
     protected final TreatmentCategory category01 = new TreatmentCategory("RNTCP Category 1", "01", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday));
     protected final TreatmentCategory category10 = new TreatmentCategory("RNTCP Category 1", "10", 3, 8, 24, 4, 12, 18, 54, Arrays.asList(DayOfWeek.Monday));
 
@@ -33,13 +35,14 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withDefaults() {
         patientRequest = new PatientRequest()
                 .setPatientInfo(PATIENT_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
-                .setTreatmentData(category01, TB_ID, PROVIDER_ID, DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category01, TB_ID, PROVIDER_ID, DiseaseClass.P, 50, "registrationNumber", "21/06/2010 10:00:05")
                 .addSmearTestResults(SputumTrackingInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
                 .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setWeightStatistics(SputumTrackingInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19))
-                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
-                .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
-        patientRequest.setDate_of_birth(DateUtil.newDateTime(1981, 3, 17, 4, 55, 0));
+                .setWeightStatistics(SputumTrackingInstance.PreTreatment, 99.7, DateUtil.newDate(2010, 5, 19));
+
+        patientRequest.setDate_modified("17/03/1990 04:55:00");
+        patientRequest.setTb_registration_date("17/03/1990");
+        patientRequest.setDate_of_birth("17/03/1981");
         return this;
     }
 
@@ -49,40 +52,40 @@ public class PatientRequestBuilder {
                 .setPatientAddress("new_house number", "new_landmark", "new_block", "new_village", "new_district", "new_state")
                 .addSmearTestResults(SputumTrackingInstance.EndTreatment, DateUtil.newDate(2010, 7, 19), SmearTestResult.Negative, DateUtil.newDate(2010, 9, 20), SmearTestResult.Negative, "labName", "labNumber")
                 .setWeightStatistics(SputumTrackingInstance.EndTreatment, 99.7, DateUtil.newDate(2010, 9, 20))
-                .setTreatmentData(null, TB_ID, null, null, 50, "newRegistrationNumber", DateUtil.newDateTime(2010, 9, 20, 10, 10, 0))
-                .setTbRegistrationDate(now());
+                .setTreatmentData(null, TB_ID, null, null, 50, "newRegistrationNumber", "20/9/2010 10:10:0");
+
+        patientRequest.setTb_registration_date(TODAY_DATE);
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForOpenNewTreatment() {
-        patientRequest.setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50));
         patientRequest.setCase_id(PATIENT_ID);
-        patientRequest.setDate_modified(now());
-        patientRequest.setTbRegistrationDate(now());
+        patientRequest.setDate_modified(TODAY_DATE_TIME);
+        patientRequest.setTb_registration_date(TODAY_DATE);
         patientRequest.setTb_id("tbid");
         patientRequest.setTreatment_category(category10);
         patientRequest.setProvider_id("newproviderid");
         patientRequest.setDisease_class(DiseaseClass.E);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
         patientRequest.addSmearTestResults(SputumTrackingInstance.EndIP, today(), SmearTestResult.Negative, today(), SmearTestResult.Negative, "labName", "labNumber");
-        patientRequest.setWeightStatistics(SputumTrackingInstance.EndIP, 67.56, patientRequest.getDate_modified().toLocalDate());
+        patientRequest.setWeightStatistics(SputumTrackingInstance.EndIP, 67.56, WHPDateTime.date(patientRequest.getDate_modified()).dateTime().toLocalDate());
 
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForCloseTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
-        patientRequest.setDate_modified(now());
+        patientRequest.setDate_modified(TODAY_DATE_TIME);
         patientRequest.setTb_id(TB_ID);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Close);
         patientRequest.setTreatment_outcome(TreatmentOutcome.Cured);
-        patientRequest.setTbRegistrationDate(now().minusDays(3));
+        patientRequest.setTb_registration_date(WHPDate.date(DateUtil.now().minusDays(3).toLocalDate()).value());
         return this;
     }
 
     public PatientRequestBuilder withMandatoryFieldsForPauseTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
-        patientRequest.setDate_modified(now());
+        patientRequest.setDate_modified(TODAY_DATE_TIME);
         patientRequest.setTb_id(TB_ID);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Pause);
         patientRequest.setReason("paws");
@@ -91,7 +94,7 @@ public class PatientRequestBuilder {
 
     public PatientRequestBuilder withMandatoryFieldsForRestartTreatment() {
         patientRequest.setCase_id(PATIENT_ID);
-        patientRequest.setDate_modified(now());
+        patientRequest.setDate_modified(TODAY_DATE_TIME);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.Restart);
         patientRequest.setTb_id(TB_ID);
         patientRequest.setReason("swap");
@@ -101,8 +104,8 @@ public class PatientRequestBuilder {
     public PatientRequestBuilder withMandatoryFieldsForTransferInTreatment() {
         patientRequest.setProvider_id(NEW_PROVIDER_ID);
         patientRequest.setCase_id(PATIENT_ID);
-        patientRequest.setDate_modified(now());
-        patientRequest.setTbRegistrationDate(now());
+        patientRequest.setDate_modified(TODAY_DATE_TIME);
+        patientRequest.setTb_registration_date(TODAY_DATE);
         patientRequest.setTb_id(NEW_TB_ID);
         patientRequest.setTreatmentUpdate(TreatmentUpdateScenario.New);
         patientRequest.setPatient_type(PatientType.TransferredIn);
@@ -113,11 +116,12 @@ public class PatientRequestBuilder {
         TreatmentCategory category = category01;
         patientRequest = new PatientRequest()
                 .setPatientInfo(PATIENT_ID, "Foo", "Bar", Gender.M, PatientType.Chronic, "1234567890", "phi")
-                .setTreatmentData(category, TB_ID, "123456", DiseaseClass.P, 50, "registrationNumber", DateUtil.newDateTime(2010, 6, 21, 10, 0, 5))
+                .setTreatmentData(category, TB_ID, "123456", DiseaseClass.P, 50, "registrationNumber", "21/06/2010 10:00:05")
                 .addSmearTestResults(SputumTrackingInstance.PreTreatment, DateUtil.newDate(2010, 5, 19), SmearTestResult.Positive, DateUtil.newDate(2010, 5, 21), SmearTestResult.Positive, "labName", "labNumber")
-                .setPatientAddress("house number", "landmark", "block", "village", "district", "state")
-                .setDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0))
-                .setTbRegistrationDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 0));
+                .setPatientAddress("house number", "landmark", "block", "village", "district", "state");
+
+        patientRequest.setDate_modified("17/03/1990 04:55:00");
+        patientRequest.setTb_registration_date("17/03/1990");
         return this;
     }
 
@@ -176,7 +180,7 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withLastModifiedDate(DateTime lastModifiedDate) {
+    public PatientRequestBuilder withLastModifiedDate(String lastModifiedDate) {
         patientRequest.setDate_modified(lastModifiedDate);
         return this;
     }
@@ -191,8 +195,8 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withDateModified(DateTime dateModified) {
-        patientRequest.setDateModified(dateModified);
+    public PatientRequestBuilder withDateModified(String dateModified) {
+        patientRequest.setDate_modified(dateModified);
         return this;
     }
 
@@ -201,8 +205,8 @@ public class PatientRequestBuilder {
         return this;
     }
 
-    public PatientRequestBuilder withTbRegistrationDate(DateTime dateTime) {
-        patientRequest.setTbRegistrationDate(dateTime);
+    public PatientRequestBuilder withTbRegistrationDate(String dateTime) {
+        patientRequest.setTb_registration_date(dateTime);
         return this;
     }
 
@@ -223,7 +227,7 @@ public class PatientRequestBuilder {
         patientRequest.setOther_investigations("others");
         patientRequest.setPrevious_treatment_history("treatment_history");
         patientRequest.setHiv_status("hiv_status");
-        patientRequest.setHiv_test_date(DateTime.now());
+        patientRequest.setHiv_test_date(TODAY_DATE);
         patientRequest.setMembers_below_six_years(6);
         patientRequest.setPhc_referred("phc_referred");
         patientRequest.setProvider_name("provider_name");
@@ -234,7 +238,7 @@ public class PatientRequestBuilder {
         patientRequest.setContact_person_phone_number("phone number");
         patientRequest.setXpert_test_result("xpert test result");
         patientRequest.setXpert_device_number("xpert device number");
-        patientRequest.setXpert_test_date(DateTime.now());
+        patientRequest.setXpert_test_date(TODAY_DATE);
         patientRequest.setRif_resistance_result("rif resistance result");
         return this;
     }

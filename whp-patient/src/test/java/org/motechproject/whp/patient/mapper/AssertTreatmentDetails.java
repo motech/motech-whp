@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.TreatmentDetails;
 
@@ -17,7 +18,7 @@ public class AssertTreatmentDetails {
         assertEquals(patientRequest.getHiv_status(), treatmentDetails.getHivStatus());
 
         if(patientRequest.getHiv_test_date() != null){
-            assertEquals(patientRequest.getHiv_test_date().toLocalDate(), treatmentDetails.getHivTestDate());
+            assertEquals(WHPDate.date(patientRequest.getHiv_test_date()).date(), treatmentDetails.getHivTestDate());
         } else {
             assertNull(treatmentDetails.getHivTestDate());
         }
@@ -34,7 +35,7 @@ public class AssertTreatmentDetails {
         assertEquals(patientRequest.getXpert_device_number() , treatmentDetails.getXpertDeviceNumber());
 
         if(patientRequest.getXpert_test_date() != null)
-            assertEquals(patientRequest.getXpert_test_date().toLocalDate() , treatmentDetails.getXpertTestDate());
+            assertEquals(WHPDate.date(patientRequest.getXpert_test_date()).date() , treatmentDetails.getXpertTestDate());
         else
             assertNull(treatmentDetails.getXpertTestDate());
         

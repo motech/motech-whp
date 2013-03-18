@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.util.DateUtil;
+import org.motechproject.whp.common.util.WHPDate;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
@@ -44,7 +46,7 @@ public class PatientMapperTest {
     @Test
     public void shouldMapPatientRequestToPatientDomain() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
         assertBasicPatientInfo(patient, patientRequest);
@@ -58,7 +60,7 @@ public class PatientMapperTest {
     @Test
     public void shouldMapPatientRequestToPatientDomain_whenDateOfBirthIsNull() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .build();
         patientRequest.setDate_of_birth(null);
 
@@ -103,7 +105,7 @@ public class PatientMapperTest {
     @Test
     public void shouldCreateNewTreatmentForCategoryChange() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:55")
                 .withPatientAge(50)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
@@ -116,7 +118,7 @@ public class PatientMapperTest {
                 .withProviderId(providerId)
                 .withMandatoryFieldsForOpenNewTreatment()
                 .withProviderId(newProviderId)
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withDateModified("17/03/1990 04:55:55")
                 .withTbId("newTbId")
                 .withPatientAge(60)
                 .withPatientType(PatientType.Relapse)
@@ -148,7 +150,7 @@ public class PatientMapperTest {
     public void shouldCreateNewTreatmentForTransferIn() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withProviderId(providerId)
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .withPatientAge(50)
                 .build();
         Patient patient = patientMapper.mapPatient(patientRequest);
@@ -159,7 +161,7 @@ public class PatientMapperTest {
 
         PatientRequest transferInRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withDateModified("17/03/1990 04:55:50")
                 .withTbId("newTbId")
                 .withPatientAge(60)
                 .withProviderId(NEW_PROVIDER_ID)
@@ -187,7 +189,7 @@ public class PatientMapperTest {
     @Test
     public void shouldUpdatePatientInformation() {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .withPatientAge(50)
                 .withProviderId(providerId)
                 .build();
@@ -197,7 +199,7 @@ public class PatientMapperTest {
 
         PatientRequest updateRequest = new PatientRequestBuilder()
                 .withSimpleUpdateFields()
-                .withDateModified(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withDateModified("17/03/1990 04:55:50")
                 .withPatientAge(60)
                 .build();
 
@@ -208,8 +210,8 @@ public class PatientMapperTest {
         Therapy therapy = patient.getCurrentTherapy();
         Treatment treatment = patient.getCurrentTreatment();
 
-        assertEquals(updateRequest.getTb_registration_date().toLocalDate(), treatment.getStartDate());
-        assertEquals(updateRequest.getDate_modified(), patient.getLastModifiedDate());
+        assertEquals(WHPDate.date(updateRequest.getTb_registration_date()).date(), treatment.getStartDate());
+        assertEquals(WHPDateTime.date(updateRequest.getDate_modified()).dateTime(), patient.getLastModifiedDate());
         assertEquals(updateRequest.getAddress(), treatment.getPatientAddress());
         assertEquals(updateRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(updateRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
@@ -228,7 +230,7 @@ public class PatientMapperTest {
     @Test
     public void shouldSetProviderDistrictOnCreatingNewTreatment(){
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
-                .withLastModifiedDate(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50))
+                .withLastModifiedDate("17/03/1990 04:55:50")
                 .withPatientAge(50)
                 .withProviderId(providerId)
                 .build();
@@ -252,11 +254,11 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getMobile_number(), patient.getPhoneNumber());
         assertEquals(patientRequest.getPhi(), patient.getPhi());
         if(patientRequest.getDate_of_birth() != null)
-            assertEquals(patientRequest.getDate_of_birth().toLocalDate(), patient.getDateOfBirth());
+            assertEquals(WHPDate.date(patientRequest.getDate_of_birth()).date(), patient.getDateOfBirth());
     }
 
     private void assertTreatment(PatientRequest patientRequest, Address address, Treatment treatment) {
-        assertEquals(patientRequest.getTb_registration_date().toLocalDate(), treatment.getStartDate());
+        assertEquals(WHPDate.date(patientRequest.getTb_registration_date()).date(), treatment.getStartDate());
         assertEquals(patientRequest.getTb_id().toLowerCase(), treatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), treatment.getProviderId());
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
@@ -273,7 +275,7 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getDisease_class(), therapy.getDiseaseClass());
         assertNull(therapy.getStartDate());
 
-        assertEquals(patientRequest.getTreatmentCreationDate(), therapy.getCreationDate());
+        assertEquals(WHPDateTime.date(patientRequest.getTreatmentCreationDate()).dateTime(), therapy.getCreationDate());
     }
 
     private void assertSmearTests(PatientRequest patientRequest, Treatment treatment) {
