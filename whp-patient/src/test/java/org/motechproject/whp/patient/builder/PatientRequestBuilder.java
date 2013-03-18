@@ -242,4 +242,27 @@ public class PatientRequestBuilder {
         patientRequest.setRif_resistance_result("rif resistance result");
         return this;
     }
+
+    public PatientRequestBuilder withEmptyTreatmentDetails() {
+        patientRequest.setDistrict_with_code("");
+        patientRequest.setTb_unit_with_code("");
+        patientRequest.setEp_site("");
+        patientRequest.setOther_investigations("");
+        patientRequest.setPrevious_treatment_history("");
+        patientRequest.setHiv_status("");
+        patientRequest.setHiv_test_date("");
+        patientRequest.setMembers_below_six_years(0);
+        patientRequest.setPhc_referred("");
+        patientRequest.setProvider_name("");
+        patientRequest.setDot_centre("");
+        patientRequest.setProvider_type("");
+        patientRequest.setCmf_doctor("");
+        patientRequest.setContact_person_name("");
+        patientRequest.setContact_person_phone_number("");
+        patientRequest.setXpert_test_result("");
+        patientRequest.setXpert_device_number("");
+        patientRequest.setXpert_test_date("");
+        patientRequest.setRif_resistance_result("");
+        return this;
+    }
 }

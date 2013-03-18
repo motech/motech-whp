@@ -361,6 +361,31 @@ public class PatientWebRequestBuilder {
         return this;
     }
 
+
+    public PatientWebRequestBuilder withTreatmentDetailsHavingEmptyForNonDateFields() {
+        patientWebRequest.setHiv_status("");
+        patientWebRequest.setMembers_below_six_years("6");
+        patientWebRequest.setProvider_name("");
+        patientWebRequest.setDot_centre("");
+        patientWebRequest.setProvider_type("");
+        patientWebRequest.setCmf_doctor("");
+        patientWebRequest.setContact_person_name("");
+        patientWebRequest.setContact_person_phone_number("");
+        patientWebRequest.setDistrict_with_code("");
+        patientWebRequest.setTb_unit_with_code("");
+        patientWebRequest.setEp_site("");
+        patientWebRequest.setOther_investigations("");
+        patientWebRequest.setPrevious_treatment_history("");
+        patientWebRequest.setHiv_test_date(null);
+        patientWebRequest.setPhc_referred("");
+        patientWebRequest.setXpert_test_result("");
+        patientWebRequest.setXpert_device_number("");
+        patientWebRequest.setXpert_test_date(null);
+        patientWebRequest.setRif_resistance_result("");
+        return this;
+    }
+
+
     public PatientWebRequestBuilder withMandatoryTreatmentDetailsAsNull() {
         patientWebRequest.setHiv_status(null);
         patientWebRequest.setMembers_below_six_years(null);

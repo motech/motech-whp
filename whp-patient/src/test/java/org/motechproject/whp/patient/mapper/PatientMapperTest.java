@@ -75,6 +75,24 @@ public class PatientMapperTest {
     }
 
     @Test
+    public void shouldMapPatientRequestToPatientDomain_whenDateFieldsAreEmpty() {
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().withProviderId(providerId)
+                .withLastModifiedDate("17/03/1990 04:55:50")
+                .build();
+        patientRequest.setDate_of_birth("");
+
+        Patient patient = patientMapper.mapPatient(patientRequest);
+        assertBasicPatientInfo(patient, patientRequest);
+        assertTreatment(patientRequest, patientRequest.getAddress(), patient.getCurrentTreatment());
+        assertTherapy(patientRequest, patientRequest.getAge(), patient.getCurrentTherapy());
+        assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(providerDistrict));
+        assertNull(patient.getDateOfBirth());
+        verify(providerService).findByProviderId(providerId);
+        verify(treatmentDetailsMapper).map(patientRequest, patient.getCurrentTreatment());
+    }
+
+
+    @Test
     public void shouldMapWeightStatisticsAsEmpty_WhenMissing() {
         PatientRequest patientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForImportPatient()

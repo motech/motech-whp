@@ -39,6 +39,10 @@ public class CaseXMLBuilder {
         return new CaseXMLBuilder("update_patient_no_mandatory_treatment_fields.xml");
     }
 
+    public static  CaseXMLBuilder simpleUpdatePatientRequestWithEmptyTags() {
+        return new CaseXMLBuilder("patient_simple_update_with_empty_treatment_details_tags.xml");
+    }
+
     public static CaseXMLBuilder updatePatientRequest(){
         return new CaseXMLBuilder("update_patient.xml");
     }

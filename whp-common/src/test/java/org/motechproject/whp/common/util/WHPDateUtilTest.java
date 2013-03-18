@@ -117,5 +117,8 @@ public class WHPDateUtilTest {
         date = null;
         assertNull(WHPDateUtil.toDateTime(date));
 
+        date= "";
+        assertNull(WHPDateUtil.toDateTime(date));
+
     }
 }

@@ -355,6 +355,45 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
     }
 
     @Test
+    public void shouldSimpleUpdatePatientWithEmptyTreatmentDetailsTag() throws Exception {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .build();
+        patientWebService.createCase(patientWebRequest);
+
+        District new_district = new District("new_district");
+        allDistricts.add(new_district);
+
+
+        String updatePatientWithEmptyTagsXML = simpleUpdatePatientRequestWithEmptyTags().withRequest(patientWebRequest).build();
+
+        standaloneSetup(patientWebService)
+                .build()
+                .perform(post("/patient/process").body(updatePatientWithEmptyTagsXML.getBytes())
+                        .contentType(MediaType.APPLICATION_XML))
+                .andExpect(status().isOk());
+
+        PatientWebRequest updatedPatientWebRequest = new PatientWebRequestBuilder().withDefaults()
+                .withCaseId(DEFAULT_CASE_ID)
+                .withTreatmentDetailsHavingEmptyForNonDateFields()
+                .build();
+
+        Patient updatedPatient = allPatients.findByPatientId(DEFAULT_CASE_ID);
+        Therapy currentTherapy = updatedPatient.getCurrentTherapy();
+        Treatment currentTreatment = currentTherapy.getCurrentTreatment();
+
+        assertEquals(updatedPatientWebRequest.getAge(), currentTherapy.getPatientAge().toString());
+        assertEquals(updatedPatientWebRequest.getMobile_number(), updatedPatient.getPhoneNumber());
+        assertEquals(updatedPatientWebRequest.getTb_id().toLowerCase(), currentTreatment.getTbId());
+
+        assertLabResults(updatedPatientWebRequest, updatedPatient);
+        assertPatientAddress(updatedPatientWebRequest, currentTreatment);
+        assertTreatmentDetails(updatedPatientWebRequest, currentTreatment.getTreatmentDetails());
+        allDistricts.remove(new_district);
+    }
+
+
+    @Test
     public void shouldTransferInPatient() throws Exception {
         //For the mapping to take place [allTreatmentCategories.findByCode()]
         List<DayOfWeek> threeDaysAWeek = Arrays.asList(DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday);

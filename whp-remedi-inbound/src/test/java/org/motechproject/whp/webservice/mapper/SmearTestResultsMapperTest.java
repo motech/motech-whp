@@ -7,6 +7,7 @@ import org.motechproject.whp.webservice.builder.PatientWebRequestBuilder;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
 import static org.motechproject.whp.common.domain.SputumTrackingInstance.PreTreatment;
 
@@ -26,6 +27,22 @@ public class SmearTestResultsMapperTest {
         PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1("22/06/2012").build();
         SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
         assertEquals(new LocalDate(2012, 6, 22), result.get(0).getSmear_test_date_1());
+    }
+
+    @Test
+    public void shouldMapEmptyTestDatesToNull() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1("").withSmearTestDate2("").build();
+        SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
+        assertNull(result.get(0).getSmear_test_date_1());
+        assertNull(result.get(0).getSmear_test_date_1());
+    }
+
+    @Test
+    public void shouldMapNullTestDatesToNull() {
+        PatientWebRequest patientWebRequest = new PatientWebRequestBuilder().withDefaults().withSmearTestDate1(null).withSmearTestDate2(null).build();
+        SmearTestResults result = smearTestResultsMapper.map(patientWebRequest);
+        assertNull(result.get(0).getSmear_test_date_1());
+        assertNull(result.get(0).getSmear_test_date_1());
     }
 
     @Test

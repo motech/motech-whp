@@ -80,7 +80,13 @@ public class WHPDateUtil {
 
     public static DateTime toDateTime(String date) {
         if (date!= null){
-            return WHPDateTime.date(date+ " 00:00:00").dateTime();
+            if(date.isEmpty()){
+                return null;
+            }
+            else {
+                String empty_time = " 00:00:00";
+                return WHPDateTime.date(date+ empty_time).dateTime();
+            }
         }
         return null;
     }

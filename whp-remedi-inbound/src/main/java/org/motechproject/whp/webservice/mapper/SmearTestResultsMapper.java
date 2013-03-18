@@ -9,6 +9,7 @@ import org.motechproject.whp.patient.domain.SmearTestResults;
 import org.motechproject.whp.webservice.request.PatientWebRequest;
 import org.springframework.stereotype.Component;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
 import static org.joda.time.format.DateTimeFormat.forPattern;
 import static org.motechproject.whp.common.util.WHPDate.DATE_FORMAT;
@@ -49,6 +50,13 @@ public class SmearTestResultsMapper {
     }
 
     private LocalDate stringToLocalDate(String string) {
-        return null != string ? DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate() : null;
+        if (string != null){
+            if (isEmpty(string)){
+                return null;
+            }
+            return DateTime.parse(string, forPattern(DATE_FORMAT)).toLocalDate();
+        }
+        return null;
+
     }
 }
