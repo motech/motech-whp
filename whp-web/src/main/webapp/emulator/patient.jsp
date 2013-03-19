@@ -120,8 +120,85 @@
             <input id="w" class="span4" type="text" value="80"/>
         </div>
         <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter district with code:</span>
+            <input id="district_with_code" class="span4" type="text" value="Begusarai 0087"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter TB Unit with code:</span>
+            <input id="tb_unit_with_code" class="span4" type="text" value="Info to be given by PHC"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter EP site:</span>
+            <input id="ep_site" class="span4" type="text" value="Cervical lymphadenitis"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Other investigations:</span>
+            <input id="other_investigations" class="span4" type="text" value="Chest Xray 20/9/2011 reported cavity right apex"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Previous Treatment History:</span>
+            <input id="previous_treatment_history" class="span4" type="text" value="No history of TB treatment prior to current"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter HIV status:</span>
+            <input id="hiv_status" class="span4" type="text" value="Positive"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter HIV Test Date:</span>
+            <input id="hiv_test_date" class="span4" type="text" value="12/01/2013"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Members below Six years:</span>
+            <input id="members_below_six_years" class="span4" type="text" value="5"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter PHC Preferred:</span>
+            <input id="phc_referred" class="span4" type="text" value="Yes"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Provider Name:</span>
+            <input id="provider_name" class="span4" type="text" value="raj"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Dot Center:</span>
+            <input id="dot_centre" class="span4" type="text" value="MURWA SkyHealth Centre"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Provider Type:</span>
+            <input id="provider_type" class="span4" type="text" value="TPC"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Cmf Doctor:</span>
+            <input id="cmf_doctor" class="span4" type="text" value="Arun nath"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Xpert Device Number:</span>
+            <input id="xpert_device_number" class="span4" type="text" value="WHP-03"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Xpert Test Date:</span>
+            <input id="xpert_test_date" class="span4" type="text" value="12/02/2013"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Xpert Test Result:</span>
+            <input id="xpert_test_result" class="span4" type="text" value="MTB Detected Medium"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Resistance Result:</span>
+            <input id="rif_resistance_result" class="span4" type="text" value="Rif Resistance Detected"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Contact Person Name:</span>
+            <input id="contact_person_name" class="span4" type="text" value="Raja sahu"/>
+        </div>
+        <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Person Phone Number:</span>
+            <input id="contact_person_phone_number" class="span4" type="text" value="9999999999"/>
+        </div>
+        <div class="row-fluid">
             <input type="button" id="submit" value="Submit" class="btn btn-large btn-primary offset3"/>
         </div>
+
     </form>
     <br/>
     <br/>
@@ -159,6 +236,25 @@
                 <weight_instance>$WII$</weight_instance>
                 <weight>$W$</weight>
                 <tb_registration_date>$TB_REGISTRATION_DATE$</tb_registration_date>
+                <district_with_code>$DISTRICT_WITH_CODE$</district_with_code>
+                <tb_unit_with_code>$TB_UNIT_WITH_CODE$</tb_unit_with_code>
+                <ep_site>$EP_SITE$</ep_site>
+                <other_investigations>$OTHER_INVESTIGATIONS$</other_investigations>
+                <previous_treatment_history>$PREVIOUS_TREATMENT_HISTORY$</previous_treatment_history>
+                <hiv_status>$HIV_STATUS$</hiv_status>
+                <hiv_test_date>$HIV_TEST_DATE$</hiv_test_date>
+                <members_below_six_years>$MEMBERS_BELOW_SIX_YEARS$</members_below_six_years>
+                <phc_referred>$PHC_REFERRED$</phc_referred>
+                <provider_name>$PROVIDER_NAME$</provider_name>
+                <dot_centre>$DOT_CENTRE$</dot_centre>
+                <provider_type>$PROVIDER_TYPE$</provider_type>
+                <cmf_doctor>$CMF_DOCTOR$</cmf_doctor>
+                <xpert_device_number>$XPERT_DEVICE_NUMBER$</xpert_device_number>
+                <xpert_test_date>$XPERT_TEST_DATE$</xpert_test_date>
+                <xpert_test_result>$XPERT_TEST_RESULT$</xpert_test_result>
+                <rif_resistance_result>$RIF_RESISTANCE_RESULT$</rif_resistance_result>
+                <contact_person_name>$CONTACT_PERSON_NAME$</contact_person_name>
+                <contact_person_phone_number>$CONTACT_PERSON_PHONE_NUMBER$</contact_person_phone_number>
             </update>
         </case>
     </textarea>
@@ -167,7 +263,6 @@
         function generatePatientXml() {
             patientXML =  $("#template").val();
             patientXML = $.trim(patientXML);
-
             patientXML = patientXML.replace('$TB_ID$', $("#tb_id").val());
             patientXML = patientXML.replace('$TB_REGISTRATION_DATE$', $("#tb_registration_date").val());
             patientXML = patientXML.replace('$CASE_NAME$', $("#case_name").val());
@@ -193,6 +288,25 @@
             patientXML = patientXML.replace('$DCLASS$', $("#dclass").val());
             patientXML = patientXML.replace('$WII$', $("#wii").val());
             patientXML = patientXML.replace('$W$', $("#w").val());
+            patientXML = patientXML.replace('$DISTRICT_WITH_CODE$', $("#district_with_code").val());
+            patientXML = patientXML.replace('$TB_UNIT_WITH_CODE$', $("#tb_unit_with_code").val());
+            patientXML = patientXML.replace('$EP_SITE$', $("#ep_site").val());
+            patientXML = patientXML.replace('$OTHER_INVESTIGATIONS$', $("#other_investigations").val());
+            patientXML = patientXML.replace('$PREVIOUS_TREATMENT_HISTORY$', $("#previous_treatment_history").val());
+            patientXML = patientXML.replace('$HIV_STATUS$', $("#hiv_status").val());
+            patientXML = patientXML.replace('$HIV_TEST_DATE$', $("#hiv_test_date").val());
+            patientXML = patientXML.replace('$MEMBERS_BELOW_SIX_YEARS$', $("#members_below_six_years").val());
+            patientXML = patientXML.replace('$PHC_REFERRED$', $("#phc_referred").val());
+            patientXML = patientXML.replace('$PROVIDER_NAME$', $("#provider_name").val());
+            patientXML = patientXML.replace('$DOT_CENTRE$', $("#dot_centre").val());
+            patientXML = patientXML.replace('$PROVIDER_TYPE$', $("#provider_type").val());
+            patientXML = patientXML.replace('$CMF_DOCTOR$', $("#cmf_doctor").val());
+            patientXML = patientXML.replace('$XPERT_DEVICE_NUMBER$', $("#xpert_device_number").val());
+            patientXML = patientXML.replace('$XPERT_TEST_DATE$', $("#xpert_test_date").val());
+            patientXML = patientXML.replace('$XPERT_TEST_RESULT$', $("#xpert_test_result").val());
+            patientXML = patientXML.replace('$RIF_RESISTANCE_RESULT$', $("#rif_resistance_result").val());
+            patientXML = patientXML.replace('$CONTACT_PERSON_NAME$', $("#contact_person_name").val());
+            patientXML = patientXML.replace('$CONTACT_PERSON_PHONE_NUMBER$', $("#contact_person_phone_number").val());
         }
         $(document).ready(function() {
             $('#submit').click(function () {
