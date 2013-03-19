@@ -143,6 +143,8 @@
             <tr>
                 <th>Container Id</th>
                 <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate', 'DESC')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
+                <th>Given Patient Name</th>
+                <th>Given Patient ID</th>
                 <th>Lab Name</th>
                 <th>Result 1</th>
                 <th>Date Of Test 1</th>
@@ -151,8 +153,6 @@
                 <th>Consultation Date</th>
                 <th>TB Diagnosis</th>
                 <th>Patient ID</th>
-                <th>Given Patient Name</th>
-                <th>Given Patient ID</th>
                 <th>Provider District</th>
                 <th>Provider Id</th>
                 <th>Container Status</th>
@@ -166,6 +166,8 @@
                 containerId="{{item.containerId}}">
                 <td class="containerId">{{item.containerId}}</td>
                 <td>{{item.containerIssuedOn}}</td>
+                <td>{{item.givenPatientName}}</td>
+                <td>{{item.givenPatientId}}</td>
                 <td>{{item.labName}}</td>
                 <td>{{item.consultationOneResult}}</td>
                 <td>{{item.consultationOneDate}}</td>
@@ -174,8 +176,6 @@
                 <td>{{item.consultation}}</td>
                 <td id="diagnosisValue">{{item.diagnosis}}</td>
                 <td><a href="<@spring.url '/patients/show?patientId={{item.patientId}}' />"  target="_blank">{{item.patientId}}</a></td>
-                <td>{{item.givenPatientName}}</td>
-                <td>{{item.givenPatientId}}</td>
                 <td>{{item.district}}</td>
                 <td>{{item.providerId}}</td>
                 <td>{{item.containerStatus}}</td>
