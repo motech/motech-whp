@@ -81,7 +81,34 @@ public class PatientInfoMapper {
         if (alertColorConfiguration != null) {
                        setPatientAlertInfo(patientInfo, patientAlerts);
         }
+
+        mapTreatmentDetails(patient.getCurrentTreatment().getTreatmentDetails(), patientInfo);
         return patientInfo;
+    }
+
+    private void mapTreatmentDetails(TreatmentDetails treatmentDetails, PatientInfo patientInfo) {
+        TreatmentDetails patientInfoTreatmentDetails = new TreatmentDetails();
+        patientInfoTreatmentDetails.setDistrictWithCode(treatmentDetails.getDistrictWithCode());
+        patientInfoTreatmentDetails.setTbUnitWithCode(treatmentDetails.getTbUnitWithCode());
+        patientInfoTreatmentDetails.setEpSite(treatmentDetails.getEpSite());
+        patientInfoTreatmentDetails.setOtherInvestigations(treatmentDetails.getOtherInvestigations());
+        patientInfoTreatmentDetails.setPreviousTreatmentHistory(treatmentDetails.getPreviousTreatmentHistory());
+        patientInfoTreatmentDetails.setHivStatus(treatmentDetails.getHivStatus());
+        patientInfoTreatmentDetails.setHivTestDate(treatmentDetails.getHivTestDate());
+        patientInfoTreatmentDetails.setMembersBelowSixYears(treatmentDetails.getMembersBelowSixYears());
+        patientInfoTreatmentDetails.setPhcReferred(treatmentDetails.getPhcReferred());
+        patientInfoTreatmentDetails.setProviderName(treatmentDetails.getProviderName());
+        patientInfoTreatmentDetails.setDotCentre(treatmentDetails.getDotCentre());
+        patientInfoTreatmentDetails.setProviderType(treatmentDetails.getProviderType());
+        patientInfoTreatmentDetails.setCmfDoctor(treatmentDetails.getCmfDoctor());
+        patientInfoTreatmentDetails.setContactPersonName(treatmentDetails.getContactPersonName());
+        patientInfoTreatmentDetails.setContactPersonPhoneNumber(treatmentDetails.getContactPersonPhoneNumber());
+        patientInfoTreatmentDetails.setXpertTestResult(treatmentDetails.getXpertTestResult());
+        patientInfoTreatmentDetails.setXpertDeviceNumber(treatmentDetails.getXpertDeviceNumber());
+        patientInfoTreatmentDetails.setXpertTestDate(treatmentDetails.getXpertTestDate());
+        patientInfoTreatmentDetails.setRifResistanceResult(treatmentDetails.getRifResistanceResult());
+
+        patientInfo.setTreatmentDetails(patientInfoTreatmentDetails);
     }
 
     private void setPatientAlertInfo(PatientInfo patientInfo, PatientAlerts patientAlerts) {

@@ -152,6 +152,29 @@
             </table>
 
         </div>
+        <div class="span8">
+            <h3>GenXpert Test Results</h3>
+            <table class="table table-bordered text-center table-striped">
+                <thead>
+                <tr>
+                    <th id="xpertDeviceNumber">Xpert MTB/RIF Device Number</th>
+                    <th id="xpertTestDate">Date of Xpert Test</th>
+                    <th id="xpertTestResult">Xpert Test Result</th>
+                    <th id="xpertRifResistanceResult">Rif Resistance Result</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>${patient.treatmentDetails.xpertDeviceNumber}</td>
+                    <td>${patient.treatmentDetails.xpertTestDate}</td>
+                    <td>${patient.treatmentDetails.xpertTestResult}</td>
+                    <td>${patient.treatmentDetails.rifResistanceResult}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
     <div class="row-fluid">
 

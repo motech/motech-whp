@@ -133,10 +133,7 @@ public class PatientInfoMapperTest {
         currentPhase.setName(Phase.IP);
 
         expectedTestResults = new TestResults(currentTreatment.getSmearTestResults(), currentTreatment.getWeightStatistics());
-
-
     }
-
 
     @Test
     public void shouldMapPatientToPatientInfo() {
@@ -210,9 +207,9 @@ public class PatientInfoMapperTest {
         patient.addTreatment(treatment, now(), now());
 
         PatientInfo patientInfo = patientInfoMapper.map(patient, provider);
-        assertThat(patientInfo.getTestResults().size(),is(2));
-        assertThat(patientInfo.getTestResults().get(0).getSampleInstance(),is(SputumTrackingInstance.PreTreatment.getDisplayText()));
-        assertThat(patientInfo.getTestResults().get(1).getSampleInstance(),is(newSputumTrackingInstance.getDisplayText()));
+        assertThat(patientInfo.getTestResults().size(), is(2));
+        assertThat(patientInfo.getTestResults().get(0).getSampleInstance(), is(SputumTrackingInstance.PreTreatment.getDisplayText()));
+        assertThat(patientInfo.getTestResults().get(1).getSampleInstance(), is(newSputumTrackingInstance.getDisplayText()));
     }
 
     @Test
@@ -237,7 +234,7 @@ public class PatientInfoMapperTest {
     }
 
     @Test
-    public void shouldSetColorValuesToNullIfColorConfigurationIsNotAvailable(){
+    public void shouldSetColorValuesToNullIfColorConfigurationIsNotAvailable() {
         Patient patient = new PatientBuilder().withDefaults().build();
         patientInfoMapper = new PatientInfoMapper();
         PatientInfo patientInfo = patientInfoMapper.map(patient);
@@ -245,5 +242,39 @@ public class PatientInfoMapperTest {
         Assert.assertNull(patientInfo.getAdherenceMissingSeverityColor());
         Assert.assertNull(patientInfo.getCumulativeMissedDosesSeverityColor());
         Assert.assertNull(patientInfo.getTreatmentNotStartedSeverityColor());
+    }
+
+    @Test
+    public void shouldMapTreatmentDetailsToPatientInfo() {
+        Patient patient = new PatientBuilder().withDefaults().withDefaultTreatmentDetails().build();
+
+        PatientInfo patientInfo = patientInfoMapper.map(patient);
+
+        assertTreatmentDetails(patientInfo, patient);
+    }
+
+    private void assertTreatmentDetails(PatientInfo patientInfo, Patient patient) {
+        TreatmentDetails patientTreatmentDetails = patient.getCurrentTreatment().getTreatmentDetails();
+        TreatmentDetails patientInfoTD = patientInfo.getTreatmentDetails();
+
+        assertThat(patientInfoTD.getDistrictWithCode(), is(patientTreatmentDetails.getDistrictWithCode()));
+        assertThat(patientInfoTD.getTbUnitWithCode(), is(patientTreatmentDetails.getTbUnitWithCode()));
+        assertThat(patientInfoTD.getEpSite(), is(patientTreatmentDetails.getEpSite()));
+        assertThat(patientInfoTD.getOtherInvestigations(), is(patientTreatmentDetails.getOtherInvestigations()));
+        assertThat(patientInfoTD.getPreviousTreatmentHistory(), is(patientTreatmentDetails.getPreviousTreatmentHistory()));
+        assertThat(patientInfoTD.getHivStatus(), is(patientTreatmentDetails.getHivStatus()));
+        assertThat(patientInfoTD.getHivTestDate(), is(patientTreatmentDetails.getHivTestDate()));
+        assertThat(patientInfoTD.getMembersBelowSixYears(), is(patientTreatmentDetails.getMembersBelowSixYears()));
+        assertThat(patientInfoTD.getPhcReferred(), is(patientTreatmentDetails.getPhcReferred()));
+        assertThat(patientInfoTD.getProviderName(), is(patientTreatmentDetails.getProviderName()));
+        assertThat(patientInfoTD.getDotCentre(), is(patientTreatmentDetails.getDotCentre()));
+        assertThat(patientInfoTD.getProviderType(), is(patientTreatmentDetails.getProviderType()));
+        assertThat(patientInfoTD.getCmfDoctor(), is(patientTreatmentDetails.getCmfDoctor()));
+        assertThat(patientInfoTD.getContactPersonName(), is(patientTreatmentDetails.getContactPersonName()));
+        assertThat(patientInfoTD.getContactPersonPhoneNumber(), is(patientTreatmentDetails.getContactPersonPhoneNumber()));
+        assertThat(patientInfoTD.getXpertTestResult(), is(patientTreatmentDetails.getXpertTestResult()));
+        assertThat(patientInfoTD.getXpertDeviceNumber(), is(patientTreatmentDetails.getXpertDeviceNumber()));
+        assertThat(patientInfoTD.getXpertTestDate(), is(patientTreatmentDetails.getXpertTestDate()));
+        assertThat(patientInfoTD.getRifResistanceResult(), is(patientTreatmentDetails.getRifResistanceResult()));
     }
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.motechproject.whp.common.domain.Phase;
 import org.motechproject.whp.patient.domain.PhaseRecord;
 import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.TreatmentDetails;
 
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class PatientInfo {
     private String cumulativeMissedDosesSeverityColor;
     private String treatmentNotStartedSeverityColor;
     private String treatmentNotStartedMessageCode;
+    private TreatmentDetails treatmentDetails;
 
 
     public void setAdherenceMissingMessageCode() {
@@ -87,7 +89,5 @@ public class PatientInfo {
     public void setTreatmentNotStartedMessageCode() {
         this.treatmentNotStartedMessageCode = "message.alert.filter.treatment.not.started.alerts";
     }
-
-
 }
 

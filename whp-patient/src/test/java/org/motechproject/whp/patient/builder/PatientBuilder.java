@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.builder;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
@@ -263,6 +264,32 @@ public class PatientBuilder {
 
     public PatientBuilder withPatientFlag(boolean flagValue) {
         patient.getPatientFlag().setFlagValue(flagValue);
+        return this;
+    }
+
+    public PatientBuilder withDefaultTreatmentDetails() {
+        TreatmentDetails treatmentDetails = new TreatmentDetails();
+        treatmentDetails.setDistrictWithCode("district_with_code");
+        treatmentDetails.setTbUnitWithCode("tb_with_code");
+        treatmentDetails.setEpSite("ep_site");
+        treatmentDetails.setOtherInvestigations("others");
+        treatmentDetails.setPreviousTreatmentHistory("treatment_history");
+        treatmentDetails.setHivStatus("hiv_status");
+        treatmentDetails.setHivTestDate(DateTime.now().toLocalDate());
+        treatmentDetails.setMembersBelowSixYears(6);
+        treatmentDetails.setPhcReferred("phc_referred");
+        treatmentDetails.setProviderName("provider_name");
+        treatmentDetails.setDotCentre("dot_center");
+        treatmentDetails.setProviderType("provider_type");
+        treatmentDetails.setCmfDoctor("cmf doctor");
+        treatmentDetails.setContactPersonName("person name");
+        treatmentDetails.setContactPersonPhoneNumber("phone number");
+        treatmentDetails.setXpertTestResult("xpert test result");
+        treatmentDetails.setXpertDeviceNumber("xpert device number");
+        treatmentDetails.setXpertTestDate(DateTime.now().toLocalDate());
+        treatmentDetails.setRifResistanceResult("rif resistance result");
+
+        patient.getCurrentTreatment().setTreatmentDetails(treatmentDetails);
         return this;
     }
 
