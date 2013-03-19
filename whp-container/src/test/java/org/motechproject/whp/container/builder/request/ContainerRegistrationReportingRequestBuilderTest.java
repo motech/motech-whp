@@ -15,6 +15,7 @@ import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequ
 import org.motechproject.whp.reports.contract.UserGivenPatientDetails;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class ContainerRegistrationReportingRequestBuilderTest {
@@ -50,6 +51,29 @@ public class ContainerRegistrationReportingRequestBuilderTest {
         assertThat(containerRegistrationReportingRequest.getStatus(), is(container.getStatus().name()));
         assertThat(containerRegistrationReportingRequest.getDiagnosis(), is(container.getDiagnosis().name()));
         assertuserGivenDetails(container, containerRegistrationReportingRequest);
+    }
+
+    @Test
+    public void shouldNotSetNullContainerRegistrationDetailsContainerRegistrationReportingRequest() {
+        String district = "district";
+        LocalDate issuedOn = DateUtil.today();
+        RegistrationInstance instance = RegistrationInstance.PreTreatment;
+        Container container = new ContainerBuilder().withDefaults()
+                .withDiagnosis(Diagnosis.Pending)
+                .withInstance(instance)
+                .withContainerIssuedDate(issuedOn)
+                .withProviderDistrict(district)
+                .withStatus(ContainerStatus.Open)
+                .withContainerRegistrationDetails("patientName", null, null, null).build();
+
+        containerRegistrationReportingRequest = containerRegistrationReportingRequestBuilder.forContainer(container).build();
+
+        UserGivenPatientDetails userGivenPatientDetails = containerRegistrationReportingRequest.getUserGivenPatientDetails();
+        ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
+        assertThat(userGivenPatientDetails.getPatientName(), is(containerRegistrationDetails.getPatientName()));
+        assertNull(userGivenPatientDetails.getPatientAge());
+        assertNull(userGivenPatientDetails.getPatientId());
+        assertNull(userGivenPatientDetails.getGender());
     }
 
     private void assertuserGivenDetails(Container container, ContainerRegistrationReportingRequest containerRegistrationReportingRequest) {

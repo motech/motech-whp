@@ -35,5 +35,4 @@ public class ContainerRegistrationRequest {
         this.channelId = channelId;
         this.callId = callId;
     }
-
 }

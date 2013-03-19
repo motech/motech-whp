@@ -30,10 +30,18 @@ public class ContainerRegistrationReportingRequestBuilder {
     private void setUserGivenDetails() {
         ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
         UserGivenPatientDetails userGivenPatientDetails = new UserGivenPatientDetails();
-        userGivenPatientDetails.setPatientId(containerRegistrationDetails.getPatientId());
-        userGivenPatientDetails.setPatientName(containerRegistrationDetails.getPatientName());
-        userGivenPatientDetails.setPatientAge(containerRegistrationDetails.getPatientAge());
-        userGivenPatientDetails.setGender(containerRegistrationDetails.getPatientGender().name());
+        if (containerRegistrationDetails.getPatientId() != null) {
+            userGivenPatientDetails.setPatientId(containerRegistrationDetails.getPatientId());
+        }
+        if (containerRegistrationDetails.getPatientName() != null) {
+            userGivenPatientDetails.setPatientName(containerRegistrationDetails.getPatientName());
+        }
+        if (containerRegistrationDetails.getPatientAge() != null) {
+            userGivenPatientDetails.setPatientAge(containerRegistrationDetails.getPatientAge());
+        }
+        if (containerRegistrationDetails.getPatientGender() != null) {
+            userGivenPatientDetails.setGender(containerRegistrationDetails.getPatientGender().name());
+        }
 
         containerRegistrationReportingRequest.setUserGivenPatientDetails(userGivenPatientDetails);
     }
