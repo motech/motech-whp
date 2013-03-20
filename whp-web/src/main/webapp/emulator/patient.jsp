@@ -56,6 +56,10 @@
             <input id="gender" class="span4" type="text" value="M"/>
         </div>
         <div class="row-fluid">
+            <span class="pull-left span3" style="vertical-align:top">Enter Date of Birth:</span>
+            <input id="date_of_birth" class="span4" type="text" value="25/11/1987"/>
+        </div>
+        <div class="row-fluid">
             <span class="pull-left span3" style="vertical-align:top">Enter Smear test instance:</span>
             <input id="smear_instance" class="span4" type="text" value="PreTreatment"/>
         </div>
@@ -218,6 +222,7 @@
                 <last_name>$LAST_NAME$</last_name>
                 <age>$AGE$</age>
                 <gender>$GENDER$</gender>
+                <date_of_birth>$DATE_OF_BIRTH$</date_of_birth>
                 <smear_sample_instance>$SMEAR_INSTANCE$</smear_sample_instance>
                 <smear_test_date_1>$TEST_DATE1$</smear_test_date_1>
                 <smear_test_result_1>$TEST_RESULT1$</smear_test_result_1>
@@ -272,6 +277,7 @@
             patientXML = patientXML.replace('$LAST_NAME$', $("#last_name").val());
             patientXML = patientXML.replace('$AGE$', $("#age").val());
             patientXML = patientXML.replace('$GENDER$', $("#gender").val());
+            patientXML = patientXML.replace('$DATE_OF_BIRTH$', $("#date_of_birth").val());
             patientXML = patientXML.replace('$SMEAR_INSTANCE$', $("#smear_instance").val());
             patientXML = patientXML.replace('$TEST_DATE1$', $("#test_date1").val());
             patientXML = patientXML.replace('$TEST_RESULT1$', $("#test_result1").val());
