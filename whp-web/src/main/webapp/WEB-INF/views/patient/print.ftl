@@ -20,8 +20,10 @@
 <div class="row-fluid">
     <div class="span6">
         <div><label class="tc-label">State</label> <label class="tc-value">${patient.addressState}</label></div>
-        <div><label class="tc-label">City/District with code</label>
-            <label class="tc-value">${patient.addressDistrict}&nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+        <div>
+            <label class="tc-label">City/District with code</label>
+            <label class="tc-value">${patient.treatmentDetails.districtWithCode}</label>
+        </div>
         <label class="tc-label">Name</label><label
             class="tc-value name">${patient.firstName!} ${patient.lastName!}</label>
 
@@ -40,8 +42,13 @@
             <label class="tc-label">Phone Number</label><label class="tc-value">${patient.phoneNumber!}</label>
         </div>
         <div>
-            <label class="tc-label">Address and Phone Number of Contact Person</label><label
-                class="tc-value"><br/></label>
+            <label class="tc-label">Name and Address of Contact Person</label>
+            <label class="tc-value">${patient.treatmentDetails.contactPersonName}</label>
+            <br/>
+        </div>
+        <div>
+            <label class="tc-label">Phone Number of Contact Person</label>
+            <label class="tc-value">${patient.treatmentDetails.contactPersonPhoneNumber}</label>
             <br/>
         </div>
         <div>
@@ -49,15 +56,22 @@
             <label class="tc-label">Date</label><label class="tc-value">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
         </div>
         <div>
-            <label class="tc-label">Disease Classification</label><label
-                class="tc-value">${patient.diseaseClass}</label>
+            <label class="tc-label">Disease Classification</label>
+            <label class="tc-value">${patient.diseaseClass}</label>
+        </div>
+        <div>
+            <label class="tc-label">EP Site</label>
+            <label class="tc-value">${patient.treatmentDetails.epSite}</label>
         </div>
         <div>
             <label class="tc-label">Type of Patient</label><label class="tc-value">${patient.patientType!}</label>
         </div>
     </div>
     <div class="span6">
-        <div><label class="tc-label">TB Unit with code</label></div>
+        <div>
+            <label class="tc-label">TB Unit with code</label>
+            <label class="tc-value">${patient.treatmentDetails.tbUnitWithCode}</label>
+        </div>
         <div>
             <label class="tc-label">Patient Id</label><label class="tc-value">${patient.patientId!}</label>
         </div>
@@ -74,20 +88,21 @@
         </div>
         <div>
             <label class="tc-label">Name and designation of DOT provider & Tel No</label>
-            <label class="">${patient.providerId!}, ${patient.providerMobileNumber!}<br/></label><br/>
+            <label class="">${patient.treatmentDetails.providerName!}, ${patient.providerMobileNumber!}
+                <br/></label><br/>
         </div>
         <div>
             <label class="tc-label">DOT centre</label>
-            <label class="tc-value">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <label class="tc-value">${patient.treatmentDetails.dotCentre}</label>
         </div>
         <div><label class="tc-label">Signature of MO with date</label>
-            <label class="tc-value">&nbsp;&nbsp;&nbsp;</label>
+            <label class="tc-value">${patient.treatmentDetails.cmfDoctor}</label>
         </div>
     </div>
 </div>
 <br/>
 
-<div id="test-results-pause-provider-history" class="row-fluid">
+<div id="test-results-pause-provider-history" class="row">
     <div class="span6">
     <#if treatmentCard.treatmentHistories?has_content>
         <div class="provider-details">
@@ -108,7 +123,6 @@
             </table>
         </div>
     </#if>
-
     <#if treatmentCard.treatmentPausePeriods?has_content>
         <div class="pause-details">
             <h4 class="inherit-font">Treatment Pause Details</h4>
@@ -128,6 +142,7 @@
     </#if>
     </div>
     <div class="span6">
+        <h4 class="inherit-font">Smear Test Results</h4>
         <table class="table table-bordered sharp fixed text-center">
             <tr>
                 <th rowspan="2">Sample Instance</th>
@@ -155,10 +170,30 @@
             </tr>
         </#list>
         </table>
+        <h4 class="inherit-font">GenXpert Test Results</h4>
+        <table class="table table-bordered sharp fixed text-center">
+            <thead>
+            <tr>
+                <th class="no-wrap">Xpert MTB/RIF Device Number</th>
+                <th class="no-wrap">Date of Xpert Test</th>
+                <th class="no-wrap">Xpert Test Result</th>
+                <th class="no-wrap">Rif Resistance Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>${patient.treatmentDetails.xpertDeviceNumber}</td>
+                <td>${patient.treatmentDetails.xpertTestDate}</td>
+                <td>${patient.treatmentDetails.xpertTestResult}</td>
+                <td>${patient.treatmentDetails.rifResistanceResult}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div>
     <label class="tc-label">H/O previous Anti-TB treatment with duration</label>
+    <label class="tc-value">${patient.treatmentDetails.previousTreatmentHistory}</label>
 </div>
 <div id="treatmentCard">
 <#include "../treatmentcard/print.ftl">
@@ -171,8 +206,9 @@
 <div class="x-ray-and-remarks row-fluid">
     <div class="span6">
 
-       <div class="x-ray ">
-        Details of X ray / EP tests
+        <div class="x-ray ">
+            Details of X ray / EP tests:
+        ${patient.treatmentDetails.otherInvestigations}
         </div>
     </div>
     <label class="span6 tc-label">
@@ -209,7 +245,11 @@
                 <th>No.</th>
                 <th>Chemoprophylaxis</th>
             </tr>
-        <#list 1..5 as i>
+            <tr>
+                <td>${patient.treatmentDetails.membersBelowSixYears}</td>
+                <td>${patient.treatmentDetails.phcReferred}</td>
+            </tr>
+        <#list 1..4 as i>
             <tr>
                 <td></td>
                 <td></td>
@@ -223,16 +263,9 @@
 
     <div>
         <label class="tc-label">HIV status</label>
-
-        <div class="empty-bordered"></div>
-        <label class="tc-value">Unknown</label>
-
-        <div class="empty-bordered"></div>
-        <label class="tc-value">Pos</label>
-
-        <div class="empty-bordered"></div>
-        <label class="tc-value">Neg</label>
-        <label class="tc-value">&nbsp; (date)</label>
+        <label class="tc-value">${patient.treatmentDetails.hivStatus}</label>
+        <label class="tc-label">HIV Test Date</label>
+        <label class="tc-value">${patient.treatmentDetails.hivTestDate}</label>
     </div>
     <div>
         <label class="tc-label">CPT delivered on (date)</label>
