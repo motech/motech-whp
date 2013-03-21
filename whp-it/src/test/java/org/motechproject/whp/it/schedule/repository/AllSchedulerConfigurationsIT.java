@@ -1,19 +1,19 @@
-package org.motechproject.whp.it.reminder;
+package org.motechproject.whp.it.schedule.repository;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.repository.AllScheduleConfigurations;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.repository.AllScheduleConfigurations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {

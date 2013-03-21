@@ -1,7 +1,7 @@
 package org.motechproject.whp.providerreminder.model;
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
+import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.wgn.outbound.WGNRequest;
 
 import javax.xml.bind.JAXB;

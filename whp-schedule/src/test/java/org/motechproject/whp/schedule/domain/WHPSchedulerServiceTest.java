@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.domain;
+package org.motechproject.whp.schedule.domain;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +9,9 @@ import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.repository.AllScheduleConfigurations;
-import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.repository.AllScheduleConfigurations;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,20 +25,20 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
 
-public class ProviderReminderSchedulerTest extends BaseUnitTest {
+public class WHPSchedulerServiceTest extends BaseUnitTest {
     @Mock
     private MotechSchedulerService motechSchedulerService;
     @Mock
     private AllScheduleConfigurations allScheduleConfigurations;
 
-    private WHPSchedulerService WHPSchedulerService;
+    private WHPSchedulerService whpSchedulerService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        WHPSchedulerService = new WHPSchedulerService(motechSchedulerService, allScheduleConfigurations);
+        whpSchedulerService = new WHPSchedulerService(motechSchedulerService, allScheduleConfigurations);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         int hour = 10;
         ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(minutes, hour, dayOfWeek);
 
-        WHPSchedulerService.scheduleReminder(scheduleConfiguration);
+        whpSchedulerService.scheduleReminder(scheduleConfiguration);
 
         ArgumentCaptor<CronSchedulableJob> captor = ArgumentCaptor.forClass(CronSchedulableJob.class);
         verify(motechSchedulerService).scheduleJob(captor.capture());
@@ -64,8 +64,8 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
 
         when(allScheduleConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
 
-        WHPSchedulerService.scheduleReminder(currentConfiguration);
-        assertEquals(currentConfiguration, WHPSchedulerService.configuration(ADHERENCE_WINDOW_COMMENCED));
+        whpSchedulerService.scheduleReminder(currentConfiguration);
+        assertEquals(currentConfiguration, whpSchedulerService.configuration(ADHERENCE_WINDOW_COMMENCED));
         verify(allScheduleConfigurations).saveOrUpdate(currentConfiguration);
     }
 
@@ -74,7 +74,7 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
         ScheduleConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
 
         when(allScheduleConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
-        WHPSchedulerService.scheduleReminder(currentConfiguration);
+        whpSchedulerService.scheduleReminder(currentConfiguration);
 
         ArgumentCaptor<ScheduleConfiguration> captor = ArgumentCaptor.forClass(ScheduleConfiguration.class);
         verify(allScheduleConfigurations).saveOrUpdate(captor.capture());
@@ -84,14 +84,14 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
     @Test
     public void shouldUnScheduleReminder() {
         ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
-        WHPSchedulerService.unScheduleReminder(scheduleConfiguration);
+        whpSchedulerService.unScheduleReminder(scheduleConfiguration);
         verify(motechSchedulerService).unscheduleJob(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ADHERENCE_WINDOW_COMMENCED.name());
     }
 
     @Test
     public void shouldMarkConfigurationAsUnscheduledUponUnSchedulingReminder() {
         ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
-        WHPSchedulerService.unScheduleReminder(scheduleConfiguration);
+        whpSchedulerService.unScheduleReminder(scheduleConfiguration);
 
         ArgumentCaptor<ScheduleConfiguration> captor = ArgumentCaptor.forClass(ScheduleConfiguration.class);
         verify(allScheduleConfigurations).saveOrUpdate(captor.capture());
@@ -109,10 +109,10 @@ public class ProviderReminderSchedulerTest extends BaseUnitTest {
 
         when(allScheduleConfigurations.withType(ADHERENCE_WINDOW_COMMENCED)).thenReturn(expectedConfiguration);
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(asList(expectedNextFireTime));
-        assertEquals(expectedConfiguration, WHPSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
+        assertEquals(expectedConfiguration, whpSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
-        assertNull(WHPSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
+        assertNull(whpSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
     }
 
     private ScheduleConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {

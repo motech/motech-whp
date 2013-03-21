@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.model;
+package org.motechproject.whp.schedule.model;
 
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
@@ -7,8 +7,8 @@ import org.motechproject.model.DayOfWeek;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
 
 public class ScheduleConfigurationTest {
 

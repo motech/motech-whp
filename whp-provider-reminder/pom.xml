@@ -24,6 +24,10 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-schedule</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-patient</artifactId>
         </dependency>
         <dependency>

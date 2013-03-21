@@ -2,9 +2,9 @@ package org.motechproject.whp.controller;
 
 import org.motechproject.flash.Flash;
 import org.motechproject.scheduler.context.EventContext;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

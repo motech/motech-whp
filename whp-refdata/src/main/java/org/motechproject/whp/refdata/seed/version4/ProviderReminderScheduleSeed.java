@@ -2,9 +2,9 @@ package org.motechproject.whp.refdata.seed.version4;
 
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.model.DayOfWeek;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

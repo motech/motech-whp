@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.scheduler.context.EventContext;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.model.DayOfWeek.Sunday;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;

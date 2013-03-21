@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.TreatmentWeek;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
+import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.providerreminder.ivr.ProviderAlertService;
 import org.motechproject.whp.user.domain.Provider;
 

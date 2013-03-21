@@ -13,6 +13,7 @@
     <import resource="classpath*:/applicationWebServiceContext.xml"/>
     <import resource="classpath*:/applicationWHPReportingContext.xml"/>
     <import resource="classpath*:/applicationUserContext.xml"/>
+    <import resource="classpath*:/applicationWHPScheduleContext.xml"/>
     <import resource="classpath*:/applicationProviderReminderContext.xml"/>
 
 </beans>

@@ -48,6 +48,7 @@
     <import resource="classpath*:applicationContext-DiagnosticsWeb.xml"/>
     <import resource="classpath*:applicationContext-CaseLoggerWeb.xml"/>
     <import resource="classpath*:applicationContext-case.xml"/>
+    <import resource="classpath*:applicationWHPScheduleContext.xml"/>
     <import resource="classpath*:applicationProviderReminderContext.xml"/>
     <import resource="classpath*:applicationWgnOutboundContext.xml"/>
     <!--<import resource="classpath*:applicationEventLogging.xml"/>-->

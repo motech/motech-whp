@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.model;
+package org.motechproject.whp.schedule.model;
 
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -6,7 +6,7 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDateTime;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
+import org.motechproject.whp.schedule.domain.ScheduleType;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

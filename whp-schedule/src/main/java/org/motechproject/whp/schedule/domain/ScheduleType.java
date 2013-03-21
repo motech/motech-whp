@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.domain;
+package org.motechproject.whp.schedule.domain;
 
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;

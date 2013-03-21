@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.repository;
+package org.motechproject.whp.schedule.repository;
 
 
 import org.ektorp.CouchDbConnector;
@@ -7,8 +7,8 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.UpdateHandler;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

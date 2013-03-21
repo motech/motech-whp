@@ -41,6 +41,7 @@
         <module>whp-adherence-api</module>
         <module>whp-provider-reminder</module>
         <module>whp-wgn-outbound</module>
+        <module>whp-schedule</module>
     </modules>
 
     <repositories>
@@ -174,6 +175,11 @@
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-container</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-schedule</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
+import org.motechproject.whp.schedule.domain.ScheduleType;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;

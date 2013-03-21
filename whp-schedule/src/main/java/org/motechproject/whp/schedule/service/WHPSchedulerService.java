@@ -1,12 +1,12 @@
-package org.motechproject.whp.providerreminder.service;
+package org.motechproject.whp.schedule.service;
 
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
-import org.motechproject.whp.providerreminder.domain.ScheduleTimings;
-import org.motechproject.whp.providerreminder.domain.ScheduleType;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.repository.AllScheduleConfigurations;
+import org.motechproject.whp.schedule.domain.ScheduleTimings;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.repository.AllScheduleConfigurations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

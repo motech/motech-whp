@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.provider.reminder;
+package org.motechproject.whp.it.schedule.service;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -8,8 +8,8 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
-import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,10 +22,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.nextApplicableWeekDay;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/applicationProviderReminderContext.xml")
+@ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class WHPSchedulerServiceIT extends BaseUnitTest {
 
     @Autowired

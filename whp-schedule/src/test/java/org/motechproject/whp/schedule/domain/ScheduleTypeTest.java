@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.domain;
+package org.motechproject.whp.schedule.domain;
 
 import org.junit.Test;
 import org.motechproject.whp.common.event.EventKeys;
