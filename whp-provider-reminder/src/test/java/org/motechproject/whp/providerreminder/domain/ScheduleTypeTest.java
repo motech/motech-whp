@@ -5,9 +5,9 @@ import org.motechproject.whp.common.event.EventKeys;
 
 import static org.junit.Assert.assertEquals;
 
-public class ProviderReminderTypeTest {
+public class ScheduleTypeTest {
     @Test
     public void shouldGetEventSubjectForGivenJobType() {
-        assertEquals(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED.getEventSubject());
+        assertEquals(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ScheduleType.ADHERENCE_WINDOW_COMMENCED.getEventSubject());
     }
 }

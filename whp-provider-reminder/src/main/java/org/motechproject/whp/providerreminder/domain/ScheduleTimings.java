@@ -4,11 +4,11 @@ import org.joda.time.DateTime;
 
 import java.util.Date;
 
-public class ProviderReminderTimings {
+public class ScheduleTimings {
 
     private DateTime now;
 
-    public ProviderReminderTimings(DateTime now) {
+    public ScheduleTimings(DateTime now) {
         this.now = now;
     }
 

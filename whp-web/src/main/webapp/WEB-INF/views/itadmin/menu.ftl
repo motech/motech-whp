@@ -18,13 +18,13 @@
         </ul>
     </li>
     <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Provider Reminders <b class="caret"></b></a>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Schedules <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="providerReminders">
             <li>
-                <a href="/whp/providerreminder/ADHERENCE_WINDOW_COMMENCED">Adherence Window Commenced</a>
+                <a href="/whp/schedule/ADHERENCE_WINDOW_COMMENCED">Adherence Window Commenced</a>
             </li>
             <li>
-                <a href="/whp/providerreminder/ADHERENCE_NOT_REPORTED">Adherence Not Reported</a>
+                <a href="/whp/schedule/ADHERENCE_NOT_REPORTED">Adherence Not Reported</a>
             </li>
         </ul>
     </li>

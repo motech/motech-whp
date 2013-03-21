@@ -6,14 +6,14 @@ import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDateTime;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-@TypeDiscriminator("doc.type === 'ProviderReminderConfiguration'")
-public class ProviderReminderConfiguration extends MotechBaseDataObject {
+@TypeDiscriminator("doc.type === 'ScheduleConfiguration'")
+public class ScheduleConfiguration extends MotechBaseDataObject {
 
     @NotNull
     private DayOfWeek dayOfWeek;
@@ -22,13 +22,13 @@ public class ProviderReminderConfiguration extends MotechBaseDataObject {
     @NotNull
     private int minute;
     @NotNull
-    private ProviderReminderType reminderType;
+    private ScheduleType scheduleType;
     private boolean scheduled = false;
 
-    public ProviderReminderConfiguration() {
+    public ScheduleConfiguration() {
     }
 
-    public ProviderReminderConfiguration(ProviderReminderType reminderType, Date date) {
+    public ScheduleConfiguration(ScheduleType reminderType, Date date) {
         setReminderType(reminderType);
         updateDateTimeValues(date);
     }
@@ -40,11 +40,11 @@ public class ProviderReminderConfiguration extends MotechBaseDataObject {
         setMinute(localDateTime.getMinuteOfHour());
     }
 
-    public void setReminderType(ProviderReminderType reminderType) {
+    public void setReminderType(ScheduleType reminderType) {
         if (StringUtils.isBlank(getId())) {
             setId(reminderType.name());
         }
-        this.reminderType = reminderType;
+        this.scheduleType = reminderType;
     }
 
     public String generateCronExpression() {

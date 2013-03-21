@@ -1,7 +1,7 @@
 package org.motechproject.whp.providerreminder.model;
 
 import lombok.EqualsAndHashCode;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
 import org.motechproject.whp.wgn.outbound.WGNRequest;
 
 import javax.xml.bind.JAXB;
@@ -18,13 +18,13 @@ import java.util.List;
 public class ProviderReminderRequest implements WGNRequest {
 
     private String requestId;
-    private ProviderReminderType reminderType;
+    private ScheduleType reminderType;
     private List<String> msisdns;
 
     public ProviderReminderRequest() {
     }
 
-    public ProviderReminderRequest(ProviderReminderType reminderType, List<String> msisdns, String requestId) {
+    public ProviderReminderRequest(ScheduleType reminderType, List<String> msisdns, String requestId) {
         this.reminderType = reminderType;
         this.msisdns = msisdns;
         this.requestId = requestId;

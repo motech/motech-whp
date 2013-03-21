@@ -7,22 +7,22 @@ import org.ektorp.ViewQuery;
 import org.ektorp.support.UpdateHandler;
 import org.ektorp.support.View;
 import org.motechproject.dao.MotechBaseRepository;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
-import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
+import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AllProviderReminderConfigurations extends MotechBaseRepository<ProviderReminderConfiguration> {
+public class AllScheduleConfigurations extends MotechBaseRepository<ScheduleConfiguration> {
 
     @Autowired
-    protected AllProviderReminderConfigurations(@Qualifier("whpDbConnector") CouchDbConnector db) {
-        super(ProviderReminderConfiguration.class, db);
+    protected AllScheduleConfigurations(@Qualifier("whpDbConnector") CouchDbConnector db) {
+        super(ScheduleConfiguration.class, db);
     }
 
     @UpdateHandler(name = "upsert", file = "upsert.js")
-    public void saveOrUpdate(ProviderReminderConfiguration configuration) {
+    public void saveOrUpdate(ScheduleConfiguration configuration) {
         UpdateHandlerRequest request = new UpdateHandlerRequest();
         request.designDocId(this.stdDesignDocumentId);
         request.docId(configuration.getId());
@@ -31,9 +31,9 @@ public class AllProviderReminderConfigurations extends MotechBaseRepository<Prov
         db.callUpdateHandler(request);
     }
 
-    @View(name = "with_type", map = "function(doc) {if (doc.type ==='ProviderReminderConfiguration') {emit(doc.reminderType, doc._id);}}")
-    public ProviderReminderConfiguration withType(ProviderReminderType reminderType) {
+    @View(name = "with_type", map = "function(doc) {if (doc.type ==='ScheduleConfiguration') {emit(doc.scheduleType, doc._id);}}")
+    public ScheduleConfiguration withType(ScheduleType reminderType) {
         ViewQuery query = createQuery("with_type").key(reminderType).includeDocs(true);
-        return singleResult(db.queryView(query, ProviderReminderConfiguration.class));
+        return singleResult(db.queryView(query, ScheduleConfiguration.class));
     }
 }

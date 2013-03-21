@@ -1,7 +1,7 @@
 package org.motechproject.whp.providerreminder.ivr;
 
 import org.motechproject.whp.common.collections.PaginatedList;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
 import org.motechproject.whp.providerreminder.util.UUIDGenerator;
 import org.motechproject.whp.user.domain.Provider;
@@ -28,7 +28,7 @@ public class ProviderAlertService {
         this.gateway = gateway;
     }
 
-    public void raiseIVRRequest(List<Provider> providers, ProviderReminderType event) {
+    public void raiseIVRRequest(List<Provider> providers, ScheduleType event) {
         String uuid = uuidGenerator.uuid();
         for (List<Provider> someProviders : new PaginatedList<>(providers, providerReminderProperties.getBatchSize())) {
             ProviderReminderRequest providerReminderRequest = new ProviderReminderRequest(event, extractPhoneNumbers(someProviders), uuid);

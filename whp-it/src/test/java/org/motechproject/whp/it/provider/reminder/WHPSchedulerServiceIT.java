@@ -8,8 +8,8 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.testing.utils.BaseUnitTest;
 import org.motechproject.whp.common.event.EventKeys;
-import org.motechproject.whp.providerreminder.model.ProviderReminderConfiguration;
-import org.motechproject.whp.providerreminder.service.ProviderReminderScheduler;
+import org.motechproject.whp.providerreminder.model.ScheduleConfiguration;
+import org.motechproject.whp.providerreminder.service.WHPSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,14 +22,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.nextApplicableWeekDay;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.providerreminder.domain.ProviderReminderType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.providerreminder.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationProviderReminderContext.xml")
-public class ProviderReminderSchedulerIT extends BaseUnitTest {
+public class WHPSchedulerServiceIT extends BaseUnitTest {
 
     @Autowired
-    ProviderReminderScheduler providerReminderScheduler;
+    WHPSchedulerService whpSchedulerService;
 
     @Autowired
     MotechSchedulerService motechSchedulerService;
@@ -41,16 +41,16 @@ public class ProviderReminderSchedulerIT extends BaseUnitTest {
     }
 
     @Test
-    public void shouldScheduleAndRetrieveProviderReminderScheduleJob() {
+    public void shouldScheduleAndRetrieveScheduledJob() {
         DateTime now = now();
-        ProviderReminderConfiguration providerReminderConfiguration = createProviderReminderConfiguration(30, 10, DayOfWeek.Sunday);
-        providerReminderScheduler.scheduleReminder(providerReminderConfiguration);
+        ScheduleConfiguration scheduleConfiguration = createScheduleConfiguration(30, 10, DayOfWeek.Sunday);
+        whpSchedulerService.scheduleReminder(scheduleConfiguration);
 
         String subject = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
         Date fromDate = now.minusDays(2).toDate();
         Date toDate = now.plusMonths(2).toDate();
 
-        assertEquals(providerReminderConfiguration, providerReminderScheduler.getReminder(ADHERENCE_WINDOW_COMMENCED));
+        assertEquals(scheduleConfiguration, whpSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
 
         List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_COMMENCED.name(), fromDate, toDate);
         assertTrue(!timings.isEmpty());
@@ -60,14 +60,14 @@ public class ProviderReminderSchedulerIT extends BaseUnitTest {
         assertEquals(expectedScheduleDate, timings.get(0));
     }
 
-    private ProviderReminderConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
-        ProviderReminderConfiguration providerReminderConfiguration = new ProviderReminderConfiguration();
-        providerReminderConfiguration.setMinute(minutes);
-        providerReminderConfiguration.setHour(hour);
-        providerReminderConfiguration.setScheduled(false);
-        providerReminderConfiguration.setDayOfWeek(dayOfWeek);
-        providerReminderConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
-        return providerReminderConfiguration;
+    private ScheduleConfiguration createScheduleConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
+        ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration();
+        scheduleConfiguration.setMinute(minutes);
+        scheduleConfiguration.setHour(hour);
+        scheduleConfiguration.setScheduled(false);
+        scheduleConfiguration.setDayOfWeek(dayOfWeek);
+        scheduleConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
+        return scheduleConfiguration;
     }
 
 }

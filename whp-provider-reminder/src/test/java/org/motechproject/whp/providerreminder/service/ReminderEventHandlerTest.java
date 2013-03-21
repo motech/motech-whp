@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -28,13 +28,13 @@ public class ReminderEventHandlerTest {
     public void shouldRemindProvidersWhenAdherenceWindowApproaches() {
         MotechEvent motechEvent = new MotechEvent(ADHERENCE_WINDOW_COMMENCED_EVENT_NAME);
         reminderEventHandler.adherenceWindowCommencedEvent(motechEvent);
-        verify(providerReminderService).alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        verify(providerReminderService).alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test
     public void shouldRemindProvidersPendingAdherence() {
         MotechEvent motechEvent = new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME);
         reminderEventHandler.adherenceNotReportedEvent(motechEvent);
-        verify(providerReminderService).alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED);
+        verify(providerReminderService).alertProvidersPendingAdherence(ScheduleType.ADHERENCE_NOT_REPORTED);
     }
 }

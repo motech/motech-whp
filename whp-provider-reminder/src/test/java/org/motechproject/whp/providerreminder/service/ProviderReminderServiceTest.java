@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.applicationservice.adherence.AdherenceSubmissionService;
 import org.motechproject.whp.common.domain.TreatmentWeek;
-import org.motechproject.whp.providerreminder.domain.ProviderReminderType;
+import org.motechproject.whp.providerreminder.domain.ScheduleType;
 import org.motechproject.whp.providerreminder.ivr.ProviderAlertService;
 import org.motechproject.whp.user.domain.Provider;
 
@@ -37,14 +37,14 @@ public class ProviderReminderServiceTest {
         List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
 
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(providers);
-        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
-        verify(alertService).raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        providerReminderService.alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        verify(alertService).raiseIVRRequest(providers, ScheduleType.ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test
     public void shouldNotRaiseRequestWhenNoProviderNeedsToSubmitAdherence() {
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(null);
-        providerReminderService.alertProvidersWithActivePatients(ProviderReminderType.ADHERENCE_WINDOW_COMMENCED);
+        providerReminderService.alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
         verifyZeroInteractions(alertService);
     }
 
@@ -55,8 +55,8 @@ public class ProviderReminderServiceTest {
         TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
 
         when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate())).thenReturn(providers);
-        providerReminderService.alertProvidersPendingAdherence(ProviderReminderType.ADHERENCE_NOT_REPORTED);
-        verify(alertService).raiseIVRRequest(providers, ProviderReminderType.ADHERENCE_NOT_REPORTED);
+        providerReminderService.alertProvidersPendingAdherence(ScheduleType.ADHERENCE_NOT_REPORTED);
+        verify(alertService).raiseIVRRequest(providers, ScheduleType.ADHERENCE_NOT_REPORTED);
     }
 
 }
