@@ -11,6 +11,7 @@ import org.motechproject.security.domain.MotechWebUser;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
@@ -105,13 +106,15 @@ public class ProviderContainerRegistrationControllerIT extends SpringIntegration
     public void shouldRegisterContainer() throws Exception {
         String containerId = "10000";
         String name = "p1";
+        String age = "99";
+        String gender = Gender.M.name();
         RegistrationInstance inTreatmentInstance = RegistrationInstance.InTreatment;
 
         List<String> roles = new ArrayList<>();
         roles.add(WHPRole.PROVIDER.name());
 
         standaloneSetup(providerContainerRegistrationController).build()
-                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("patientName", name).param("instance", inTreatmentInstance.getDisplayText())
+                .perform(post("/containerRegistration/by_provider/register").param("containerId", containerId).param("patientName", name).param("age", age).param("gender", gender).param("instance", inTreatmentInstance.getDisplayText())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, new MotechUser(new MotechWebUser(providerId, null, null, roles))))
                 .andExpect(status().isOk());
 

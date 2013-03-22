@@ -21,8 +21,10 @@ public class ContainerRegistrationValidationPropertiesValuesIT {
 
     @Test
     public void shouldGetAllMandatoryFieldsToBeValidated(){
-        assertThat(registrationValidationPropertyValues.getMandatoryFields().size(), is(1));
+        assertThat(registrationValidationPropertyValues.getMandatoryFields().size(), is(3));
         assertThat(registrationValidationPropertyValues.getMandatoryFields().get(0), is("patientName"));
+        assertThat(registrationValidationPropertyValues.getMandatoryFields().get(1), is("age"));
+        assertThat(registrationValidationPropertyValues.getMandatoryFields().get(2), is("gender"));
     }
 
     @Test

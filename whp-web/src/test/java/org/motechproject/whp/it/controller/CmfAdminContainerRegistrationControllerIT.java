@@ -12,6 +12,7 @@ import org.motechproject.security.exceptions.WebSecurityException;
 import org.motechproject.security.service.MotechUser;
 import org.motechproject.whp.common.domain.ChannelId;
 import org.motechproject.whp.common.domain.District;
+import org.motechproject.whp.common.domain.Gender;
 import org.motechproject.whp.common.domain.RegistrationInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.service.RemediProperties;
@@ -116,6 +117,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
     public void shouldRegisterTheContainerAndInvokeRemediWithAppropriateXml_OnBehalfOfProvider() throws Exception {
         String containerId = "10000";
         String name = "p1";
+        String age = "99";
+        String gender = Gender.M.name();
         RegistrationInstance inTreatment = RegistrationInstance.InTreatment;
 
         ArrayList<String> roles = new ArrayList<>();
@@ -126,6 +129,8 @@ public class CmfAdminContainerRegistrationControllerIT  extends SpringIntegratio
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
                         .param("containerId", containerId)
                         .param("patientName", name)
+                        .param("age", age)
+                        .param("gender", gender)
                         .param("instance", inTreatment.getDisplayText()).param("providerId", providerId)
                         .param("containerRegistrationMode", ContainerRegistrationMode.ON_BEHALF_OF_PROVIDER.name())
                         .sessionAttr(LoginSuccessHandler.LOGGED_IN_USER, testuser))
