@@ -25,6 +25,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping(value = "/schedule")
 public class ScheduleConfigurationController extends BaseWebController {
 
+    private static final String SCHEDULE_UPDATED_FLAG = "schedule.updated";
+
     private EventContext eventContext;
     private WHPSchedulerService whpSchedulerService;
 
@@ -35,14 +37,14 @@ public class ScheduleConfigurationController extends BaseWebController {
     }
 
     @RequestMapping(value = "/{scheduleType}", method = GET)
-    public String scheduleFor(@PathVariable("scheduleType") ScheduleType reminderType, Model model, HttpServletRequest request) throws IOException {
+    public String getSchedule(@PathVariable("scheduleType") ScheduleType reminderType, Model model, HttpServletRequest request) throws IOException {
         ScheduleConfiguration configuration = whpSchedulerService.configuration(reminderType);
         if (configuration == null) {
             configuration = new ScheduleConfiguration(reminderType, now().toDate());
         }
         model.addAttribute(configuration);
-        if (Flash.has("reminder.updated", request)) {
-            model.addAttribute("message", Flash.in("reminder.updated", request));
+        if (Flash.has(SCHEDULE_UPDATED_FLAG, request)) {
+            model.addAttribute("message", Flash.in(SCHEDULE_UPDATED_FLAG, request));
         }
         return "schedule/scheduleConfiguration";
     }
@@ -56,13 +58,13 @@ public class ScheduleConfigurationController extends BaseWebController {
 
     @RequestMapping(value = "/update", method = POST)
     public String updateSchedule(@Valid ScheduleConfiguration scheduleConfiguration, HttpServletRequest request) throws IOException {
-        whpSchedulerService.scheduleReminder(scheduleConfiguration);
-        Flash.out("reminder.updated", "true", request);
+        whpSchedulerService.scheduleEvent(scheduleConfiguration);
+        Flash.out(SCHEDULE_UPDATED_FLAG, "true", request);
         return "redirect:/schedule/" + scheduleConfiguration.getScheduleType().name();
     }
 
     @RequestMapping(value = "/update/unschedule", method = POST)
-    public String unSchedule(@Valid ScheduleConfiguration scheduleConfiguration, HttpServletRequest request) throws IOException {
+    public String unSchedule(@Valid ScheduleConfiguration scheduleConfiguration) throws IOException {
         whpSchedulerService.unScheduleReminder(scheduleConfiguration);
         return "redirect:/schedule/" + scheduleConfiguration.getScheduleType().name();
     }

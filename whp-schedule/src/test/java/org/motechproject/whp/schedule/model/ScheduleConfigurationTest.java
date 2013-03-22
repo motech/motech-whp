@@ -7,15 +7,15 @@ import org.motechproject.model.DayOfWeek;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
-import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
-import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
 
 public class ScheduleConfigurationTest {
 
     @Test
     public void testIdIsSameAsType() {
-        ScheduleConfiguration reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, null);
-        assertEquals(ADHERENCE_WINDOW_COMMENCED.name(), reminder.getId());
+        ScheduleConfiguration reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, null);
+        assertEquals(PROVIDER_ADHERENCE_WINDOW_COMMENCED.name(), reminder.getId());
     }
 
     @Test
@@ -23,10 +23,10 @@ public class ScheduleConfigurationTest {
         Date tuesday = new LocalDateTime(2012, 12, 11, 10, 30).toDate();
         ScheduleConfiguration reminder;
 
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, tuesday);
-        assertEquals(ADHERENCE_WINDOW_COMMENCED, reminder.getScheduleType());
-        reminder = new ScheduleConfiguration(ADHERENCE_NOT_REPORTED, tuesday);
-        assertEquals(ADHERENCE_NOT_REPORTED, reminder.getScheduleType());
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, tuesday);
+        assertEquals(PROVIDER_ADHERENCE_WINDOW_COMMENCED, reminder.getScheduleType());
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_NOT_REPORTED, tuesday);
+        assertEquals(PROVIDER_ADHERENCE_NOT_REPORTED, reminder.getScheduleType());
     }
 
     @Test
@@ -35,9 +35,9 @@ public class ScheduleConfigurationTest {
         Date wednesday = new LocalDateTime(2012, 12, 12, 10, 30).toDate();
         ScheduleConfiguration reminder;
 
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, tuesday);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, tuesday);
         assertEquals(DayOfWeek.Tuesday, reminder.getDayOfWeek());
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, wednesday);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, wednesday);
         assertEquals(DayOfWeek.Wednesday, reminder.getDayOfWeek());
     }
 
@@ -47,9 +47,9 @@ public class ScheduleConfigurationTest {
         Date twelve = new LocalDateTime(2012, 12, 11, 12, 0).toDate();
         ScheduleConfiguration reminder;
 
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, eleven);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, eleven);
         assertEquals(11, reminder.getHour());
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, twelve);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, twelve);
         assertEquals(12, reminder.getHour());
     }
 
@@ -59,9 +59,9 @@ public class ScheduleConfigurationTest {
         Date thirty = new LocalDateTime(2012, 12, 11, 11, 30).toDate();
         ScheduleConfiguration reminder;
 
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, ten);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, ten);
         assertEquals(10, reminder.getMinute());
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, thirty);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, thirty);
         assertEquals(30, reminder.getMinute());
     }
 
@@ -71,9 +71,9 @@ public class ScheduleConfigurationTest {
         Date wednesday = new LocalDateTime(2012, 12, 12, 11, 10).toDate();
         ScheduleConfiguration reminder;
 
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, tuesday);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, tuesday);
         assertEquals("0 30 11 ? * TUE", reminder.generateCronExpression());
-        reminder = new ScheduleConfiguration(ADHERENCE_WINDOW_COMMENCED, wednesday);
+        reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, wednesday);
         assertEquals("0 10 11 ? * WED", reminder.generateCronExpression());
     }
 }

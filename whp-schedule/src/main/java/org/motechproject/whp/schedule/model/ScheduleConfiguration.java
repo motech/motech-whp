@@ -29,7 +29,7 @@ public class ScheduleConfiguration extends MotechBaseDataObject {
     }
 
     public ScheduleConfiguration(ScheduleType reminderType, Date date) {
-        setReminderType(reminderType);
+        setScheduleType(reminderType);
         updateDateTimeValues(date);
     }
 
@@ -40,11 +40,11 @@ public class ScheduleConfiguration extends MotechBaseDataObject {
         setMinute(localDateTime.getMinuteOfHour());
     }
 
-    public void setReminderType(ScheduleType reminderType) {
+    public void setScheduleType(ScheduleType scheduleType) {
         if (StringUtils.isBlank(getId())) {
-            setId(reminderType.name());
+            setId(scheduleType.name());
         }
-        this.scheduleType = reminderType;
+        this.scheduleType = scheduleType;
     }
 
     public String generateCronExpression() {

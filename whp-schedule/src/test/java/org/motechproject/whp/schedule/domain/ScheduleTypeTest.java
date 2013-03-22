@@ -8,6 +8,6 @@ import static org.junit.Assert.assertEquals;
 public class ScheduleTypeTest {
     @Test
     public void shouldGetEventSubjectForGivenJobType() {
-        assertEquals(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ScheduleType.ADHERENCE_WINDOW_COMMENCED.getEventSubject());
+        assertEquals(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED.getEventSubject());
     }
 }

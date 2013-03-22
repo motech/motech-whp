@@ -42,7 +42,7 @@ public class ProviderReminderCallLogControllerTest {
                 "<provider_reminder_call_status>\n" +
                 "    <request_id>request_id</request_id>\n" +
                 "    <call_id>call_id</call_id>\n" +
-                "    <reminder_type>ADHERENCE_WINDOW_COMMENCED</reminder_type>\n" +
+                "    <reminder_type>PROVIDER_ADHERENCE_WINDOW_COMMENCED</reminder_type>\n" +
                 "    <msisdn>1234567890</msisdn>\n" +
                 "    <call_answered>YES</call_answered>\n" +
                 "    <disconnection_type>PROVIDER_HANGUP</disconnection_type>\n" +
@@ -70,7 +70,7 @@ public class ProviderReminderCallLogControllerTest {
         ProviderReminderCallLogRequest request = captor.getValue();
         assertEquals("request_id", request.getRequestId());
         assertEquals("call_id", request.getCallId());
-        assertEquals("ADHERENCE_WINDOW_COMMENCED", request.getReminderType());
+        assertEquals("PROVIDER_ADHERENCE_WINDOW_COMMENCED", request.getReminderType());
         assertEquals("1234567890", request.getMsisdn());
         assertEquals("YES", request.getCallAnswered());
         assertEquals("PROVIDER_HANGUP", request.getDisconnectionType());

@@ -29,10 +29,10 @@ public class WHPSchedulerService {
         this.allScheduleConfigurations = allScheduleConfigurations;
     }
 
-    public void scheduleReminder(ScheduleConfiguration reminderConfiguration) {
-        schedule(reminderConfiguration);
-        reminderConfiguration.setScheduled(true);
-        allScheduleConfigurations.saveOrUpdate(reminderConfiguration);
+    public void scheduleEvent(ScheduleConfiguration configuration) {
+        schedule(configuration);
+        configuration.setScheduled(true);
+        allScheduleConfigurations.saveOrUpdate(configuration);
     }
 
     public ScheduleConfiguration getReminder(ScheduleType jobType) {
@@ -57,12 +57,12 @@ public class WHPSchedulerService {
     }
 
     private void schedule(ScheduleConfiguration reminderConfiguration) {
-        ScheduleType reminderType = reminderConfiguration.getScheduleType();
-        MotechEvent motechEvent = providerReminderEvent(reminderType);
+        ScheduleType scheduleType = reminderConfiguration.getScheduleType();
+        MotechEvent motechEvent = createMotechEvent(scheduleType);
         motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
     }
 
-    private MotechEvent providerReminderEvent(ScheduleType reminderType) {
+    private MotechEvent createMotechEvent(ScheduleType reminderType) {
         MotechEvent motechEvent = new MotechEvent(reminderType.getEventSubject());
         motechEvent.getParameters().put(JOB_ID_KEY, reminderType.name());
         return motechEvent;

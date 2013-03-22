@@ -22,21 +22,21 @@ public class ProviderReminderScheduleSeed {
     public void loadAdherenceWindowCommencedSeed() {
         ScheduleConfiguration adherenceWindowCommencedEvent = new ScheduleConfiguration();
         adherenceWindowCommencedEvent.setDayOfWeek(DayOfWeek.Saturday);
-        adherenceWindowCommencedEvent.setReminderType(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        adherenceWindowCommencedEvent.setScheduleType(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         adherenceWindowCommencedEvent.setHour(14);
         adherenceWindowCommencedEvent.setMinute(30);
 
-        reminderSchedulerService.scheduleReminder(adherenceWindowCommencedEvent);
+        reminderSchedulerService.scheduleEvent(adherenceWindowCommencedEvent);
     }
 
     @Seed(priority = 0, version = "4.1")
     public void loadAdherenceNotReportedSeed() {
         ScheduleConfiguration adherenceWindowCommencedEvent = new ScheduleConfiguration();
         adherenceWindowCommencedEvent.setDayOfWeek(DayOfWeek.Tuesday);
-        adherenceWindowCommencedEvent.setReminderType(ScheduleType.ADHERENCE_NOT_REPORTED);
+        adherenceWindowCommencedEvent.setScheduleType(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
         adherenceWindowCommencedEvent.setHour(10);
         adherenceWindowCommencedEvent.setMinute(30);
 
-        reminderSchedulerService.scheduleReminder(adherenceWindowCommencedEvent);
+        reminderSchedulerService.scheduleEvent(adherenceWindowCommencedEvent);
     }
 }

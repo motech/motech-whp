@@ -9,9 +9,9 @@ function(doc, req){
     }else{
         var updatedDoc = JSON.parse(req.body);
         doc.hour = updatedDoc.hour;
-        doc.minute = updatedDoc.minute;
-        doc.dayOfWeek = updatedDoc.dayOfWeek;
-        doc.scheduled = updatedDoc.scheduled;
-        return [doc, {}];
-    }
+doc.minute = updatedDoc.minute;
+doc.dayOfWeek = updatedDoc.dayOfWeek;
+doc.scheduled = updatedDoc.scheduled;
+return [doc, {}];
+}
 }

@@ -28,13 +28,13 @@ public class ReminderEventHandlerTest {
     public void shouldRemindProvidersWhenAdherenceWindowApproaches() {
         MotechEvent motechEvent = new MotechEvent(ADHERENCE_WINDOW_COMMENCED_EVENT_NAME);
         reminderEventHandler.adherenceWindowCommencedEvent(motechEvent);
-        verify(providerReminderService).alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        verify(providerReminderService).alertProvidersWithActivePatients(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test
     public void shouldRemindProvidersPendingAdherence() {
         MotechEvent motechEvent = new MotechEvent(ADHERENCE_NOT_REPORTED_EVENT_NAME);
         reminderEventHandler.adherenceNotReportedEvent(motechEvent);
-        verify(providerReminderService).alertProvidersPendingAdherence(ScheduleType.ADHERENCE_NOT_REPORTED);
+        verify(providerReminderService).alertProvidersPendingAdherence(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
     }
 }

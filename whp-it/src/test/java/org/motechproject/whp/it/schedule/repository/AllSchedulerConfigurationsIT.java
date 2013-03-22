@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_NOT_REPORTED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED;
 
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
 public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
@@ -29,14 +29,14 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldSaveScheduleConfiguration() {
-        ScheduleConfiguration scheduleConfiguration = configuration(DayOfWeek.Monday, 1, 1, ADHERENCE_NOT_REPORTED, false);
+        ScheduleConfiguration scheduleConfiguration = configuration(DayOfWeek.Monday, 1, 1, PROVIDER_ADHERENCE_NOT_REPORTED, false);
         allScheduleConfigurations.saveOrUpdate(scheduleConfiguration);
         assertNotNull(allScheduleConfigurations.get(scheduleConfiguration.getId()));
     }
 
     @Test
     public void shouldNotMaintainDuplicateCopiesOfConfiguration() {
-        ScheduleType type = ADHERENCE_NOT_REPORTED;
+        ScheduleType type = PROVIDER_ADHERENCE_NOT_REPORTED;
         ScheduleConfiguration[] configurations = {configuration(DayOfWeek.Monday, 1, 1, type, false), configuration(DayOfWeek.Tuesday, 2, 2, type, true)};
 
         allScheduleConfigurations.saveOrUpdate(configurations[0]);
@@ -55,7 +55,7 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setMinute(minute);
         scheduleConfiguration.setScheduled(scheduled);
-        scheduleConfiguration.setReminderType(type);
+        scheduleConfiguration.setScheduleType(type);
         return scheduleConfiguration;
     }
 }

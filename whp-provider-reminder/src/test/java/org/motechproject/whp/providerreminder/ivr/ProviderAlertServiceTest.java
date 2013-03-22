@@ -44,41 +44,41 @@ public class ProviderAlertServiceTest {
         String phoneNumber = "phoneNumber";
         List<Provider> providers = asList(new Provider("", phoneNumber, "", null));
 
-        alertService.raiseIVRRequest(providers, ScheduleType.ADHERENCE_WINDOW_COMMENCED);
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.ADHERENCE_WINDOW_COMMENCED, asList(phoneNumber), UUID));
+        alertService.raiseIVRRequest(providers, ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED, asList(phoneNumber), UUID));
     }
 
     @Test
     public void shouldRaiseRequestForAnyGroupOfProviders() {
-        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ScheduleType.ADHERENCE_WINDOW_COMMENCED);
-        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
 
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.ADHERENCE_WINDOW_COMMENCED, asList("anotherPhoneNumber"), UUID));
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED, asList("anotherPhoneNumber"), UUID));
     }
 
     @Test
     public void shouldRaiseRequestForAnyTypeOfProviderReminder() {
-        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ScheduleType.ADHERENCE_WINDOW_COMMENCED);
-        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ScheduleType.ADHERENCE_NOT_REPORTED);
+        alertService.raiseIVRRequest(asList(new Provider("", "phoneNumber", "", null)), ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        alertService.raiseIVRRequest(asList(new Provider("", "anotherPhoneNumber", "", null)), ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
 
-        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID));
+        verify(gateway).post(IVRUrl, new ProviderReminderRequest(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED, asList("anotherPhoneNumber"), UUID));
     }
 
     @Test
     public void shouldRaiseMoreThanOneRequestWhenTheNumberOfProvidersIsGreaterThenBatchSize() {
         List<Provider> providers = asList(new Provider("", "phoneNumber1", "", null), new Provider("", "phoneNumber2", "", null));
-        ScheduleType sameType = ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+        ScheduleType sameType = ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
         String sameUUID = UUID;
 
-        alertService.raiseIVRRequest(providers, ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        alertService.raiseIVRRequest(providers, ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber1"), sameUUID));
         verify(gateway).post(IVRUrl, new ProviderReminderRequest(sameType, asList("phoneNumber2"), sameUUID));
     }
 
     @Test
     public void shouldRaiseRequestWithUniqueUUIDForEveryRequest() {
-        alertService.raiseIVRRequest(Collections.<Provider>emptyList(), ScheduleType.ADHERENCE_NOT_REPORTED);
-        alertService.raiseIVRRequest(Collections.<Provider>emptyList(), ScheduleType.ADHERENCE_NOT_REPORTED);
+        alertService.raiseIVRRequest(Collections.<Provider>emptyList(), ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
+        alertService.raiseIVRRequest(Collections.<Provider>emptyList(), ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
         verify(uuidGenerator, times(2)).uuid();
     }
 }

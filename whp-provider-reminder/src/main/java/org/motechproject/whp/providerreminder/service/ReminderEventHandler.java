@@ -19,11 +19,11 @@ public class ReminderEventHandler {
 
     @MotechListener(subjects = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME)
     public void adherenceWindowCommencedEvent(MotechEvent motechEvent) {
-        providerReminderService.alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        providerReminderService.alertProvidersWithActivePatients(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
     }
 
     @MotechListener(subjects = EventKeys.ADHERENCE_NOT_REPORTED_EVENT_NAME)
     public void adherenceNotReportedEvent(MotechEvent motechEvent) {
-        providerReminderService.alertProvidersPendingAdherence(ScheduleType.ADHERENCE_NOT_REPORTED);
+        providerReminderService.alertProvidersPendingAdherence(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
     }
 }

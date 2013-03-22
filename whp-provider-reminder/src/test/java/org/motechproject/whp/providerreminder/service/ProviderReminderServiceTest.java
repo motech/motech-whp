@@ -37,14 +37,14 @@ public class ProviderReminderServiceTest {
         List<Provider> providers = asList(new Provider("providerId", phoneNumber, null, null));
 
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(providers);
-        providerReminderService.alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
-        verify(alertService).raiseIVRRequest(providers, ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        providerReminderService.alertProvidersWithActivePatients(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        verify(alertService).raiseIVRRequest(providers, ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
     }
 
     @Test
     public void shouldNotRaiseRequestWhenNoProviderNeedsToSubmitAdherence() {
         when(adherenceSubmissionService.providersToSubmitAdherence()).thenReturn(null);
-        providerReminderService.alertProvidersWithActivePatients(ScheduleType.ADHERENCE_WINDOW_COMMENCED);
+        providerReminderService.alertProvidersWithActivePatients(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         verifyZeroInteractions(alertService);
     }
 
@@ -55,8 +55,8 @@ public class ProviderReminderServiceTest {
         TreatmentWeek treatmentWeek = currentAdherenceCaptureWeek();
 
         when(adherenceSubmissionService.providersPendingAdherence(treatmentWeek.startDate())).thenReturn(providers);
-        providerReminderService.alertProvidersPendingAdherence(ScheduleType.ADHERENCE_NOT_REPORTED);
-        verify(alertService).raiseIVRRequest(providers, ScheduleType.ADHERENCE_NOT_REPORTED);
+        providerReminderService.alertProvidersPendingAdherence(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
+        verify(alertService).raiseIVRRequest(providers, ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
     }
 
 }

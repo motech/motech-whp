@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.motechproject.util.DateUtil.nextApplicableWeekDay;
 import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.whp.schedule.domain.ScheduleType.ADHERENCE_WINDOW_COMMENCED;
+import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:/applicationITContext.xml")
@@ -44,15 +44,15 @@ public class WHPSchedulerServiceIT extends BaseUnitTest {
     public void shouldScheduleAndRetrieveScheduledJob() {
         DateTime now = now();
         ScheduleConfiguration scheduleConfiguration = createScheduleConfiguration(30, 10, DayOfWeek.Sunday);
-        whpSchedulerService.scheduleReminder(scheduleConfiguration);
+        whpSchedulerService.scheduleEvent(scheduleConfiguration);
 
         String subject = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
         Date fromDate = now.minusDays(2).toDate();
         Date toDate = now.plusMonths(2).toDate();
 
-        assertEquals(scheduleConfiguration, whpSchedulerService.getReminder(ADHERENCE_WINDOW_COMMENCED));
+        assertEquals(scheduleConfiguration, whpSchedulerService.getReminder(PROVIDER_ADHERENCE_WINDOW_COMMENCED));
 
-        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, ADHERENCE_WINDOW_COMMENCED.name(), fromDate, toDate);
+        List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, PROVIDER_ADHERENCE_WINDOW_COMMENCED.name(), fromDate, toDate);
         assertTrue(!timings.isEmpty());
 
         DateTime nextSunday = nextApplicableWeekDay(now, asList(DayOfWeek.Sunday));
@@ -66,7 +66,7 @@ public class WHPSchedulerServiceIT extends BaseUnitTest {
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setScheduled(false);
         scheduleConfiguration.setDayOfWeek(dayOfWeek);
-        scheduleConfiguration.setReminderType(ADHERENCE_WINDOW_COMMENCED);
+        scheduleConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         return scheduleConfiguration;
     }
 

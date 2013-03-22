@@ -84,7 +84,7 @@ public class ReminderEventHandlerIT extends BaseUnitTest {
                 "    <msisdns>\n" +
                 "        <msisdn>1234567890</msisdn>\n" +
                 "    </msisdns>\n" +
-                "    <reminder_type>ADHERENCE_NOT_REPORTED</reminder_type>\n" +
+                "    <reminder_type>PROVIDER_ADHERENCE_NOT_REPORTED</reminder_type>\n" +
                 "    <request_id>request-id</request_id>\n" +
                 "</provider_reminder_request>";
 
