@@ -22,7 +22,7 @@
         <div><label class="tc-label">State</label> <label class="tc-value">${patient.addressState}</label></div>
         <div>
             <label class="tc-label">City/District with code</label>
-            <label class="tc-value">${patient.treatmentDetails.districtWithCode}</label>
+            <label class="tc-value">${patient.treatmentDetails.districtWithCode!}</label>
         </div>
         <label class="tc-label">Name</label><label
             class="tc-value name">${patient.firstName!} ${patient.lastName!}</label>
@@ -61,7 +61,7 @@
         </div>
         <div>
             <label class="tc-label">EP Site</label>
-            <label class="tc-value">${patient.treatmentDetails.epSite}</label>
+            <label class="tc-value">${patient.treatmentDetails.epSite!}</label>
         </div>
         <div>
             <label class="tc-label">Type of Patient</label><label class="tc-value">${patient.patientType!}</label>
@@ -70,7 +70,7 @@
     <div class="span6">
         <div>
             <label class="tc-label">TB Unit with code</label>
-            <label class="tc-value">${patient.treatmentDetails.tbUnitWithCode}</label>
+            <label class="tc-value">${patient.treatmentDetails.tbUnitWithCode!}</label>
         </div>
         <div>
             <label class="tc-label">Patient Id</label><label class="tc-value">${patient.patientId!}</label>
@@ -161,14 +161,14 @@
             </tr>
         <#list patient.testResults as testResult>
             <tr>
-                <td>${testResult.sampleInstance}</td>
-                <td>${testResult.labName}</td>
-                <td>${testResult.labNumber}</td>
-                <td>${testResult.smearTestDate1}</td>
-                <td>${testResult.smearTestResult1}</td>
-                <td>${testResult.smearTestDate2}</td>
-                <td>${testResult.smearTestResult2}</td>
-                <td>${testResult.weight}</td>
+                <td>${testResult.sampleInstance!}</td>
+                <td>${testResult.labName!}</td>
+                <td>${testResult.labNumber!}</td>
+                <td>${testResult.smearTestDate1!}</td>
+                <td>${testResult.smearTestResult1!}</td>
+                <td>${testResult.smearTestDate2!}</td>
+                <td>${testResult.smearTestResult2!}</td>
+                <td>${testResult.weight!}</td>
             </tr>
         </#list>
         </table>
@@ -184,10 +184,10 @@
             </thead>
             <tbody>
             <tr>
-                <td>${patient.treatmentDetails.xpertDeviceNumber}</td>
-                <td>${patient.treatmentDetails.xpertTestDate}</td>
-                <td>${patient.treatmentDetails.xpertTestResult}</td>
-                <td>${patient.treatmentDetails.rifResistanceResult}</td>
+                <td>${patient.treatmentDetails.xpertDeviceNumber!}</td>
+                    <td>${patient.treatmentDetails.xpertTestDate!}</td>
+                <td>${patient.treatmentDetails.xpertTestResult!}</td>
+                <td>${patient.treatmentDetails.rifResistanceResult!}</td>
             </tr>
             </tbody>
         </table>
@@ -195,7 +195,7 @@
 </div>
 <div>
     <label class="tc-label">H/O previous Anti-TB treatment with duration</label>
-    <label class="tc-value">${patient.treatmentDetails.previousTreatmentHistory}</label>
+    <label class="tc-value">${patient.treatmentDetails.previousTreatmentHistory!}</label>
 </div>
 <div id="treatmentCard">
 <#include "../treatmentcard/print.ftl">
@@ -213,7 +213,7 @@
 
         <div class="x-ray ">
             <b> Details of X ray / EP tests:</b><br>
-        ${patient.treatmentDetails.otherInvestigations}
+        ${patient.treatmentDetails.otherInvestigations!}
         </div>
     </div>
     <div class="span6">
@@ -253,7 +253,7 @@
             </tr>
             <tr>
                 <td>${patient.treatmentDetails.membersBelowSixYears}</td>
-                <td>${patient.treatmentDetails.phcReferred}</td>
+                <td>${patient.treatmentDetails.phcReferred!}</td>
             </tr>
         <#list 1..4 as i>
             <tr>
@@ -271,7 +271,7 @@
         <label class="tc-label">HIV status</label>
         <label class="tc-value">${patient.treatmentDetails.hivStatus}</label>
         <label class="tc-label">HIV Test Date</label>
-        <label class="tc-value">${patient.treatmentDetails.hivTestDate}</label>
+        <label class="tc-value">${patient.treatmentDetails.hivTestDate!}</label>
     </div>
     <div>
         <label class="tc-label">CPT delivered on (date)</label>

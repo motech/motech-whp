@@ -138,14 +138,14 @@
                 <tbody>
                 <#list patient.testResults as testResult>
                 <tr>
-                    <td>${testResult.sampleInstance}</td>
-                    <td>${testResult.labName}</td>
-                    <td>${testResult.labNumber}</td>
-                    <td>${testResult.smearTestDate1}</td>
-                    <td>${testResult.smearTestResult1}</td>
-                    <td>${testResult.smearTestDate2}</td>
-                    <td>${testResult.smearTestResult2}</td>
-                    <td>${testResult.weight}</td>
+                    <td>${testResult.sampleInstance!}</td>
+                    <td>${testResult.labName!}</td>
+                    <td>${testResult.labNumber!}</td>
+                    <td>${testResult.smearTestDate1!}</td>
+                    <td>${testResult.smearTestResult1!}</td>
+                    <td>${testResult.smearTestDate2!}</td>
+                    <td>${testResult.smearTestResult2!}</td>
+                    <td>${testResult.weight!}</td>
                 </tr>
                 </#list>
                 </tbody>
@@ -166,10 +166,10 @@
 
                 <tbody>
                 <tr>
-                    <td>${patient.treatmentDetails.xpertDeviceNumber}</td>
-                    <td>${patient.treatmentDetails.xpertTestDate}</td>
-                    <td>${patient.treatmentDetails.xpertTestResult}</td>
-                    <td>${patient.treatmentDetails.rifResistanceResult}</td>
+                    <td>${patient.treatmentDetails.xpertDeviceNumber!}</td>
+                    <td>${patient.treatmentDetails.xpertTestDate!}</td>
+                    <td>${patient.treatmentDetails.xpertTestResult!}</td>
+                    <td>${patient.treatmentDetails.rifResistanceResult!}</td>
                 </tr>
                 </tbody>
             </table>
