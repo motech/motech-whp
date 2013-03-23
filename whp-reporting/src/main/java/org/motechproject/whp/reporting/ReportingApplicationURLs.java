@@ -28,6 +28,7 @@ public class ReportingApplicationURLs {
     private String adherenceAuditLogURL;
     private String adherenceRecordUpdateURL;
     private String providerAdherenceStatusByDistrictURL;
+    private String patientAdherenceMissingDataURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -124,4 +125,8 @@ public class ReportingApplicationURLs {
         this.providerAdherenceStatusByDistrictURL = providerAdherenceStatusURL;
     }
 
+    @Value("${whp.reports.patient.missing.adherence}")
+    public void setPatientAdherenceMissingDataURL(String patientAdherenceMissingDataURL) {
+        this.patientAdherenceMissingDataURL = patientAdherenceMissingDataURL;
+    }
 }

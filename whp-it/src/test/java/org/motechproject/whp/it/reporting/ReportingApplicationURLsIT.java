@@ -106,4 +106,9 @@ public class ReportingApplicationURLsIT {
     public void shouldGetProviderAdherenceStatusURL() {
         assertThat(reportingApplicationURLs.getProviderAdherenceStatusByDistrictURL(), is("http://127.0.0.1:9999/whp-reports/providerAdherenceSummary/{district}"));
     }
+
+    @Test
+    public void shouldGetPatientsWithoutAdherenceDataURL() {
+        assertThat(reportingApplicationURLs.getPatientAdherenceMissingDataURL(), is("http://127.0.0.1:9999/whp-reports/patientsWithoutAdherence?skip={skip}&limit={limit}"));
+    }
 }
