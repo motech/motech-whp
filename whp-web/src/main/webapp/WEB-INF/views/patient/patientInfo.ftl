@@ -153,7 +153,7 @@
 
         </div>
         <div class="span8">
-            <h3>GenXpert Test Results</h3>
+            <h3>GeneXpert Test Results</h3>
             <table class="table table-bordered text-center table-striped">
                 <thead>
                 <tr>

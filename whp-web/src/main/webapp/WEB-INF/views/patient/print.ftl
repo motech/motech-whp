@@ -88,7 +88,8 @@
         </div>
         <div>
             <label class="tc-label">Name and designation of DOT provider & Tel No</label>
-            <label class="">${patient.treatmentDetails.providerName!}, ${patient.providerMobileNumber!}
+            <label class="">${patient.treatmentDetails.providerName!}, ${patient.providerId!}
+                , ${patient.providerMobileNumber!}
                 <br/></label><br/>
         </div>
         <div>
@@ -97,6 +98,7 @@
         </div>
         <div><label class="tc-label">Signature of MO with date</label>
             <label class="tc-value">${patient.treatmentDetails.cmfDoctor}</label>
+            <label class="tc-value">${patient.therapyStartDate}</label>
         </div>
     </div>
 </div>
@@ -170,7 +172,7 @@
             </tr>
         </#list>
         </table>
-        <h4 class="inherit-font">GenXpert Test Results</h4>
+        <h4 class="inherit-font">GeneXpert Test Results</h4>
         <table class="table table-bordered sharp fixed text-center">
             <thead>
             <tr>
@@ -199,21 +201,25 @@
 <#include "../treatmentcard/print.ftl">
 </div>
 <div class="row-fluid">
-    <label class="span6 tc-div tc-label">Treatment outcome with date</label>
-    <label class="span6 tc-div tc-label">Signature of MO with date</label>
+    <div class="span6">
+        <label class="tc-label">Treatment outcome with date</label>
+        <label class="tc-value">${patient.currentTreatment.treatmentOutcome!}</label>
+    </div>
+    <label class="span6 tc-label">Signature of MO with date</label>
 
 </div>
 <div class="x-ray-and-remarks row-fluid">
     <div class="span6">
 
         <div class="x-ray ">
-            Details of X ray / EP tests:
+            <b> Details of X ray / EP tests:</b><br>
         ${patient.treatmentDetails.otherInvestigations}
         </div>
     </div>
-    <label class="span6 tc-label">
-        Remarks
-    </label>
+    <div class="span6">
+        <label class="tc-label">Remarks</label>
+        <label class="tc-value">${patient.currentTreatment.closeTreatmentRemarks!}</label>
+    </div>
 </div>
 <div class="row-fluid">
     <div class="actions-for-missed-doses span7">
