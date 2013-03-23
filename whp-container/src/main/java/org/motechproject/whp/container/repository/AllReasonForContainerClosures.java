@@ -6,8 +6,8 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
+import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.motechproject.dao.BusinessIdNotUniqueException;
-import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
@@ -22,7 +22,7 @@ import static org.motechproject.whp.container.domain.ReasonForContainerClosure.A
 import static org.motechproject.whp.container.domain.ReasonForContainerClosure.ApplicableTreatmentPhase.All;
 
 @Repository
-public class AllReasonForContainerClosures extends MotechBaseRepository<ReasonForContainerClosure> {
+public class AllReasonForContainerClosures extends CrudRepository<ReasonForContainerClosure> {
 
     @Autowired
     public AllReasonForContainerClosures(@Qualifier("whpDbConnector") CouchDbConnector whpDbConnector) {

@@ -4,8 +4,8 @@ package org.motechproject.whp.container.repository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
+import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.motechproject.dao.BusinessIdNotUniqueException;
-import org.motechproject.dao.MotechBaseRepository;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AllAlternateDiagnosis extends MotechBaseRepository<AlternateDiagnosis> {
+public class AllAlternateDiagnosis extends CrudRepository<AlternateDiagnosis> {
 
     @Autowired
     public AllAlternateDiagnosis(@Qualifier("whpDbConnector") CouchDbConnector whpDbConnector) {

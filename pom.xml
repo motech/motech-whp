@@ -6,7 +6,6 @@
     <version>0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>motech-whp</name>
-
     <properties>
         <spring.version>3.1.0.RELEASE</spring.version>
         <spring-security.version>3.1.0.RELEASE</spring-security.version>
@@ -42,6 +41,7 @@
         <module>whp-provider-reminder</module>
         <module>whp-wgn-outbound</module>
         <module>whp-schedule</module>
+        <module>motech-couchdb-crud</module>
     </modules>
 
     <repositories>
@@ -146,6 +146,12 @@
             </dependency>
 
             <!--Child modules-->
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>motech-couchdb-crud</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-config</artifactId>

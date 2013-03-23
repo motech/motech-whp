@@ -51,6 +51,7 @@
     <import resource="classpath*:applicationWHPScheduleContext.xml"/>
     <import resource="classpath*:applicationProviderReminderContext.xml"/>
     <import resource="classpath*:applicationWgnOutboundContext.xml"/>
+    <import resource="classpath*:applicationCouchdbCrudModuleContext.xml"/>
     <!--<import resource="classpath*:applicationEventLogging.xml"/>-->
 
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>motech-whp</artifactId>
+        <groupId>org.motechproject.whp</groupId>
+        <version>0.6-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>motech-couchdb-crud</artifactId>
+    <name>motech-couchdb-crud</name>
+    <properties>
+        <build.dir>../build</build.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-platform-common-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-paginator</artifactId>
+        </dependency>
+    </dependencies>
+</project>
