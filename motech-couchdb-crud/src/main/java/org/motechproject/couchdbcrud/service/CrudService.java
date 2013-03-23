@@ -1,6 +1,7 @@
 package org.motechproject.couchdbcrud.service;
 
 import org.motechproject.couchdbcrud.model.CrudEntity;
+import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,10 @@ public class CrudService {
 
     public CrudEntity getEntity(String name){
         return allCrudEntities.get(name);
+    }
+
+    public void deleteEntity(String name, String entityId) {
+        CrudRepository repository = allCrudEntities.get(name).getRepository();
+        repository.remove(repository.get(entityId));
     }
 }

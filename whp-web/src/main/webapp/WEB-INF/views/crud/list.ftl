@@ -10,7 +10,7 @@
 <h1>${entity} Listing</h1>
 
 <div class="row-fluid">
-    <@paginator.filter id = "${entity}_filter"  pagination_id = "${entity}_listing">
+    <@paginator.filter id = "filter"  pagination_id = "listing">
         <div class="well" id="search-section">
             <div id="search-pane">
                 <fieldset class="filters">
@@ -46,7 +46,7 @@
 <div class="row-fluid">
     <div class="results">
         <div id="${entity}s">
-            <@paginator.paginate id = "${entity}_listing" entity="${entity}" filterSectionId="${entity}_filter" contextRoot="/whp" rowsPerPage="20"  stylePath="/resources-${applicationVersion}/styles">
+            <@paginator.paginate id = "listing" entity="${entity}" filterSectionId="filter" contextRoot="/whp" rowsPerPage="20"  stylePath="/resources-${applicationVersion}/styles">
                 <table id="${entity}List" class="table table-striped table-bordered table-condensed"
                        redirectOnRowClick="true">
                     <thead>
@@ -54,6 +54,8 @@
                         <#list displayFields as displayField>
                         <th>${displayField}</th>
                         </#list>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -61,6 +63,8 @@
                         <#list displayFields as displayField>
                             <td id="${entity}_{{item.${displayField}}}">{{item.${displayField}}}</td>
                         </#list>
+                        <td><a href="#" class = "editEntity" entityId = "{{item._id}}">Edit</a></td>
+                        <td><a href="#" class = "deleteEntity" entityId = "{{item._id}}">Delete</a></td>
                     </tr>
                     <tr type="no-results" class="hide">
                         <td class="warning text-center" colspan="17"></td>
@@ -72,5 +76,21 @@
     </div>
 </div>
 </div>
-    <@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
+<@paginator.paginationScripts jsPath="/resources-${applicationVersion}/js" loadJquery="false"/>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".deleteEntity").click(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type:"GET",
+                url:"<@spring.url '/crud/${entity}/delete/'/>" + $(elem).attr('entityId'),
+                success:function (data) {
+                    angular.element($('#${entity} .paginator')).controller().loadPage();
+                }
+            });
+        });
+    }
+</script>
 </@layout.defaultLayout>

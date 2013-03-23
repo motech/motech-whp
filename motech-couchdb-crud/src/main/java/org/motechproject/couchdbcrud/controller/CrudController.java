@@ -17,7 +17,7 @@ public class CrudController {
         this.crudService = crudService;
     }
 
-    @RequestMapping(value = "/crud/display/{entity}")
+    @RequestMapping(value = "/crud/{entity}/list")
     public String all(@PathVariable("entity") String entityName, Model model){
         CrudEntity entity = crudService.getEntity(entityName);
 
@@ -25,5 +25,10 @@ public class CrudController {
         model.addAttribute("displayFields", entity.getDisplayFields());
         model.addAttribute("filterFields", entity.getFilterFields());
         return "crud/list";
+    }
+
+    @RequestMapping(value = "/crud/{entity}/delete/{id}")
+    public void delete(@PathVariable("entity") String entityName, @PathVariable("id") String entityId){
+        crudService.deleteEntity(entityName, entityId);
     }
 }

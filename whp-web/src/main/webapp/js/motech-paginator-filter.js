@@ -9,7 +9,10 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
         var paramMap = $location.search();
         if (paramMap[$scope.pagination_id + "-searchCriteria"]) {
             $rootScope.searchCriteria = JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
+        } else {
+            $rootScope.searchCriteria = {}
         }
+
         if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
             $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
 
@@ -25,7 +28,11 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
                     $("#sortIcon_" + sortField).addClass('icon-arrow-up');
                 }
             });
+        } else {
+            $rootScope.sortCriteria = {}
         }
+
+
 
         /*Initialize the search box*/
         for (key in $rootScope.searchCriteria) {
