@@ -37,6 +37,11 @@ public class ReasonForContainerClosureService extends CrudEntity<ReasonForContai
     }
 
     @Override
+    public Class getEntityType() {
+        return ReasonForContainerClosure.class;
+    }
+
+    @Override
     public String entityName() {
         return "ReasonForContainerClosure";
     }

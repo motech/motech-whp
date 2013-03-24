@@ -37,6 +37,11 @@ public class AlternateDiagnosisService extends CrudEntity<AlternateDiagnosis>{
     }
 
     @Override
+    public Class getEntityType() {
+        return AlternateDiagnosis.class;
+    }
+
+    @Override
     public String entityName() {
         return "AlternateDiagnosis";
     }

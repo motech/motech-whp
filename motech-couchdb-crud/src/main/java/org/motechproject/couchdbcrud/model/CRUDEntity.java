@@ -15,6 +15,7 @@ public abstract class CrudEntity<T extends MotechBaseDataObject> implements Pagi
     public abstract List<String> getDisplayFields();
     public abstract List<String> getFilterFields();
     public abstract CrudRepository<T> getRepository();
+    public abstract Class getEntityType();
 
     public PageResults page(Integer pageNumber, Integer rowsPerPage, FilterParams filterParams, SortParams sortCriteria) {
         List<T> result = null;
