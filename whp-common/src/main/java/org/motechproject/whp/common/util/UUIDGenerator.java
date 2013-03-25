@@ -1,4 +1,4 @@
-package org.motechproject.whp.providerreminder.util;
+package org.motechproject.whp.common.util;
 
 import org.springframework.stereotype.Component;
 

@@ -8,6 +8,7 @@ import org.motechproject.whp.wgn.outbound.properties.WGNGatewayProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import static org.apache.log4j.Logger.getLogger;
@@ -31,6 +32,12 @@ public class WGNGateway {
         headers.put(wgnGatewayProperties.getApiKeyName(), wgnGatewayProperties.getApiKeyValue());
         httpClientService.post(url, request.toXML(), headers);
         log(url, request);
+    }
+
+    public void post(String url, Serializable request) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put(wgnGatewayProperties.getApiKeyName(), wgnGatewayProperties.getApiKeyValue());
+        httpClientService.post(url, request, headers);
     }
 
     private void log(String url, WGNRequest request) {

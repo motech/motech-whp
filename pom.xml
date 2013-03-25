@@ -42,6 +42,7 @@
         <module>whp-provider-reminder</module>
         <module>whp-wgn-outbound</module>
         <module>whp-schedule</module>
+        <module>whp-patient-ivr-alert</module>
     </modules>
 
     <repositories>
@@ -180,6 +181,11 @@
             <dependency>
                 <groupId>org.motechproject.whp</groupId>
                 <artifactId>whp-schedule</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp</groupId>
+                <artifactId>whp-patient-ivr-alert</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

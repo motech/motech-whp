@@ -15,5 +15,6 @@
     <import resource="classpath*:/applicationUserContext.xml"/>
     <import resource="classpath*:/applicationWHPScheduleContext.xml"/>
     <import resource="classpath*:/applicationProviderReminderContext.xml"/>
+    <import resource="classpath*:/applicationPatientIVRAlertContext.xml"/>
 
 </beans>

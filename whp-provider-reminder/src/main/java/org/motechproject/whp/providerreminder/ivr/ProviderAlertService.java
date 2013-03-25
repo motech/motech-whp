@@ -3,7 +3,7 @@ package org.motechproject.whp.providerreminder.ivr;
 import org.motechproject.whp.common.collections.PaginatedList;
 import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
-import org.motechproject.whp.providerreminder.util.UUIDGenerator;
+import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.providerreminder.model.ProviderReminderRequest;
-import org.motechproject.whp.providerreminder.util.UUIDGenerator;
+import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 

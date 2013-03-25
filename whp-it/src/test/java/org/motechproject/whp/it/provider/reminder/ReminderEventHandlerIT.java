@@ -16,7 +16,7 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.providerreminder.ivr.ProviderReminderRequestProperties;
 import org.motechproject.whp.providerreminder.service.ReminderEventHandler;
-import org.motechproject.whp.providerreminder.util.UUIDGenerator;
+import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.repository.AllProviders;
