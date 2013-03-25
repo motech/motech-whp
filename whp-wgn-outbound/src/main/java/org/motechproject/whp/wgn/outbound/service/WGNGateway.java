@@ -1,6 +1,7 @@
 package org.motechproject.whp.wgn.outbound.service;
 
 import org.apache.log4j.Logger;
+import org.motechproject.http.client.domain.EventCallBack;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.wgn.outbound.WGNRequest;
 import org.motechproject.whp.wgn.outbound.logging.WGNRequestLogger;
@@ -34,10 +35,10 @@ public class WGNGateway {
         log(url, request);
     }
 
-    public void post(String url, Serializable request) {
+    public void post(String url, Serializable request, EventCallBack eventCallBack) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put(wgnGatewayProperties.getApiKeyName(), wgnGatewayProperties.getApiKeyValue());
-        httpClientService.post(url, request, headers);
+        httpClientService.post(url, request, headers, eventCallBack);
     }
 
     private void log(String url, WGNRequest request) {

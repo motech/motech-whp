@@ -3,12 +3,16 @@ package org.motechproject.whp.patientivralert.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.motechproject.event.MotechEvent;
+import org.motechproject.http.client.domain.EventCallBack;
+import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.patientivralert.configuration.PatientIVRAlertProperties;
 import org.motechproject.whp.patientivralert.model.PatientAdherenceRecord;
 import org.motechproject.whp.patientivralert.model.PatientAlertRequest;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -42,14 +46,29 @@ public class PatientIvrAlertServiceTest {
         String batchId = "batch-id";
         String requestId = "requestId";
         String wgnURL = "wgnURL";
-        when(patientAdherenceService.getPatientsWithoutAdherence(10, PAGE_SIZE)).thenReturn(records);
+        int offset = 10;
+        when(patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE)).thenReturn(records);
         when(uuidGenerator.uuid()).thenReturn(batchId);
         when(patientIVRAlertProperties.getPatientIVRRequestURL()).thenReturn(wgnURL);
-
-        patientIvrAlertService.alert(requestId, 10);
-
         PatientAlertRequest expectedWgnRequest = expectedPatientAlertRequest(records, batchId, requestId);
-        verify(wgnGateway).post(wgnURL, expectedWgnRequest);
+        EventCallBack expectedEventCallBack = expectedEventCallBack(requestId, offset);
+
+        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset));
+        patientIvrAlertService.alert(motechEvent);
+
+        verify(wgnGateway).post(wgnURL, expectedWgnRequest, expectedEventCallBack);
+    }
+
+    private EventCallBack expectedEventCallBack(String requestId, int offset) {
+        HashMap<String, Object> params = createParams(requestId, offset + PAGE_SIZE);
+        return new EventCallBack(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, params);
+    }
+
+    private HashMap<String, Object> createParams(String requestId, int offset) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("requestId", requestId);
+        params.put("offset", offset);
+        return params;
     }
 
     private PatientAlertRequest expectedPatientAlertRequest(List<PatientAdherenceRecord> records, String batchId, String requestId) {

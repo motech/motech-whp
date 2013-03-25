@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.motechproject.http.client.domain.EventCallBack;
 import org.motechproject.http.client.service.HttpClientService;
 import org.motechproject.whp.wgn.outbound.properties.WGNGatewayProperties;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
@@ -50,9 +51,9 @@ public class WGNGatewayTest {
     @Test
     public void shouldSendAPIKeyAsHeaderForAnyRequest() {
         Serializable request = mock(Serializable.class);
-
-        gateway.post("url", request);
-        verify(httpClientService).post(eq("url"), eq(request), headers.capture());
+        EventCallBack eventCallBack = mock(EventCallBack.class);
+        gateway.post("url", request, eventCallBack);
+        verify(httpClientService).post(eq("url"), eq(request), headers.capture(), eq(eventCallBack));
         assertEquals(API_KEY_VALUE, headers.getValue().get(API_KEY_NAME));
     }
 
