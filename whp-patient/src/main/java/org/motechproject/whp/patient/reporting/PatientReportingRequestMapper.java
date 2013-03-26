@@ -173,11 +173,36 @@ public class PatientReportingRequestMapper {
             treatmentDTO.setReasonsForPause(treatment.getInterruptions().getPauseReasonForOngoingInterruption());
             treatmentDTO.setTotalPausedDuration(treatment.getInterruptions().totalPausedDuration());
             treatmentDTO.setCurrentTreatment(YesNo.No.code());
-
+            treatmentDTO.setCloseTreatmentRemarks(treatment.getCloseTreatmentRemarks());
+            treatmentDTO.setTreatmentDetails(mapTreatmentDetails(treatment.getTreatmentDetails()));
             treatmentDTOs.add(treatmentDTO);
         }
 
         return treatmentDTOs;
+    }
+
+    private TreatmentDetailsDTO mapTreatmentDetails(TreatmentDetails treatmentDetails) {
+        TreatmentDetailsDTO treatmentDetailsDTO = new TreatmentDetailsDTO();
+        treatmentDetailsDTO.setDistrictWithCode(treatmentDetails.getDistrictWithCode());
+        treatmentDetailsDTO.setTbUnitWithCode(treatmentDetails.getTbUnitWithCode());
+        treatmentDetailsDTO.setEpSite(treatmentDetails.getEpSite());
+        treatmentDetailsDTO.setOtherInvestigations(treatmentDetails.getOtherInvestigations());
+        treatmentDetailsDTO.setPreviousTreatmentHistory(treatmentDetails.getPreviousTreatmentHistory());
+        treatmentDetailsDTO.setHivStatus(treatmentDetails.getHivStatus());
+        treatmentDetailsDTO.setHivTestDate(toSqlDate(treatmentDetails.getHivTestDate()));
+        treatmentDetailsDTO.setMembersBelowSixYears(treatmentDetails.getMembersBelowSixYears());
+        treatmentDetailsDTO.setPhcReferred(treatmentDetails.getPhcReferred());
+        treatmentDetailsDTO.setProviderName(treatmentDetails.getProviderName());
+        treatmentDetailsDTO.setDotCentre(treatmentDetails.getDotCentre());
+        treatmentDetailsDTO.setProviderType(treatmentDetails.getProviderType());
+        treatmentDetailsDTO.setCmfDoctor(treatmentDetails.getCmfDoctor());
+        treatmentDetailsDTO.setContactPersonName(treatmentDetails.getContactPersonName());
+        treatmentDetailsDTO.setContactPersonPhoneNumber(treatmentDetails.getContactPersonPhoneNumber());
+        treatmentDetailsDTO.setXpertTestResult(treatmentDetails.getXpertTestResult());
+        treatmentDetailsDTO.setXpertDeviceNumber(treatmentDetails.getXpertDeviceNumber());
+        treatmentDetailsDTO.setXpertTestDate(toSqlDate(treatmentDetails.getXpertTestDate()));
+        treatmentDetailsDTO.setRifResistanceResult(treatmentDetails.getRifResistanceResult());
+        return treatmentDetailsDTO;
     }
 
     private Double getPreTreatmentWeight(Treatment treatment) {

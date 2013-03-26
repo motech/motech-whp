@@ -10,18 +10,17 @@ import org.motechproject.whp.patient.alerts.processor.CumulativeMissedDosesCalcu
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.patient.domain.Address;
-import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.domain.Therapy;
-import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.patient.domain.alerts.PatientAlerts;
 import org.motechproject.whp.reports.contract.enums.YesNo;
 import org.motechproject.whp.reports.contract.patient.*;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.common.util.WHPDateUtil.toSqlDate;
@@ -43,7 +42,7 @@ public class PatientReportingRequestMapperTest {
     @Test
     public void shouldMapPatientToReportingRequest() {
         Patient patient = new PatientBuilder().withDefaults().defaultPatientAlerts().build();
-        patient.addTreatment(new TreatmentBuilder().withDefaults().build(), new TherapyBuilder().withDefaults().build(), now(), now());
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withDefaultTreatmentDetails().build(), new TherapyBuilder().withDefaults().build(), now(), now());
 
         int expectedCumulativeMissedDoses = 12;
         when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(expectedCumulativeMissedDoses);
@@ -187,7 +186,31 @@ public class PatientReportingRequestMapperTest {
             assertEquals(treatment.getPreTreatmentWeightRecord().getWeight(), treatmentDTO.getPreTreatmentWeight());
 
             assertCurrentTreatmentFlag(isLastTherapy, isLastTreatment, treatmentDTO);
+            assertEquals(treatment.getCloseTreatmentRemarks(), treatmentDTO.getCloseTreatmentRemarks());
+            assertTreatmentDetails(treatment.getTreatmentDetails(), treatmentDTO.getTreatmentDetails());
         }
+    }
+
+    private void assertTreatmentDetails(TreatmentDetails treatmentDetails, TreatmentDetailsDTO treatmentDetailsDTO) {
+        assertThat(treatmentDetails.getDistrictWithCode(),is(treatmentDetailsDTO.getDistrictWithCode()));
+        assertThat(treatmentDetails.getTbUnitWithCode(),is(treatmentDetailsDTO.getTbUnitWithCode()));
+        assertThat(treatmentDetails.getEpSite(),is(treatmentDetailsDTO.getEpSite()));
+        assertThat(treatmentDetails.getOtherInvestigations(),is(treatmentDetailsDTO.getOtherInvestigations()));
+        assertThat(treatmentDetails.getPreviousTreatmentHistory(),is(treatmentDetailsDTO.getPreviousTreatmentHistory()));
+        assertThat(treatmentDetails.getHivStatus(),is(treatmentDetailsDTO.getHivStatus()));
+        assertThat(toSqlDate(treatmentDetails.getHivTestDate()),is(treatmentDetailsDTO.getHivTestDate()));
+        assertThat(treatmentDetails.getMembersBelowSixYears(), is(treatmentDetailsDTO.getMembersBelowSixYears()));
+        assertThat(treatmentDetails.getPhcReferred() ,is(treatmentDetailsDTO.getPhcReferred()));
+        assertThat(treatmentDetails.getProviderName(),is(treatmentDetailsDTO.getProviderName()));
+        assertThat(treatmentDetails.getDotCentre(), is(treatmentDetailsDTO.getDotCentre()));
+        assertThat(treatmentDetails.getProviderType(),is(treatmentDetailsDTO.getProviderType()));
+        assertThat(treatmentDetails.getCmfDoctor(),is(treatmentDetailsDTO.getCmfDoctor()));
+        assertThat(treatmentDetails.getContactPersonName(),is(treatmentDetailsDTO.getContactPersonName()));
+        assertThat(treatmentDetails.getContactPersonPhoneNumber() ,is(treatmentDetailsDTO.getContactPersonPhoneNumber()));
+        assertThat(treatmentDetails.getXpertTestResult() ,is(treatmentDetailsDTO.getXpertTestResult()));
+        assertThat(treatmentDetails.getXpertDeviceNumber() ,is(treatmentDetailsDTO.getXpertDeviceNumber()));
+        assertThat(toSqlDate(treatmentDetails.getXpertTestDate()) ,is(treatmentDetailsDTO.getXpertTestDate()));
+        assertThat(treatmentDetails.getRifResistanceResult(),is(treatmentDetailsDTO.getRifResistanceResult()));
     }
 
     private void assertCurrentTreatmentFlag(boolean isLastTherapy, boolean lastTreatment, TreatmentDTO treatmentDTO) {
