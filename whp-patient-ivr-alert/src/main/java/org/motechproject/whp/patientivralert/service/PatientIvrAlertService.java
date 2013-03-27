@@ -43,11 +43,12 @@ public class PatientIvrAlertService {
         String requestId = (String) event.getParameters().get(REQUEST_ID);
 
         List<PatientAdherenceRecord> patientAdherenceRecords = patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE);
-        PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(requestId, patientAdherenceRecords);
 
-        EventCallBack eventCallBack = new EventCallBack(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createNextBatchEventParams(requestId, offset));
-
-        wgnGateway.post(patientIVRAlertProperties.getPatientIVRRequestURL(), patientAlertRequest, eventCallBack);
+        if(!patientAdherenceRecords.isEmpty()) {
+            PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(requestId, patientAdherenceRecords);
+            EventCallBack eventCallBack = new EventCallBack(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createNextBatchEventParams(requestId, offset));
+            wgnGateway.post(patientIVRAlertProperties.getPatientIVRRequestURL(), patientAlertRequest, eventCallBack);
+        }
     }
 
     private PatientAlertRequest createPatientAlertsRequest(String requestId, List<PatientAdherenceRecord> patientAdherenceRecords) {

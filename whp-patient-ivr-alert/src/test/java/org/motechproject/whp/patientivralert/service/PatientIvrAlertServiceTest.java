@@ -12,12 +12,12 @@ import org.motechproject.whp.patientivralert.model.PatientAdherenceRecord;
 import org.motechproject.whp.patientivralert.model.PatientAlertRequest;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.patientivralert.service.PatientIvrAlertService.PAGE_SIZE;
 
@@ -57,6 +57,19 @@ public class PatientIvrAlertServiceTest {
         patientIvrAlertService.alert(motechEvent);
 
         verify(wgnGateway).post(wgnURL, expectedWgnRequest, expectedEventCallBack);
+    }
+
+    @Test
+    public void shouldNotSendAlertRequestWhenThereAreNoResultsForGivenPageNumber() {
+        List<PatientAdherenceRecord> emptyResults = new ArrayList<>();
+        String requestId = "requestId";
+        int offset = 10;
+        when(patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE)).thenReturn(emptyResults);
+
+        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset));
+        patientIvrAlertService.alert(motechEvent);
+
+        verifyZeroInteractions(wgnGateway);
     }
 
     private EventCallBack expectedEventCallBack(String requestId, int offset) {
