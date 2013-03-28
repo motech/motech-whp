@@ -1,4 +1,4 @@
-package org.motechproject.whp.it.patientivralert;
+package org.motechproject.whp.patientivralert.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationPatientIVRAlertContext.xml")
-public class PatientIvrAlertServiceIT  extends SpringIntegrationTest {
+public class PatientIvrAlertServiceIntegrationTest extends SpringIntegrationTest {
 
     @Autowired
     EventContext eventContext;
@@ -49,6 +49,7 @@ public class PatientIvrAlertServiceIT  extends SpringIntegrationTest {
 
     @Test
     public void shouldSendRequestsToWGN() throws InterruptedException {
+        reset(restTemplate);
         PatientAdherenceSummary patient1 = new PatientAdherenceSummary("patient1", "1234567890", 1);
         PatientAdherenceSummary patient2 = new PatientAdherenceSummary("patient2", "1234567891", 1);
         PatientAdherenceSummary patient3 = new PatientAdherenceSummary("patient3", "1234567892", 2);
@@ -83,6 +84,7 @@ public class PatientIvrAlertServiceIT  extends SpringIntegrationTest {
 
     @Test
     public void shouldNotSendSubsequentRequestsOnFailure() throws InterruptedException {
+        reset(restTemplate);
         PatientAdherenceSummary patient1 = new PatientAdherenceSummary("patient1", "1234567890", 1);
         PatientAdherenceSummary patient2 = new PatientAdherenceSummary("patient2", "1234567891", 1);
         PatientAdherenceSummary patient3 = new PatientAdherenceSummary("patient3", "1234567892", 2);

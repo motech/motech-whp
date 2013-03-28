@@ -22,11 +22,22 @@
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-config</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-reporting</artifactId>
         </dependency>
         <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-wgn-outbound</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp</groupId>
+            <artifactId>whp-common</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
         </dependency>
     </dependencies>
 
