@@ -33,7 +33,7 @@ public class PatientIvrAlertScheduleEventHandlerTest {
         String requestId = "requestId";
         when(uuidGenerator.uuid()).thenReturn(requestId);
 
-        patientIvrAlertScheduleEventHandler.startAlerts();
+        patientIvrAlertScheduleEventHandler.startAlerts(null);
 
         HashMap<String, Object> params = new HashMap<>();
         params.put(PatientIvrAlertService.REQUEST_ID, requestId);

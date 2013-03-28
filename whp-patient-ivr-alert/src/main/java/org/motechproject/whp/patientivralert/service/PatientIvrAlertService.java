@@ -17,7 +17,6 @@ import java.util.List;
 
 @Service
 public class PatientIvrAlertService {
-    public static final int PAGE_SIZE = 10000;
     public static final String OFFSET = "offset";
     public static final String REQUEST_ID = "requestId";
     public static final String PATIENT_ALERTS_CALL_TYPE = "patientAlerts";
@@ -42,7 +41,7 @@ public class PatientIvrAlertService {
         int offset = (Integer) event.getParameters().get(OFFSET);
         String requestId = (String) event.getParameters().get(REQUEST_ID);
 
-        List<PatientAdherenceRecord> patientAdherenceRecords = patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE);
+        List<PatientAdherenceRecord> patientAdherenceRecords = patientAdherenceService.getPatientsWithoutAdherence(offset, patientIVRAlertProperties.getBatchSize());
 
         if(!patientAdherenceRecords.isEmpty()) {
             PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(requestId, patientAdherenceRecords);
@@ -62,7 +61,7 @@ public class PatientIvrAlertService {
 
     private HashMap<String, Object> createNextBatchEventParams(String requestId, int offset) {
         HashMap<String, Object> params = new HashMap<>();
-        params.put(OFFSET, offset + PAGE_SIZE);
+        params.put(OFFSET, offset + patientIVRAlertProperties.getBatchSize());
         params.put(REQUEST_ID, requestId);
         return params;
     }

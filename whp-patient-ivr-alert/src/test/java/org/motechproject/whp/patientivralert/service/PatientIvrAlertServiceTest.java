@@ -19,7 +19,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.whp.patientivralert.service.PatientIvrAlertService.PAGE_SIZE;
 
 public class PatientIvrAlertServiceTest {
 
@@ -33,6 +32,8 @@ public class PatientIvrAlertServiceTest {
     PatientAdherenceService patientAdherenceService;
     @Mock
     PatientIVRAlertProperties patientIVRAlertProperties;
+
+    private int PAGE_SIZE = 100;
 
     @Before
     public void setUp() {
@@ -50,6 +51,8 @@ public class PatientIvrAlertServiceTest {
         when(patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE)).thenReturn(records);
         when(uuidGenerator.uuid()).thenReturn(batchId);
         when(patientIVRAlertProperties.getPatientIVRRequestURL()).thenReturn(wgnURL);
+        when(patientIVRAlertProperties.getBatchSize()).thenReturn(PAGE_SIZE);
+
         PatientAlertRequest expectedWgnRequest = expectedPatientAlertRequest(records, batchId, requestId);
         EventCallBack expectedEventCallBack = expectedEventCallBack(requestId, offset);
 

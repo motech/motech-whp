@@ -26,7 +26,7 @@ public class PatientIvrAlertScheduleEventHandler {
     }
 
     @MotechListener(subjects = EventKeys.PATIENT_IVR_ALERT_EVENT_NAME)
-    public void startAlerts() {
+    public void startAlerts(MotechEvent motechEvent) {
         String requestId = uuidGenerator.uuid();
         HashMap<String, Object> params = new HashMap<>();
         params.put(REQUEST_ID, requestId);
