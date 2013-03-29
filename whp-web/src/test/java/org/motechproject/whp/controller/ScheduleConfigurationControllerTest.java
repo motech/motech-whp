@@ -60,9 +60,15 @@ public class ScheduleConfigurationControllerTest {
 
     @Test
     public void shouldUpdateSchedule() throws Exception {
+        String messageId = "message";
         standaloneSetup(scheduleConfigurationController)
                 .build()
-                .perform(post("/schedule/update").param("dayOfWeek", "Sunday").param("hour", "10").param("minute", "30").param("scheduleType", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
+                .perform(post("/schedule/update")
+                        .param("dayOfWeek", "Sunday")
+                        .param("hour", "10")
+                        .param("minute", "30")
+                        .param("scheduleType", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name())
+                        .param("messageId", messageId))
                 .andExpect(view().name("redirect:/schedule/" + PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
                 .andExpect(status().isOk());
 
@@ -71,6 +77,7 @@ public class ScheduleConfigurationControllerTest {
         expectedReminderConfiguration.setHour(10);
         expectedReminderConfiguration.setMinute(30);
         expectedReminderConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        expectedReminderConfiguration.setMessageId(messageId);
 
         verify(WHPSchedulerService).scheduleEvent(expectedReminderConfiguration);
     }
@@ -79,7 +86,10 @@ public class ScheduleConfigurationControllerTest {
     public void shouldUnScheduleReminder() throws Exception {
         standaloneSetup(scheduleConfigurationController)
                 .build()
-                .perform(post("/schedule/update/unschedule").param("dayOfWeek", "Sunday").param("hour", "10").param("minute", "30").param("scheduleType", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
+                .perform(post("/schedule/update/unschedule")
+                        .param("dayOfWeek", "Sunday")
+                        .param("hour", "10").param("minute", "30")
+                        .param("scheduleType", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
                 .andExpect(view().name("redirect:/schedule/" + PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
                 .andExpect(status().isOk());
 

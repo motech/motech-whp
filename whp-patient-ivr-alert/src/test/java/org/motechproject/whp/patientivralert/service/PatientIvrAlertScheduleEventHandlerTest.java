@@ -12,6 +12,8 @@ import java.util.HashMap;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.whp.patientivralert.model.PatientIvrAlertBatchRequest.OFFSET;
+import static org.motechproject.whp.patientivralert.model.PatientIvrAlertBatchRequest.REQUEST_ID;
 
 public class PatientIvrAlertScheduleEventHandlerTest {
 
@@ -32,13 +34,21 @@ public class PatientIvrAlertScheduleEventHandlerTest {
     public void shouldStartSendingPatientAlerts() {
         String requestId = "requestId";
         when(uuidGenerator.uuid()).thenReturn(requestId);
+        String messageId = "message";
 
-        patientIvrAlertScheduleEventHandler.startAlerts(null);
+        HashMap<String, Object> eventParams = new HashMap<>();
+        eventParams.put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, messageId);
+        patientIvrAlertScheduleEventHandler.startAlerts(new MotechEvent(EventKeys.PATIENT_IVR_ALERT_EVENT_NAME, eventParams));
 
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(PatientIvrAlertService.REQUEST_ID, requestId);
-        params.put(PatientIvrAlertService.OFFSET, 0);
-        MotechEvent event = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, params);
+        MotechEvent event = expectedMotechEvent(requestId, messageId);
         verify(patientIvrAlertService).alert(event);
+    }
+
+    private MotechEvent expectedMotechEvent(String requestId, String messageId) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(REQUEST_ID, requestId);
+        params.put(OFFSET, 0);
+        params.put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, messageId);
+        return new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, params);
     }
 }

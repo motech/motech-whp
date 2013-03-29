@@ -3,6 +3,7 @@ package org.motechproject.whp.schedule.service;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
+import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.schedule.domain.ScheduleTimings;
 import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.schedule.model.ScheduleConfiguration;
@@ -58,13 +59,14 @@ public class WHPSchedulerService {
 
     private void schedule(ScheduleConfiguration reminderConfiguration) {
         ScheduleType scheduleType = reminderConfiguration.getScheduleType();
-        MotechEvent motechEvent = createMotechEvent(scheduleType);
+        MotechEvent motechEvent = createMotechEvent(scheduleType, reminderConfiguration.getMessageId());
         motechSchedulerService.scheduleJob(new CronSchedulableJob(motechEvent, reminderConfiguration.generateCronExpression()));
     }
 
-    private MotechEvent createMotechEvent(ScheduleType reminderType) {
+    private MotechEvent createMotechEvent(ScheduleType reminderType, String messageId) {
         MotechEvent motechEvent = new MotechEvent(reminderType.getEventSubject());
         motechEvent.getParameters().put(JOB_ID_KEY, reminderType.name());
+        motechEvent.getParameters().put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, messageId);
         return motechEvent;
     }
 

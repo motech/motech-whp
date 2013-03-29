@@ -5,7 +5,8 @@ import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.ArgumentCaptor;
-import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.event.EventRelay;
+import org.motechproject.event.MotechEvent;
 import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
 import org.motechproject.whp.patientivralert.configuration.PatientIVRAlertProperties;
@@ -18,17 +19,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.motechproject.whp.common.event.EventKeys.PATIENT_IVR_ALERT_EVENT_NAME;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = "classpath*:/applicationPatientIVRAlertContext.xml")
 public class PatientIvrAlertServiceIntegrationTest extends SpringIntegrationTest {
 
     @Autowired
-    EventContext eventContext;
+    EventRelay eventRelay;
 
     @ReplaceWithMock
     @Autowired
@@ -62,7 +65,8 @@ public class PatientIvrAlertServiceIntegrationTest extends SpringIntegrationTest
         when(reportingDataService.getPatientsWithMissingAdherence(batchSize, batchSize))
                 .thenReturn(asList(patient3));
 
-        eventContext.send(EventKeys.PATIENT_IVR_ALERT_EVENT_NAME);
+        String messageId = "messageId";
+        eventRelay.sendEventMessage(createMotechEvent(messageId));
 
         ArgumentCaptor<HttpEntity> wgnRequestArgumentCaptor1 = ArgumentCaptor.forClass(HttpEntity.class);
         String wgnURL = patientIVRAlertProperties.getPatientIVRRequestURL();
@@ -73,13 +77,21 @@ public class PatientIvrAlertServiceIntegrationTest extends SpringIntegrationTest
 
         List<HttpEntity> allValues = wgnRequestArgumentCaptor1.getAllValues();
         PatientAlertRequest patientAlertRequest1 = (PatientAlertRequest) allValues.get(0).getBody();
+        assertEquals(messageId, patientAlertRequest1.getMessageId());
         assertEquals(2, patientAlertRequest1.getData().size());
         assertPatientAdherenceSummary(patient1, patientAlertRequest1.getData().get(0));
         assertPatientAdherenceSummary(patient2, patientAlertRequest1.getData().get(1));
 
         PatientAlertRequest patientAlertRequest2 = (PatientAlertRequest) allValues.get(1).getBody();
         assertEquals(1, patientAlertRequest2.getData().size());
+        assertEquals(messageId, patientAlertRequest2.getMessageId());
         assertPatientAdherenceSummary(patient3, patientAlertRequest2.getData().get(0));
+    }
+
+    private MotechEvent createMotechEvent(String messageId) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, messageId);
+        return new MotechEvent(PATIENT_IVR_ALERT_EVENT_NAME, params);
     }
 
     @Test
@@ -99,7 +111,7 @@ public class PatientIvrAlertServiceIntegrationTest extends SpringIntegrationTest
                 eq(patientIVRAlertProperties.getPatientIVRRequestURL()), any(HttpEntity.class)))
                 .thenThrow(new RuntimeException("Testing..."));
 
-        eventContext.send(EventKeys.PATIENT_IVR_ALERT_EVENT_NAME);
+        eventRelay.sendEventMessage(createMotechEvent("messageId"));
 
         ArgumentCaptor<HttpEntity> wgnRequestArgumentCaptor1 = ArgumentCaptor.forClass(HttpEntity.class);
         String wgnURL = patientIVRAlertProperties.getPatientIVRRequestURL();

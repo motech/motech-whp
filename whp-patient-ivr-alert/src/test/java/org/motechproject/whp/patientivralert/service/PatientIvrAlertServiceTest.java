@@ -34,6 +34,7 @@ public class PatientIvrAlertServiceTest {
     PatientIVRAlertProperties patientIVRAlertProperties;
 
     private int PAGE_SIZE = 100;
+    private final String messageId = "message";
 
     @Before
     public void setUp() {
@@ -53,10 +54,10 @@ public class PatientIvrAlertServiceTest {
         when(patientIVRAlertProperties.getPatientIVRRequestURL()).thenReturn(wgnURL);
         when(patientIVRAlertProperties.getBatchSize()).thenReturn(PAGE_SIZE);
 
-        PatientAlertRequest expectedWgnRequest = expectedPatientAlertRequest(records, batchId, requestId);
-        EventCallBack expectedEventCallBack = expectedEventCallBack(requestId, offset);
+        PatientAlertRequest expectedWgnRequest = expectedPatientAlertRequest(records, batchId, requestId, messageId);
+        EventCallBack expectedEventCallBack = expectedEventCallBack(requestId, offset, messageId);
 
-        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset));
+        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset, messageId));
         patientIvrAlertService.alert(motechEvent);
 
         verify(wgnGateway).post(wgnURL, expectedWgnRequest, expectedEventCallBack);
@@ -69,30 +70,32 @@ public class PatientIvrAlertServiceTest {
         int offset = 10;
         when(patientAdherenceService.getPatientsWithoutAdherence(offset, PAGE_SIZE)).thenReturn(emptyResults);
 
-        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset));
+        MotechEvent motechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createParams(requestId, offset, messageId));
         patientIvrAlertService.alert(motechEvent);
 
         verifyZeroInteractions(wgnGateway);
     }
 
-    private EventCallBack expectedEventCallBack(String requestId, int offset) {
-        HashMap<String, Object> params = createParams(requestId, offset + PAGE_SIZE);
+    private EventCallBack expectedEventCallBack(String requestId, int offset, String messageId) {
+        HashMap<String, Object> params = createParams(requestId, offset + PAGE_SIZE, messageId);
         return new EventCallBack(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, params);
     }
 
-    private HashMap<String, Object> createParams(String requestId, int offset) {
+    private HashMap<String, Object> createParams(String requestId, int offset, String messageId) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("requestId", requestId);
         params.put("offset", offset);
+        params.put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, messageId);
         return params;
     }
 
-    private PatientAlertRequest expectedPatientAlertRequest(List<PatientAdherenceRecord> records, String batchId, String requestId) {
+    private PatientAlertRequest expectedPatientAlertRequest(List<PatientAdherenceRecord> records, String batchId, String requestId, String messageId) {
         PatientAlertRequest expectedWgnRequest = new PatientAlertRequest();
         expectedWgnRequest.setBatchId(batchId);
         expectedWgnRequest.setRequestId(requestId);
         expectedWgnRequest.setCallType("patientAlerts");
         expectedWgnRequest.setData(records);
+        expectedWgnRequest.setMessageId(messageId);
         return expectedWgnRequest;
     }
 }

@@ -29,7 +29,7 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
 
     @Test
     public void shouldSaveScheduleConfiguration() {
-        ScheduleConfiguration scheduleConfiguration = configuration(DayOfWeek.Monday, 1, 1, PROVIDER_ADHERENCE_NOT_REPORTED, false);
+        ScheduleConfiguration scheduleConfiguration = configuration(DayOfWeek.Monday, 1, 1, PROVIDER_ADHERENCE_NOT_REPORTED, false, "messageId");
         allScheduleConfigurations.saveOrUpdate(scheduleConfiguration);
         assertNotNull(allScheduleConfigurations.get(scheduleConfiguration.getId()));
     }
@@ -37,7 +37,7 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
     @Test
     public void shouldNotMaintainDuplicateCopiesOfConfiguration() {
         ScheduleType type = PROVIDER_ADHERENCE_NOT_REPORTED;
-        ScheduleConfiguration[] configurations = {configuration(DayOfWeek.Monday, 1, 1, type, false), configuration(DayOfWeek.Tuesday, 2, 2, type, true)};
+        ScheduleConfiguration[] configurations = {configuration(DayOfWeek.Monday, 1, 1, type, false, "messageId"), configuration(DayOfWeek.Tuesday, 2, 2, type, true, "messageId")};
 
         allScheduleConfigurations.saveOrUpdate(configurations[0]);
         allScheduleConfigurations.saveOrUpdate(configurations[1]);
@@ -47,15 +47,17 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
         assertEquals(configurations[1].getHour(), updatedConfiguration.getHour());
         assertEquals(configurations[1].getMinute(), updatedConfiguration.getMinute());
         assertEquals(configurations[1].isScheduled(), updatedConfiguration.isScheduled());
+        assertEquals(configurations[1].getMessageId(), updatedConfiguration.getMessageId());
     }
 
-    private ScheduleConfiguration configuration(DayOfWeek dayOfWeek, int hour, int minute, ScheduleType type, boolean scheduled) {
+    private ScheduleConfiguration configuration(DayOfWeek dayOfWeek, int hour, int minute, ScheduleType type, boolean scheduled, String messageId) {
         ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration();
         scheduleConfiguration.setDayOfWeek(dayOfWeek);
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setMinute(minute);
         scheduleConfiguration.setScheduled(scheduled);
         scheduleConfiguration.setScheduleType(type);
+        scheduleConfiguration.setMessageId(messageId);
         return scheduleConfiguration;
     }
 }

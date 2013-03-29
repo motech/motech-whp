@@ -23,6 +23,9 @@ public class ScheduleConfiguration extends MotechBaseDataObject {
     private int minute;
     @NotNull
     private ScheduleType scheduleType;
+
+    private String messageId;
+
     private boolean scheduled = false;
 
     public ScheduleConfiguration() {

@@ -75,6 +75,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label">Message ID</label>
+                    <div class="controls">
+                        <@spring.bind "scheduleConfiguration.messageId" />
+                        <input type="text" name="${spring.status.expression}" value="${spring.status.value?default("")}"/>
+                    </div>
+                </div>
                 <div class="form-buttons control-group">
                     <div class="controls">
                         <button type="submit" id="registerButton" class="btn btn-primary">

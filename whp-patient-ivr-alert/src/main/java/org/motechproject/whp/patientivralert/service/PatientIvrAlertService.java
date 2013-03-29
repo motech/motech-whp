@@ -8,17 +8,15 @@ import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.patientivralert.configuration.PatientIVRAlertProperties;
 import org.motechproject.whp.patientivralert.model.PatientAdherenceRecord;
 import org.motechproject.whp.patientivralert.model.PatientAlertRequest;
+import org.motechproject.whp.patientivralert.model.PatientIvrAlertBatchRequest;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class PatientIvrAlertService {
-    public static final String OFFSET = "offset";
-    public static final String REQUEST_ID = "requestId";
     public static final String PATIENT_ALERTS_CALL_TYPE = "patientAlerts";
 
     private PatientAdherenceService patientAdherenceService;
@@ -38,31 +36,36 @@ public class PatientIvrAlertService {
 
     @MotechListener(subjects = EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME)
     public void alert(MotechEvent event){
-        int offset = (Integer) event.getParameters().get(OFFSET);
-        String requestId = (String) event.getParameters().get(REQUEST_ID);
+        PatientIvrAlertBatchRequest request = new PatientIvrAlertBatchRequest(event);
 
-        List<PatientAdherenceRecord> patientAdherenceRecords = patientAdherenceService.getPatientsWithoutAdherence(offset, patientIVRAlertProperties.getBatchSize());
+        List<PatientAdherenceRecord> patientAdherenceRecords = patientAdherenceService.getPatientsWithoutAdherence(
+                request.getOffset(),
+                patientIVRAlertProperties.getBatchSize());
 
         if(!patientAdherenceRecords.isEmpty()) {
-            PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(requestId, patientAdherenceRecords);
-            EventCallBack eventCallBack = new EventCallBack(EventKeys.PATIENT_IVR_ALERT_BATCH_EVENT_NAME, createNextBatchEventParams(requestId, offset));
+            PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(patientAdherenceRecords, request);
+            EventCallBack eventCallBack = createEventCallBackForNextBatch(request);
             wgnGateway.post(patientIVRAlertProperties.getPatientIVRRequestURL(), patientAlertRequest, eventCallBack);
         }
     }
 
-    private PatientAlertRequest createPatientAlertsRequest(String requestId, List<PatientAdherenceRecord> patientAdherenceRecords) {
+    private PatientAlertRequest createPatientAlertsRequest(List<PatientAdherenceRecord> patientAdherenceRecords, PatientIvrAlertBatchRequest request) {
         PatientAlertRequest patientAlertRequest = new PatientAlertRequest();
         patientAlertRequest.setBatchId(uuidGenerator.uuid());
-        patientAlertRequest.setRequestId(requestId);
+        patientAlertRequest.setRequestId(request.getRequestId());
         patientAlertRequest.setCallType(PATIENT_ALERTS_CALL_TYPE);
         patientAlertRequest.setData(patientAdherenceRecords);
+        patientAlertRequest.setMessageId(request.getMessageId());
         return patientAlertRequest;
     }
 
-    private HashMap<String, Object> createNextBatchEventParams(String requestId, int offset) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(OFFSET, offset + patientIVRAlertProperties.getBatchSize());
-        params.put(REQUEST_ID, requestId);
-        return params;
+    private EventCallBack createEventCallBackForNextBatch(PatientIvrAlertBatchRequest request) {
+        int newOffset = request.getOffset() + patientIVRAlertProperties.getBatchSize();
+        PatientIvrAlertBatchRequest nextBatchRequest = new PatientIvrAlertBatchRequest(
+                request.getRequestId(),
+                request.getMessageId(),
+                newOffset);
+
+        return nextBatchRequest.createCallBackEvent();
     }
 }

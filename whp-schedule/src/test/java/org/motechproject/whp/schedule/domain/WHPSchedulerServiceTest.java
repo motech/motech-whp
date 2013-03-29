@@ -23,8 +23,10 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.scheduler.MotechSchedulerService.JOB_ID_KEY;
 import static org.motechproject.util.DateUtil.today;
 import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
+import static org.motechproject.whp.common.event.EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID;
 import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
 
 public class WHPSchedulerServiceTest extends BaseUnitTest {
@@ -46,7 +48,7 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
         DayOfWeek dayOfWeek = DayOfWeek.Sunday;
         int minutes = 30;
         int hour = 10;
-        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(minutes, hour, dayOfWeek);
+        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(minutes, hour, dayOfWeek, "messageId");
 
         whpSchedulerService.scheduleEvent(scheduleConfiguration);
 
@@ -55,12 +57,13 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
         CronSchedulableJob job = captor.getValue();
 
         assertEquals(ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, job.getMotechEvent().getSubject());
-        assertEquals(PROVIDER_ADHERENCE_WINDOW_COMMENCED.name(), job.getMotechEvent().getParameters().get(MotechSchedulerService.JOB_ID_KEY));
+        assertEquals(PROVIDER_ADHERENCE_WINDOW_COMMENCED.name(), job.getMotechEvent().getParameters().get(JOB_ID_KEY));
+        assertEquals(scheduleConfiguration.getMessageId(), job.getMotechEvent().getParameters().get(SCHEDULE_CONFIGURATION_MESSAGE_ID));
     }
 
     @Test
     public void shouldPersistReminderConfigurationUponScheduling() {
-        ScheduleConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        ScheduleConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday, "messageId");
 
         when(allScheduleConfigurations.withType(PROVIDER_ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
 
@@ -71,7 +74,7 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldMarkConfigurationAsScheduledUponScheduling() {
-        ScheduleConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        ScheduleConfiguration currentConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday, "messageId");
 
         when(allScheduleConfigurations.withType(PROVIDER_ADHERENCE_WINDOW_COMMENCED)).thenReturn(currentConfiguration);
         whpSchedulerService.scheduleEvent(currentConfiguration);
@@ -83,14 +86,14 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldUnScheduleReminder() {
-        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday, "messageId");
         whpSchedulerService.unScheduleReminder(scheduleConfiguration);
         verify(motechSchedulerService).unscheduleJob(EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME, PROVIDER_ADHERENCE_WINDOW_COMMENCED.name());
     }
 
     @Test
     public void shouldMarkConfigurationAsUnscheduledUponUnSchedulingReminder() {
-        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday);
+        ScheduleConfiguration scheduleConfiguration = createProviderReminderConfiguration(1, 1, DayOfWeek.Monday, "messageId");
         whpSchedulerService.unScheduleReminder(scheduleConfiguration);
 
         ArgumentCaptor<ScheduleConfiguration> captor = ArgumentCaptor.forClass(ScheduleConfiguration.class);
@@ -115,12 +118,13 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
         assertNull(whpSchedulerService.getReminder(PROVIDER_ADHERENCE_WINDOW_COMMENCED));
     }
 
-    private ScheduleConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek) {
+    private ScheduleConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek, String messageId) {
         ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration();
         scheduleConfiguration.setMinute(minutes);
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setDayOfWeek(dayOfWeek);
         scheduleConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
+        scheduleConfiguration.setMessageId(messageId);
         return scheduleConfiguration;
     }
 }
