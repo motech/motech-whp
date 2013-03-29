@@ -1,7 +1,6 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.flash.Flash;
-import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.schedule.model.ScheduleConfiguration;
 import org.motechproject.whp.schedule.service.WHPSchedulerService;
@@ -26,13 +25,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class ScheduleConfigurationController extends BaseWebController {
 
     private static final String SCHEDULE_UPDATED_FLAG = "schedule.updated";
-
-    private EventContext eventContext;
     private WHPSchedulerService whpSchedulerService;
 
     @Autowired
-    public ScheduleConfigurationController(EventContext eventContext, WHPSchedulerService whpSchedulerService) {
-        this.eventContext = eventContext;
+    public ScheduleConfigurationController(WHPSchedulerService whpSchedulerService) {
         this.whpSchedulerService = whpSchedulerService;
     }
 
@@ -51,8 +47,8 @@ public class ScheduleConfigurationController extends BaseWebController {
 
     @RequestMapping(value = "/execute", method = GET)
     @ResponseBody
-    public String remind(@RequestParam("type") ScheduleType scheduleType) throws IOException {
-        eventContext.send(scheduleType.getEventSubject());
+    public String remind(@RequestParam("type") ScheduleType scheduleType, @RequestParam("messageId") String messageId) throws IOException {
+        whpSchedulerService.execute(scheduleType, messageId);
         return "Triggered reminder";
     }
 

@@ -3,7 +3,7 @@ package org.motechproject.whp.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.scheduler.context.EventContext;
+import org.motechproject.whp.schedule.domain.ScheduleType;
 import org.motechproject.whp.schedule.model.ScheduleConfiguration;
 import org.motechproject.whp.schedule.service.WHPSchedulerService;
 
@@ -22,23 +22,21 @@ import static org.springframework.test.web.server.setup.MockMvcBuilders.standalo
 public class ScheduleConfigurationControllerTest {
 
     @Mock
-    private WHPSchedulerService WHPSchedulerService;
-    @Mock
-    private EventContext eventContext;
+    private WHPSchedulerService whpSchedulerService;
 
     private ScheduleConfigurationController scheduleConfigurationController;
 
     @Before
     public void setUp() {
         initMocks(this);
-        scheduleConfigurationController = new ScheduleConfigurationController(eventContext, WHPSchedulerService);
+        scheduleConfigurationController = new ScheduleConfigurationController(whpSchedulerService);
     }
 
     @Test
     public void shouldReturnNextScheduleTiming() throws Exception {
         ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, new Date());
 
-        when(WHPSchedulerService.configuration(PROVIDER_ADHERENCE_WINDOW_COMMENCED)).thenReturn(scheduleConfiguration);
+        when(whpSchedulerService.configuration(PROVIDER_ADHERENCE_WINDOW_COMMENCED)).thenReturn(scheduleConfiguration);
 
         standaloneSetup(scheduleConfigurationController)
                 .build()
@@ -50,12 +48,15 @@ public class ScheduleConfigurationControllerTest {
 
     @Test
     public void shouldRemindProvidersOnAdherenceWindowCommenced() throws Exception {
+        String message = "message";
         standaloneSetup(scheduleConfigurationController)
                 .build()
-                .perform(get("/schedule/execute").param("type", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name()))
+                .perform(get("/schedule/execute")
+                        .param("type", PROVIDER_ADHERENCE_WINDOW_COMMENCED.name())
+                        .param("messageId", message))
                 .andExpect(content().string("Triggered reminder"))
                 .andExpect(status().isOk());
-        verify(eventContext).send(PROVIDER_ADHERENCE_WINDOW_COMMENCED.getEventSubject());
+        verify(whpSchedulerService).execute(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED, message);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class ScheduleConfigurationControllerTest {
         expectedReminderConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         expectedReminderConfiguration.setMessageId(messageId);
 
-        verify(WHPSchedulerService).scheduleEvent(expectedReminderConfiguration);
+        verify(whpSchedulerService).scheduleEvent(expectedReminderConfiguration);
     }
 
     @Test
@@ -99,6 +100,6 @@ public class ScheduleConfigurationControllerTest {
         expectedReminderConfiguration.setMinute(30);
         expectedReminderConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
 
-        verify(WHPSchedulerService).unScheduleReminder(expectedReminderConfiguration);
+        verify(whpSchedulerService).unScheduleReminder(expectedReminderConfiguration);
     }
 }

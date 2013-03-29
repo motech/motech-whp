@@ -1,5 +1,6 @@
 package org.motechproject.whp.schedule.service;
 
+import org.motechproject.event.EventRelay;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
@@ -23,11 +24,13 @@ public class WHPSchedulerService {
 
     private MotechSchedulerService motechSchedulerService;
     private AllScheduleConfigurations allScheduleConfigurations;
+    private EventRelay eventRelay;
 
     @Autowired
-    public WHPSchedulerService(MotechSchedulerService motechSchedulerService, AllScheduleConfigurations allScheduleConfigurations) {
+    public WHPSchedulerService(MotechSchedulerService motechSchedulerService, AllScheduleConfigurations allScheduleConfigurations, EventRelay eventRelay) {
         this.motechSchedulerService = motechSchedulerService;
         this.allScheduleConfigurations = allScheduleConfigurations;
+        this.eventRelay = eventRelay;
     }
 
     public void scheduleEvent(ScheduleConfiguration configuration) {
@@ -76,5 +79,10 @@ public class WHPSchedulerService {
         } catch (Exception ignored) {
             return emptyList();
         }
+    }
+
+    public void execute(ScheduleType scheduleType, String messageId) {
+        MotechEvent motechEvent = createMotechEvent(scheduleType, messageId);
+        eventRelay.sendEventMessage(motechEvent);
     }
 }

@@ -103,9 +103,9 @@
            $('#provider-reminder-form').attr('action',action+"/unschedule");
            $('#provider-reminder-form').submit();
         })
-        <@spring.bind "scheduleConfiguration.scheduleType" />
         $('#confirmReminder').click(function(){
-           $.get('/whp/schedule/execute?type=${spring.status.value}', function(data){
+           var messageId = encodeURIComponent('${scheduleConfiguration.messageId}')
+           $.get('/whp/schedule/execute?type=${scheduleConfiguration.scheduleType}&messageId=' + messageId, function(data){
                 $("#alert").html('<div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>' + data + '</div>');
                 createAutoClosingAlert("#update-alert", 5000);
            });

@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.motechproject.event.EventRelay;
+import org.motechproject.event.MotechEvent;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.scheduler.MotechSchedulerService;
 import org.motechproject.scheduler.domain.CronSchedulableJob;
@@ -15,6 +17,7 @@ import org.motechproject.whp.schedule.service.WHPSchedulerService;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
@@ -34,13 +37,15 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
     private MotechSchedulerService motechSchedulerService;
     @Mock
     private AllScheduleConfigurations allScheduleConfigurations;
+    @Mock
+    private EventRelay eventRelay;
 
     private WHPSchedulerService whpSchedulerService;
 
     @Before
     public void setUp() {
         initMocks(this);
-        whpSchedulerService = new WHPSchedulerService(motechSchedulerService, allScheduleConfigurations);
+        whpSchedulerService = new WHPSchedulerService(motechSchedulerService, allScheduleConfigurations, eventRelay);
     }
 
     @Test
@@ -116,6 +121,19 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
 
         when(motechSchedulerService.getScheduledJobTimings(eq(subject), eq(jobId), any(Date.class), any(Date.class))).thenReturn(new ArrayList<Date>());
         assertNull(whpSchedulerService.getReminder(PROVIDER_ADHERENCE_WINDOW_COMMENCED));
+    }
+
+    @Test
+    public void shouldSendMotechEventForGivenScheduleTypeAndMessageId() {
+        HashMap<String, Object> parameters = new HashMap<>();
+        ScheduleType patientIvrAlert = ScheduleType.PATIENT_IVR_ALERT;
+        parameters.put(EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID, "message");
+        parameters.put(JOB_ID_KEY, patientIvrAlert.name());
+        MotechEvent expectedMotechEvent = new MotechEvent(EventKeys.PATIENT_IVR_ALERT_EVENT_NAME, parameters);
+
+        whpSchedulerService.execute(patientIvrAlert, "message");
+
+        verify(eventRelay).sendEventMessage(expectedMotechEvent);
     }
 
     private ScheduleConfiguration createProviderReminderConfiguration(int minutes, int hour, DayOfWeek dayOfWeek, String messageId) {
