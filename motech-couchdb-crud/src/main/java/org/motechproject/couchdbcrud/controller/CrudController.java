@@ -22,9 +22,9 @@ public class CrudController {
     private ObjectMapper objectMapper;
 
     @Autowired
-    public CrudController(CrudService crudService, ObjectMapper objectMapper) {
+    public CrudController(CrudService crudService) {
         this.crudService = crudService;
-        this.objectMapper = objectMapper;
+        this.objectMapper = new ObjectMapper();
     }
 
     @RequestMapping(value = "/crud/{entity}/list")

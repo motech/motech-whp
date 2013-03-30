@@ -37,7 +37,7 @@ public class CrudControllerTest {
     public void setUp() {
         initMocks(this);
         objectMapper = new ObjectMapper();
-        crudController = new CrudController(crudService, objectMapper);
+        crudController = new CrudController(crudService);
         crudEntity = new AlternateDiagnosisCrudEntity();
         when(crudService.getCrudEntity(ENTITY_NAME)).thenReturn(crudEntity);
     }

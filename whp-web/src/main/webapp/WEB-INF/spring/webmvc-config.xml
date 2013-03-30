@@ -38,6 +38,7 @@
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/"/>
+    <mvc:resources mapping="/motech-couchdb-crud/**" location="classpath:/motech-couchdb-crud/"/>
     <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
     <mvc:default-servlet-handler/>
 
@@ -118,7 +119,8 @@
 
     <!-- Freemarker config -->
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="templateLoaderPaths" value="/WEB-INF/views/,classpath:/views/" />
+        <property name="preferFileSystemAccess" value="false" />
         <property name="freemarkerVariables">
             <map>
                 <entry key="applicationVersion" value="#{whpProperties['application.version']}"/>
