@@ -38,6 +38,7 @@ public class CrudController {
     }
 
     @RequestMapping(value = "/crud/{entity}/delete/{id}")
+    @ResponseBody
     public void delete(@PathVariable("entity") String entityName, @PathVariable("id") String entityId){
         crudService.deleteEntity(entityName, entityId);
     }

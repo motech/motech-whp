@@ -6,16 +6,10 @@
 <head>
     <title>  ${entity} - Admin </title>
 
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/bootstrap.min.css'/>"/>
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/resources-${applicationVersion}/styles/jquery-ui-1.9.1.custom.min.css'/>"/>
+    <script type="text/javascript" src="<@spring.url '/motech-couchdb-crud/js/jquery/jquery-1.8.2.min.js'/>"></script>
+    <script type="text/javascript" src="<@spring.url '/motech-couchdb-crud/js/bootstrap/bootstrap.min.js'/>"></script>
 
-    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-1.8.2.min.js'/>"></script>
-
-    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/bootstrap/bootstrap.min.js'/>"></script>
-    <script type="text/javascript" src="<@spring.url '/resources-${applicationVersion}/js/jquery/jquery-ui-1.9.1.custom.min.js'/>"></script>
-
-    <link rel="SHORTCUT ICON" href="<@spring.url '/resources-${applicationVersion}/images/favicon.ico'/>"/>
-
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/motech-couchdb-crud/css/bootstrap.min.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/motech-couchdb-crud/css/motech-paginator-pagination.css'/>"/>
     <link rel="stylesheet" type="text/css" href="<@spring.url '/motech-couchdb-crud/css/crud.css'/>"/>
 </head>
@@ -91,8 +85,6 @@
     <a href= "#" data-toggle="modal" data-target="#createOrEditEntityModal" onclick="newEntity(this)">Add Entity</a>
 </div>
 
-
-
 <div id="createOrEditEntityModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -101,10 +93,6 @@
     <div class="modal-body">
         <form id = "jsonForm"></form>
     </div>
-    <#--<div class="modal-footer">-->
-        <#--<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>-->
-        <#--<button class="btn btn-primary">Save</button>-->
-    <#--</div>-->
 </div>
 
 </div>
@@ -116,7 +104,6 @@
 <script type="text/javascript" src="<@spring.url '/motech-couchdb-crud/js/jsonform/underscore.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/motech-couchdb-crud/js/jsonform/jsv.js'/>"></script>
 <script type="text/javascript" src="<@spring.url '/motech-couchdb-crud/js/jsonform/jsonform.js'/>"></script>
-
 
 <script type="text/javascript">
 
@@ -187,14 +174,6 @@
             jsonSchema = json;
             jsonSchema.properties.type.default = "${entity}";
         });
-
-//        $(".newEntity").click(function (event) {
-//            event.preventDefault();
-//
-
-//            });
-
-
     });
 </script>
 </html>
