@@ -4,7 +4,7 @@ import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.couchdbcrud.model.CrudEntity;
+import org.motechproject.couchdbcrud.service.CrudEntity;
 import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.motechproject.couchdbcrud.service.CrudService;
 import org.motechproject.model.MotechBaseDataObject;

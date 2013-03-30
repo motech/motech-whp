@@ -3,7 +3,7 @@ package org.motechproject.couchdbcrud.controller;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.schema.JsonSchema;
-import org.motechproject.couchdbcrud.model.CrudEntity;
+import org.motechproject.couchdbcrud.service.CrudEntity;
 import org.motechproject.couchdbcrud.service.CrudService;
 import org.motechproject.model.MotechBaseDataObject;
 import org.springframework.beans.factory.annotation.Autowired;

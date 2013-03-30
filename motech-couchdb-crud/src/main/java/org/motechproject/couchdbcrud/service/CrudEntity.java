@@ -1,4 +1,4 @@
-package org.motechproject.couchdbcrud.model;
+package org.motechproject.couchdbcrud.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.couchdbcrud.repository.CrudRepository;

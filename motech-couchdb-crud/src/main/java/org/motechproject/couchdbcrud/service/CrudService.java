@@ -1,6 +1,5 @@
 package org.motechproject.couchdbcrud.service;
 
-import org.motechproject.couchdbcrud.model.CrudEntity;
 import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.motechproject.model.MotechBaseDataObject;
 import org.springframework.beans.factory.annotation.Autowired;
