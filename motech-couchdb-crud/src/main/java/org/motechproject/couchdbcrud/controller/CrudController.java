@@ -19,16 +19,17 @@ import java.io.IOException;
 @Controller
 public class CrudController {
     private CrudService crudService;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
 
     @Autowired
-    public CrudController(CrudService crudService) {
+    public CrudController(CrudService crudService, ObjectMapper objectMapper) {
         this.crudService = crudService;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/crud/{entity}/list")
-    public String all(@PathVariable("entity") String entityName, Model model){
-        CrudEntity entity = crudService.getEntity(entityName);
+    public String list(@PathVariable("entity") String entityName, Model model){
+        CrudEntity entity = crudService.getCrudEntity(entityName);
 
         model.addAttribute("entity", entityName);
         model.addAttribute("displayFields", entity.getDisplayFields());
@@ -50,7 +51,7 @@ public class CrudController {
     @RequestMapping(value = "/crud/{entity}/save")
     @ResponseBody
     public void save(@PathVariable("entity") String entityName, @RequestBody String entityJson) throws IOException {
-        CrudEntity crudEntity = crudService.getEntity(entityName);
+        CrudEntity crudEntity = crudService.getCrudEntity(entityName);
         MotechBaseDataObject object = (MotechBaseDataObject) objectMapper.readValue(entityJson, crudEntity.getEntityType());
         crudService.saveEntity(entityName, object);
     }
@@ -58,7 +59,7 @@ public class CrudController {
     @ResponseBody
     @RequestMapping(value = "/crud/{entity}/schema")
     public JsonSchema schema(@PathVariable("entity") String entityName) throws JsonMappingException {
-        Class entityType = crudService.getEntity(entityName).getEntityType();
+        Class entityType = crudService.getCrudEntity(entityName).getEntityType();
         return objectMapper.generateJsonSchema(entityType);
     }
 }

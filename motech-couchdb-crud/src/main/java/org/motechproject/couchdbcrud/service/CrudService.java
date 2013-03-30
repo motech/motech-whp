@@ -21,18 +21,18 @@ public class CrudService {
         }
     }
 
-    public CrudEntity getEntity(String name) {
+    public CrudEntity getCrudEntity(String name) {
         return allCrudEntities.get(name);
     }
 
     public void deleteEntity(String name, String entityId) {
         CrudRepository repository = allCrudEntities.get(name).getRepository();
-        repository.remove(repository.get(entityId));
+        Object entity = repository.get(entityId);
+        repository.remove(entity);
     }
 
-
     public void saveEntity(String name, MotechBaseDataObject entity) {
-        CrudRepository repository = getEntity(name).getRepository();
+        CrudRepository repository = getCrudEntity(name).getRepository();
         if (entity.getId() == null) {
             repository.add(entity);
         } else {
@@ -41,7 +41,7 @@ public class CrudService {
     }
 
     public Object getEntity(String entityName, String entityId) {
-        CrudRepository repository = getEntity(entityName).getRepository();
+        CrudRepository repository = getCrudEntity(entityName).getRepository();
         return repository.get(entityId);
     }
 }
