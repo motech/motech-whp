@@ -52,7 +52,7 @@
     <import resource="classpath*:applicationProviderReminderContext.xml"/>
     <import resource="classpath*:applicationWgnOutboundContext.xml"/>
     <import resource="classpath*:applicationPatientIVRAlertContext.xml"/>
-    <!--<import resource="classpath*:applicationEventLogging.xml"/>-->
+    <import resource="classpath*:applicationCouchdbCrudModuleContext.xml"/>
 
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

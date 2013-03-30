@@ -4,14 +4,14 @@ package org.motechproject.whp.containermapping.repository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
-import org.motechproject.dao.MotechBaseRepository;
+import org.motechproject.couchdbcrud.repository.CrudRepository;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AllProviderContainerMappings extends MotechBaseRepository<ProviderContainerMapping> {
+public class AllProviderContainerMappings extends CrudRepository<ProviderContainerMapping> {
 
     @Autowired
     public AllProviderContainerMappings(@Qualifier("whpDbConnector") CouchDbConnector db) {

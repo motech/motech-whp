@@ -212,6 +212,10 @@
             <artifactId>motech-deliverytools-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-couchdb-crud</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
         </dependency>
