@@ -43,7 +43,8 @@ public class WHPSchedulerServiceIT extends BaseUnitTest {
     @Test
     public void shouldScheduleAndRetrieveScheduledJob() {
         DateTime now = now();
-        ScheduleConfiguration scheduleConfiguration = createScheduleConfiguration(30, 10, DayOfWeek.Sunday);
+        DayOfWeek dayOfWeek = DayOfWeek.getDayOfWeek(now().plusDays(1).getDayOfWeek());
+        ScheduleConfiguration scheduleConfiguration = createScheduleConfiguration(30, 10, dayOfWeek);
         whpSchedulerService.scheduleEvent(scheduleConfiguration);
 
         String subject = EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
@@ -55,8 +56,8 @@ public class WHPSchedulerServiceIT extends BaseUnitTest {
         List<Date> timings = motechSchedulerService.getScheduledJobTimings(subject, PROVIDER_ADHERENCE_WINDOW_COMMENCED.name(), fromDate, toDate);
         assertTrue(!timings.isEmpty());
 
-        DateTime nextSunday = nextApplicableWeekDay(now, asList(DayOfWeek.Sunday));
-        Date expectedScheduleDate = nextSunday.withHourOfDay(10).withMinuteOfHour(30).withSecondOfMinute(0).withMillisOfSecond(0).toDate();
+        DateTime nextWeek = nextApplicableWeekDay(now, asList(dayOfWeek));
+        Date expectedScheduleDate = nextWeek.withHourOfDay(10).withMinuteOfHour(30).withSecondOfMinute(0).withMillisOfSecond(0).toDate();
         assertEquals(expectedScheduleDate, timings.get(0));
     }
 
