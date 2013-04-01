@@ -185,7 +185,7 @@
             <tbody>
             <tr>
                 <td>${patient.treatmentDetails.xpertDeviceNumber!}</td>
-                    <td>${patient.treatmentDetails.xpertTestDate!}</td>
+                <td>${patient.treatmentDetails.getXpertTestDateInDesiredFormat()}</td>
                 <td>${patient.treatmentDetails.xpertTestResult!}</td>
                 <td>${patient.treatmentDetails.rifResistanceResult!}</td>
             </tr>
@@ -271,7 +271,7 @@
         <label class="tc-label">HIV status</label>
         <label class="tc-value">${patient.treatmentDetails.hivStatus}</label>
         <label class="tc-label">HIV Test Date</label>
-        <label class="tc-value">${patient.treatmentDetails.hivTestDate!}</label>
+        <label class="tc-value">${patient.treatmentDetails.getHivTestDateInDesiredFormat()}</label>
     </div>
     <div>
         <label class="tc-label">CPT delivered on (date)</label>

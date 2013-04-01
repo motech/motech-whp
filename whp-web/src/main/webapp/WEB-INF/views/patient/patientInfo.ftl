@@ -167,7 +167,7 @@
                 <tbody>
                 <tr>
                     <td>${patient.treatmentDetails.xpertDeviceNumber!}</td>
-                    <td>${patient.treatmentDetails.xpertTestDate!}</td>
+                    <td>${patient.treatmentDetails.getXpertTestDateInDesiredFormat()}</td>
                     <td>${patient.treatmentDetails.xpertTestResult!}</td>
                     <td>${patient.treatmentDetails.rifResistanceResult!}</td>
                 </tr>

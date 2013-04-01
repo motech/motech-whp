@@ -1,7 +1,9 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.LocalDate;
+import org.motechproject.whp.common.util.WHPDate;
 
 import java.io.Serializable;
 
@@ -27,4 +29,19 @@ public class TreatmentDetails implements Serializable {
     private String xpertDeviceNumber;
     private LocalDate xpertTestDate;
     private String rifResistanceResult;
+
+
+    @JsonIgnore
+    public String getXpertTestDateInDesiredFormat() {
+        if(xpertTestDate != null)
+            return WHPDate.date(xpertTestDate).value();
+        return "";
+    }
+
+    @JsonIgnore
+    public String getHivTestDateInDesiredFormat() {
+        if(hivTestDate != null)
+            return WHPDate.date(hivTestDate).value();
+        return "";
+    }
 }
