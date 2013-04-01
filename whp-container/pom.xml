@@ -56,6 +56,11 @@
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-couchdb-crud</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
