@@ -1,6 +1,6 @@
 package org.motechproject.whp.container.service;
 
-import org.motechproject.couchdbcrud.service.CouchDBCrudEntity;
+import org.motechproject.crud.service.CouchDBCrudEntity;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @Component
-public class AlternateDiagnosisCrudEntity extends CouchDBCrudEntity<AlternateDiagnosis>{
+public class AlternateDiagnosisCrudEntity extends CouchDBCrudEntity<AlternateDiagnosis> {
 
     @Autowired
     public AlternateDiagnosisCrudEntity(AllAlternateDiagnosis allAlternateDiagnosis) {

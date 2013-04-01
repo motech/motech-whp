@@ -4,7 +4,7 @@ package org.motechproject.whp.container.repository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.GenerateView;
-import org.motechproject.couchdbcrud.repository.CouchDBCrudRepository;
+import org.motechproject.crud.repository.CouchDBCrudRepository;
 import org.motechproject.dao.BusinessIdNotUniqueException;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;

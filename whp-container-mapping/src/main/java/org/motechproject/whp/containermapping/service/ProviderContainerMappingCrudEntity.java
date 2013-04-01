@@ -1,6 +1,6 @@
 package org.motechproject.whp.containermapping.service;
 
-import org.motechproject.couchdbcrud.service.CouchDBCrudEntity;
+import org.motechproject.crud.service.CouchDBCrudEntity;
 import org.motechproject.whp.containermapping.domain.ProviderContainerMapping;
 import org.motechproject.whp.containermapping.repository.AllProviderContainerMappings;
 import org.springframework.beans.factory.annotation.Autowired;

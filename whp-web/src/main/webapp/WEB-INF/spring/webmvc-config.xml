@@ -30,7 +30,7 @@
     <context:component-scan base-package="org.motechproject.caselogs.controller">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
-    <context:component-scan base-package="org.motechproject.couchdbcrud.controller">
+    <context:component-scan base-package="org.motechproject.crud.controller">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
     <context:component-scan base-package="org.motechproject.flash"/>
@@ -38,7 +38,7 @@
     <mvc:annotation-driven/>
     <mvc:resources mapping="/resources-#{whpProperties['application.version']}/**" location="/"/>
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/"/>
-    <mvc:resources mapping="/motech-couchdb-crud/**" location="classpath:/motech-couchdb-crud/"/>
+    <mvc:resources mapping="/motech-crud/**" location="classpath:/motech-crud/"/>
     <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
     <mvc:default-servlet-handler/>
 
