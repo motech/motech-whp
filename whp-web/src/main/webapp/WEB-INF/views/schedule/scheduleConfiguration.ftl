@@ -25,10 +25,12 @@
     </div>
     <h1>
         Schedule
-        <div class="pull-right controls">
-            <button type="button" id="manualTrigger" class="btn btn-danger" data-toggle="modal" href="#confirm"><i class="icon-play icon-white"></i> Remind now</button>
-            <#if scheduleConfiguration.scheduled == true><button type="submit" id="unScheduleButton" class="btn btn-primary"><i class="icon-trash icon-white"></i> Unschedule</button></#if>
-        </div>
+        <#if scheduleConfiguration.scheduled == true>
+            <div class="pull-right controls">
+                <button type="button" id="manualTrigger" class="btn btn-danger" data-toggle="modal" href="#confirm"><i class="icon-play icon-white"></i> Remind now</button>
+                <button type="submit" id="unScheduleButton" class="btn btn-primary"><i class="icon-trash icon-white"></i> Unschedule</button>
+            </div>
+        </#if>
     </h1>
         <form id="provider-reminder-form"  autocomplete="off" action="<@spring.url '/schedule/update'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
             <div class="form-element">
