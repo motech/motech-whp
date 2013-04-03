@@ -21,6 +21,9 @@
             <li>
                 <a href="${whpReportsURL}/<@spring.message 'whp.reports.provider.reminder.call.report'/>">Provider reminder call logs</a>
             </li>
+            <li>
+                <a href="${whpReportsURL}/<@spring.message 'whp.reports.patient.alert.call.log.report'/>">Patient alert call logs</a>
+            </li>
         </ul>
     </li>
 
