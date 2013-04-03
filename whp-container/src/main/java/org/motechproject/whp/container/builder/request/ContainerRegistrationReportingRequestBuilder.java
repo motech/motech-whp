@@ -3,7 +3,7 @@ package org.motechproject.whp.container.builder.request;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ContainerRegistrationDetails;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
-import org.motechproject.whp.reports.contract.UserGivenPatientDetails;
+import org.motechproject.whp.reports.contract.UserGivenPatientDetailsRequest;
 
 public class ContainerRegistrationReportingRequestBuilder {
     private Container container;
@@ -29,7 +29,7 @@ public class ContainerRegistrationReportingRequestBuilder {
 
     private void setUserGivenDetails() {
         ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
-        UserGivenPatientDetails userGivenPatientDetails = new UserGivenPatientDetails();
+        UserGivenPatientDetailsRequest userGivenPatientDetails = new UserGivenPatientDetailsRequest();
         if (containerRegistrationDetails.getPatientId() != null) {
             userGivenPatientDetails.setPatientId(containerRegistrationDetails.getPatientId());
         }
@@ -43,7 +43,7 @@ public class ContainerRegistrationReportingRequestBuilder {
             userGivenPatientDetails.setGender(containerRegistrationDetails.getPatientGender().name());
         }
 
-        containerRegistrationReportingRequest.setUserGivenPatientDetails(userGivenPatientDetails);
+        containerRegistrationReportingRequest.setUserGivenPatientDetailsRequest(userGivenPatientDetails);
     }
 
     public ContainerRegistrationReportingRequestBuilder registeredThrough(String channelId) {

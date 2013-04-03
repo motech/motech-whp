@@ -21,6 +21,7 @@ import org.motechproject.whp.container.builder.request.ContainerRegistrationRepo
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.*;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
@@ -29,10 +30,7 @@ import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.ContainerPatientMappingReportingRequest;
-import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
-import org.motechproject.whp.reports.contract.ContainerStatusReportingRequest;
-import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
+import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -269,6 +267,64 @@ public class ContainerServiceTest extends BaseUnitTest {
         assertNull(actualContainer.getDiagnosis());
 
         verifyStatusUpdateReportingEventPublication(actualContainer);
+    }
+
+    @Test
+    public void shouldUpdateOnlyPatientDetails() throws DateParseException {
+
+        ContainerPatientDetailsRequest containerPatientDetailsRequest = new ContainerPatientDetailsRequest();
+        String containerId = "containerId";
+        String providerId = "providerid";
+        String newPatientId = "newPatientId";
+        String newPatientName = "newPatientName";
+        containerPatientDetailsRequest.setContainerId(containerId);
+        containerPatientDetailsRequest.setPatientId(newPatientId);
+        containerPatientDetailsRequest.setPatientName(newPatientName);
+
+        Container container = new Container();
+        container.setContainerId(containerId);
+        container.setProviderId(providerId);
+        ContainerRegistrationDetails containerRegistrationDetails = new ContainerRegistrationDetails();
+        containerRegistrationDetails.setPatientId(patientId);
+        containerRegistrationDetails.setPatientName(patientName);
+        containerRegistrationDetails.setPatientGender(gender);
+        containerRegistrationDetails.setPatientAge(age);
+        container.setContainerRegistrationDetails(containerRegistrationDetails);
+        when(allContainers.findByContainerId(containerPatientDetailsRequest.getContainerId())).thenReturn(container);
+
+        containerService.updatePatientDetails(containerPatientDetailsRequest);
+
+        verify(allContainers).findByContainerId(containerPatientDetailsRequest.getContainerId());
+        ArgumentCaptor<Container> captor = ArgumentCaptor.forClass(Container.class);
+        verify(allContainers).update(captor.capture());
+        Container actualContainer = captor.getValue();
+
+        assertThat(actualContainer.getContainerId(), is(containerId));
+        assertThat(actualContainer.getProviderId(), is(providerId));
+        assertThat(actualContainer.getContainerRegistrationDetails().getPatientId(), is(containerPatientDetailsRequest.getPatientId()));
+        assertThat(actualContainer.getContainerRegistrationDetails().getPatientName(), is(containerPatientDetailsRequest.getPatientName()));
+
+        UserGivenPatientDetailsReportingRequest expectedUserGivenPatientDetailsReportingRequest = new UserGivenPatientDetailsReportingRequest();
+        expectedUserGivenPatientDetailsReportingRequest.setContainerId(containerId);
+        expectedUserGivenPatientDetailsReportingRequest.setGender(gender.name());
+        expectedUserGivenPatientDetailsReportingRequest.setPatientName(newPatientName);
+        expectedUserGivenPatientDetailsReportingRequest.setPatientId(newPatientId);
+        expectedUserGivenPatientDetailsReportingRequest.setPatientAge(age);
+
+        verify(reportingPublisherService).reportUserGivenPatientDetailsUpdate(expectedUserGivenPatientDetailsReportingRequest);
+    }
+
+    @Test
+    public void shouldNotUpdatePatientDetailsIfTheContainerIdIsInvalid() throws DateParseException {
+        ContainerPatientDetailsRequest containerPatientDetailsRequest = new ContainerPatientDetailsRequest();
+
+        when(allContainers.findByContainerId(containerPatientDetailsRequest.getContainerId())).thenReturn(null);
+
+        containerService.updatePatientDetails(containerPatientDetailsRequest);
+
+        verify(allContainers).findByContainerId(containerPatientDetailsRequest.getContainerId());
+        verify(allContainers, never()).update(any(Container.class));
+        verify(reportingPublisherService, never()).reportUserGivenPatientDetailsUpdate(any(UserGivenPatientDetailsReportingRequest.class));
     }
 
     @Test

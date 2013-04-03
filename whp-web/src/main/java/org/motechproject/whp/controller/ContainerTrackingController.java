@@ -1,6 +1,7 @@
 package org.motechproject.whp.controller;
 
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.validation.ReasonForClosureValidator;
 import org.motechproject.whp.reponse.WHPResponse;
@@ -31,6 +32,11 @@ public class ContainerTrackingController {
         }
 
         containerService.closeContainer(containerClosureRequest);
+        return new WHPResponse();
+    }
+
+    protected WHPResponse updateRegistrationPatientDetails(ContainerPatientDetailsRequest containerPatientDetailsRequest) {
+        containerService.updatePatientDetails(containerPatientDetailsRequest);
         return new WHPResponse();
     }
 }

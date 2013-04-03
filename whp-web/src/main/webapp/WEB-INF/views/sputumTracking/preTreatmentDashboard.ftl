@@ -6,6 +6,7 @@
         <#assign pageNo=1/>
     </#if>
     <#include "preTreatmentReasonForClosure.ftl"/>
+    <#include "editContainerPatientDetails.ftl"/>
 <div>
     <@paginator.filter id = "sputum_tracking_filter"  pagination_id = "sputum_tracking_pagination">
       <h1>Pre Treatment Sputum Tracking Dashboard</h1>
@@ -142,7 +143,7 @@
             <thead>
             <tr>
                 <th>Container Id</th>
-                <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate', 'DESC')"><i id = "sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
+                <th>Container Issued On  <a href="#" ng-click = "sort('containerIssuedDate', 'DESC')"><i id="sortIcon_containerIssuedDate" class="icon-arrow-up"></i></a></th>
                 <th>Given Patient Name</th>
                 <th>Given Patient ID</th>
                 <th>Lab Name</th>
@@ -166,8 +167,8 @@
                 containerId="{{item.containerId}}">
                 <td class="containerId">{{item.containerId}}</td>
                 <td>{{item.containerIssuedOn}}</td>
-                <td>{{item.givenPatientName}}</td>
-                <td>{{item.givenPatientId}}</td>
+                <td id="patientName"><a href="#editPatientDetails" data-toggle="modal" class="editPatientDetails"><i class="icon-edit"></i></a>&nbsp;<span>{{item.givenPatientName}}</span></td>
+                <td id="patientId"><a href="#editPatientDetails" data-toggle="modal" class="editPatientDetails"><i class="icon-edit"></i></a>&nbsp;<span>{{item.givenPatientId}}</span></td>
                 <td>{{item.labName}}</td>
                 <td>{{item.consultationOneResult}}</td>
                 <td>{{item.consultationOneDate}}</td>

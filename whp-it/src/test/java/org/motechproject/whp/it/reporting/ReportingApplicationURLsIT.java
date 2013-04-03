@@ -58,6 +58,11 @@ public class ReportingApplicationURLsIT {
     }
 
     @Test
+    public void shouldGetUpdateContainerUserGivenPatientDetailsURL() {
+        assertThat(reportingApplicationURLs.getUpdateUserGivenPatientDetailsURL(), is("http://127.0.0.1:9999/whp-reports/sputumTracking/updateUserGivenPatientDetails"));
+    }
+
+    @Test
     public void shouldGetContainerRegistrationCallLogURL() {
         assertThat(reportingApplicationURLs.getContainerRegistrationCallDetailsLogURL(), is("http://127.0.0.1:9999/whp-reports/containerRegistrationCallLog/updateCallDetails"));
     }

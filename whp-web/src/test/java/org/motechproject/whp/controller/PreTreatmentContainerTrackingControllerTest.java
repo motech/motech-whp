@@ -3,6 +3,7 @@ package org.motechproject.whp.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.Diagnosis;
@@ -10,6 +11,7 @@ import org.motechproject.whp.common.domain.District;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
@@ -23,6 +25,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.whp.controller.PreTreatmentContainerTrackingController.*;
@@ -129,5 +133,24 @@ public class PreTreatmentContainerTrackingControllerTest {
                 .andExpect(content().string("success"));
 
         verify(containerService).openContainer(containerId);
+    }
+
+    @Test
+    public void shouldUpdatePatientDetails() throws Exception{
+        String patientId = "12345";
+        String patientName = "patient123";
+        String containerId = "1234567890";
+
+        standaloneSetup(containerTrackingController).build()
+                .perform(post("/sputum-tracking/pre-treatment/updatePatientDetails").param("containerId", containerId).param("patientName", patientName).param("patientId", patientId))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<ContainerPatientDetailsRequest> captor = ArgumentCaptor.forClass(ContainerPatientDetailsRequest.class);
+        verify(containerService).updatePatientDetails(captor.capture());
+        ContainerPatientDetailsRequest patientDetailsRequest = captor.getValue();
+
+        assertThat(patientDetailsRequest.getContainerId(), is(containerId));
+        assertThat(patientDetailsRequest.getPatientId(), is(patientId));
+        assertThat(patientDetailsRequest.getPatientName(), is(patientName));
     }
 }

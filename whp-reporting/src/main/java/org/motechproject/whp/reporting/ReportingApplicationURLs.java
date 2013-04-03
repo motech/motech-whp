@@ -29,6 +29,7 @@ public class ReportingApplicationURLs {
     private String adherenceRecordUpdateURL;
     private String providerAdherenceStatusByDistrictURL;
     private String patientAdherenceMissingDataURL;
+    private String updateUserGivenPatientDetailsURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -73,6 +74,11 @@ public class ReportingApplicationURLs {
     @Value("${whp.reports.containerPatientMapping}")
     public void setContainerPatientMappingLogURL(String containerPatientMappingLogURL) {
         this.containerPatientMappingLogURL = containerPatientMappingLogURL;
+    }
+
+    @Value("${whp.reports.updateUserGivenPatientDetails}")
+    public void setUpdateContainerUserGivenPatientDetailsURL(String userGivenPatientDetailsURL) {
+        this.updateUserGivenPatientDetailsURL = userGivenPatientDetailsURL;
     }
 
     @Value("${whp.reports.containerRegistrationCallDetailsLog}")

@@ -16,6 +16,36 @@ $(function () {
             $('[type=no-results]').hide();
         }
 
+
+        $(".editPatientDetails").click(function () {
+            setContainerIdOnEditPatientDetailsForm.call(this);
+        });
+
+        var setContainerIdOnEditPatientDetailsForm = function () {
+            var containerId = $(this).parents('tr').attr('containerId');
+            var patientId = $(this).parents('tr').find("td#patientId span").html();
+            var patientName = $(this).parents('tr').find("td#patientName span").html();
+            $('#editPatientDetails input[name=containerId]').val(containerId);
+            $('#editPatientDetails input[name=patientId]').val(patientId);
+            $('#editPatientDetails input[name=patientName]').val(patientName);
+            $('#editPatientDetails #containerIdDisplay').html(containerId);
+        }
+
+        $("#savePatientDetails").click(function () {
+            var dataString = $("#editPatientDetails").serialize();
+            var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/updatePatientDetails";
+            $.ajax({
+                type:"POST",
+                url:endpoint,
+                data:dataString,
+                success:function () {
+                    angular.element($('#sputum_tracking_pagination .paginator')).controller().loadPage();
+                    $('#editPatientDetails').modal('hide');
+                }
+            });
+            return false;
+        });
+
         $(".closeContainer").click(function () {
             setContainerIdOnClosureForm.call(this);
             showTbNegativeOptionForPositiveDiagnosis.call(this);
@@ -30,7 +60,7 @@ $(function () {
         var setContainerIdOnClosureForm = function () {
             var containerId = $(this).parents('tr').attr('containerId');
             $('#setReason input[name=containerId]').val(containerId);
-            $('#containerIdDisplay').html(containerId);
+            $('#setReason #containerIdDisplay').html(containerId);
         }
 
         var showTbNegativeOptionForPositiveDiagnosis = function () {

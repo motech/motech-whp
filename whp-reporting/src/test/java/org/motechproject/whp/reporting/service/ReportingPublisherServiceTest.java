@@ -127,6 +127,17 @@ public class ReportingPublisherServiceTest {
     }
 
     @Test
+    public void shouldUpdateUserGivenPatientDetailsLog() {
+        String url = "url";
+        when(reportingApplicationURLs.getUpdateUserGivenPatientDetailsURL()).thenReturn(url);
+
+        UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest = new UserGivenPatientDetailsReportingRequest();
+
+        reportingPublisher.reportUserGivenPatientDetailsUpdate(userGivenPatientDetailsReportingRequest);
+        verify(httpClientService).post(url, userGivenPatientDetailsReportingRequest);
+    }
+
+    @Test
     public void shouldReportContainerRegistrationCallDetailsLogRequest() {
         String url = "url";
         when(reportingApplicationURLs.getContainerRegistrationCallDetailsLogURL()).thenReturn(url);

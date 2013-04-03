@@ -12,7 +12,7 @@ import org.motechproject.whp.container.builder.ContainerBuilder;
 import org.motechproject.whp.container.domain.Container;
 import org.motechproject.whp.container.domain.ContainerRegistrationDetails;
 import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
-import org.motechproject.whp.reports.contract.UserGivenPatientDetails;
+import org.motechproject.whp.reports.contract.UserGivenPatientDetailsRequest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -68,7 +68,7 @@ public class ContainerRegistrationReportingRequestBuilderTest {
 
         containerRegistrationReportingRequest = containerRegistrationReportingRequestBuilder.forContainer(container).build();
 
-        UserGivenPatientDetails userGivenPatientDetails = containerRegistrationReportingRequest.getUserGivenPatientDetails();
+        UserGivenPatientDetailsRequest userGivenPatientDetails = containerRegistrationReportingRequest.getUserGivenPatientDetailsRequest();
         ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
         assertThat(userGivenPatientDetails.getPatientName(), is(containerRegistrationDetails.getPatientName()));
         assertNull(userGivenPatientDetails.getPatientAge());
@@ -77,7 +77,7 @@ public class ContainerRegistrationReportingRequestBuilderTest {
     }
 
     private void assertuserGivenDetails(Container container, ContainerRegistrationReportingRequest containerRegistrationReportingRequest) {
-        UserGivenPatientDetails userGivenPatientDetails = containerRegistrationReportingRequest.getUserGivenPatientDetails();
+        UserGivenPatientDetailsRequest userGivenPatientDetails = containerRegistrationReportingRequest.getUserGivenPatientDetailsRequest();
         ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
         assertThat(userGivenPatientDetails.getPatientName(), is(containerRegistrationDetails.getPatientName()));
         assertThat(userGivenPatientDetails.getPatientAge(), is(containerRegistrationDetails.getPatientAge()));

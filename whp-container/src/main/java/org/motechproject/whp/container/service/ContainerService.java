@@ -14,6 +14,7 @@ import org.motechproject.whp.container.builder.request.ContainerRegistrationRepo
 import org.motechproject.whp.container.builder.request.ContainerStatusReportingRequestBuilder;
 import org.motechproject.whp.container.builder.request.SputumLabResultsCaptureReportingRequestBuilder;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.contract.ContainerRegistrationRequest;
 import org.motechproject.whp.container.domain.*;
 import org.motechproject.whp.container.repository.AllAlternateDiagnosis;
@@ -22,10 +23,7 @@ import org.motechproject.whp.container.repository.AllReasonForContainerClosures;
 import org.motechproject.whp.remedi.model.ContainerRegistrationModel;
 import org.motechproject.whp.remedi.service.RemediService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.reports.contract.ContainerPatientMappingReportingRequest;
-import org.motechproject.whp.reports.contract.ContainerRegistrationReportingRequest;
-import org.motechproject.whp.reports.contract.ContainerStatusReportingRequest;
-import org.motechproject.whp.reports.contract.SputumLabResultsCaptureReportingRequest;
+import org.motechproject.whp.reports.contract.*;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +141,17 @@ public class ContainerService {
         return allAlternateDiagnosis.getAll();
     }
 
+    public void updatePatientDetails(ContainerPatientDetailsRequest containerPatientDetailsRequest) {
+        Container container = allContainers.findByContainerId(containerPatientDetailsRequest.getContainerId());
+        if(container != null) {
+            ContainerRegistrationDetails containerRegistrationDetails = container.getContainerRegistrationDetails();
+            containerRegistrationDetails.setPatientId(containerPatientDetailsRequest.getPatientId());
+            containerRegistrationDetails.setPatientName(containerPatientDetailsRequest.getPatientName());
+
+            allContainers.update(container);
+            publishUserDetailsUpdateReportingEvent(container);
+        }
+    }
 
     private void resetContainerDiagnosisData(Container container) {
         if (container.getDiagnosis() == Diagnosis.Negative) {
@@ -165,7 +174,6 @@ public class ContainerService {
         containerRegistrationDetails.setPatientAge(registrationRequest.getAge());
         containerRegistrationDetails.setPatientGender(registrationRequest.getGender());
     }
-
 
     private LocalDate parseDate(String date) {
         List<String> dateFormats = Arrays.asList(new SimpleDateFormat(DATE_FORMAT).toPattern());
@@ -199,5 +207,17 @@ public class ContainerService {
     private void publishContainerPatientMappingReportingEvent(Container container) {
         ContainerPatientMappingReportingRequest containerPatientMappingReportingRequest = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
         reportingPublisherService.reportContainerPatientMapping(containerPatientMappingReportingRequest);
+    }
+
+    private void publishUserDetailsUpdateReportingEvent(Container container) {
+        UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest = new UserGivenPatientDetailsReportingRequest();
+        userGivenPatientDetailsReportingRequest.setContainerId(container.getContainerId());
+        ContainerRegistrationDetails registrationDetails = container.getContainerRegistrationDetails();
+        userGivenPatientDetailsReportingRequest.setPatientAge(registrationDetails.getPatientAge());
+        userGivenPatientDetailsReportingRequest.setPatientId(registrationDetails.getPatientId());
+        userGivenPatientDetailsReportingRequest.setPatientName(registrationDetails.getPatientName());
+        userGivenPatientDetailsReportingRequest.setGender(registrationDetails.getPatientGender().name());
+
+        reportingPublisherService.reportUserGivenPatientDetailsUpdate(userGivenPatientDetailsReportingRequest);
     }
 }

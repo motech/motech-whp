@@ -5,6 +5,7 @@ import org.motechproject.whp.common.domain.Diagnosis;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.domain.AlternateDiagnosis;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
@@ -72,5 +73,11 @@ public class PreTreatmentContainerTrackingController extends ContainerTrackingCo
         uiModel.addAttribute(DISTRICTS, allDistricts.getAll());
 
         return "sputumTracking/preTreatmentDashboard";
+    }
+
+    @RequestMapping(value = "/updatePatientDetails", method = RequestMethod.POST)
+    @ResponseBody
+    public WHPResponse updatePatientDetails(ContainerPatientDetailsRequest containerPatientDetailsRequest) {
+        return updateRegistrationPatientDetails(containerPatientDetailsRequest);
     }
 }

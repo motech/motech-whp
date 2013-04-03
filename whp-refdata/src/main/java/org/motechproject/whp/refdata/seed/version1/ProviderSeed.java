@@ -38,7 +38,7 @@ public class ProviderSeed {
         ContainerRanges containerRanges = new ContainerRanges();
 
         mapping.setProviderId("raj");
-        containerRanges.add(new ContainerRange(10000000000l, 20000000000l));
+        containerRanges.add(new ContainerRange(1l, 50000l));
 
         mapping.setContainerRanges(containerRanges);
         providerContainerMappingService.add(mapping);

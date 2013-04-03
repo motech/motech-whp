@@ -4,6 +4,7 @@ import org.motechproject.whp.common.domain.ContainerStatus;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.container.contract.ContainerClosureRequest;
+import org.motechproject.whp.container.contract.ContainerPatientDetailsRequest;
 import org.motechproject.whp.container.domain.ReasonForContainerClosure;
 import org.motechproject.whp.container.service.ContainerService;
 import org.motechproject.whp.container.service.ReasonsForClosureService;
@@ -67,5 +68,11 @@ public class InTreatmentContainerTrackingController extends ContainerTrackingCon
         uiModel.addAttribute(DISTRICTS, allDistricts.getAll());
 
         return "sputumTracking/inTreatmentDashboard";
+    }
+
+    @RequestMapping(value = "/updatePatientDetails", method = RequestMethod.POST)
+    @ResponseBody
+    public WHPResponse updatePatientDetails(ContainerPatientDetailsRequest containerPatientDetailsRequest) {
+        return updateRegistrationPatientDetails(containerPatientDetailsRequest);
     }
 }

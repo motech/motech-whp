@@ -14,6 +14,7 @@
     </div>
     </#if>
     <#include "inTreatmentReasonForClosure.ftl"/>
+    <#include "editContainerPatientDetails.ftl"/>
 <div>
     <@paginator.filter id = "sputum_tracking_filter" pagination_id = "sputum_tracking_pagination">
        <h1>In Treatment Sputum Tracking Dashboard</h1>
@@ -156,8 +157,8 @@
                 containerId="{{item.containerId}}">
                 <td>{{item.containerId}}</td>
                 <td>{{item.containerIssuedOn}}</td>
-                <td>{{item.givenPatientName}}</td>
-                <td>{{item.givenPatientId}}</td>
+                <td id="patientName"><a href="#editPatientDetails" data-toggle="modal" class="editPatientDetails"><i class="icon-edit"></i></a>&nbsp;<span>{{item.givenPatientName}}</span></td>
+                <td id="patientId"><a href="#editPatientDetails" data-toggle="modal" class="editPatientDetails"><i class="icon-edit"></i></a>&nbsp;<span>{{item.givenPatientId}}</span></td>
                 <td>{{item.labName}}</td>
                 <td>{{item.consultationOneResult}}</td>
                 <td>{{item.consultationOneDate}}</td>
