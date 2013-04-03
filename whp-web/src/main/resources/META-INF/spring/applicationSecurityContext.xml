@@ -21,6 +21,8 @@
 
         <access-denied-handler error-page="/errors/403"/>
 
+        <intercept-url pattern="/crud/**" access="hasAnyRole('IT_ADMIN', 'CMF_ADMIN')" requires-channel="any"/>
+
         <!-- Permit all -->
         <intercept-url pattern="/patient/process" access="permitAll" requires-channel="any"/>
         <intercept-url pattern="/motech-delivery-tools/**" access="permitAll" requires-channel="any"/>
