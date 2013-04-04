@@ -216,7 +216,12 @@ public class ContainerService {
         userGivenPatientDetailsReportingRequest.setPatientAge(registrationDetails.getPatientAge());
         userGivenPatientDetailsReportingRequest.setPatientId(registrationDetails.getPatientId());
         userGivenPatientDetailsReportingRequest.setPatientName(registrationDetails.getPatientName());
-        userGivenPatientDetailsReportingRequest.setGender(registrationDetails.getPatientGender().name());
+
+        if(registrationDetails.getPatientGender() != null) {
+            userGivenPatientDetailsReportingRequest.setGender(registrationDetails.getPatientGender().name());
+        } else {
+            userGivenPatientDetailsReportingRequest.setGender(null);
+        }
 
         reportingPublisherService.reportUserGivenPatientDetailsUpdate(userGivenPatientDetailsReportingRequest);
     }

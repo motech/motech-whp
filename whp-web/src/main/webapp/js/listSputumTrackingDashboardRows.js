@@ -17,7 +17,7 @@ $(function () {
         }
 
 
-        $(".editPatientDetails").click(function () {
+        $(".editPatientDetails").unbind('click').click(function () {
             setContainerIdOnEditPatientDetailsForm.call(this);
         });
 
@@ -31,7 +31,7 @@ $(function () {
             $('#editPatientDetails #containerIdDisplay').html(containerId);
         }
 
-        $("#savePatientDetails").click(function () {
+        $("#savePatientDetails").unbind('click').click(function () {
             var dataString = $("#editPatientDetails").serialize();
             var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/updatePatientDetails";
             $.ajax({
@@ -46,13 +46,13 @@ $(function () {
             return false;
         });
 
-        $(".closeContainer").click(function () {
+        $(".closeContainer").unbind('click').click(function () {
             setContainerIdOnClosureForm.call(this);
             showTbNegativeOptionForPositiveDiagnosis.call(this);
             resetFormFields();
         });
 
-        $("#close").click(function () {
+        $("#close").unbind('click').click(function () {
             resetFormFields();
         });
 
@@ -73,7 +73,7 @@ $(function () {
             }
         }
 
-        $(".openContainerLink").click(function () {
+        $(".openContainerLink").unbind('click').click(function () {
             var containerId = $(this).parents("tr").attr("containerId");
             var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/open-container?containerId=" + containerId;
             $.ajax({
@@ -148,7 +148,7 @@ $(function () {
 
     $("#alternateDiagnosis").combobox();
 
-    $("#saveReason").click(function () {
+    $("#saveReason").unbind('click').click(function () {
         var dataString = $("#setReason").serialize();
         var endpoint = $($("#sputumTrackingDashboardRowsList")[0]).attr("endpoint") + "/close-container";
         $.ajax({
