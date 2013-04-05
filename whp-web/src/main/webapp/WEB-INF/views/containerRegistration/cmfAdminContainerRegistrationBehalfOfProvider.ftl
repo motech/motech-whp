@@ -68,14 +68,14 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Age</label>
+                        <label class="control-label">Age*</label>
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.age" />
                             <input id="age" class="span" name="${spring.status.expression}" type="text" validate="number:true, required:${validationProperties.isMandatory("age")?string}""  value="${spring.status.value?default("")}"  placeholder="Enter Age"/>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Gender</label>
+                        <label class="control-label">Gender*</label>
                         <div class="controls">
                             <@spring.bind "containerRegistrationRequest.gender" />
                             <select id="gender" name="${spring.status.expression}" validate="required:${validationProperties.isMandatory("gender")?string}">
