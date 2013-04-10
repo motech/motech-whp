@@ -3,28 +3,8 @@
         <a id="show-patients" href="/whp/patients/list#?patient_listing-searchCriteria={}&patient_listing-sortCriteria={&quot;AdherenceMissingAlertValue&quot;:&quot;DESC&quot;}"><i class="icon-user icon-white"></i> Patients</a>
     </li>
 
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Downloads <b class="caret"></b></a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="downloadLinks">
-            <li>
-                <a href="/whp/patientreports/filter">Patient Reports</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/<@spring.message 'whp.reports.adherence.report'/>">All adherence data</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/<@spring.message 'whp.reports.adherence.audit.report'/>">All adherence audit data</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/<@spring.message 'whp.reports.container.report'/>">Container tracking data</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/<@spring.message 'whp.reports.provider.reminder.call.report'/>">Provider reminder call logs</a>
-            </li>
-            <li>
-                <a href="${whpReportsURL}/<@spring.message 'whp.reports.patient.alert.call.log.report'/>">Patient alert call logs</a>
-            </li>
-        </ul>
+    <li>
+        <a id="reportsUrl" href="${whpReportsURL}" target="_blank" >Reports</a>
     </li>
 
     <li class="dropdown">
