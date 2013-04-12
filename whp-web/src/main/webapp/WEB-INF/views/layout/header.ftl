@@ -12,6 +12,11 @@
 
         <#if Session.loggedInUser?exists>
             <ul class="nav pull-right">
+            <@security.authorize ifAnyGranted="IT_ADMIN, CMF_ADMIN">
+                <li>
+                    <a id="reportsUrl" href="${whpReportsURL}" target="_blank" >Reports</a>
+                </li>
+            </@security.authorize>
                 <li class="dropdown pull-right">
                     <@security.authorize ifNotGranted="PROVIDER, FIELD_STAFF">
                         <a class="dropdown-toggle" data-toggle="dropdown"

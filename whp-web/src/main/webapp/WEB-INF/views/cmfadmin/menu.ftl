@@ -3,10 +3,6 @@
         <a id="show-patients" href="/whp/patients/list#?patient_listing-searchCriteria={}&patient_listing-sortCriteria={&quot;AdherenceMissingAlertValue&quot;:&quot;DESC&quot;}"><i class="icon-user icon-white"></i> Patients</a>
     </li>
 
-    <li>
-        <a id="reportsUrl" href="${whpReportsURL}" target="_blank" >Reports</a>
-    </li>
-
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-check icon-white"></i> Container Registration <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu">
