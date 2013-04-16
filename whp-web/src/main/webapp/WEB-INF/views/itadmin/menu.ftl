@@ -31,13 +31,5 @@
             </li>
         </ul>
     </li>
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Visualizations <b class="caret"></b></a>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="visualizations">
-            <li>
-                <a href="<@spring.message 'whp.reports.url'/>/patientIvrAlertVisualizations.html">Patient IVR Alerts</a>
-            </li>
-        </ul>
-    </li>
 </ul>
 

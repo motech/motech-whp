@@ -17,9 +17,9 @@
                     <td>
                         <div class="control-group">
                             <div class="controls">
-                                <label class="control-label">Patient Name</label>
+                                <label class="control-label">Given Patient Name</label>
                                 <input id="patientName" name="patientName"/>
-                                <label class="control-label">Patient Id</label>
+                                <label class="control-label">Given Patient Id</label>
                                 <input id="patientId" name="patientId"/>
                             </div>
                         </div>
