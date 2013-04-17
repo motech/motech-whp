@@ -12,6 +12,6 @@ import static org.motechproject.whp.user.domain.WHPRole.*;
 public class UserRoleImpl implements UserRoles{
     @Override
     public List<String> all() {
-        return asList(PROVIDER.name(), CMF_ADMIN.name(), FIELD_STAFF.name(), IT_ADMIN.name());
+        return asList(CMF_ADMIN.name(), PROVIDER.name(), FIELD_STAFF.name(), IT_ADMIN.name(), REPORT_USER.name());
     }
 }
