@@ -31,5 +31,8 @@
             </li>
         </ul>
     </li>
+    <li>
+        <a href="/whp/userManagement/list" target="_blank"><i class="icon-briefcase icon-white"></i> Manage Users</a>
+    </li>
 </ul>
 

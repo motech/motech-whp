@@ -54,6 +54,7 @@
         <intercept-url pattern="/diagnostics/show/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/caselogs/**" access="hasRole('IT_ADMIN')" requires-channel="any"/>
         <intercept-url pattern="/providerreminder/**" access="hasRole('IT_ADMIN')" requires-channel="any" />
+        <intercept-url pattern="/userManagement/**" access="hasRole('IT_ADMIN')" requires-channel="any" />
 
         <!-- Only field staff-->
         <intercept-url pattern="/providers/adherenceStatus" access="hasRole('FIELD_STAFF')" requires-channel="any"/>

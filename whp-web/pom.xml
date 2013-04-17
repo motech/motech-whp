@@ -52,6 +52,10 @@
             <artifactId>whp-schedule</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.motechproject.whp-contrib</groupId>
+            <artifactId>motech-user-management</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.motechproject.whp</groupId>
             <artifactId>whp-container</artifactId>
             <scope>test</scope>

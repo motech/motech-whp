@@ -423,6 +423,11 @@
                 <artifactId>motech-deliverytools-common</artifactId>
                 <version>${motech.delivery.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.motechproject.whp-contrib</groupId>
+                <artifactId>motech-user-management</artifactId>
+                <version>${motech.contrib.version}</version>
+            </dependency>
             <!--Libs-->
             <dependency>
                 <groupId>commons-httpclient</groupId>

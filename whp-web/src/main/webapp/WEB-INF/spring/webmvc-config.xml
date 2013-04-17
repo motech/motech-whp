@@ -33,6 +33,9 @@
     <context:component-scan base-package="org.motechproject.crud.controller">
         <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    <context:component-scan base-package="org.motechproject.user.management" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
     <context:component-scan base-package="org.motechproject.flash"/>
 
     <mvc:annotation-driven/>
@@ -40,6 +43,8 @@
     <mvc:resources mapping="/diagnostics-web/**" location="classpath:/diagnostics-web/"/>
     <mvc:resources mapping="/motech-crud/**" location="classpath:/motech-crud/"/>
     <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
+    <mvc:resources mapping="/case-log-browser/**" location="classpath:/case-log-browser/"/>
+    <mvc:resources mapping="/motech-user-management/**" location="classpath:/motech-user-management/"/>
     <mvc:default-servlet-handler/>
 
     <!-- Configures Handler Interceptors -->
