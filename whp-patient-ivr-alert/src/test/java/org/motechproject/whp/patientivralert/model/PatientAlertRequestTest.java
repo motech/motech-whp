@@ -25,19 +25,19 @@ public class PatientAlertRequestTest {
                 "\"requestId\":\"requestId\"," +
                 "\"batchId\":\"batchId\"," +
                 "\"messageId\":\"messageId\"," +
-                "\"callType\":\"callType\"," +
                 "\"data\":[" +
                 "{" +
                 "\"patientId\":\"patient1\"," +
-                "\"mobileNumber\":\"1234567890\"," +
-                "\"missingWeeks\":1" +
+                "\"msisdn\":\"1234567890\"," +
+                "\"missing_weeks\":1" +
                 "}," +
                 "{" +
                 "\"patientId\":\"patient2\"," +
-                "\"mobileNumber\":\"1234567891\"," +
-                "\"missingWeeks\":1" +
+                "\"msisdn\":\"1234567891\"," +
+                "\"missing_weeks\":1" +
                 "}" +
-                "]" +
+                "]," +
+                "\"call_type\":\"callType\"" +
                 "}";
         
         assertEquals(expectedJson, json);
