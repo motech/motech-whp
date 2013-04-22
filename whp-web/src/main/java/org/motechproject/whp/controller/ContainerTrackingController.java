@@ -9,7 +9,7 @@ import org.motechproject.whp.reponse.WHPResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class ContainerTrackingController {
+public class ContainerTrackingController extends BaseWebController {
     protected ContainerService containerService;
     protected ReasonForClosureValidator reasonForClosureValidator;
 
