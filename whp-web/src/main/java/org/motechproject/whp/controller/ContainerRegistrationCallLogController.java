@@ -16,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/ivr/containerRegistration")
-public class ContainerRegistrationCallLogController {
+public class ContainerRegistrationCallLogController extends BaseWebController{
 
     private ReportingPublisherService reportingPublisherService;
     private ProviderService providerService;
