@@ -83,7 +83,7 @@ public class ContainerServiceTest extends BaseUnitTest {
 
     @Test
     public void shouldRestoreDefaultsUponRegistration() throws IOException, TemplateException {
-        when(providerService.findByProviderId("providerId")).thenReturn(new Provider());
+        when(providerService.findByProviderId("providerid")).thenReturn(new Provider());
         ContainerRegistrationRequest containerRegistrationRequest = new ContainerRegistrationRequest("providerId", "12345", SputumTrackingInstance.PreTreatment.getDisplayText(), ChannelId.WEB.name(), null);
         containerRegistrationRequest.setPatientName("name");
         containerRegistrationRequest.setPatientId("id");

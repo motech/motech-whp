@@ -105,14 +105,13 @@ public class CommonContainerRegistrationValidatorTest {
 
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
-
         verify(providerService).findByProviderId(validProvider.getProviderId());
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
     public void shouldValidatePresenceOfProviderId_whenProviderDoesNotExist() {
-        String unregisteredProviderId = "UnregisteredProviderId";
+        String unregisteredProviderId = "UnregisteredProviderId".toLowerCase();
         ContainerRegistrationRequest registrationRequest = new ContainerRegistrationRequest(unregisteredProviderId, "11111", InTreatment.getDisplayText(), WEB.name(), null);
         List<ErrorWithParameters> validationErrors = registrationRequestValidator.validate(registrationRequest);
 
@@ -228,6 +227,19 @@ public class CommonContainerRegistrationValidatorTest {
         when(containerRegistrationValidationPropertyValues.getMandatoryFields()).thenReturn(asList("invalidField", "age"));
 
         registrationRequestValidator.validatePatientDetails(registrationRequest);
+    }
+
+    @Test
+    public void shouldHandleCaseInsensitiveProviderId() {
+        String containerID = "12345678901";
+        String providerIdInUpperCase = "ProviderID";
+        ContainerRegistrationRequest registrationRequest = new CmfAdminContainerRegistrationRequest(providerIdInUpperCase, containerID, InTreatment.getDisplayText(), ContainerRegistrationMode.NEW_CONTAINER, WEB, null);
+        when(containerService.exists(new ContainerId(providerIdInUpperCase.toLowerCase(), containerID, NEW_CONTAINER).value())).thenReturn(true);
+
+        List<ErrorWithParameters> errors = registrationRequestValidator.validate(registrationRequest);
+
+        verify(containerService).exists(new ContainerId(providerIdInUpperCase, containerID, NEW_CONTAINER).value());
+        assertTrue(errors.contains(new ErrorWithParameters("container.already.registered.error")));
     }
 
     private ContainerRegistrationRequest createContainerRegistrationRequest(String containerId) {

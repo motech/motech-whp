@@ -67,7 +67,7 @@ public class CmfAdminContainerRegistrationControllerTest {
         roles.add(WHPRole.CMF_ADMIN.name());
 
         String containerId = "containerId";
-        String providerId = "providerId";
+        String providerId = "providerid";
         String instance = RegistrationInstance.InTreatment.getDisplayText();
         standaloneSetup(containerRegistrationController).build()
                 .perform(post("/containerRegistration/by_cmfAdmin/register")
@@ -174,7 +174,7 @@ public class CmfAdminContainerRegistrationControllerTest {
 
     @Test
     public void shouldRegisterTheContainerGivenTheDetailsOnBehalfOfProvider() throws Exception {
-        String providerId = "P00011";
+        String providerId = "p00011";
         String containerId = "1234567890";
         String instance = RegistrationInstance.InTreatment.getDisplayText();
 

@@ -35,4 +35,8 @@ public class ContainerRegistrationRequest {
         this.channelId = channelId;
         this.callId = callId;
     }
+
+    public String getProviderId(){
+        return (providerId==null ? null : providerId.toLowerCase());
+    }
 }
