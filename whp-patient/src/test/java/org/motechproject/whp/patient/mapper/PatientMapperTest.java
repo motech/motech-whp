@@ -256,6 +256,7 @@ public class PatientMapperTest {
         Treatment treatment = patientMapper.createTreatment(patientRequest, patientRequest.getAddress());
 
         assertThat(treatment.getProviderDistrict(), is(providerDistrict));
+        assertThat(treatment.getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT), is(patientRequest.getDate_modified()));
         verify(providerService).findByProviderId(providerId);
     }
 
@@ -280,6 +281,7 @@ public class PatientMapperTest {
         assertEquals(patientRequest.getTb_id().toLowerCase(), treatment.getTbId());
         assertEquals(patientRequest.getProvider_id(), treatment.getProviderId());
         assertEquals(patientRequest.getTb_registration_number(), treatment.getTbRegistrationNumber());
+        assertEquals(WHPDateTime.toLocalDateTime(patientRequest.getDate_modified()), treatment.getCreationDate());
         assertEquals(patientRequest.getPatient_type(), treatment.getPatientType());
         assertEquals(address, treatment.getPatientAddress());
 

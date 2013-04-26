@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.reporting;
 
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -42,7 +43,8 @@ public class PatientReportingRequestMapperTest {
     @Test
     public void shouldMapPatientToReportingRequest() {
         Patient patient = new PatientBuilder().withDefaults().defaultPatientAlerts().build();
-        patient.addTreatment(new TreatmentBuilder().withDefaults().withDefaultTreatmentDetails().build(), new TherapyBuilder().withDefaults().build(), now(), now());
+        patient.addTreatment(new TreatmentBuilder().withDefaults().withDefaultTreatmentDetails().withCreationDate(new LocalDateTime()).build(), new TherapyBuilder().withDefaults().build(), now(), now());
+
 
         int expectedCumulativeMissedDoses = 12;
         when(cumulativeMissedDosesCalculator.getCumulativeMissedDoses(patient)).thenReturn(expectedCumulativeMissedDoses);
@@ -184,6 +186,7 @@ public class PatientReportingRequestMapperTest {
             assertEquals(treatment.getInterruptions().getPauseReasonForOngoingInterruption(), treatmentDTO.getReasonsForPause());
             assertEquals(treatment.getPreTreatmentSmearTestResult().value(), treatmentDTO.getPreTreatmentSmearTestResult());
             assertEquals(treatment.getPreTreatmentWeightRecord().getWeight(), treatmentDTO.getPreTreatmentWeight());
+            assertEquals(WHPDateUtil.toSqlTimestamp(treatment.getCreationDate()), treatmentDTO.getCreationDate());
 
             assertCurrentTreatmentFlag(isLastTherapy, isLastTreatment, treatmentDTO);
             assertEquals(treatment.getCloseTreatmentRemarks(), treatmentDTO.getCloseTreatmentRemarks());

@@ -94,6 +94,7 @@ public class PatientMapper {
         String providerId = patientRequest.getProvider_id();
         Treatment treatment = new Treatment(patientRequest.getProvider_id(), getProviderDistrict(providerId), patientRequest.getTb_id(), patientRequest.getPatient_type());
         treatment.setStartDate(WHPDate.date(patientRequest.getTb_registration_date()).date());
+        treatment.setCreationDate(WHPDateTime.toLocalDateTime(patientRequest.getDate_modified()));
         treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         treatment.setSmearTestResults(patientRequest.getSmearTestResults());
         treatment.setWeightStatistics(patientRequest.getWeightStatistics());

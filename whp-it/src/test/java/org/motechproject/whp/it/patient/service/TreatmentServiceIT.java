@@ -1,5 +1,6 @@
 package org.motechproject.whp.it.patient.service;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.domain.SputumTrackingInstance;
 import org.motechproject.whp.common.repository.AllDistricts;
 import org.motechproject.whp.common.util.SpringIntegrationTest;
+import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.DiseaseClass;
@@ -30,6 +32,8 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
     private static final String CASE_ID = "TestCaseId";
     private static final String TB_ID = "tb_id";
+    public static final String MODIFIED_DATE = "17/03/1990 04:55:50";
+    public static final DateTime DATE = new DateTime(1990, 3, 17, 4, 55, 50);
 
     @Autowired
     private AllPatients allPatients;
@@ -65,7 +69,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
-                .withLastModifiedDate("17/03/1990 04:55:50")
+                .withLastModifiedDate(MODIFIED_DATE)
                 .withPatientAge(50)
                 .withTbId(TB_ID)
                 .build();
@@ -76,12 +80,14 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
     public void shouldCreateActiveTreatmentForPatientByDefault() {
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
+        assertEquals(WHPDateTime.toLocalDateTime(MODIFIED_DATE), updatedPatient.getCurrentTreatment().getCreationDate());
     }
 
     @Test
     public void shouldCreateActiveTreatmentForPatientOnOpen() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DATE.plusDays(1).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -89,8 +95,10 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         patientWebService.update(updatePatientRequest);
 
+        String newTreatmentDateModified = DATE.plusDays(2).toString(WHPDateTime.DATE_TIME_FORMAT);
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
+                .withDateModified(newTreatmentDateModified)
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -100,12 +108,14 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
+        assertEquals(WHPDateTime.toLocalDateTime(newTreatmentDateModified), updatedPatient.getCurrentTreatment().getCreationDate());
     }
 
     @Test
     public void shouldMarkPatientAsNotHavingActiveTreatmentOnClose() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DATE.plus(1).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -115,12 +125,14 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertFalse(updatedPatient.isOnActiveTreatment());
+        assertEquals(WHPDateTime.toLocalDateTime(MODIFIED_DATE), updatedPatient.getCurrentTreatment().getCreationDate());
     }
 
     @Test
     public void shouldMarkPatientAsHavingActiveTreatmentOnTransferIn() {
         PatientRequest updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
+                .withDateModified(DATE.plusDays(1).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .withProviderId(providerId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -130,8 +142,10 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
         String newProviderId = "new-provider-id";
         createProvider(newProviderId, "newDistrict");
 
+        String transferInDate = DATE.plusDays(2).toString(WHPDateTime.DATE_TIME_FORMAT);
         updatePatientRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForTransferInTreatment()
+                .withDateModified(transferInDate)
                 .withProviderId(newProviderId)
                 .withCaseId(CASE_ID)
                 .withTbId(TB_ID)
@@ -141,6 +155,7 @@ public class TreatmentServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(CASE_ID);
         assertTrue(updatedPatient.isOnActiveTreatment());
+        assertEquals(WHPDateTime.toLocalDateTime(transferInDate), updatedPatient.getCurrentTreatment().getCreationDate());
     }
 
     @Test

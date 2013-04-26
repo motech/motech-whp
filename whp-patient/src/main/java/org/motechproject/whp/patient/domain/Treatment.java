@@ -4,6 +4,7 @@ import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.motechproject.whp.common.domain.SmearTestResult;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.util.WHPDate;
@@ -30,6 +31,7 @@ public class Treatment implements Serializable {
     private TreatmentInterruptions interruptions = new TreatmentInterruptions();
     private String closeTreatmentRemarks;
     private TreatmentDetails treatmentDetails = new TreatmentDetails();
+    private LocalDateTime creationDate;
 
     public Treatment() {
     }
@@ -147,4 +149,5 @@ public class Treatment implements Serializable {
     public boolean hasPreTreatmentWeightRecord() {
         return weightStatistics.hasPreTreatmentWeightRecord();
     }
+
 }

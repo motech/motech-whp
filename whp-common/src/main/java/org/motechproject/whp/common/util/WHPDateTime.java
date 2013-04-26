@@ -2,6 +2,7 @@ package org.motechproject.whp.common.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -12,7 +13,7 @@ public class WHPDateTime {
     public static final String DATE_TIME_FORMAT = "dd/MM/YYYY HH:mm:ss";
     public static final String TIME_PATTERN = "HH:mm:ss";
 
-    private DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
+    private static DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
     private DateTime date;
 
@@ -54,5 +55,9 @@ public class WHPDateTime {
 
     public DateTime dateTime() {
         return date;
+    }
+
+    public static LocalDateTime toLocalDateTime(String date) {
+           return formatter.parseLocalDateTime(date);
     }
 }

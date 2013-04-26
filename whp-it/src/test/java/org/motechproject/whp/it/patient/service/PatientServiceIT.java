@@ -114,6 +114,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
         Therapy therapy = updatedPatient.getCurrentTherapy();
 
+        //treatmentCreationDate does not change
+        assertEquals(patientRequest.getDate_modified(), updatedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT));
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(WHPDateTime.date(updatePatientRequest.getDate_modified()).dateTime(), updatedPatient.getLastModifiedDate());
         assertEquals(updatePatientRequest.getAddress(), updatedPatient.getCurrentTreatment().getPatientAddress());
@@ -142,6 +144,8 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
 
+        //treatmentCreationDate does not change
+        assertEquals(patientRequest.getDate_modified(), updatedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT));
         assertEquals(updatePatientRequest.getMobile_number(), updatedPatient.getPhoneNumber());
         assertEquals(updatePatientRequest.getTb_registration_number(), updatedPatient.getCurrentTreatment().getTbRegistrationNumber());
         assertNotSame("newFirstName", updatedPatient.getFirstName());
@@ -235,6 +239,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         Patient patient = allPatients.findByPatientId(caseId);
         assertTrue(patient.isOnActiveTreatment());
         assertThat(patient.getCurrentTreatment().getProviderDistrict(), is(PROVIDER_DISTRICT));
+        assertThat(patient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT), is(patientRequest.getDate_modified()));
     }
 
     @Test
@@ -282,14 +287,14 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldOpenNewTreatmentForPatient() {
-        String lastModifiedDate = "17/03/1990 04:55:50";
+        DateTime lastModifiedDate = new DateTime(1990, 3, 17, 4, 55, 50);
 
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(patientRequest);
 
         PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
-                .withDateModified(lastModifiedDate)
+                .withDateModified(lastModifiedDate.toString(WHPDateTime.DATE_TIME_FORMAT))
                 .build();
         commandFactory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
 
@@ -305,7 +310,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
                 .withProviderId(newProviderId)
-                .withDateModified(lastModifiedDate)
+                .withDateModified(lastModifiedDate.plusDays(1).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .withTbId("newTbId")
                 .build();
         commandFactory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);
@@ -314,33 +319,39 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         assertCurrentTreatmentIsNew(updatedPatient, openNewTreatmentUpdateRequest);
         assertThat(updatedPatient.getCurrentTreatment().getProviderDistrict(), is(newDistrict));
+        assertThat(updatedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT), is(openNewTreatmentUpdateRequest.getDate_modified()));
     }
 
     @Test
     public void shouldPauseAndRestartForPatient() {
-        String lastModifiedDate = "17/03/1990 04:55:50";
-        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
+        DateTime lastModifiedDate = new DateTime(1990, 3, 17, 4, 55, 50);
+        String originalDateModified = lastModifiedDate.toString(WHPDateTime.DATE_TIME_FORMAT);
+
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withDateModified(originalDateModified).build();
         patientService.createPatient(patientRequest);
 
         PatientRequest pauseTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForPauseTreatment()
-                .withDateModified(lastModifiedDate)
+                .withDateModified(lastModifiedDate.plusDays(1).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .build();
         commandFactory.updateFor(UpdateScope.pauseTreatment).apply(pauseTreatmentRequest);
 
         Patient pausedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         assertCurrentTreatmentPaused(pausedPatient, pauseTreatmentRequest);
+        assertEquals(originalDateModified, pausedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT));
 
         PatientRequest restartTreatmentRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForRestartTreatment()
-                .withDateModified(lastModifiedDate)
+                .withDateModified(lastModifiedDate.plusDays(2).toString(WHPDateTime.DATE_TIME_FORMAT))
                 .build();
         commandFactory.updateFor(UpdateScope.restartTreatment).apply(restartTreatmentRequest);
 
         Patient restartedPatient = allPatients.findByPatientId(PATIENT_ID);
 
         assertCurrentTreatmentNotPaused(restartedPatient, restartTreatmentRequest);
+        assertEquals(originalDateModified, restartedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT));
     }
 
     @Test
@@ -488,12 +499,16 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
     @Test
     public void shouldPerformSimpleUpdate_onAnyTreatmentAcrossTherapiesForPatient() {
+
+        DateTime lastModifiedDate = new DateTime(1990, 3, 17, 4, 55, 50);
+        String originalDateModified = lastModifiedDate.toString(WHPDateTime.DATE_TIME_FORMAT);
+
         PatientRequest patientRequest = new PatientRequestBuilder().withDefaults().build();
         patientService.createPatient(patientRequest);
 
         PatientRequest closeTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForCloseTreatment()
-                .withDateModified("17/03/1990 04:55:50")
+                .withDateModified(originalDateModified)
                 .build();
         String oldTbId = closeTreatmentUpdateRequest.getTb_id();
         commandFactory.updateFor(UpdateScope.closeTreatment).apply(closeTreatmentUpdateRequest);
@@ -507,10 +522,11 @@ public class PatientServiceIT extends SpringIntegrationTest {
                 .withDistrict(newDistrict)
                 .build());
 
+        String newTreatmentDateModified = lastModifiedDate.plusDays(1).toString(WHPDateTime.DATE_TIME_FORMAT);
         PatientRequest openNewTreatmentUpdateRequest = new PatientRequestBuilder()
                 .withMandatoryFieldsForOpenNewTreatment()
                 .withProviderId(newProviderId)
-                .withDateModified("17/03/1990 04:55:50")
+                .withDateModified(newTreatmentDateModified)
                 .withTbId("newTbId")
                 .build();
         commandFactory.updateFor(UpdateScope.openTreatment).apply(openNewTreatmentUpdateRequest);
@@ -520,7 +536,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         SputumTrackingInstance sampleInstance = SputumTrackingInstance.ExtendedIP;
         PatientRequest simpleUpdateRequest = new PatientRequestBuilder()
                 .withSimpleUpdateFields()
-                .withDateModified("17/03/1990 04:55:50")
+                .withDateModified(originalDateModified)
                 .withSmearTestResults(sampleInstance, today, testResult, today, testResult)
                 .withAddressDistrict("district")
                 .withTbId(oldTbId)
@@ -529,6 +545,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
 
         Patient updatedPatient = allPatients.findByPatientId(PATIENT_ID);
 
+        assertEquals(newTreatmentDateModified, updatedPatient.getCurrentTreatment().getCreationDate().toString(WHPDateTime.DATE_TIME_FORMAT));
         SmearTestRecord smearTestRecord = updatedPatient.getTreatmentBy(oldTbId).getSmearTestResults().resultForInstance(sampleInstance);
         assertEquals(sampleInstance, smearTestRecord.getSmear_sample_instance());
         assertEquals(testResult, smearTestRecord.getSmear_test_result_1());
@@ -588,7 +605,7 @@ public class PatientServiceIT extends SpringIntegrationTest {
         assertEquals(openNewPatientRequest.getDisease_class(), updatedPatient.getCurrentTherapy().getDiseaseClass());
         assertEquals(openNewPatientRequest.getProvider_id().toLowerCase(), currentTreatment.getProviderId());
         assertEquals(openNewPatientRequest.getTb_registration_number(), currentTreatment.getTbRegistrationNumber());
-        assertEquals(DateUtil.newDateTime(1990, 3, 17, 4, 55, 50), updatedPatient.getLastModifiedDate());
+        assertEquals(openNewPatientRequest.getDate_modified(), updatedPatient.getLastModifiedDate().toString(WHPDateTime.DATE_TIME_FORMAT));
     }
 
     private void assertCurrentTreatmentClosed(Patient updatedPatient, DateTime lastModifiedDate) {

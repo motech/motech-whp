@@ -174,6 +174,7 @@ public class PatientReportingRequestMapper {
             treatmentDTO.setTotalPausedDuration(treatment.getInterruptions().totalPausedDuration());
             treatmentDTO.setCurrentTreatment(YesNo.No.code());
             treatmentDTO.setCloseTreatmentRemarks(treatment.getCloseTreatmentRemarks());
+            treatmentDTO.setCreationDate(WHPDateUtil.toSqlTimestamp(treatment.getCreationDate()));
             treatmentDTO.setTreatmentDetails(mapTreatmentDetails(treatment.getTreatmentDetails()));
             treatmentDTOs.add(treatmentDTO);
         }

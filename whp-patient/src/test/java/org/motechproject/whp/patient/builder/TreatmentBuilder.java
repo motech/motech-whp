@@ -2,6 +2,7 @@ package org.motechproject.whp.patient.builder;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.domain.SmearTestResult;
@@ -123,6 +124,11 @@ public class TreatmentBuilder {
         treatmentDetails.setRifResistanceResult("rif resistance result");
 
         treatment.setTreatmentDetails(treatmentDetails);
+        return this;
+    }
+
+    public TreatmentBuilder withCreationDate(LocalDateTime dateTime) {
+        treatment.setCreationDate(dateTime);
         return this;
     }
 }

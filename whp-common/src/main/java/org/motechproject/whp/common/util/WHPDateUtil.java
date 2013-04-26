@@ -2,6 +2,7 @@ package org.motechproject.whp.common.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.Weeks;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -73,6 +74,12 @@ public class WHPDateUtil {
     }
 
     public static Timestamp toSqlTimestamp(DateTime dateTime) {
+        if(dateTime == null)
+            return null;
+        return new Timestamp(dateTime.toDate().getTime());
+    }
+
+    public static Timestamp toSqlTimestamp(LocalDateTime dateTime) {
         if(dateTime == null)
             return null;
         return new Timestamp(dateTime.toDate().getTime());
