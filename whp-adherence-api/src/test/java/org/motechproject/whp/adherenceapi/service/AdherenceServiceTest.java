@@ -39,7 +39,7 @@ public class AdherenceServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        adherenceService = new AdherenceService(patientService, adherenceDataService);
+        adherenceService = new AdherenceService(adherenceDataService);
     }
 
     @Test
@@ -60,14 +60,11 @@ public class AdherenceServiceTest {
         String patientId = "1234";
         Patient govtCategoryPatient = patients(patientId);
 
-        when(patientService.findByPatientId(patientId)).thenReturn(govtCategoryPatient);
-
-        Dosage dosage = adherenceService.dosageForPatient(patientId);
+        Dosage dosage = adherenceService.dosageForPatient(govtCategoryPatient);
 
         assertEquals(TreatmentProvider.GOVERNMENT, dosage.getTreatmentProvider());
         assertEquals("0", dosage.getValidRangeFrom());
         assertEquals("3", dosage.getValidRangeTo());
-        verify(patientService).findByPatientId(patientId);
     }
 
     @Test
@@ -76,10 +73,9 @@ public class AdherenceServiceTest {
 
         when(patientService.findByPatientId(patientId)).thenReturn(null);
 
-        Dosage dosage = adherenceService.dosageForPatient(patientId);
+        Dosage dosage = adherenceService.dosageForPatient(null);
 
         assertNull(dosage);
-        verify(patientService).findByPatientId(patientId);
     }
 
     private Patient patients(String patientId) {
