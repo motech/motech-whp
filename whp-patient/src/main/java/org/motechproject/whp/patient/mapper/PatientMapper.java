@@ -57,11 +57,11 @@ public class PatientMapper {
         if (patientRequest.getMobile_number() != null)
             patient.setPhoneNumber(patientRequest.getMobile_number());
         if (patientRequest.getTb_registration_number() != null)
-            patient.getCurrentTreatment().setTbRegistrationNumber(patientRequest.getTb_registration_number());
+            treatment.setTbRegistrationNumber(patientRequest.getTb_registration_number());
         if (patientRequest.getTb_registration_date() != null)
             treatment.setStartDate(WHPDate.date(patientRequest.getTb_registration_date()).date());
 
-        treatmentDetailsMapper.mapWithNullCheck(patientRequest, patient.getCurrentTreatment());
+        treatmentDetailsMapper.mapWithNullCheck(patientRequest, treatment);
 
         setPatientAddress(treatment, patientRequest.getAddress());
         updateTestResults(patientRequest, treatment);

@@ -1,5 +1,6 @@
 package org.motechproject.whp.patient.mapper;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.motechproject.util.DateUtil;
 import org.motechproject.whp.common.util.WHPDate;
 import org.motechproject.whp.common.util.WHPDateTime;
 import org.motechproject.whp.patient.builder.PatientRequestBuilder;
+import org.motechproject.whp.patient.builder.TreatmentBuilder;
 import org.motechproject.whp.patient.contract.PatientRequest;
 import org.motechproject.whp.patient.domain.*;
 import org.motechproject.whp.user.builder.ProviderBuilder;
@@ -243,6 +245,54 @@ public class PatientMapperTest {
 
 
         verify(treatmentDetailsMapper).mapWithNullCheck(updateRequest, treatment);
+    }
+
+
+    @Test
+    public void shouldUpdateGivenTreatmentOfPatientInformation() {
+        Treatment newTreatment = new TreatmentBuilder().withDefaults().withTbRegistrationNumber("registrationNumber").withTbId("newTbId").build();
+
+        PatientRequest patientRequest = new PatientRequestBuilder().withDefaults()
+                .withLastModifiedDate("17/03/1990 04:55:50")
+                .withPatientAge(50)
+                .withProviderId(providerId)
+                .build();
+
+
+        Patient patient = patientMapper.mapPatient(patientRequest);
+        patient.addTreatment(newTreatment, new DateTime(1990,3,18,4,55,50), new DateTime(1990,3,18,4,55,50));
+
+        verify(providerService).findByProviderId(providerId);
+
+        //change "tbId" details
+        PatientRequest updateRequest = new PatientRequestBuilder()
+                .withSimpleUpdateFields()
+                .withDateModified("18/03/1990 04:55:50")
+                .withPatientAge(60)
+                .build();
+
+        Treatment oldtreatment = patient.getTreatmentBy(updateRequest.getTb_id());
+        when(treatmentDetailsMapper.mapWithNullCheck(updateRequest, oldtreatment)).thenReturn(new TreatmentDetails());
+
+        patientMapper.mapUpdates(updateRequest, patient);
+
+        Therapy therapy = patient.getCurrentTherapy();
+        Treatment currentTreatment = patient.getCurrentTreatment();
+
+        assertEquals(patientRequest.getTb_registration_number(), currentTreatment.getTbRegistrationNumber());
+        assertEquals(updateRequest.getTb_registration_number(), oldtreatment.getTbRegistrationNumber());
+        assertEquals(WHPDate.date(updateRequest.getTb_registration_date()).date(), oldtreatment.getStartDate());
+        assertEquals(updateRequest.getAddress(), oldtreatment.getPatientAddress());
+        assertEquals(updateRequest.getSmearTestResults().size() + 1, oldtreatment.getSmearTestResults().size());
+        assertSmearTestResult(updateRequest.getSmearTestResults().get(0), oldtreatment.getSmearTestResults().get(1));
+        assertEquals(updateRequest.getWeightStatistics().size() + 1, oldtreatment.getWeightStatistics().size());
+        assertEquals(updateRequest.getWeightStatistics().get(0), oldtreatment.getWeightStatistics().get(1));
+
+        assertEquals(WHPDateTime.date(updateRequest.getDate_modified()).dateTime(), patient.getLastModifiedDate());
+        assertEquals(updateRequest.getMobile_number(), patient.getPhoneNumber());
+        assertEquals(updateRequest.getAge(), therapy.getPatientAge());
+
+        verify(treatmentDetailsMapper).mapWithNullCheck(updateRequest, oldtreatment);
     }
 
     @Test
