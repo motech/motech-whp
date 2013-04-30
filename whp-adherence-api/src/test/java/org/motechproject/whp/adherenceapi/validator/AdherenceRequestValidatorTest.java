@@ -3,13 +3,10 @@ package org.motechproject.whp.adherenceapi.validator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.motechproject.whp.adherenceapi.builder.DosageBuilder;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
@@ -24,10 +21,6 @@ public class AdherenceRequestValidatorTest {
     private AdherenceRequestValidator adherenceRequestValidator;
 
     @Mock
-    private AdherenceService adherenceService;
-    @Mock
-    private PatientService patientService;
-    @Mock
     private ProviderService providerService;
     private ProviderId providerId;
 
@@ -35,7 +28,7 @@ public class AdherenceRequestValidatorTest {
     public void setUp() {
         initMocks(this);
         initializeProvider();
-        adherenceRequestValidator = new AdherenceRequestValidator(adherenceService, patientService, providerService);
+        adherenceRequestValidator = new AdherenceRequestValidator(providerService);
     }
 
     private void initializeProvider() {
@@ -49,14 +42,13 @@ public class AdherenceRequestValidatorTest {
         adherenceValidationRequest.setPatientId(invalidPatientId);
         adherenceValidationRequest.setTimeTaken("1000");
 
-        when(adherenceService.dosageForPatient(invalidPatientId)).thenReturn(null);
-        assertEquals(INVALID_PATIENT.name(), adherenceRequestValidator.validatePatientProviderMapping(invalidPatientId, providerId).errorMessage());
+        assertEquals(INVALID_PATIENT.name(), adherenceRequestValidator.validatePatientProviderMapping(providerId, null).errorMessage());
     }
 
     @Test
     public void shouldReturnFailureWhenThereIsNoValidProviderForTheGivenProviderId() {
         ProviderId emptyProviderId = new ProviderId();
-        assertEquals(INVALID_PROVIDER.name(), adherenceRequestValidator.validatePatientProviderMapping("patientId", emptyProviderId).errorMessage());
+        assertEquals(INVALID_PROVIDER.name(), adherenceRequestValidator.validatePatientProviderMapping(emptyProviderId, null).errorMessage());
     }
 
     @Test
@@ -67,9 +59,7 @@ public class AdherenceRequestValidatorTest {
         AdherenceValidationRequest adherenceValidationRequest = new AdherenceValidationRequest();
         adherenceValidationRequest.setPatientId(patientId);
 
-        when(adherenceService.dosageForPatient(patientId)).thenReturn(new DosageBuilder(1).dosage());
-        when(patientService.findByPatientId(patientId)).thenReturn(patient);
-        assertEquals(INVALID_PATIENT_PROVIDER_COMBINATION.name(), adherenceRequestValidator.validatePatientProviderMapping(patientId, providerId).errorMessage());
+        assertEquals(INVALID_PATIENT_PROVIDER_COMBINATION.name(), adherenceRequestValidator.validatePatientProviderMapping(providerId, patient).errorMessage());
     }
 
     @Test
