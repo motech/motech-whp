@@ -2,13 +2,13 @@ package org.motechproject.whp.adherence.builder;
 
 import org.joda.time.LocalDate;
 import org.motechproject.whp.adherence.domain.AdherenceSummaryByProvider;
-import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.model.PatientAdherenceStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class AdherenceSummaryByProviderBuilder {
 
@@ -21,14 +21,14 @@ public class AdherenceSummaryByProviderBuilder {
     }
 
     public AdherenceSummaryByProvider build(){
-        List<Patient> patients = new ArrayList<>();
-
+        List<PatientAdherenceStatus> patients = new ArrayList<>();
+        LocalDate currentAdherenceReportWeekStartDate = currentAdherenceCaptureWeek().startDate();
         for(String patientId : patientsWithAdherence){
-            patients.add(new PatientBuilder().withDefaults().withPatientId(patientId).withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build());
+            patients.add(new PatientAdherenceStatus(patientId, currentAdherenceReportWeekStartDate));
         }
 
         for(String patientId : patientsWithoutAdherence){
-            patients.add(new PatientBuilder().withDefaults().withPatientId(patientId).build());
+            patients.add(new PatientAdherenceStatus(patientId, null));
         }
 
         return new AdherenceSummaryByProvider(providerId, patients);

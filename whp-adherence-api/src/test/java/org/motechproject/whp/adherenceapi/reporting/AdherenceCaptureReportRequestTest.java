@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.motechproject.whp.adherenceapi.domain.AdherenceCaptureStatus;
 import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.*;
 
@@ -15,7 +14,7 @@ public class AdherenceCaptureReportRequestTest {
 
     @Before
     public void setup() {
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().build());
+        providerId = new ProviderId("providerId");
     }
 
     @Test

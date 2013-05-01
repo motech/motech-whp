@@ -7,7 +7,6 @@ import org.motechproject.whp.adherenceapi.domain.ProviderId;
 import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 
@@ -32,7 +31,7 @@ public class AdherenceRequestValidatorTest {
     }
 
     private void initializeProvider() {
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
+        providerId = new ProviderId("providerId");
     }
 
     @Test

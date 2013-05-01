@@ -14,7 +14,6 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -43,7 +42,7 @@ public class AdherenceValidationOverIVRTest {
     }
 
     private void initializePatientAndProvider() {
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
+        providerId = new ProviderId("providerId");
         Patient patient = new PatientBuilder().withDefaults().withPatientId("patientid").withProviderId(providerId.value()).build();
         when(patientService.findByPatientId(patient.getPatientId())).thenReturn(patient);
     }

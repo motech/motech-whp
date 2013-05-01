@@ -9,4 +9,5 @@ public class EventKeys {
     public static final String PATIENT_IVR_ALERT_EVENT_NAME = "org.motechproject.whp.patient.alert.ivr";
     public static final String PATIENT_IVR_ALERT_BATCH_EVENT_NAME = "org.motechproject.whp.patient.alert.ivr.batch.request";
     public static final String SCHEDULE_CONFIGURATION_MESSAGE_ID = "messageId";
+    public static final String PROVIDER_CONFIRMS_ADHERENCE_OVER_IVR = "org.motechproject.whp.adherence.confirm.over.ivr";
 }

@@ -12,7 +12,6 @@ import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidatio
 import org.motechproject.whp.adherenceapi.service.AdherenceService;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -37,13 +36,9 @@ public class AdherenceValidationRequestValidatorTest {
     @Before
     public void setUp() {
         initMocks(this);
-        initializePatientAndProvider();
+        providerId = new ProviderId("providerId");
         adherenceValidationRequestValidator = new AdherenceValidationRequestValidator(adherenceService, adherenceRequestValidator, patientService);
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
-    }
-
-    private void initializePatientAndProvider() {
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
     }
 
     @Test

@@ -9,7 +9,6 @@ import org.motechproject.whp.adherenceapi.request.AdherenceValidationRequest;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -33,7 +32,7 @@ public class AdherenceNotCapturedRequestValidatorTest {
     public void setup() {
         initMocks(this);
         adherenceNotCapturedRequestValidator = new AdherenceNotCapturedRequestValidator(adherenceRequestValidator, patientService);
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
+        providerId = new ProviderId("providerId");
         when(patientService.findByPatientId(patientId)).thenReturn(patient);
     }
 

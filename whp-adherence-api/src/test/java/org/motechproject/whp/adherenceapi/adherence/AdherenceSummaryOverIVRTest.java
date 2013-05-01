@@ -66,7 +66,7 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
         AdherenceFlashingResponse expectedResponse = new AdherenceFlashingResponse(adherenceSummary);
 
-        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
+        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(providerId));
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);
@@ -100,7 +100,7 @@ public class AdherenceSummaryOverIVRTest extends BaseUnitTest {
         FlashingLogRequest expectedFlashingLogRequest = expectedFlashingRequest(msisdn, flashingCallId, providerId, callTime);
         AdherenceFlashingResponse expectedResponse = failureResponse(adherenceSummary, NON_ADHERENCE_DAY.name());
 
-        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(provider));
+        AdherenceFlashingResponse response = adherenceSummaryOverIVR.value(adherenceFlashingRequest, new ProviderId(providerId));
 
         assertThat(response, is(expectedResponse));
         verify(reportingPublishingService).reportFlashingRequest(expectedFlashingLogRequest);

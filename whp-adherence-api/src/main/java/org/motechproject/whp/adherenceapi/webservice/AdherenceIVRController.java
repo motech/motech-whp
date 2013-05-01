@@ -8,6 +8,7 @@ import org.motechproject.whp.adherenceapi.response.flashing.AdherenceFlashingRes
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceCallStatusValidationResponse;
 import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidationResponse;
 import org.motechproject.whp.common.error.BindingResultXML;
+import org.motechproject.whp.user.domain.Provider;
 import org.motechproject.whp.user.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,10 +104,14 @@ public class AdherenceIVRController {
     }
 
     private ProviderId providerId(String providerId) {
-        return new ProviderId(providerService.findByProviderId(providerId));
+        return new ProviderId(providerId);
     }
 
     private ProviderId providerIdFromMsisdn(String msisdn) {
-        return new ProviderId(providerService.findByMobileNumber(msisdn));
+        Provider provider = providerService.findByMobileNumber(msisdn);
+        if(provider != null)
+        return new ProviderId(provider.getProviderId());
+
+        return new ProviderId();
     }
 }
