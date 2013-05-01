@@ -1,10 +1,8 @@
 package org.motechproject.whp.adherence.domain;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.whp.patient.builder.PatientBuilder;
-import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.model.PatientAdherenceStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,28 +10,27 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
+import static org.motechproject.whp.common.domain.TreatmentWeekInstance.currentAdherenceCaptureWeek;
 
 public class AdherenceSummaryByProviderTest {
 
     public static final String PROVIDER_ID = "providerId";
 
-    public List<Patient> patientsWithAdherence;
-    public List<Patient> patientsWithoutAdherence;
-    public List<Patient> patients;
+    public List<PatientAdherenceStatus> patientsWithAdherence;
+    public List<PatientAdherenceStatus> patientsWithoutAdherence;
+    public List<PatientAdherenceStatus> patients;
 
     @Before
     public void setUp() {
-        Patient patientWithAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient1").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
-        Patient patientWithAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient2").withTherapyStartDate(new LocalDate(2012,7,7)).withAdherenceProvidedForLastWeek().build();
+        PatientAdherenceStatus patientAdherenceStatus1 = new PatientAdherenceStatus("patient1", currentAdherenceCaptureWeek().startDate());
+        PatientAdherenceStatus patientAdherenceStatus2 = new PatientAdherenceStatus("patient2", currentAdherenceCaptureWeek().startDate());
 
-        patientsWithAdherence = asList(patientWithAdherence1, patientWithAdherence2);
+        patientsWithAdherence = asList(patientAdherenceStatus1, patientAdherenceStatus2);
 
-        Patient patientWithoutAdherence1 = new PatientBuilder().withDefaults().withPatientId("patient3").build();
-        Patient patientWithoutAdherence2 = new PatientBuilder().withDefaults().withPatientId("patient4").build();
-        patientsWithoutAdherence = asList(patientWithoutAdherence1, patientWithoutAdherence2);
+        PatientAdherenceStatus patientWithoutAdherenceStatus1 = new PatientAdherenceStatus("patient3", null);
+        PatientAdherenceStatus patientWithoutAdherenceStatus2 = new PatientAdherenceStatus("patient4", null);
+        patientsWithoutAdherence = asList(patientWithoutAdherenceStatus1, patientWithoutAdherenceStatus2);
 
         patients = new ArrayList<>();
         patients.addAll(patientsWithAdherence);
@@ -41,7 +38,7 @@ public class AdherenceSummaryByProviderTest {
     }
     @Test
     public void shouldReturnZeroAsCountOfAllPatientsByDefault() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<Patient>());
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<PatientAdherenceStatus>());
         assertThat(summary.countOfAllPatients(), is(0));
     }
 
@@ -53,7 +50,7 @@ public class AdherenceSummaryByProviderTest {
 
     @Test
     public void shouldReturnZeroAsCountAllPatientsWithAdherenceByDefault() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<Patient>());
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<PatientAdherenceStatus>());
         assertThat(summary.countOfPatientsWithAdherence(), is(0));
     }
 
@@ -65,7 +62,7 @@ public class AdherenceSummaryByProviderTest {
 
     @Test
     public void shouldReturnZeroAsCountOfAllPatientsWithoutAdherenceByDefault() {
-        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<Patient>());
+        AdherenceSummaryByProvider summary = new AdherenceSummaryByProvider(PROVIDER_ID, new ArrayList<PatientAdherenceStatus>());
         assertThat(summary.countOfPatientsWithoutAdherence(), is(0));
     }
 
@@ -87,18 +84,10 @@ public class AdherenceSummaryByProviderTest {
         assertThat(adherenceSummaryByProvider.getAllPatientsWithAdherence(), is(patientsWithAdherence));
     }
 
-    @Test
-    public void shouldReturnAllPatientsWithAdherenceForCurrentTherapyOnly() {
-        Patient patientWithAdherenceForPreviousTherapy = new PatientBuilder().withPatientId("patient1").withAdherenceProvidedForLastWeek().build();
-        patients.add(patientWithAdherenceForPreviousTherapy);
-        AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId", patients);
-        assertThat(adherenceSummaryByProvider.getAllPatientsWithAdherence(), hasItem(not(patientWithAdherenceForPreviousTherapy)));
-    }
 
     @Test
     public void shouldReturnListOfPatientIdsWithoutAdherence() {
         AdherenceSummaryByProvider adherenceSummaryByProvider = new AdherenceSummaryByProvider("providerId", patients);
-
         assertEquals(asList("patient3", "patient4"), adherenceSummaryByProvider.getAllPatientIdsWithoutAdherence());
     }
 

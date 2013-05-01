@@ -19,6 +19,7 @@ import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
 import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.model.PatientAdherenceStatus;
 import org.motechproject.whp.patient.query.PatientQueryDefinition;
 import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,28 +86,28 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
     @View(name = "find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", map = "function(doc) {if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
             "emit([doc.currentTherapy.currentTreatment.providerId, doc.currentTherapy.currentTreatment.startDate], doc._id);}}")
     public List<Patient> getAllWithActiveTreatmentFor(String providerId) {
-        return getAllWithActiveTreatmentForAGivenPage(providerId, null, null);
+        return getPatientsForProvider("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1", providerId, Patient.class, true);
     }
 
-    private List<Patient> getAllWithActiveTreatmentForAGivenPage(String selectedProvider, Integer startIndex, Integer rowsPerPage) {
+
+    @View(name = "find_active_patients_by_provider", map = "function(doc) {" +
+                    "if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
+                        "emit([doc.currentTherapy.currentTreatment.providerId, doc.currentTherapy.currentTreatment.startDate], {patientId:doc.patientId, lastAdherenceReportedDate : doc.lastAdherenceWeekStartDate});" +
+                    "}}")
+    public List<PatientAdherenceStatus> getPatientAdherenceStatusesFor(String providerId) {
+        return getPatientsForProvider("find_active_patients_by_provider", providerId, PatientAdherenceStatus.class, false);
+    }
+
+    private List getPatientsForProvider(String view, String selectedProvider, Class clazz, boolean includeDocs) {
         if (selectedProvider == null)
             return new ArrayList<>();
         String keyword = selectedProvider.toLowerCase();
-
         ComplexKey startKey = ComplexKey.of(keyword, null);
         ComplexKey endKey = ComplexKey.of(keyword, ComplexKey.emptyObject());
-        ViewQuery q;
+        ViewQuery q = createQuery(view)
+                    .startKey(startKey).endKey(endKey).includeDocs(includeDocs).inclusiveEnd(true);
 
-        if (rowsPerPage == null || startIndex == null) {
-            q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
-                    .startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
-        } else {
-            q = createQuery("find_by_provider_having_active_treatment_sort_by_treatment_start_dt_v1")
-                    .startKey(startKey).endKey(endKey)
-                    .skip(startIndex * rowsPerPage).limit(rowsPerPage)
-                    .includeDocs(true).inclusiveEnd(true);
-        }
-        return db.queryView(q, Patient.class);
+        return db.queryView(q, clazz);
     }
 
 

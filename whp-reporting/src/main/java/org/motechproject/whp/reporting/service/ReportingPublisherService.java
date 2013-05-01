@@ -95,6 +95,5 @@ public class ReportingPublisherService {
 
     public void reportUserGivenPatientDetailsUpdate(UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest) {
         httpClientService.post(reportingApplicationURLs.getUpdateUserGivenPatientDetailsURL(), userGivenPatientDetailsReportingRequest);
-
     }
 }

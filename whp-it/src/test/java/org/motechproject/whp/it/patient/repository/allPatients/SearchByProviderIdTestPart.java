@@ -9,6 +9,7 @@ import org.motechproject.paginator.contract.SortParams;
 import org.motechproject.util.DateUtil;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.domain.TreatmentOutcome;
+import org.motechproject.whp.patient.model.PatientAdherenceStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +17,14 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 import static org.motechproject.util.DateUtil.now;
 import static org.motechproject.whp.patient.assertUtil.PatientAssert.assertPatientEquals;
 
 public class SearchByProviderIdTestPart extends AllPatientsTestPart {
     FilterParams filterParams;
-
     SortParams sortParams;
-
 
     @Before
     public void setUp() {
@@ -37,6 +37,8 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         createPatient("patientId2", "providerId2", PROVIDER_DISTRICT);
 
         assertPatientEquals(new Patient[]{requiredPatient}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId1"),
+                contains(new PatientAdherenceStatus("patientid1", requiredPatient.getLastAdherenceWeekStartDate())));
     }
 
     @Test
@@ -49,6 +51,8 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         allPatients.update(patientWithTreatmentClosed);
 
         assertPatientEquals(new Patient[]{requiredPatient}, allPatients.getAllWithActiveTreatmentFor(providerId).toArray());
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId1"),
+                contains(new PatientAdherenceStatus(requiredPatient.getPatientId(), requiredPatient.getLastAdherenceWeekStartDate())));
     }
 
     @Test
@@ -62,6 +66,9 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
         Patient patient2 = createPatient("patientId2", "providerId1", PROVIDER_DISTRICT);
 
         assertPatientEquals(new Patient[]{patient1, patient2}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId1"), contains(
+                new PatientAdherenceStatus(patient1.getPatientId(), patient1.getLastAdherenceWeekStartDate()),
+                new PatientAdherenceStatus(patient2.getPatientId(), patient2.getLastAdherenceWeekStartDate())));
     }
 
     @Test
@@ -80,6 +87,12 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
 
         assertPatientEquals(new Patient[]{withActiveTreatment1}, allPatients.getAllWithActiveTreatmentFor("providerId1").toArray());
         assertPatientEquals(new Patient[]{withActiveTreatment2}, allPatients.getAllWithActiveTreatmentFor("providerId2").toArray());
+
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId1"),
+                contains(new PatientAdherenceStatus(withActiveTreatment1.getPatientId(), withActiveTreatment1.getLastAdherenceWeekStartDate())));
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId2"),
+                contains(new PatientAdherenceStatus(withActiveTreatment2.getPatientId(), withActiveTreatment2.getLastAdherenceWeekStartDate())));
+
     }
 
     @Test
@@ -98,6 +111,11 @@ public class SearchByProviderIdTestPart extends AllPatientsTestPart {
                 asList(withOldestStartDate, withOlderStartDate, withNewerStartDate),
                 allPatients.getAllWithActiveTreatmentFor(providerId)
         );
+        assertThat(allPatients.getPatientAdherenceStatusesFor("providerId1"), contains(
+                new PatientAdherenceStatus(withOldestStartDate.getPatientId(), withOldestStartDate.getLastAdherenceWeekStartDate()),
+                new PatientAdherenceStatus(withOlderStartDate.getPatientId(), withOlderStartDate.getLastAdherenceWeekStartDate()),
+                new PatientAdherenceStatus(withNewerStartDate.getPatientId(), withNewerStartDate.getLastAdherenceWeekStartDate())));
+
     }
 
     @Test

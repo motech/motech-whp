@@ -11,7 +11,6 @@ import org.motechproject.whp.adherenceapi.response.validation.AdherenceValidatio
 import org.motechproject.whp.adherenceapi.validator.AdherenceNotCapturedRequestValidator;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.AdherenceCaptureRequest;
-import org.motechproject.whp.user.builder.ProviderBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -36,7 +35,7 @@ public class AdherenceNotCapturedOverIVRTest {
     }
 
     private void initializeProvider() {
-        providerId = new ProviderId(new ProviderBuilder().withDefaults().withId("providerId").build());
+        providerId = new ProviderId("providerId");
     }
 
     @Test

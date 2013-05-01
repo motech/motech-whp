@@ -9,16 +9,10 @@ import org.motechproject.whp.adherenceapi.domain.Dosage;
 import org.motechproject.whp.adherenceapi.domain.TreatmentProvider;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
-import org.motechproject.whp.patient.service.PatientService;
-import org.motechproject.whp.reporting.service.ReportingPublisherService;
-import org.motechproject.whp.user.service.ProviderService;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -26,15 +20,7 @@ public class AdherenceServiceTest {
 
     private AdherenceService adherenceService;
     @Mock
-    private PatientService patientService;
-    @Mock
-    private ReportingPublisherService reportingPublisherService;
-
-    @Mock
     private AdherenceDataService adherenceDataService;
-
-    @Mock
-    private ProviderService providerService;
 
     @Before
     public void setUp() {
@@ -45,11 +31,8 @@ public class AdherenceServiceTest {
     @Test
     public void shouldSummarizeAdherenceSubmittedByProvider() {
         String providerId = "providerid";
-        List<Patient> patientsForProvider = asList(patients("1234"), patients("5678"));
 
-        when(patientService.getAllWithActiveTreatmentForProvider(providerId)).thenReturn(patientsForProvider);
-
-        AdherenceSummaryByProvider expectedAdherenceSummary = new AdherenceSummaryByProvider(providerId, patientsForProvider);
+        AdherenceSummaryByProvider expectedAdherenceSummary = mock(AdherenceSummaryByProvider.class);
         when(adherenceDataService.getAdherenceSummary(providerId)).thenReturn(expectedAdherenceSummary);
 
         assertEquals(expectedAdherenceSummary, adherenceService.adherenceSummary(providerId));
@@ -69,12 +52,7 @@ public class AdherenceServiceTest {
 
     @Test
     public void shouldReturnTreatmentCategoryInfoAsNullForInvalidPatientId() {
-        String patientId = "invalidPatient";
-
-        when(patientService.findByPatientId(patientId)).thenReturn(null);
-
         Dosage dosage = adherenceService.dosageForPatient(null);
-
         assertNull(dosage);
     }
 

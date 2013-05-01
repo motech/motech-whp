@@ -2,7 +2,7 @@ package org.motechproject.whp.adherence.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.model.PatientAdherenceStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ public class AdherenceSummaryByProvider implements Serializable {
 
     @Getter
     private String providerId;
-    private List<Patient> patients;
+    private List<PatientAdherenceStatus> patients;
     @Getter
-    private List<Patient> allPatientsWithAdherence = new ArrayList<>();
+    private List<PatientAdherenceStatus> allPatientsWithAdherence = new ArrayList<>();
     @Getter
-    private List<Patient> allPatientsWithoutAdherence = new ArrayList<>();
+    private List<PatientAdherenceStatus> allPatientsWithoutAdherence = new ArrayList<>();
 
-    public AdherenceSummaryByProvider(String providerId, List<Patient> patients) {
+    public AdherenceSummaryByProvider(String providerId, List<PatientAdherenceStatus> patients) {
         this.patients = patients;
         this.providerId = providerId;
         setAllPatientsWithAdherence();
@@ -47,7 +47,7 @@ public class AdherenceSummaryByProvider implements Serializable {
 
     private void setAllPatientsWithAdherence() {
         allPatientsWithAdherence = new ArrayList<>();
-        for (Patient patient : patients) {
+        for (PatientAdherenceStatus patient : patients) {
             if (patient.hasAdherenceForLastReportingWeekForCurrentTherapy())
                 allPatientsWithAdherence.add(patient);
         }
@@ -59,6 +59,6 @@ public class AdherenceSummaryByProvider implements Serializable {
     }
 
     public List<String> getAllPatientIdsWithoutAdherence() {
-        return extract(getAllPatientsWithoutAdherence(), on(Patient.class).getPatientId());
+        return extract(getAllPatientsWithoutAdherence(), on(PatientAdherenceStatus.class).getPatientId());
     }
 }
