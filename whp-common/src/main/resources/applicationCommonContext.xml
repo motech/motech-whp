@@ -46,12 +46,12 @@
         </constructor-arg>
     </bean>
 
-    <cache:annotation-driven cache-manager="applicationRefDataCacheManager"/>
+    <cache:annotation-driven cache-manager="districtsCacheManager"/>
 
     <context:annotation-config/>
     <context:spring-configured/>
 
-    <bean id="applicationRefDataCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+    <bean id="districtsCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
         <property name="caches">
             <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="districts"/>
         </property>

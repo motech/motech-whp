@@ -367,6 +367,10 @@
                             <value>true</value>
                         </systemProperty>
                         <systemProperty>
+                            <name>sun.management.jmxremote.port</name>
+                            <value>1099</value>
+                        </systemProperty>
+                        <systemProperty>
                             <name>log4j.configuration</name>
                             <value>file:${basedir}/src/main/resources/log4j.xml</value>
                         </systemProperty>

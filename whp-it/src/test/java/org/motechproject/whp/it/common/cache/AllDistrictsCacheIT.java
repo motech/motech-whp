@@ -53,7 +53,7 @@ public class AllDistrictsCacheIT extends SpringIntegrationTest {
     public void tearDown() {
         allDistricts.remove(districtA);
         allDistricts.remove(districtB);
-        allDistricts.refresh();
+        allDistricts.refreshCache();
         reset(whpDbConnector);
     }
 
@@ -68,7 +68,7 @@ public class AllDistrictsCacheIT extends SpringIntegrationTest {
     public void shouldRefreshDistricts() {
         allDistricts.getAll();
 
-        allDistricts.refresh();
+        allDistricts.refreshCache();
 
         allDistricts.getAll();
 

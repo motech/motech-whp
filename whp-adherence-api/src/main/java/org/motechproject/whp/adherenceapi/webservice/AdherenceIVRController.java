@@ -110,8 +110,7 @@ public class AdherenceIVRController {
     private ProviderId providerIdFromMsisdn(String msisdn) {
         Provider provider = providerService.findByMobileNumber(msisdn);
         if(provider != null)
-        return new ProviderId(provider.getProviderId());
-
+            return new ProviderId(provider.getProviderId());
         return new ProviderId();
     }
 }

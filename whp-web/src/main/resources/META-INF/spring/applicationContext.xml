@@ -25,7 +25,7 @@
         <property name="cacheManagers">
             <array>
                 <ref bean="cacheManager" />
-                <ref bean="applicationRefDataCacheManager" />
+                <ref bean="districtsCacheManager" />
             </array>
         </property>
     </bean>

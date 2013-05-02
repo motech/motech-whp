@@ -2,25 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:cache="http://www.springframework.org/schema/cache"
-       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-                         http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <import resource="classpath:applicationCommonContext.xml"/>
     <import resource="classpath:applicationContainerMappingContext.xml"/>
     <import resource="classpath:applicationContainerContext.xml"/>
 
-    <cache:annotation-driven cache-manager="applicationRefDataCacheManager"/>
-
     <context:component-scan base-package="org.motechproject.whp.refdata"/>
     <context:annotation-config/>
     <context:spring-configured/>
-
-    <bean id="applicationRefDataCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-        <property name="caches">
-            <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="districts"/>
-        </property>
-    </bean>
 </beans>
