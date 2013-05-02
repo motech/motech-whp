@@ -43,12 +43,12 @@
         </div>
         <div>
             <label class="tc-label">Name and Address of Contact Person</label>
-            <label class="tc-value">${patient.treatmentDetails.contactPersonName}</label>
+            <label class="tc-value">${patient.treatmentDetails.contactPersonName!}</label>
             <br/>
         </div>
         <div>
             <label class="tc-label">Phone Number of Contact Person</label>
-            <label class="tc-value">${patient.treatmentDetails.contactPersonPhoneNumber}</label>
+            <label class="tc-value">${patient.treatmentDetails.contactPersonPhoneNumber!}</label>
             <br/>
         </div>
         <div>
@@ -94,10 +94,10 @@
         </div>
         <div>
             <label class="tc-label">DOT centre</label>
-            <label class="tc-value">${patient.treatmentDetails.dotCentre}</label>
+            <label class="tc-value">${patient.treatmentDetails.dotCentre!}</label>
         </div>
         <div><label class="tc-label">Signature of MO with date</label>
-            <label class="tc-value">${patient.treatmentDetails.cmfDoctor}</label>
+            <label class="tc-value">${patient.treatmentDetails.cmfDoctor!}</label>
             <label class="tc-value">${patient.therapyStartDate}</label>
         </div>
     </div>
@@ -252,7 +252,7 @@
                 <th>Chemoprophylaxis</th>
             </tr>
             <tr>
-                <td>${patient.treatmentDetails.membersBelowSixYears}</td>
+                <td>${patient.treatmentDetails.membersBelowSixYears!}</td>
                 <td>${patient.treatmentDetails.phcReferred!}</td>
             </tr>
         <#list 1..4 as i>
@@ -269,7 +269,7 @@
 
     <div>
         <label class="tc-label">HIV status</label>
-        <label class="tc-value">${patient.treatmentDetails.hivStatus}</label>
+        <label class="tc-value">${patient.treatmentDetails.hivStatus!}</label>
         <label class="tc-label">HIV Test Date</label>
         <label class="tc-value">${patient.treatmentDetails.getHivTestDateInDesiredFormat()}</label>
     </div>
