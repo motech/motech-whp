@@ -552,11 +552,11 @@ public class Patient extends MotechBaseDataObject {
     @JsonIgnore
     public int getWeeksElapsedSinceLastDose(LocalDate tillDate) {
         DoseInterruption ongoingDoseInterruption = this.getCurrentTherapy().getOngoingDoseInterruption();
-        if(ongoingDoseInterruption == null){
+        if (ongoingDoseInterruption == null) {
             return 0;
         }
 
-        if(ongoingDoseInterruption.startDate().isAfter(tillDate)) {
+        if (ongoingDoseInterruption.startDate().isAfter(tillDate)) {
             return 0;
         }
 
@@ -567,7 +567,7 @@ public class Patient extends MotechBaseDataObject {
         return weeksBetween(fromDate, tillDate.plusDays(1)).getWeeks();
     }
 
-    public void updatePatientAlert(PatientAlertType alertType, double value, int severity){
+    public void updatePatientAlert(PatientAlertType alertType, double value, int severity) {
         patientAlerts.updateAlertStatus(alertType, value, severity);
     }
 
@@ -584,4 +584,33 @@ public class Patient extends MotechBaseDataObject {
 
     }
 
+    public void removeTreatmentForTbId(String tbId) {
+        Treatment treatment = getTreatmentBy(tbId);
+        assert treatment != null : "Treatment not found for TB Id: " + tbId;
+        assert treatment.getEndDate() != null : "Treatment is not closed for TB Id: " + tbId;
+
+        Therapy therapy = getTherapyHaving(tbId);
+        therapy.removeTreatmentForTbId(tbId);
+
+        if (therapy.getAllTreatments().isEmpty()) {
+            if (therapy == currentTherapy) {
+                replaceCurrentTherapyWithLatestHistory(tbId);
+            } else {
+                therapyHistory.remove(therapy);
+            }
+        }
+    }
+
+    private void replaceCurrentTherapyWithLatestHistory(String tbId) {
+        assert !therapyHistory.isEmpty() : "Cannot delete Current therapy when there is no history" + tbId;
+        currentTherapy = therapyHistory.remove(therapyHistory.size() - 1);
+    }
+
+    public boolean canRemoveTreatment(String tbId) {
+        Treatment treatment = getTreatmentBy(tbId);
+        Therapy therapy = getTherapyHaving(tbId);
+        if (treatment == null) return false;
+        else if(therapy == currentTherapy && therapyHistory.size() == 0) return false;
+        else return true;
+    }
 }

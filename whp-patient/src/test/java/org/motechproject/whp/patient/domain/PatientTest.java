@@ -17,14 +17,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.motechproject.util.DateUtil.newDate;
-import static org.motechproject.util.DateUtil.now;
-import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.Phase.EIP;
 import static org.motechproject.whp.common.domain.Phase.IP;
 import static org.motechproject.whp.common.domain.SmearTestResult.Positive;
@@ -656,7 +652,6 @@ public class PatientTest {
         assertEquals(providerId, patient.getCurrentProviderId());
     }
 
-
     @Test
     public void shouldGetDosesOnlyTillCPEndDateIfSet() {
         Patient patient = new PatientBuilder().withDefaults().build();
@@ -698,4 +693,71 @@ public class PatientTest {
         assertEquals(expectedDoseInterruptions, patient.getCurrentTherapy().getDoseInterruptions());
     }
 
+    @Test
+    public void shouldRemoveTreatmentForTheGivenClosedTBId() {
+        Patient patient = patient();
+        String oldTbId = patient.getCurrentTreatment().getTbId();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Treatment treatment =  new TreatmentBuilder().withDefaults().withTbId("currentOpenTbId").build();
+        patient.addTreatment(treatment, now(), now());
+
+        patient.removeTreatmentForTbId(oldTbId);
+
+        assertThat(patient.getAllTreatments(), hasItem(treatment));
+        assertThat(patient.getAllTreatments().size(), is(1));
+    }
+
+    @Test
+    public void shouldRemoveOldTherapyIfItContainsNoTreatments() {
+        Patient patient = patient();
+        String oldTbId = patient.getCurrentTreatment().getTbId();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Therapy currentTherapy = new TherapyBuilder().withDefaults().build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("currentTbId").build();
+        patient.addTreatment(currentTreatment, currentTherapy, now(), now());
+
+        patient.removeTreatmentForTbId(oldTbId);
+
+        assertThat(patient.getTherapyHistory().size(), is(0));
+        assertThat(patient.getCurrentTherapy(), notNullValue());
+    }
+
+    @Test
+    public void shouldRemoveCurrentTherapyIfItContainsNoTreatments() {
+        Patient patient = patient();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+        Therapy oldTherapy = patient.getCurrentTherapy();
+
+        Therapy currentTherapy = new TherapyBuilder().withDefaults().build();
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId("currentTbId").build();
+        currentTreatment.close(TreatmentOutcome.Cured, "remarks", now());
+
+        patient.addTreatment(currentTreatment, currentTherapy, now(), now());
+
+        patient.removeTreatmentForTbId(currentTreatment.getTbId());
+
+        assertThat(patient.getTherapyHistory().size(), is(0));
+        assertThat(patient.getCurrentTherapy(), is(oldTherapy));
+    }
+
+    @Test
+    public void shouldCheckIfTreatmentCanBeRemoved() {
+        Patient patient = patient();
+        String oldTbId = patient.getCurrentTreatment().getTbId();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Therapy currentTherapy = new TherapyBuilder().withDefaults().build();
+        String currentTbId = "currentTbId";
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId(currentTbId).build();
+        patient.addTreatment(currentTreatment, currentTherapy, now(), now());
+
+        assertTrue(patient.canRemoveTreatment(oldTbId));
+        assertTrue(patient.canRemoveTreatment(currentTbId));
+        assertFalse(patient.canRemoveTreatment("tbIdDoesNotExist"));
+
+        patient.removeTreatmentForTbId(oldTbId);
+        assertFalse(patient.canRemoveTreatment(currentTbId));
+    }
 }

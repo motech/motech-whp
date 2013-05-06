@@ -12,12 +12,10 @@ import org.motechproject.whp.patient.builder.TreatmentBuilder;
 
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.*;
 import static org.motechproject.whp.common.domain.AllDaysOfWeek.allDaysOfWeek;
 import static org.motechproject.whp.common.domain.Phase.*;
@@ -499,5 +497,33 @@ public class TherapyTest {
 
         therapy.getPhases().setCPStartDate(today().plusDays(2));
         assertEquals(Phase.CP.name(), therapy.getCurrentPhaseName());
+    }
+
+    @Test
+    public void shouldRemoveTreatmentForGivenTBId() {
+        String closedTbId = "closedTbId";
+        String openTbId = "openTbId";
+
+        Treatment closedTreatment = new TreatmentBuilder().withDefaults().withEndDate(today()).withTbId(closedTbId).build();
+        Treatment openTreatment = new TreatmentBuilder().withDefaults().withTbId(openTbId).build();
+
+        Therapy therapy = new TherapyBuilder().withDefaults().withTreatment(closedTreatment).withTreatment(openTreatment).build();
+
+        therapy.removeTreatmentForTbId(closedTbId);
+
+        assertThat(therapy.getAllTreatments(), contains(openTreatment));
+        assertThat(therapy.getCurrentTreatment(), notNullValue());
+    }
+
+    @Test
+    public void shouldRemoveCurrentTreatmentForGivenTBId() {
+        String closedTbId = "closedTbId";
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withEndDate(today()).withTbId(closedTbId).build();
+        Therapy therapy = new TherapyBuilder().withDefaults().withTreatment(currentTreatment).build();
+
+        therapy.removeTreatmentForTbId(closedTbId);
+
+        assertThat(therapy.getAllTreatments().size(), is(0));
+        assertThat(therapy.getCurrentTreatment(), nullValue());
     }
 }

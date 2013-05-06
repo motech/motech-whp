@@ -354,7 +354,8 @@ public class Therapy implements Serializable {
     public List<Treatment> getAllTreatments() {
         List<Treatment> treatments = new ArrayList<>();
         treatments.addAll(getTreatments());
-        treatments.add(getCurrentTreatment());
+        if(getCurrentTreatment() != null)
+            treatments.add(getCurrentTreatment());
         return treatments;
     }
 
@@ -451,5 +452,17 @@ public class Therapy implements Serializable {
     public String getCurrentPhaseName() {
         PhaseRecord currentPhase = getCurrentPhase();
         return currentPhase != null ? currentPhase.getName().name() : null;
+    }
+
+    public void removeTreatmentForTbId(String tbId) {
+        Treatment treatment = getTreatmentBy(tbId);
+        assert treatment != null : "Cannot find treatment with Tb Id : " + tbId;
+        assert treatment.getEndDate() != null : "Cannot remove open treatment with Tb Id : " + tbId;
+
+        if(treatment == currentTreatment){
+            currentTreatment = null;
+        } else {
+            this.treatments.remove(treatment);
+        }
     }
 }
