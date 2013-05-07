@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<case xmlns="http://openrosa.org/javarosa" case_id="%s" date_modified="%s 00:00:00" user_id="system" api_key="3F2504E04F8911D39A0C0305E82C3301">
-    <update>
-        <tb_id>%s</tb_id>
-        <treatment_update>Pause</treatment_update>
-        <reason>%s</reason>
-    </update>
-</case>

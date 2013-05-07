@@ -39,6 +39,14 @@ public class CaseXMLBuilder {
         return new CaseXMLBuilder("update_patient_no_mandatory_treatment_fields.xml");
     }
 
+    public static  CaseXMLBuilder simpleUpdatePatientXML() {
+        return new CaseXMLBuilder("patient_simple_update.xml");
+    }
+
+    public static  CaseXMLBuilder simpleUpdatePatientRequestWithNoTreatmentDetails() {
+        return new CaseXMLBuilder("patient_simple_update_with_no_treatment_details.xml");
+    }
+
     public static  CaseXMLBuilder simpleUpdatePatientRequestWithEmptyTags() {
         return new CaseXMLBuilder("patient_simple_update_with_empty_treatment_details_tags.xml");
     }
@@ -57,6 +65,10 @@ public class CaseXMLBuilder {
 
     public static CaseXMLBuilder closeTreatmentRequest() {
         return new CaseXMLBuilder("close_treatment.xml");
+    }
+
+    public static CaseXMLBuilder openNewTreatmentRequest() {
+        return new CaseXMLBuilder("open_new_treatment.xml");
     }
 
     public String build() {

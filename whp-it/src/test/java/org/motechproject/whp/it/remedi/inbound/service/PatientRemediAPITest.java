@@ -297,9 +297,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
                 .withNewTreatmentDetails()
                 .withPatientDistrict(new_district.getName())
                 .build();
-        String updatePatientXML = new CaseXMLBuilder("patient_simple_update.xml")
-                .withRequest(updatedPatientWebRequest)
-                .build();
+        String updatePatientXML = simpleUpdatePatientXML().withRequest(updatedPatientWebRequest).build();
 
         standaloneSetup(patientWebService)
                 .build()
@@ -339,7 +337,7 @@ public class PatientRemediAPITest extends SpringIntegrationTest {
                 .withAllTreatmentDetailsAsNull()
                 .build();
 
-        String simpleUpdateXML = new CaseXMLBuilder("patient_simple_update_with_no_treatment_details.xml")
+        String simpleUpdateXML = simpleUpdatePatientRequestWithNoTreatmentDetails()
                 .withRequest(updatedPatientWebRequest)
                 .build();
 
