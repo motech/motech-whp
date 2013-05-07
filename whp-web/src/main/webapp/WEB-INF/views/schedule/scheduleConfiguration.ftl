@@ -106,7 +106,7 @@
            $('#provider-reminder-form').submit();
         })
         $('#confirmReminder').click(function(){
-           var messageId = encodeURIComponent('${scheduleConfiguration.messageId}')
+           var messageId = encodeURIComponent('${scheduleConfiguration.messageId!}')
            $.get('/whp/schedule/execute?type=${scheduleConfiguration.scheduleType}&messageId=' + messageId, function(data){
                 $("#alert").html('<div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>' + data + '</div>');
                 createAutoClosingAlert("#update-alert", 5000);
