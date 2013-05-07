@@ -3,9 +3,6 @@
     <li>
         <a id="list-providers" href="/whp/providers/list"><i class="icon-cog icon-white"></i> Manage Providers</a>
     <li>
-    <li>
-        <a id="cmf-admins" href="/whp/cmfAdmin/list"><i class="icon-briefcase icon-white"></i> Manage CMF Admins</a>
-    </li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-tasks icon-white"></i> Diagnostics <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="diagnostics">
