@@ -585,9 +585,7 @@ public class Patient extends MotechBaseDataObject {
     }
 
     public void removeTreatmentForTbId(String tbId) {
-        Treatment treatment = getTreatmentBy(tbId);
-        assert treatment != null : "Treatment not found for TB Id: " + tbId;
-        assert treatment.getEndDate() != null : "Treatment is not closed for TB Id: " + tbId;
+        assert canRemoveTreatment(tbId) : "Cannot remove treatment";
 
         Therapy therapy = getTherapyHaving(tbId);
         therapy.removeTreatmentForTbId(tbId);
@@ -608,9 +606,14 @@ public class Patient extends MotechBaseDataObject {
 
     public boolean canRemoveTreatment(String tbId) {
         Treatment treatment = getTreatmentBy(tbId);
-        Therapy therapy = getTherapyHaving(tbId);
         if (treatment == null) return false;
-        else if(therapy == currentTherapy && therapyHistory.size() == 0) return false;
-        else return true;
+        if(thereAreNoOtherTreatments(treatment)) return false;
+
+        return true;
+    }
+
+    private boolean thereAreNoOtherTreatments(Treatment treatment) {
+        Therapy therapy = getTherapyHaving(treatment.getTbId());
+        return therapy == currentTherapy && currentTherapy.getAllTreatments().size() <= 1 && therapyHistory.size() == 0;
     }
 }

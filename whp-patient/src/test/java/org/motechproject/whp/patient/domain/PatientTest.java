@@ -748,6 +748,7 @@ public class PatientTest {
         String oldTbId = patient.getCurrentTreatment().getTbId();
         patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
 
+
         Therapy currentTherapy = new TherapyBuilder().withDefaults().build();
         String currentTbId = "currentTbId";
         Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId(currentTbId).build();
@@ -759,5 +760,10 @@ public class PatientTest {
 
         patient.removeTreatmentForTbId(oldTbId);
         assertFalse(patient.canRemoveTreatment(currentTbId));
+
+        Treatment newTreatment = new TreatmentBuilder().withDefaults().withTbId("newTbId").build();
+        patient.addTreatment(newTreatment, now(), now());
+
+        assertTrue(patient.canRemoveTreatment(currentTbId));
     }
 }
