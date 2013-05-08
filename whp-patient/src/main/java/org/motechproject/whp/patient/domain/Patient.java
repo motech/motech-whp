@@ -614,6 +614,6 @@ public class Patient extends MotechBaseDataObject {
 
     private boolean thereAreNoOtherTreatments(Treatment treatment) {
         Therapy therapy = getTherapyHaving(treatment.getTbId());
-        return therapy == currentTherapy && currentTherapy.getAllTreatments().size() <= 1 && therapyHistory.size() == 0;
+        return therapy == currentTherapy && currentTherapy.getAllTreatments().size() <= 1 && therapyHistory.isEmpty();
     }
 }

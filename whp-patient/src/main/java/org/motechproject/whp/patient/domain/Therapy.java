@@ -457,10 +457,13 @@ public class Therapy implements Serializable {
     public void removeTreatmentForTbId(String tbId) {
         Treatment treatment = getTreatmentBy(tbId);
         assert treatment != null : "Cannot find treatment with Tb Id : " + tbId;
-        assert treatment.getEndDate() != null : "Cannot remove open treatment with Tb Id : " + tbId;
-
         if(treatment == currentTreatment){
-            currentTreatment = null;
+            if(!treatments.isEmpty()){
+                currentTreatment = this.treatments.remove(treatments.size() - 1);
+                this.closeDate = currentTreatment.getEndDate();
+                this.status = TherapyStatus.Closed;
+            }
+            else currentTreatment = null;
         } else {
             this.treatments.remove(treatment);
         }

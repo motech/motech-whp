@@ -526,4 +526,24 @@ public class TherapyTest {
         assertThat(therapy.getAllTreatments().size(), is(0));
         assertThat(therapy.getCurrentTreatment(), nullValue());
     }
+
+    @Test
+      public void shouldReplaceRemovedCurrentTreatmentForGivenTBId() {
+        String closedTbId = "closedTbId";
+        String openTbId = "openTbId";
+
+        Treatment closedTreatment = new TreatmentBuilder().withDefaults().withEndDate(today()).withTbId(closedTbId).build();
+        Treatment openTreatment = new TreatmentBuilder().withDefaults().withTbId(openTbId).build();
+
+        Therapy therapy = new TherapyBuilder().withDefaults().withTreatment(closedTreatment).withTreatment(openTreatment).build();
+
+        therapy.removeTreatmentForTbId(openTbId);
+
+        assertThat(therapy.getAllTreatments(), contains(closedTreatment));
+        assertThat(therapy.getCurrentTreatment(), is(closedTreatment));
+        assertTrue(therapy.isCurrentTreatmentClosed());
+        assertThat(therapy.getCloseDate(), is(closedTreatment.getEndDate()));
+    }
+
+
 }
