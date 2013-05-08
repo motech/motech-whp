@@ -14,7 +14,6 @@ import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseReposito
 import org.motechproject.couchdb.lucene.util.WhiteSpaceEscape;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
-import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
@@ -29,22 +28,17 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.motechproject.whp.patient.WHPPatientConstants.PATIENT_UPDATED_SUBJECT;
-
 @Repository
 public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
 
-    private EventContext eventContext;
     private PatientQueryDefinition patientQueryDefinition;
     private static final String SORT_BY_ASCENDING = "ASC";
 
     @Autowired
     public AllPatients(@Qualifier("whpLuceneAwareCouchDbConnector") LuceneAwareCouchDbConnector whpLuceneAwareCouchDbConnector,
-                       EventContext eventContext,
                        PatientQueryDefinition patientQueryDefinition,
-                       @Qualifier("whiteSpaceEscape")WhiteSpaceEscape whiteSpaceEscape) {
+                       @Qualifier("whiteSpaceEscape") WhiteSpaceEscape whiteSpaceEscape) {
         super(Patient.class, whpLuceneAwareCouchDbConnector, whiteSpaceEscape);
-        this.eventContext = eventContext;
         this.patientQueryDefinition = patientQueryDefinition;
 
         IndexUploader uploader = new IndexUploader();
@@ -72,7 +66,6 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
             throw new WHPRuntimeException(errorCodes);
         }
         super.update(patient);
-        eventContext.send(PATIENT_UPDATED_SUBJECT, patient);
     }
 
     @GenerateView
