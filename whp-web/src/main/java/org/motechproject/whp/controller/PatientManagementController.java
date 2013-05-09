@@ -42,7 +42,8 @@ public class PatientManagementController extends BaseWebController {
                                      Model uiModel, HttpServletRequest request) {
 
         Patient patient = patientService.findByPatientId(patientId);
-        uiModel.addAttribute("treatment", patient.getTreatmentBy(tbId));
+        if (patient!=null)
+            uiModel.addAttribute("treatment", patient.getTreatmentBy(tbId));
         return "patient/treatmentDetails";
     }
 

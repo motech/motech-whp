@@ -48,7 +48,7 @@ public class PatientManagementControllerTest {
     }
 
     @Test
-    public void shouldReturnTreatmentView() throws Exception {
+    public void shouldReturnTreatmentViewWithTreatmentWhenPatientFound() throws Exception {
         String patientId = "patientId";
 
         Patient patient = PatientBuilder.patient();
@@ -59,6 +59,20 @@ public class PatientManagementControllerTest {
                 .perform(get("/managepatients/treatment").param("patientId", patientId).param("tbId", tbId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("treatment", patient.getTreatmentBy(tbId)))
+                .andExpect(view().name("patient/treatmentDetails"));
+    }
+
+    @Test
+    public void shouldReturnTreatmentViewWhenNoPatientIsFound() throws Exception {
+        String patientId = "patientId";
+
+        Patient patient = PatientBuilder.patient();
+        String tbId = patient.getCurrentTreatment().getTbId();
+        when(patientService.findByPatientId(patientId)).thenReturn(null);
+
+        standaloneSetup(patientManagementController).build()
+                .perform(get("/managepatients/treatment").param("patientId", patientId).param("tbId", tbId))
+                .andExpect(status().isOk())
                 .andExpect(view().name("patient/treatmentDetails"));
     }
 
