@@ -18,6 +18,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.motechproject.util.DateUtil.*;
@@ -766,4 +767,70 @@ public class PatientTest {
 
         assertTrue(patient.canRemoveTreatment(currentTbId));
     }
+
+    @Test
+    public void shouldUpdateOnActiveTreamentFlagOnDeletingTheCurrentTherapy(){
+        Patient patient = patient();
+        Therapy oldTherapy = patient.getCurrentTherapy();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Therapy currentTherapy = new TherapyBuilder().withDefaults().build();
+        String currentTbId = "currenttbid";
+        Treatment currentTreatment = new TreatmentBuilder().withDefaults().withTbId(currentTbId).build();
+        patient.addTreatment(currentTreatment, currentTherapy, now(), now());
+
+        patient.removeTreatmentForTbId(currentTbId);
+
+        assertThat(patient.getCurrentTherapy(), is(oldTherapy));
+        assertThat(patient.getTherapyHistory().size(), is(0));
+        assertFalse(patient.isOnActiveTreatment());
+
+    }
+
+    @Test
+    public void shouldUpdateOnActiveTreamentFlagOnMovingDeletingTheCurrentTreatment() {
+        Patient patient = patient();
+        Treatment oldTreatment = patient.getCurrentTreatment();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Treatment treatment =  new TreatmentBuilder().withDefaults().withTbId("currentOpenTbId").build();
+        patient.addTreatment(treatment, now(), now());
+
+        patient.removeTreatmentForTbId(treatment.getTbId());
+
+        assertThat(patient.getAllTreatments(), hasItem(oldTreatment));
+        assertThat(patient.getAllTreatments().size(), is(1));
+        assertFalse(patient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldNotUpdateOnActiveTreamentFlagOnMovingDeletingTheOldTreatment() {
+        Patient patient = patient();
+        Treatment oldTreatment = patient.getCurrentTreatment();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+
+        Treatment treatment =  new TreatmentBuilder().withDefaults().withTbId("currentOpenTbId").build();
+        patient.addTreatment(treatment, now(), now());
+
+        patient.removeTreatmentForTbId(oldTreatment.getTbId());
+
+        assertThat(patient.getAllTreatments(), hasItem(treatment));
+        assertThat(patient.getAllTreatments().size(), is(1));
+        assertTrue(patient.isOnActiveTreatment());
+    }
+
+    @Test
+    public void shouldCheckIfTreatmentExists(){
+        Patient patient = patient();
+        String oldTbId = patient.getCurrentTreatment().getTbId();
+        patient.closeCurrentTreatment(TreatmentOutcome.Cured, "remarks", now());
+        String currentOpenTbId = "currentOpenTbId";
+        Treatment treatment =  new TreatmentBuilder().withDefaults().withTbId(currentOpenTbId).build();
+        patient.addTreatment(treatment, now(), now());
+
+        assertFalse(patient.isTreatmentExisting("invalidTbId"));
+        assertTrue(patient.isTreatmentExisting(oldTbId));
+        assertTrue(patient.isTreatmentExisting(currentOpenTbId));
+    }
+
 }

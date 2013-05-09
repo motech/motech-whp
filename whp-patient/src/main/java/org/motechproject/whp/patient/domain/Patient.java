@@ -588,7 +588,12 @@ public class Patient extends MotechBaseDataObject {
         assert canRemoveTreatment(tbId) : "Cannot remove treatment";
 
         Therapy therapy = getTherapyHaving(tbId);
-        therapy.removeTreatmentForTbId(tbId);
+        if(isTreatmentExisting(tbId)){
+            if(this.getCurrentTreatment().getTbId().equals(tbId)){
+                this.onActiveTreatment = false;
+            }
+            therapy.removeTreatmentForTbId(tbId);
+        }
 
         if (therapy.getAllTreatments().isEmpty()) {
             if (therapy == currentTherapy) {
@@ -615,5 +620,9 @@ public class Patient extends MotechBaseDataObject {
     private boolean thereAreNoOtherTreatments(Treatment treatment) {
         Therapy therapy = getTherapyHaving(treatment.getTbId());
         return therapy == currentTherapy && currentTherapy.getAllTreatments().size() <= 1 && therapyHistory.isEmpty();
+    }
+
+    public boolean isTreatmentExisting(String tbId) {
+        return (this.getTherapyHaving(tbId)== null) ? false: true;
     }
 }

@@ -456,7 +456,6 @@ public class Therapy implements Serializable {
 
     public void removeTreatmentForTbId(String tbId) {
         Treatment treatment = getTreatmentBy(tbId);
-        assert treatment != null : "Cannot find treatment with Tb Id : " + tbId;
         if(treatment == currentTreatment){
             if(!treatments.isEmpty()){
                 currentTreatment = this.treatments.remove(treatments.size() - 1);
