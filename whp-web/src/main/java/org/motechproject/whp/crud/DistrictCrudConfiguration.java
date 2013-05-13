@@ -12,7 +12,7 @@ import static org.motechproject.crud.builder.CrudModelBuilder.couchDBCrudModel;
 @Configuration
 public class DistrictCrudConfiguration {
 
-    @Bean
+    @Bean(name = "districtCrudEntity")
     public CrudEntity createDistrictCrudEntity(AllDistricts allDistricts){
         return newCrudEntity(District.class)
                 .crudRepository(allDistricts)

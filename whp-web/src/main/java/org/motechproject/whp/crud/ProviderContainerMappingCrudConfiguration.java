@@ -13,7 +13,7 @@ import static org.motechproject.crud.builder.CrudModelBuilder.couchDBCrudModel;
 @Configuration
 public class ProviderContainerMappingCrudConfiguration {
 
-    @Bean
+    @Bean(name = "providerContainerMappingCrudEntity")
     public CrudEntity<ProviderContainerMapping> build(@Qualifier("whpDbConnector") CouchDbConnector couchDbConnector){
         return newCrudEntity(ProviderContainerMapping.class)
                 .couchDBCrudRepository(couchDbConnector)
