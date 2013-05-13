@@ -32,10 +32,10 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt icon-white"></i> Master Data <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="Menu" id="masterData">
             <li>
-                <a href="/whp/crud/ProviderContainerMapping/list">Provider Container Mapping</a>
+                <a href="/whp/crud/ProviderContainerMapping/list" target="_blank">Provider Container Mapping</a>
             </li>
             <li>
-                <a href="/whp/crud/District/list">District</a>
+                <a href="/whp/crud/District/list" target="_blank">District</a>
             </li>
         </ul>
     </li>
