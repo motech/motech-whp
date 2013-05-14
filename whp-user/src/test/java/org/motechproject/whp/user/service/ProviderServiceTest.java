@@ -31,6 +31,7 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.*;
@@ -62,7 +63,7 @@ public class ProviderServiceTest {
     private ProviderService providerService;
     Integer startIndex;
     Integer rowsPerPage;
-
+    String providerId = "providerId";
 
     @Before
     public void setUp() {
@@ -74,8 +75,24 @@ public class ProviderServiceTest {
 
     @Test
     public void shouldFetchProviderByDistrictAndProviderId() {
-        providerService.fetchByFilterParams(startIndex, rowsPerPage, "district", "providerId");
+        Provider expectedProvider = mock(Provider.class);
+        when(allProviders.findByProviderId(providerId)).thenReturn(expectedProvider);
+
+        List<Provider> providers = providerService.fetchByFilterParams(startIndex, rowsPerPage, "district", "providerId");
+
+        assertThat(providers, hasItem(expectedProvider));
+        assertThat(providers.size(), is(1));
         verify(allProviders).findByProviderId("providerId");
+    }
+
+    @Test
+    public void shouldHandleNoResultForFilterByProviderId() {
+        when(allProviders.findByProviderId(providerId)).thenReturn(null);
+
+        List<Provider> providers = providerService.fetchByFilterParams(startIndex, rowsPerPage, "district", providerId);
+
+        assertTrue(providers.isEmpty());
+        verify(allProviders).findByProviderId(providerId);
     }
 
     @Test

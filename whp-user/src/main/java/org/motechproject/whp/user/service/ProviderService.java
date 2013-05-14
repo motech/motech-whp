@@ -1,6 +1,5 @@
 package org.motechproject.whp.user.service;
 
-import org.apache.commons.lang.StringUtils;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
@@ -17,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang.StringUtils.isEmpty;
@@ -58,7 +60,14 @@ public class ProviderService {
         if (isEmpty(providerId)) {
             return allProviders.paginateByDistrict(startIndex, rowsPerPage, district);
         }
-        return asList(allProviders.findByProviderId(providerId));
+
+        return filterByProviderId(providerId);
+    }
+
+    private List<Provider> filterByProviderId(String providerId) {
+        Provider provider = allProviders.findByProviderId(providerId);
+        if(provider != null) return asList(provider);
+        else return new ArrayList<>();
     }
 
     public List<Provider> fetchBy(String district) {
