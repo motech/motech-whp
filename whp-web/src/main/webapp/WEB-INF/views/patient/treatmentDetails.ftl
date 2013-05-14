@@ -13,11 +13,11 @@
     <label class="tc-value">${treatment.creationDate!}</label>
 </div>
 <div>
-    <label class="tc-label">Start Date</label>
+    <label class="tc-label">TB Registration Date</label>
     <label class="tc-value">${treatment.startDate!}</label>
 </div>
 <div>
-    <label class="tc-label">End Date</label>
+    <label class="tc-label">Close Date</label>
     <label class="tc-value">${treatment.endDate!}</label>
 </div>
 <div>
