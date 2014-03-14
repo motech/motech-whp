@@ -19,7 +19,15 @@ public class PatientReportingService {
     }
 
     public void reportPatient(Patient patient) {
+        reportingPublisherService.reportPatient(populatePatientDTO(patient));
+    }
+
+    public void removePatient(Patient patient) {
+        reportingPublisherService.removePatient(populatePatientDTO(patient));
+    }
+
+    private PatientDTO populatePatientDTO(Patient patient) {
         PatientDTO patientDTO = patientReportingRequestMapper.mapToReportingRequest(patient);
-        reportingPublisherService.reportPatient(patientDTO);
+        return patientDTO;
     }
 }

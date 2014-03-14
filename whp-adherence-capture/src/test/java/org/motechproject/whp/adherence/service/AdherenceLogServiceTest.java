@@ -78,4 +78,14 @@ public class AdherenceLogServiceTest {
         verify(allAdherenceLogs).allLogs(pageNumber - 1, pageSize);
     }
 
+    @Test
+    public void removeAdherenceLogs(){
+        String patientId = "patientId";
+        AdherenceLog adherenceLog = mock(AdherenceLog.class);
+        List<AdherenceLog> adherenceLogs = asList(adherenceLog);
+        when(allAdherenceLogs.findByPatientId(patientId)).thenReturn(adherenceLogs);
+        adherenceLogService.removeAdherenceLogs(patientId);
+        verify(allAdherenceLogs).remove(adherenceLogs);
+    }
+
 }

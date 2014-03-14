@@ -173,4 +173,12 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
         ViewQuery q = createQuery("all").skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true).includeDocs(true);
         return db.queryView(q, Patient.class);
     }
+
+    public void remove(Patient patient){
+        ArrayList<WHPErrorCode> errorCodes = new ArrayList<>();
+        if (!patient.isValid(errorCodes)) {
+            throw new WHPRuntimeException(errorCodes);
+        }
+        super.remove(patient);
+    }
 }

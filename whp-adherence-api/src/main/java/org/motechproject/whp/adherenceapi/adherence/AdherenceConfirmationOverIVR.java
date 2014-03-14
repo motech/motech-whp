@@ -64,4 +64,8 @@ public class AdherenceConfirmationOverIVR {
                 ADHERENCE_PROVIDED).request();
         reportingService.reportAdherenceCapture(reportingRequest);
     }
+
+    public void deleteAdherenceOfInvalidPatient(String patientId){
+        reportingService.removeAdherenceOverIVR(patientId);
+    }
 }

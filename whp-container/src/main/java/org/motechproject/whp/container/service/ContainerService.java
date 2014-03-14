@@ -210,6 +210,18 @@ public class ContainerService {
     }
 
     private void publishUserDetailsUpdateReportingEvent(Container container) {
+        UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest =populateUserGivenPatientDetailsReportingRequest(container);
+        reportingPublisherService.reportUserGivenPatientDetailsUpdate(userGivenPatientDetailsReportingRequest);
+    }
+
+    public void removeContainers(List<Container> containers){
+        for(Container container : containers){
+            allContainers.remove(container);
+            reportingPublisherService.removeUserGivenPatientDetailsUpdate(populateUserGivenPatientDetailsReportingRequest(container));
+        }
+    }
+
+    public UserGivenPatientDetailsReportingRequest  populateUserGivenPatientDetailsReportingRequest(Container container){
         UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest = new UserGivenPatientDetailsReportingRequest();
         userGivenPatientDetailsReportingRequest.setContainerId(container.getContainerId());
         ContainerRegistrationDetails registrationDetails = container.getContainerRegistrationDetails();
@@ -222,7 +234,6 @@ public class ContainerService {
         } else {
             userGivenPatientDetailsReportingRequest.setGender(null);
         }
-
-        reportingPublisherService.reportUserGivenPatientDetailsUpdate(userGivenPatientDetailsReportingRequest);
+        return userGivenPatientDetailsReportingRequest;
     }
 }

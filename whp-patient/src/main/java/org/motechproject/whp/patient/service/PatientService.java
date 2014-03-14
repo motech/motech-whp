@@ -130,4 +130,11 @@ public class PatientService {
     public List<Patient> getAll(int pageNumber, int pageSize) {
         return allPatients.getAll(pageNumber - 1, pageSize);
     }
+
+    public void removePatient(String patientId){
+        patientAlertScheduler.unscheduleJob(patientId);
+        Patient patient = findByPatientId(patientId);
+        allPatients.remove(patient);
+        patientReportingService.removePatient(patient);
+    }
 }

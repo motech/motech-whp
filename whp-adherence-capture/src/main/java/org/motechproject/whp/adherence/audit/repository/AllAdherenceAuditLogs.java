@@ -1,5 +1,6 @@
 package org.motechproject.whp.adherence.audit.repository;
 
+import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.support.View;
@@ -24,5 +25,19 @@ public class AllAdherenceAuditLogs extends MotechBaseRepository<AuditLog> {
     public List<AdherenceAuditLog> allLogs(int pageNo, int pageSize) {
         ViewQuery q = createQuery("all_adherence_audit_logs").skip(pageNo * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceAuditLog.class);
+    }
+
+    @View(name = "by_patientId", map = "function(doc) {if (doc.type =='AuditLog') {emit([doc.patientId], doc._id);}}")
+    public List<AuditLog> findByPatientId(String patientId){
+        final ComplexKey startKey = ComplexKey.of(patientId.toLowerCase());
+        final ComplexKey endKey =  startKey;
+        ViewQuery q = createQuery("by_patientId").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        return db.queryView(q, AuditLog.class);
+    }
+
+    public void remove(List<AuditLog> auditLogs){
+        for (AuditLog auditLog : auditLogs){
+            remove(auditLog);
+        }
     }
 }

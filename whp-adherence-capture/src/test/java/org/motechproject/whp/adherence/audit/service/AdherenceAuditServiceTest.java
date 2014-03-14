@@ -114,4 +114,24 @@ public class AdherenceAuditServiceTest extends BaseUnitTest {
         assertEquals(expectedAuditLogs, auditLogs);
         verify(allAdherenceAuditLogs).allLogs(pageNumber - 1, pageSize);
     }
+
+    @Test
+    public void removeAdherenceLogs(){
+        String patientId = "patientId";
+        AuditLog auditLog = mock(AuditLog.class);
+        List<AuditLog> auditLogs = asList(auditLog);
+        when(allAdherenceAuditLogs.findByPatientId(patientId)).thenReturn(auditLogs);
+        adherenceAuditService.removeAuditLogs(patientId);
+        verify(allAdherenceAuditLogs).remove(auditLogs);
+    }
+
+    @Test
+    public void removeDailyAdherenceAuditLogs(){
+        String patientId = "patientId";
+        DailyAdherenceAuditLog dailyAdherenceAuditLog = mock(DailyAdherenceAuditLog.class);
+        List<DailyAdherenceAuditLog> dailyAdherenceAuditLogs = asList(dailyAdherenceAuditLog);
+        when(allDailyAdherenceAuditLogs.findByPatientId(patientId)).thenReturn(dailyAdherenceAuditLogs);
+        adherenceAuditService.removeDailyAdherenceAuditLogs(patientId);
+        verify(allDailyAdherenceAuditLogs).remove(dailyAdherenceAuditLogs);
+    }
 }

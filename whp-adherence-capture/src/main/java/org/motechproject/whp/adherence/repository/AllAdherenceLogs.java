@@ -4,6 +4,7 @@ import org.ektorp.ComplexKey;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
+import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.joda.time.LocalDate;
 import org.motechproject.dao.MotechBaseRepository;
@@ -149,5 +150,22 @@ public class AllAdherenceLogs extends MotechBaseRepository<AdherenceLog> {
     public List<AdherenceRecord> allLogs(int pageNumber, int pageSize) {
         ViewQuery q = createQuery(viewForAdherenceLogsByDoseDate()).skip(pageNumber * pageSize).limit(pageSize).inclusiveEnd(true);
         return db.queryView(q, AdherenceRecord.class);
+    }
+    @View(name = "by_externalId", map = "function(doc) {if (doc.type =='AdherenceLog') {emit([doc.externalId], doc._id);}}")
+    public List<AdherenceLog> findByPatientId(String externalId) {
+        if (externalId == null)
+            return null;
+        final ComplexKey startKey = ComplexKey.of(externalId.toLowerCase());
+        final ComplexKey endKey =  startKey;
+
+        ViewQuery q = createQuery("by_externalId").startKey(startKey).endKey(endKey).includeDocs(true).inclusiveEnd(true);
+        return db.queryView(q, AdherenceLog.class);
+    }
+
+    public void remove(List<AdherenceLog> adherenceLogs){
+        for(AdherenceLog adherenceLog: adherenceLogs){
+            remove(adherenceLog);
+        }
+
     }
 }

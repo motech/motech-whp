@@ -73,4 +73,16 @@ public class AdherenceAuditService {
     public List<AdherenceAuditLog> fetchAllAuditLogs(int pageNumber) {
         return allAdherenceAuditLogs.allLogs(pageNumber - 1, 10000);
     }
+
+    public void removeAuditLogs(String patientId){
+        List<AuditLog> auditLogs = allAdherenceAuditLogs.findByPatientId(patientId);
+        allAdherenceAuditLogs.remove(auditLogs);
+        adherenceAuditLogReportingService.removeAuditLogs(auditLogs);
+    }
+
+    public void removeDailyAdherenceAuditLogs(String patientId){
+     List<DailyAdherenceAuditLog> dailyAdherenceAuditLogs = allDailyAdherenceAuditLogs.findByPatientId(patientId);
+     allDailyAdherenceAuditLogs.remove(dailyAdherenceAuditLogs);
+     adherenceAuditLogReportingService.removeDailyAdherenceAuditLogs(dailyAdherenceAuditLogs);
+    }
 }

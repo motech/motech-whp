@@ -241,9 +241,24 @@ public class PatientServiceTest extends BaseUnitTest {
         verify(allPatients).getAll(pageNumber - 1, pageSize);
     }
 
+    @Test
+    public void shouldRemovePatient() {
+        PatientRequest patientRequest = mock(PatientRequest.class);
+        Patient patient = mock(Patient.class);
+        when(patient.getPatientId()).thenReturn(PATIENT_ID);
+        when(patientMapper.mapPatient(patientRequest)).thenReturn(patient);
+        when(patientService.findByPatientId(PATIENT_ID)).thenReturn(patient);
+        patientService.removePatient(PATIENT_ID);
+        verify(allPatients).findByPatientId(PATIENT_ID);
+        verify(patientAlertScheduler).unscheduleJob(PATIENT_ID);
+        verify(patientReportingService).removePatient(patient);
+        verify(allPatients).remove(patient);
+    }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(allPatients);
         verifyNoMoreInteractions(patientAlertService);
     }
+
 }

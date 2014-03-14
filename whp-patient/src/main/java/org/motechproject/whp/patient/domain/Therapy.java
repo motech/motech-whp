@@ -65,6 +65,10 @@ public class Therapy implements Serializable {
     public boolean isClosed() {
         return TherapyStatus.Closed == status;
     }
+    @JsonIgnore
+    public boolean isOngoing() {
+        return TherapyStatus.Ongoing == status;
+    }
 
     @JsonIgnore
     public boolean isNearingPhaseTransition() {

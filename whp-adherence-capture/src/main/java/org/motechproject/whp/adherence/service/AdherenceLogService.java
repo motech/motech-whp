@@ -9,6 +9,7 @@ import org.motechproject.whp.user.domain.ProviderIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,5 +62,16 @@ public class AdherenceLogService {
 
     public List<AdherenceRecord> fetchAllAdherenceRecords(int pageNumber) {
         return allAdherenceLogs.allLogs(pageNumber - 1, 10000);
+    }
+
+    public void removeAdherenceLogs(String patientId){
+        List<AdherenceLog> adherenceLogs = allAdherenceLogs.findByPatientId(patientId);
+        allAdherenceLogs.remove(adherenceLogs);
+        List<AdherenceRecord> adherenceRecords = new ArrayList<>();
+        for(AdherenceLog adherenceLog : adherenceLogs){
+            AdherenceRecord adherenceRecord = new AdherenceRecord(adherenceLog);
+            adherenceRecords.add(adherenceRecord);
+        }
+        adherenceRecordReportingService.delete(adherenceRecords);
     }
 }

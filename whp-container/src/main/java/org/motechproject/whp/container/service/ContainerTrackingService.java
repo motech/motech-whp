@@ -36,4 +36,8 @@ public class ContainerTrackingService {
             allContainerTrackingRecords.updateAll(allRowsBelongingToProvider);
         }
     }
+
+    public List<Container> findByPatientId(String patientId){
+        return allContainerTrackingRecords.withPatientId(patientId);
+    }
 }

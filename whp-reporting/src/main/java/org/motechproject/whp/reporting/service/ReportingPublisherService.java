@@ -11,6 +11,9 @@ import org.motechproject.whp.reports.contract.provider.ProviderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Service
 public class ReportingPublisherService {
 
@@ -93,7 +96,30 @@ public class ReportingPublisherService {
         httpClientService.post(reportingApplicationURLs.getAdherenceRecordUpdateURL(), adherenceRecordDTO);
     }
 
+    public void reportAdherenceRecordDelete(List<AdherenceRecordDTO> adherenceRecordDTOs) {
+        httpClientService.post(reportingApplicationURLs.getAdherenceRecordDeleteURL(), (Serializable)adherenceRecordDTOs);
+    }
+
+    public void reportAdherenceAuditLogDelete(List<AdherenceAuditLogDTO> adherenceAuditLogDTOs){
+        httpClientService.post(reportingApplicationURLs.getAuditLogsDeleteURL(), (Serializable)adherenceAuditLogDTOs);
+    }
+
+    public void reportDailyAdherenceAuditLogsDelete(List<AdherenceAuditLogDTO> adherenceAuditLogDTOs){
+        httpClientService.post(reportingApplicationURLs.getAdherenceRecordDeleteURL(), (Serializable)adherenceAuditLogDTOs);
+    }
+
     public void reportUserGivenPatientDetailsUpdate(UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest) {
         httpClientService.post(reportingApplicationURLs.getUpdateUserGivenPatientDetailsURL(), userGivenPatientDetailsReportingRequest);
+    }
+
+    public void removeUserGivenPatientDetailsUpdate(UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest) {
+        httpClientService.post(reportingApplicationURLs.getDeleteUserGivenPatientDetailsURL(), userGivenPatientDetailsReportingRequest);
+    }
+
+    public void removePatient(PatientDTO patientDTO) {
+        httpClientService.post(reportingApplicationURLs.getDeletePatientURL(), patientDTO);
+    }
+    public void removeAdherenceOverIVR(String patientID){
+        httpClientService.post(reportingApplicationURLs.getAdherencePathDelete(), patientID);
     }
 }

@@ -30,6 +30,12 @@ public class ReportingApplicationURLs {
     private String providerAdherenceStatusByDistrictURL;
     private String patientAdherenceMissingDataURL;
     private String updateUserGivenPatientDetailsURL;
+    private String adherenceRecordDeleteURL;
+    private String auditLogsDeleteURL;
+    private String dailyAdherenceAuditLogsURL;
+    private String deleteUserGivenPatientDetailsURL;
+    private String deletePatientURL;
+    private String adherencePathDelete;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -135,4 +141,36 @@ public class ReportingApplicationURLs {
     public void setPatientAdherenceMissingDataURL(String patientAdherenceMissingDataURL) {
         this.patientAdherenceMissingDataURL = patientAdherenceMissingDataURL;
     }
+
+    @Value("${whp.reports.adherence.delete}")
+    public void setAdherenceRecordDeleteURL(String adherenceRecordDeleteURL) {
+        this.adherenceRecordDeleteURL = adherenceRecordDeleteURL;
+    }
+
+    @Value("${whp.reports.auditLog.delete}")
+    public void setAuditLogsDeleteURLURL(String auditLogsDeleteURL) {
+        this.auditLogsDeleteURL = auditLogsDeleteURL;
+    }
+
+    @Value("${whp.reports.dailyAdherenceAuditLogs.delete}")
+    public void setDailyAdherenceAuditLogsURL(String dailyAdherenceAuditLogsURL) {
+        this.dailyAdherenceAuditLogsURL = dailyAdherenceAuditLogsURL;
+    }
+
+    @Value("${whp.reports.deleteUserGivenPatientDetails}")
+    public void setDeleteUserGivenPatientDetailsURL(String deleteUserGivenPatientDetailsURL) {
+        this.deleteUserGivenPatientDetailsURL = deleteUserGivenPatientDetailsURL;
+    }
+
+
+    @Value("${whp.reports.patient.delete}")
+    public void setDeletePatientURL(String deletePatientURL) {
+        this.deletePatientURL = deletePatientURL;
+    }
+
+    @Value("${whp.reports.adherencePath.delete}")
+    public void setAdherencePathDelete(String adherencePathDelete) {
+        this.adherencePathDelete = adherencePathDelete;
+    }
+
 }

@@ -37,6 +37,7 @@ import org.motechproject.whp.user.service.ProviderService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Arrays.asList;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
@@ -69,6 +70,10 @@ public class ContainerServiceTest extends BaseUnitTest {
     private ProviderService providerService;
     @Mock
     private ReportingPublisherService reportingPublisherService;
+
+    @Mock
+    private ContainerTrackingService containerTrackingService;
+
 
     private static final String patientName = "patientName";
     private static final String patientId = "patientid";
@@ -526,6 +531,15 @@ public class ContainerServiceTest extends BaseUnitTest {
         verifyZeroInteractions(reportingPublisherService);
     }
 
+    @Test
+    public void removeContainers() {
+        String patientId = "patientId";
+        Container container = ContainerBuilder.newContainer().withDefaults().build();
+        List<Container> containers = asList(container);
+        when(containerTrackingService.findByPatientId(patientId)).thenReturn(containers);
+        containerService.removeContainers(containers);
+        verify(allContainers).remove(container);
+    }
 
     private void verifyMappingReportingEventPublication(Container container) {
         ContainerPatientMappingReportingRequest request = new ContainerPatientMappingReportingRequestBuilder().forContainer(container).build();
