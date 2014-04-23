@@ -17,137 +17,153 @@ import java.util.List;
 @Data
 public class Treatment implements Serializable {
 
-    private String providerId;
-    private String providerDistrict;
-    private String tbId;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Address patientAddress;
-    private TreatmentOutcome treatmentOutcome;
-    private PatientType patientType;
-    private String tbRegistrationNumber;
-    private SmearTestResults smearTestResults = new SmearTestResults();
-    private WeightStatistics weightStatistics = new WeightStatistics();
-    private TreatmentInterruptions interruptions = new TreatmentInterruptions();
-    private String closeTreatmentRemarks;
-    private TreatmentDetails treatmentDetails = new TreatmentDetails();
-    private LocalDateTime creationDate;
+	private String providerId;
+	private String providerDistrict;
+	private String tbId;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private Address patientAddress;
+	private TreatmentOutcome treatmentOutcome;
+	private PatientType patientType;
+	private String tbRegistrationNumber;
+	private SmearTestResults smearTestResults = new SmearTestResults();
+	private WeightStatistics weightStatistics = new WeightStatistics();
+	private TreatmentInterruptions interruptions = new TreatmentInterruptions();
+	private String closeTreatmentRemarks;
+	private TreatmentDetails treatmentDetails = new TreatmentDetails();
+	private LocalDateTime creationDate;
 
-    public Treatment() {
-    }
+	public Treatment() {
+	}
 
-    public Treatment(Treatment treatment) {
-        this.providerId = treatment.getProviderId();
-        this.providerId = treatment.getProviderId();
-        this.providerId = treatment.getProviderId();
-        this.providerId = treatment.getProviderId();
-        this.providerId = treatment.getProviderId();
-        this.providerId = treatment.getProviderId();
+	public Treatment(Treatment treatment) {
+		this.providerId = treatment.getProviderId();
+		this.providerId = treatment.getProviderId();
+		this.providerId = treatment.getProviderId();
+		this.providerId = treatment.getProviderId();
+		this.providerId = treatment.getProviderId();
+		this.providerId = treatment.getProviderId();
 
-    }
+	}
 
+	public Treatment(String providerId, String providerDistrict, String tbId,
+			PatientType patientType) {
+		setProviderId(providerId);
+		setProviderDistrict(providerDistrict);
+		setTbId(tbId);
+		setPatientType(patientType);
+	}
 
-    public Treatment(String providerId, String providerDistrict, String tbId, PatientType patientType) {
-        setProviderId(providerId);
-        setProviderDistrict(providerDistrict);
-        setTbId(tbId);
-        setPatientType(patientType);
-    }
+	public void close(TreatmentOutcome treatmentOutcome,
+			String closeTreatmentRemarks, DateTime dateModified) {
+		endDate = dateModified.toLocalDate();
+		this.treatmentOutcome = treatmentOutcome;
+		this.closeTreatmentRemarks = closeTreatmentRemarks;
+	}
 
-    public void close(TreatmentOutcome treatmentOutcome, String closeTreatmentRemarks, DateTime dateModified) {
-        endDate = dateModified.toLocalDate();
-        this.treatmentOutcome = treatmentOutcome;
-        this.closeTreatmentRemarks = closeTreatmentRemarks;
-    }
+	public void pause(String reasonForPause, DateTime dateModified) {
+		interruptions.add(new TreatmentInterruption(reasonForPause,
+				dateModified.toLocalDate()));
+	}
 
-    public void pause(String reasonForPause, DateTime dateModified) {
-        interruptions.add(new TreatmentInterruption(reasonForPause, dateModified.toLocalDate()));
-    }
+	public void resume(String reasonForResumption, DateTime dateModified) {
+		interruptions.latestInterruption().resumeTreatment(reasonForResumption,
+				dateModified.toLocalDate());
+	}
 
-    public void resume(String reasonForResumption, DateTime dateModified) {
-        interruptions.latestInterruption().resumeTreatment(reasonForResumption, dateModified.toLocalDate());
-    }
+	public void addSmearTestResult(SmearTestRecord smearTestRecord) {
+		smearTestResults.add(smearTestRecord);
+	}
 
-    public void addSmearTestResult(SmearTestRecord smearTestRecord) {
-        smearTestResults.add(smearTestRecord);
-    }
+	public void addWeightStatistics(
+			WeightStatisticsRecord weightStatisticsRecord) {
+		weightStatistics.add(weightStatisticsRecord);
+	}
 
-    public void addWeightStatistics(WeightStatisticsRecord weightStatisticsRecord) {
-        weightStatistics.add(weightStatisticsRecord);
-    }
+	public boolean isDateInTreatment(LocalDate date) {
+		if (WHPDateUtil.isOnOrAfter(date, startDate)) {
+			if (endDate == null || WHPDateUtil.isOnOrBefore(date, endDate))
+				return true;
+		}
+		return false;
+	}
 
-    public boolean isDateInTreatment(LocalDate date) {
-        if (WHPDateUtil.isOnOrAfter(date, startDate)) {
-            if (endDate == null || WHPDateUtil.isOnOrBefore(date, endDate))
-                return true;
-        }
-        return false;
-    }
+	@JsonIgnore
+	public boolean isPaused() {
+		return !CollectionUtils.isEmpty(interruptions)
+				&& interruptions.latestInterruption().isCurrentlyPaused();
+	}
 
-    @JsonIgnore
-    public boolean isPaused() {
-        return !CollectionUtils.isEmpty(interruptions) && interruptions.latestInterruption().isCurrentlyPaused();
-    }
+	public void setProviderId(String providerId) {
+		if (providerId == null)
+			this.providerId = null;
+		else
+			this.providerId = providerId.toLowerCase();
+	}
 
-    public void setProviderId(String providerId) {
-        if (providerId == null)
-            this.providerId = null;
-        else
-            this.providerId = providerId.toLowerCase();
-    }
+	public void setTbId(String tbId) {
+		if (tbId == null)
+			this.tbId = null;
+		else
+			this.tbId = tbId.toLowerCase();
+	}
 
-    public void setTbId(String tbId) {
-        if (tbId == null)
-            this.tbId = null;
-        else
-            this.tbId = tbId.toLowerCase();
-    }
+	@JsonIgnore
+	public boolean isValid(List<WHPErrorCode> errorCodes) {
+		return patientAddress.isValid(errorCodes)
+				&& areSmearInstancesValid(errorCodes)
+				&& areWeightInstancesValid(errorCodes);
+	}
 
-    @JsonIgnore
-    public boolean isValid(List<WHPErrorCode> errorCodes) {
-        return patientAddress.isValid(errorCodes)
-                && areSmearInstancesValid(errorCodes)
-                && areWeightInstancesValid(errorCodes);
-    }
+	private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
+		return weightStatistics.isEmpty()
+				|| weightStatistics.latestResult().isValid(errorCodes);
+	}
 
-    private boolean areWeightInstancesValid(List<WHPErrorCode> errorCodes) {
-        return weightStatistics.isEmpty() || weightStatistics.latestResult().isValid(errorCodes);
-    }
+	private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
+		return smearTestResults.isEmpty()
+				|| smearTestResults.latestResult().isValid(errorCodes);
+	}
 
-    private boolean areSmearInstancesValid(List<WHPErrorCode> errorCodes) {
-        return smearTestResults.isEmpty() || smearTestResults.latestResult().isValid(errorCodes);
-    }
+	public boolean isDoseDateInPausedPeriod(LocalDate doseDate) {
+		for (TreatmentInterruption interruption : getInterruptions()) {
+			if (interruption.isDoseDateInInterruptionPeriod(doseDate)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public boolean isDoseDateInPausedPeriod(LocalDate doseDate) {
-        for (TreatmentInterruption interruption : getInterruptions()) {
-            if (interruption.isDoseDateInInterruptionPeriod(doseDate)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	@JsonIgnore
+	public String getStartDateAsString() {
+		return WHPDate.date(startDate).value();
+	}
 
-    @JsonIgnore
-    public String getStartDateAsString() {
-        return WHPDate.date(startDate).value();
-    }
+	@JsonIgnore
+	public SmearTestResult getPreTreatmentSmearTestResult() {
+		return smearTestResults.getPreTreatmentResult();
+	}
 
-    @JsonIgnore
-    public SmearTestResult getPreTreatmentSmearTestResult() {
-        return smearTestResults.getPreTreatmentResult();
-    }
+	public boolean hasPreTreatmentResult() {
+		return smearTestResults.hasPreTreatmentResult();
+	}
 
-    public boolean hasPreTreatmentResult() {
-        return smearTestResults.hasPreTreatmentResult();
-    }
+	@JsonIgnore
+	public WeightStatisticsRecord getPreTreatmentWeightRecord() {
+		return weightStatistics.getPreTreatmentWeightRecord();
+	}
 
-    @JsonIgnore
-    public WeightStatisticsRecord getPreTreatmentWeightRecord() {
-        return weightStatistics.getPreTreatmentWeightRecord();
-    }
+	public boolean hasPreTreatmentWeightRecord() {
+		return weightStatistics.hasPreTreatmentWeightRecord();
+	}
 
-    public boolean hasPreTreatmentWeightRecord() {
-        return weightStatistics.hasPreTreatmentWeightRecord();
-    }
+	/**
+	 * implemented for the fix Missing Sputum Test Results(MS-233)
+	 * calls clear smear test result
+	 * @author mohit
+	 */
+	public void clearSmearTestResult() {
+		smearTestResults.clearSmearTestResult();
+	}
 
 }

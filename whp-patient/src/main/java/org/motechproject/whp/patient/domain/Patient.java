@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.ektorp.support.TypeDiscriminator;
 import org.hamcrest.Matchers;
@@ -625,4 +626,42 @@ public class Patient extends MotechBaseDataObject {
     public boolean isTreatmentExisting(String tbId) {
         return (this.getTherapyHaving(tbId)== null) ? false: true;
     }
+    
+/**
+ * implemented for the fix Missing Sputum Test Results(MS-233)
+ * returns the <code>Therapy</code> containing <code>treatment</code> of specified <code>tbId</code>
+ * @param tbId
+ * @return
+ * @author mohit
+ */
+    public Therapy getTherapyWithTreatmentOfTbId(String tbId){
+    	for (Therapy therapy: getAllTherapies())
+    	{
+    		if (therapy.getTherapyWithTreatmentOfTbId(tbId)!=null)
+    		return therapy;
+    	}
+    	return null;
+    }
+
+  /**
+   * implemented for the fix Missing Sputum Test Results(MS-233)
+   * If the therapy containig the <code>treatment</code> is current therapy then calls updateTreatment() on it
+   * else, first remove the therapy from the list of therapies and again add the updated therapy at the same index
+   * @param treatment
+   * @author mohit
+   */
+	public void updateTreatment(Treatment treatment){
+		Therapy therapy = getTherapyWithTreatmentOfTbId(treatment.getTbId());
+		if (therapy.getUid() == currentTherapyId())
+		{
+			this.currentTherapy.updateTreatment(treatment);
+		}
+		else
+		{
+			int indexOfTherapyToUpdate = therapyHistory.indexOf(therapy);
+    		this.therapyHistory.remove(therapy);
+    		therapy.updateTreatment(treatment);
+    		this.therapyHistory.add(indexOfTherapyToUpdate, therapy);
+		}
+	}
 }
