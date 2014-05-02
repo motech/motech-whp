@@ -16,7 +16,7 @@
         <build.dir>build</build.dir>
         <motech.version>0.12.3-whp</motech.version>
         <motech.contrib.version>0.16</motech.contrib.version>
-        <whp.reports.version>0.6</whp.reports.version>
+        <whp.reports.version>0.7</whp.reports.version>
         <motech.delivery.version>0.12-SNAPSHOT</motech.delivery.version>
     </properties>
 
