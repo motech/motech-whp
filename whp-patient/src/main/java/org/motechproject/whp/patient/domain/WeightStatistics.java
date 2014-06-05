@@ -89,4 +89,22 @@ public class WeightStatistics implements Serializable {
     public WeightStatisticsRecord getPreTreatmentWeightRecord() {
         return resultForInstance(SputumTrackingInstance.PreTreatment);
     }
+
+	/**
+	 * implemented for the fix Missing Sputum Test Results(MS-233)
+	 * clears the smear test result
+	 * @return
+	 * @author mohit
+	 */
+	public boolean clearSmearTestResult() {
+		if (!this.weightStatisticsRecords.isEmpty()) {
+			try {
+				this.weightStatisticsRecords.clear();
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
