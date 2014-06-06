@@ -1,5 +1,26 @@
 package org.motechproject.whp.schedule.domain;
 
+import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.scheduler.MotechSchedulerService.JOB_ID_KEY;
+import static org.motechproject.util.DateUtil.today;
+import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
+import static org.motechproject.whp.common.event.EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID;
+import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,23 +35,6 @@ import org.motechproject.whp.common.event.EventKeys;
 import org.motechproject.whp.schedule.model.ScheduleConfiguration;
 import org.motechproject.whp.schedule.repository.AllScheduleConfigurations;
 import org.motechproject.whp.schedule.service.WHPSchedulerService;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
-import static java.util.Arrays.asList;
-import static junit.framework.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.scheduler.MotechSchedulerService.JOB_ID_KEY;
-import static org.motechproject.util.DateUtil.today;
-import static org.motechproject.whp.common.event.EventKeys.ADHERENCE_WINDOW_COMMENCED_EVENT_NAME;
-import static org.motechproject.whp.common.event.EventKeys.SCHEDULE_CONFIGURATION_MESSAGE_ID;
-import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
 
 public class WHPSchedulerServiceTest extends BaseUnitTest {
     @Mock
@@ -140,7 +144,7 @@ public class WHPSchedulerServiceTest extends BaseUnitTest {
         ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration();
         scheduleConfiguration.setMinute(minutes);
         scheduleConfiguration.setHour(hour);
-        scheduleConfiguration.setDayOfWeek(dayOfWeek);
+        scheduleConfiguration.setDayOfWeek(Arrays.asList(dayOfWeek));
         scheduleConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         scheduleConfiguration.setMessageId(messageId);
         return scheduleConfiguration;

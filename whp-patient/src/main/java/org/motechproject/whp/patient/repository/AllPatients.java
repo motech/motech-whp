@@ -181,4 +181,25 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
         }
         super.remove(patient);
     }
+    
+    @View(name = "find_treatment_type", map = "function(doc) {" +
+            "if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true) {" +
+                "emit(doc.currentTherapy.treatmentCategory.name,doc.patientId);" +
+            "}}")
+    public List<Patient> findByTreatmentType(String treatmentType){
+    	ViewQuery query = createQuery("find_treatment_type").key(treatmentType).includeDocs(true);
+    	return db.queryView(query , Patient.class);
+    }
+    
+    @View(name = "find_by_phone_number", map = "function(doc) {" +
+            "if (doc.type ==='Patient' && doc.phoneNumber != '') {" +
+            "emit(doc.phoneNumber, doc.patientId);" +
+        "}}")
+    public Patient findByPhoneNumber(String phoneNumber){
+    	ViewQuery query = createQuery("find_by_phone_number").key(phoneNumber).includeDocs(true);
+    	List<Patient> list =  db.queryView(query , Patient.class);	//TODO verify the query for couchdb
+    	if(list.size() < 1)
+    		return null;
+    	return list.get(0);
+    }
 }

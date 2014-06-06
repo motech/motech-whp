@@ -1,6 +1,13 @@
 package org.motechproject.whp.schedule.model;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
+
 import org.apache.commons.lang.StringUtils;
 import org.ektorp.support.TypeDiscriminator;
 import org.joda.time.LocalDateTime;
@@ -8,15 +15,12 @@ import org.motechproject.model.DayOfWeek;
 import org.motechproject.model.MotechBaseDataObject;
 import org.motechproject.whp.schedule.domain.ScheduleType;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-
 @Data
 @TypeDiscriminator("doc.type === 'ScheduleConfiguration'")
 public class ScheduleConfiguration extends MotechBaseDataObject {
 
     @NotNull
-    private DayOfWeek dayOfWeek;
+    private List<DayOfWeek> dayOfWeek;
     @NotNull
     private int hour;
     @NotNull
@@ -38,7 +42,7 @@ public class ScheduleConfiguration extends MotechBaseDataObject {
 
     public void updateDateTimeValues(Date date) {
         LocalDateTime localDateTime = new LocalDateTime(date);
-        setDayOfWeek(DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek()));
+        setDayOfWeek(Arrays.asList(DayOfWeek.getDayOfWeek(localDateTime.getDayOfWeek())));
         setHour(localDateTime.getHourOfDay());
         setMinute(localDateTime.getMinuteOfHour());
     }
@@ -51,7 +55,14 @@ public class ScheduleConfiguration extends MotechBaseDataObject {
     }
 
     public String generateCronExpression() {
-        String weekDay = getDayOfWeek().getShortName();
-        return String.format("0 %s %s ? * %s", minute, hour, weekDay);
-    }
+    	String weekDay = "" ;
+    	String delimiter = "";
+    	for(DayOfWeek day : dayOfWeek){
+    		weekDay += delimiter;
+    		weekDay += day.getShortName();
+    		delimiter = ",";
+    	}
+    	
+        return String.format("0 %s %s ? * %s", minute, hour, weekDay);    
+     }
 }

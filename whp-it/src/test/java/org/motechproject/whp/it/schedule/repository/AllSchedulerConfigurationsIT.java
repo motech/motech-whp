@@ -1,5 +1,7 @@
 package org.motechproject.whp.it.schedule.repository;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +54,7 @@ public class AllSchedulerConfigurationsIT extends SpringIntegrationTest {
 
     private ScheduleConfiguration configuration(DayOfWeek dayOfWeek, int hour, int minute, ScheduleType type, boolean scheduled, String messageId) {
         ScheduleConfiguration scheduleConfiguration = new ScheduleConfiguration();
-        scheduleConfiguration.setDayOfWeek(dayOfWeek);
+        scheduleConfiguration.setDayOfWeek(Arrays.asList(dayOfWeek));
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setMinute(minute);
         scheduleConfiguration.setScheduled(scheduled);

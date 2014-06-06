@@ -1,14 +1,5 @@
 package org.motechproject.whp.controller;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.motechproject.whp.schedule.domain.ScheduleType;
-import org.motechproject.whp.schedule.model.ScheduleConfiguration;
-import org.motechproject.whp.schedule.service.WHPSchedulerService;
-
-import java.util.Date;
-
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -16,8 +7,21 @@ import static org.motechproject.model.DayOfWeek.Sunday;
 import static org.motechproject.whp.schedule.domain.ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
+
+import java.util.Arrays;
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.motechproject.whp.schedule.domain.ScheduleType;
+import org.motechproject.whp.schedule.model.ScheduleConfiguration;
+import org.motechproject.whp.schedule.service.WHPSchedulerService;
 
 public class ScheduleConfigurationControllerTest {
 
@@ -74,7 +78,7 @@ public class ScheduleConfigurationControllerTest {
                 .andExpect(status().isOk());
 
         ScheduleConfiguration expectedReminderConfiguration = new ScheduleConfiguration();
-        expectedReminderConfiguration.setDayOfWeek(Sunday);
+        expectedReminderConfiguration.setDayOfWeek(Arrays.asList(Sunday));
         expectedReminderConfiguration.setHour(10);
         expectedReminderConfiguration.setMinute(30);
         expectedReminderConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
@@ -95,7 +99,7 @@ public class ScheduleConfigurationControllerTest {
                 .andExpect(status().isOk());
 
         ScheduleConfiguration expectedReminderConfiguration = new ScheduleConfiguration();
-        expectedReminderConfiguration.setDayOfWeek(Sunday);
+        expectedReminderConfiguration.setDayOfWeek(Arrays.asList(Sunday));
         expectedReminderConfiguration.setHour(10);
         expectedReminderConfiguration.setMinute(30);
         expectedReminderConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);

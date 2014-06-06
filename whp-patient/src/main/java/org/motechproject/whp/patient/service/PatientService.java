@@ -137,4 +137,8 @@ public class PatientService {
         allPatients.remove(patient);
         patientReportingService.removePatient(patient);
     }
+    
+    public Patient getPatientByPhoneNumber(String phoneNumber){
+    	return allPatients.findByPhoneNumber(phoneNumber);
+    }
 }

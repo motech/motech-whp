@@ -4,6 +4,7 @@ import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.motechproject.model.DayOfWeek;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -36,9 +37,9 @@ public class ScheduleConfigurationTest {
         ScheduleConfiguration reminder;
 
         reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, tuesday);
-        assertEquals(DayOfWeek.Tuesday, reminder.getDayOfWeek());
+        assertEquals(Arrays.asList(DayOfWeek.Tuesday), reminder.getDayOfWeek());
         reminder = new ScheduleConfiguration(PROVIDER_ADHERENCE_WINDOW_COMMENCED, wednesday);
-        assertEquals(DayOfWeek.Wednesday, reminder.getDayOfWeek());
+        assertEquals(Arrays.asList(DayOfWeek.Wednesday), reminder.getDayOfWeek());
     }
 
     @Test

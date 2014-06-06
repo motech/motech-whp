@@ -1,5 +1,7 @@
 package org.motechproject.whp.refdata.seed.version4;
 
+import java.util.Arrays;
+
 import org.motechproject.deliverytools.seed.Seed;
 import org.motechproject.model.DayOfWeek;
 import org.motechproject.whp.schedule.domain.ScheduleType;
@@ -21,7 +23,7 @@ public class ProviderReminderScheduleSeed {
     @Seed(priority = 0, version = "4.1")
     public void loadAdherenceWindowCommencedSeed() {
         ScheduleConfiguration adherenceWindowCommencedEvent = new ScheduleConfiguration();
-        adherenceWindowCommencedEvent.setDayOfWeek(DayOfWeek.Saturday);
+        adherenceWindowCommencedEvent.setDayOfWeek(Arrays.asList(DayOfWeek.Saturday));
         adherenceWindowCommencedEvent.setScheduleType(ScheduleType.PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         adherenceWindowCommencedEvent.setHour(14);
         adherenceWindowCommencedEvent.setMinute(30);
@@ -32,7 +34,7 @@ public class ProviderReminderScheduleSeed {
     @Seed(priority = 0, version = "4.1")
     public void loadAdherenceNotReportedSeed() {
         ScheduleConfiguration adherenceWindowCommencedEvent = new ScheduleConfiguration();
-        adherenceWindowCommencedEvent.setDayOfWeek(DayOfWeek.Tuesday);
+        adherenceWindowCommencedEvent.setDayOfWeek(Arrays.asList(DayOfWeek.Tuesday));
         adherenceWindowCommencedEvent.setScheduleType(ScheduleType.PROVIDER_ADHERENCE_NOT_REPORTED);
         adherenceWindowCommencedEvent.setHour(10);
         adherenceWindowCommencedEvent.setMinute(30);

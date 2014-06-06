@@ -122,4 +122,7 @@ public class ReportingPublisherService {
     public void removeAdherenceOverIVR(String patientID){
         httpClientService.post(reportingApplicationURLs.getAdherencePathDelete(), patientID);
     }
+    public void reportPatientReminderCallLog(PatientReminderCallLogRequest patientRequest){
+        httpClientService.post(reportingApplicationURLs.getPatientReminderCallLogURL(), patientRequest);
+    }
 }

@@ -26,6 +26,12 @@
             <li>
                 <a href="/whp/schedule/PATIENT_IVR_ALERT">Patient IVR Alert</a>
             </li>
+            <li>
+                <a href="/whp/schedule/PATIENT_REMINDER_CATEGORY_GOVERNMENT">Patient Reminder Call(Government Category)</a>
+            </li>
+            <li>
+                <a href="/whp/schedule/PATIENT_REMINDER_CATEGORY_COMMERCIAL">Patient Reminder Call(Commercial Category)</a>
+            </li>
         </ul>
     </li>
     <li class="dropdown">

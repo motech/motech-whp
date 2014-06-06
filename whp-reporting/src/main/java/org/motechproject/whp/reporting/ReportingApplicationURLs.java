@@ -36,6 +36,7 @@ public class ReportingApplicationURLs {
     private String deleteUserGivenPatientDetailsURL;
     private String deletePatientURL;
     private String adherencePathDelete;
+    private String patientReminderCallLogURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -171,6 +172,11 @@ public class ReportingApplicationURLs {
     @Value("${whp.reports.adherencePath.delete}")
     public void setAdherencePathDelete(String adherencePathDelete) {
         this.adherencePathDelete = adherencePathDelete;
+    }
+    
+    @Value("${whp.reports.patient.reminder}")
+    public void setPatientReminderCallLogURL(String patientReminderCallLogURL) {
+        this.patientReminderCallLogURL = patientReminderCallLogURL;
     }
 
 }

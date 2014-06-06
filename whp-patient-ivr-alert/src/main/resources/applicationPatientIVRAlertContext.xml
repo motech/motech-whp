@@ -11,7 +11,7 @@
     <import resource="classpath*:applicationWHPReportingContext.xml"/>
 
     <util:properties id="patientIVRAlertProperty" location="classpath:/patientIvrAlert.properties"/>
-
+	<util:properties id="patientReminderProperty" location="classpath:/patientReminder.properties"/>
     <context:annotation-config/>
     <context:component-scan base-package="org.motechproject.whp.patientivralert"/>
 

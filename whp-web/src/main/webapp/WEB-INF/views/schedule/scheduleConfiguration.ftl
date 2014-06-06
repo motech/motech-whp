@@ -32,8 +32,10 @@
             </div>
         </#if>
     </h1>
+    
         <form id="provider-reminder-form"  autocomplete="off" action="<@spring.url '/schedule/update'/>" input method="POST" submitOnEnterKey="true" class="form-horizontal">
             <div class="form-element">
+            
                 <div class="control-group">
                     <label class="control-label">Type</label>
                     <div class="controls">
@@ -42,17 +44,33 @@
                         <div class="span8 text-value"><strong>${spring.status.value?default("")?replace("_"," ")}</strong></div>
                     </div>
                 </div>
+                
+               
                 <div class="control-group">
+		<#if scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_COMMERCIAL" || scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_GOVERNMENT">
                     <label class="control-label">Day Of Week</label>
                     <div class="controls">
                         <@spring.bind "scheduleConfiguration.dayOfWeek" />
-                        <select id="dayOfWeek" name="${spring.status.expression}" validate="required:true">
+                        <select id="dayOfWeek" name="${spring.status.expression}" validate="required:true" multiple onload="fullfillDays(this,${spring.status.value})">
+                            <#list ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as dayOfWeek>
+                                <option value="${dayOfWeek}"<#if (spring.status.value?has_content) && (spring.status.value?contains(dayOfWeek))>selected="true"</#if> >${dayOfWeek}</option>
+                            </#list>
+                        </select>
+                    </div>
+		
+		<#else >
+                    <label class="control-label">Day Of Week</label>
+                    <div class="controls">
+                        <@spring.bind "scheduleConfiguration.dayOfWeek" />
+                        <select id="daysOfWeek" name="${spring.status.expression}" validate="required:true" >
                             <#list ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as dayOfWeek>
                                 <option value="${dayOfWeek}" <#if spring.status.value?default("") == dayOfWeek>selected="true"</#if>>${dayOfWeek}</option>
                             </#list>
                         </select>
                     </div>
+		</#if>
                 </div>
+          
                 <div class="control-group">
                     <label class="control-label">Hour</label>
                     <div class="controls">
@@ -98,6 +116,7 @@
                 </div>
             </div>
         </form>
+        
 
         <script type="text/javascript">
         $('#unScheduleButton').click(function(){
@@ -111,7 +130,19 @@
                 $("#alert").html('<div id="update-alert" class="alert row alert-non-intrusive alert-success fade in"><button class="close" data-dismiss="alert">&times;</button>' + data + '</div>');
                 createAutoClosingAlert("#update-alert", 5000);
            });
-        })
+        });
+	
+	function fullfillDays(selector , value){
+		if(value != "" && value.indexOf(",") != -1){
+		var days = value.split(","); 	
+			for(var day in days){
+				selector.find("option").each(function(){
+				if(this.value == days[day])
+					$(this).attr("selected",true);
+				});
+			}
+		}
+	};
         </script>
 
     </div>

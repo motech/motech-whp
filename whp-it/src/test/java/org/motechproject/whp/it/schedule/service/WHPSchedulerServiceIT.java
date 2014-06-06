@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class WHPSchedulerServiceIT extends BaseUnitTest {
         scheduleConfiguration.setMinute(minutes);
         scheduleConfiguration.setHour(hour);
         scheduleConfiguration.setScheduled(false);
-        scheduleConfiguration.setDayOfWeek(dayOfWeek);
+        scheduleConfiguration.setDayOfWeek(Arrays.asList(dayOfWeek));
         scheduleConfiguration.setScheduleType(PROVIDER_ADHERENCE_WINDOW_COMMENCED);
         return scheduleConfiguration;
     }
