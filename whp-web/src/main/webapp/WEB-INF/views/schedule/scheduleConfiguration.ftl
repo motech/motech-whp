@@ -47,7 +47,8 @@
                 
                
                 <div class="control-group">
-		<#if scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_COMMERCIAL" || scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_GOVERNMENT">
+		<#if scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_COMMERCIAL" || scheduleConfiguration.scheduleType == "PATIENT_REMINDER_CATEGORY_GOVERNMENT" || 
+		scheduleConfiguration.scheduleType == "PROVIDER_ADHERENCE_NOT_REPORTED">
                     <label class="control-label">Day Of Week</label>
                     <div class="controls">
                         <@spring.bind "scheduleConfiguration.dayOfWeek" />
