@@ -184,32 +184,39 @@ public class PatientManagementController extends BaseWebController {
 	}
 
 	/**
-	 * implemented for the fix Missing Sputum Test Results(MS-233)
-	 * Reads the file and delete the Smear Test Results for the tbId in couchDb
-	 * @param filePath (absolute path of the file containing the patientId,tbId)
+	 * implemented for the fix Missing Sputum Test Results(MS-233) Reads the
+	 * file and delete the Smear Test Results for the tbId in couchDb
+	 * 
+	 * @param filePath
+	 *            (absolute path of the file containing the patientId,tbId)
 	 * @param request
 	 * @return
 	 * @author mohit
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "removeSmearTest", method = RequestMethod.GET)
 	public String removeSmearTest(@RequestParam("filePath") String filePath,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws IOException {
 		File patientIdFile = FileUtils.getFile(filePath);
-		try {
-			List<String> fileContents = FileUtils.readLines(patientIdFile);
-			for (String row : fileContents) {
-				String[] rowContents = StringUtils.split(row, DELIMITER);
-				String patientId = rowContents[0];
-				String tbId = rowContents[1];
-				Patient patient = patientService.findByPatientId(patientId);
+
+		List<String> fileContents = FileUtils.readLines(patientIdFile);
+		for (String row : fileContents) {
+			String[] rowContents = StringUtils.split(row, DELIMITER);
+			String patientId = rowContents[0];
+			String tbId = rowContents[1];
+			Patient patient = null;
+			try {
+				patient = patientService.findByPatientId(patientId);
+			} catch (Exception e) {
+				// throw new WHPDomainException("Patient not found");
+			}
+			if (patient != null) {
 				Treatment treatment = patient.getTreatmentBy(tbId);
 				treatment.clearSmearTestResult();
 				treatment.clearWeightInstance();
 				patient.updateTreatment(treatment);
 				patientService.update(patient);
 			}
-		} catch (IOException e) {
-			throw new WHPDomainException("Patient not found");
 		}
 		return "redirect:/managepatients";
 	}
