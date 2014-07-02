@@ -12,6 +12,7 @@ import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.treatmentcard.domain.TreatmentCard;
+import org.motechproject.whp.treatmentcard.service.TreatmentCardService;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;

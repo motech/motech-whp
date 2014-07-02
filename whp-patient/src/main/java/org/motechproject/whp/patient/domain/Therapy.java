@@ -1,6 +1,7 @@
 package org.motechproject.whp.patient.domain;
 
 import lombok.Data;
+
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.joda.time.DateTime;
@@ -470,5 +471,48 @@ public class Therapy implements Serializable {
         } else {
             this.treatments.remove(treatment);
         }
+    }
+    
+ /**
+  * implemented for the fix Missing Sputum Test Results(MS-233)
+  * Returns the therapy containing the treatment of passed tbId
+  * @param tbId
+  * @return Therapy
+  * @author Mohit
+  */
+  public Therapy getTherapyWithTreatmentOfTbId(String tbId)
+    {
+    	if (currentTreatment.getTbId() == tbId)
+    		return this;
+    	for (Treatment treatment : treatments)
+    	{
+    		if (treatment.getTbId() == tbId)
+    			return this;
+    	}
+    	return null;
+    }
+    
+  /**
+   * implemented for the fix Missing Sputum Test Results(MS-233)
+   * updates the treatment passed as parameter
+   * @param treatment
+   * @author Mohit
+   */
+    @SuppressWarnings("deprecation")
+	public void updateTreatment(Treatment treatment)
+    {
+    	if(treatment == currentTreatment)//if the treatment is a current treatment then deletes the treatment and add the passed treatment as current treatment 
+    	{
+    		this.removeTreatmentForTbId(treatment.getTbId());
+    		this.addTreatment(treatment, treatment.getStartDate().toDateTimeAtMidnight());
+    	}
+    	else //if the treatment is not a current treatment then 
+    	{
+    		Treatment treatmentToRemove = getTreatmentBy(treatment.getTbId());
+    		int indexOfTreatmentToUpdate = treatments.indexOf(treatmentToRemove); //gets the index of the treatment from the list of treatments
+    		this.treatments.remove(treatmentToRemove); // remove the treatment
+    		this.treatments.add(indexOfTreatmentToUpdate, treatment); //add the updated treatment at the same index as previous one
+    	}
+    	
     }
 }
