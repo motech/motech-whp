@@ -166,4 +166,13 @@ public class Treatment implements Serializable {
 		smearTestResults.clearSmearTestResult();
 	}
 
+	/**
+	 * implemented for the fix Missing Sputum Test Results(MS-233)
+	 * calls clear Weight Instance result
+	 * @author mohit
+	 */
+	public void clearWeightInstance() {
+		weightStatistics.clearSmearTestResult();
+	}
+
 }

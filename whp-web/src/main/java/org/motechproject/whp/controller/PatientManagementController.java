@@ -204,6 +204,7 @@ public class PatientManagementController extends BaseWebController {
 				Patient patient = patientService.findByPatientId(patientId);
 				Treatment treatment = patient.getTreatmentBy(tbId);
 				treatment.clearSmearTestResult();
+				treatment.clearWeightInstance();
 				patient.updateTreatment(treatment);
 				patientService.update(patient);
 			}
