@@ -105,7 +105,7 @@ public class ReportingPublisherService {
     }
 
     public void reportDailyAdherenceAuditLogsDelete(List<AdherenceAuditLogDTO> adherenceAuditLogDTOs){
-        httpClientService.post(reportingApplicationURLs.getAdherenceRecordDeleteURL(), (Serializable)adherenceAuditLogDTOs);
+        httpClientService.post(reportingApplicationURLs.getDailyAdherenceAuditLogsURL(), (Serializable)adherenceAuditLogDTOs);
     }
 
     public void reportUserGivenPatientDetailsUpdate(UserGivenPatientDetailsReportingRequest userGivenPatientDetailsReportingRequest) {
