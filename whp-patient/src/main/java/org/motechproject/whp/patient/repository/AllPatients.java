@@ -192,7 +192,7 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
     }
     
     @View(name = "find_by_phone_number", map = "function(doc) {" +
-            "if (doc.type ==='Patient' && doc.phoneNumber != '') {" +
+            "if (doc.type =='Patient' && doc.phoneNumber) {" +
             "emit(doc.phoneNumber, doc.patientId);" +
         "}}")
     public Patient findByPhoneNumber(String phoneNumber){
