@@ -1,8 +1,8 @@
 package org.motechproject.whp.patient.repository;
 
-import com.github.ldriscoll.ektorplucene.CustomLuceneResult;
-import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
-import com.github.ldriscoll.ektorplucene.util.IndexUploader;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.jackson.type.TypeReference;
 import org.ektorp.ComplexKey;
 import org.ektorp.ViewQuery;
@@ -14,6 +14,7 @@ import org.motechproject.couchdb.lucene.repository.LuceneAwareMotechBaseReposito
 import org.motechproject.couchdb.lucene.util.WhiteSpaceEscape;
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.paginator.contract.SortParams;
+import org.motechproject.whp.common.domain.PhoneNumber;
 import org.motechproject.whp.common.ektorp.SearchFunctionUpdater;
 import org.motechproject.whp.common.exception.WHPErrorCode;
 import org.motechproject.whp.common.exception.WHPRuntimeException;
@@ -25,8 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.ldriscoll.ektorplucene.CustomLuceneResult;
+import com.github.ldriscoll.ektorplucene.LuceneAwareCouchDbConnector;
+import com.github.ldriscoll.ektorplucene.util.IndexUploader;
 
 @Repository
 public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
@@ -192,12 +194,13 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
     }
     
     @View(name = "find_by_phone_number", map = "function(doc) {" +
-            "if (doc.type =='Patient' && doc.phoneNumber) {" +
+            "if (doc.type ==='Patient' && doc.phoneNumber) {" +
             "emit(doc.phoneNumber, doc.patientId);" +
         "}}")
     public Patient findByPhoneNumber(String phoneNumber){
+    	phoneNumber = new PhoneNumber(phoneNumber, true, true).value();
     	ViewQuery query = createQuery("find_by_phone_number").key(phoneNumber).includeDocs(true);
-    	List<Patient> list =  db.queryView(query , Patient.class);	//TODO verify the query for couchdb
+    	List<Patient> list =  db.queryView(query , Patient.class);
     	if(list.size() < 1)
     		return null;
     	return list.get(0);
