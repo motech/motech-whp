@@ -28,7 +28,11 @@ public class PatientReminderController {
     @RequestMapping(value = "/calllog", method = POST)
     @ResponseBody
     public void recordCallLog(@RequestBody IvrPatientReminderCallLogRequest request) {
-        Patient patient = patientService.getPatientByPhoneNumber(request.getMsisdn());
+    	if (request.getStartTime()==null || request.getStartTime().equals("null"))
+    		request.setStartTime("");
+    	if (request.getEndTime()==null || request.getEndTime().equals("null"))
+    		request.setEndTime("");
+    	Patient patient = patientService.getPatientByPhoneNumber(request.getMsisdn());
         String patientId = patient != null ? patient.getPatientId() : null;
         reportingPublisherService.reportPatientReminderCallLog(request.mapToReportingRequest(patientId));
     }

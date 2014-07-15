@@ -46,8 +46,8 @@ public class PatientReminderCallLogControllerTest {
                 "    <msisdn>1234567890</msisdn>\n" +
                 "    <call_answered>YES</call_answered>\n" +
                 "    <disconnection_type>MISSED_CALL</disconnection_type>\n" +
-                "    <start_time></start_time>\n" +
-                "    <end_time></end_time> \n" +
+                "    <start_time>null</start_time>\n" +
+                "    <end_time>null</end_time> \n" +
                 "    <attempt_time>10/12/2012 12:21:45</attempt_time>" +
                 "    <attempt>1</attempt>\n" +
                 "</patient_reminder_call_status>\n";
