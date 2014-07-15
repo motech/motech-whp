@@ -89,8 +89,8 @@ public class IvrPatientReminderCallLogRequest {
         request.setAttemptTime(getAttemptTime());
         request.setCallId(getCallId());
         request.setCallAnswered(getCallAnswered());
-        request.setStartTime(getStartTime());
-        request.setEndTime(getEndTime());
+        request.setStartTime((getStartTime()==null || getStartTime().length()<1 || getStartTime() == "null") ? "" : getStartTime());
+        request.setEndTime((getEndTime()==null || getEndTime().length()<1 || getEndTime() == "null") ? "" : getEndTime());
         request.setMsisdn(getMsisdn());
         request.setPatientId(patientId);
         return request;
