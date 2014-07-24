@@ -94,4 +94,22 @@ public class IvrProviderReminderCallLogRequest {
         request.setProviderId(providerId);
         return request;
     }
+    
+    @Override
+    public String toString(){
+    	String m = String.format("<provider_reminder_call_status>" +
+                "<request_id>%s</request_id>" +
+                "<call_id>%s</call_id>" +
+                "<reminder_type>%s</reminder_type>" +
+                "<msisdn>%s</msisdn>" +
+                "<call_answered>%s</call_answered>" +
+                "<disconnection_type>%s</disconnection_type>" +
+                "<start_time>%s</start_time>" +
+                "<end_time>%s</end_time>" +
+                "<attempt_time>%s</attempt_time>" +
+                "<attempt>%s</attempt>" +
+                "</provider_reminder_call_status>\n", this.requestId, this.callId, this.reminderType, this.msisdn, this.callAnswered, this.disconnectionType
+                , this.startTime, this.endTime, this.attemptTime, this.attempt);
+    	return m;
+    }
 }

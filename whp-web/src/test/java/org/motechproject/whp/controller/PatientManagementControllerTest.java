@@ -1,5 +1,21 @@
 package org.motechproject.whp.controller;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.motechproject.util.DateUtil.now;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.request;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
+
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +29,12 @@ import org.motechproject.whp.container.service.ContainerTrackingService;
 import org.motechproject.whp.patient.builder.PatientBuilder;
 import org.motechproject.whp.patient.builder.TherapyBuilder;
 import org.motechproject.whp.patient.builder.TreatmentBuilder;
-import org.motechproject.whp.patient.domain.*;
+import org.motechproject.whp.patient.domain.Patient;
+import org.motechproject.whp.patient.domain.Therapy;
+import org.motechproject.whp.patient.domain.TherapyStatus;
+import org.motechproject.whp.patient.domain.Treatment;
+import org.motechproject.whp.patient.domain.TreatmentOutcome;
 import org.motechproject.whp.patient.service.PatientService;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.motechproject.util.DateUtil.now;
-import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.server.setup.MockMvcBuilders.standaloneSetup;
 
 public class PatientManagementControllerTest {
 

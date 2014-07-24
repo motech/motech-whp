@@ -2,6 +2,7 @@ package org.motechproject.whp.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import org.apache.log4j.Logger;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
@@ -18,6 +19,7 @@ public class PatientReminderController {
 	
 	private ReportingPublisherService reportingPublisherService;
     private PatientService patientService;
+    private Logger logger = Logger.getLogger(PatientReminderController.class);
 
     @Autowired
     public PatientReminderController(ReportingPublisherService reportingPublisherService, PatientService patientService) {
@@ -28,6 +30,7 @@ public class PatientReminderController {
     @RequestMapping(value = "/calllog", method = POST)
     @ResponseBody
     public void recordCallLog(@RequestBody IvrPatientReminderCallLogRequest request) {
+    	logger.info(request);
     	if (request.getStartTime()==null || request.getStartTime().equals("null"))
     		request.setStartTime("");
     	if (request.getEndTime()==null || request.getEndTime().equals("null"))

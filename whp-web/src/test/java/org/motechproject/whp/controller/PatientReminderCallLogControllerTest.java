@@ -18,7 +18,6 @@ import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.service.PatientService;
 import org.motechproject.whp.reporting.service.ReportingPublisherService;
 import org.motechproject.whp.reports.contract.PatientReminderCallLogRequest;
-import org.motechproject.whp.reports.contract.ProviderReminderCallLogRequest;
 
 public class PatientReminderCallLogControllerTest {
 
