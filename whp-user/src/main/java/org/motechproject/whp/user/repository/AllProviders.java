@@ -88,6 +88,16 @@ public class AllProviders extends MotechBaseRepository<Provider> {
         return db.queryView(query, Provider.class);
     }
 
+    public List<Provider> paginateByDistrictAndProviderId(Integer startIndex, Integer rowsPerPage, String district, String providerId) {
+        ViewQuery query = createQuery("find_by_district_and_provider_id")
+                .startKey(ComplexKey.of(district, providerId))
+                .endKey(ComplexKey.of(district, providerId, ComplexKey.emptyObject()))
+                .skip(startIndex * rowsPerPage).limit(rowsPerPage)
+                .reduce(false)
+                .includeDocs(true);
+       return db.queryView(query, Provider.class);
+    }
+
     public String findCountByDistrict(String district) {
         ViewQuery q = createQuery("find_by_district_and_provider_id").startKey(ComplexKey.of(district)).endKey(ComplexKey.of(district, ComplexKey.emptyObject())).inclusiveEnd(true).reduce(true);
         ViewResult rows = db.queryView(q);

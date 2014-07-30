@@ -36,7 +36,7 @@ public class PatientReminderCallLogControllerTest {
 
     @Test
     public void shouldPublishPatientCallStatusToReporting() throws Exception {
-
+/*
         String requestXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<patient_reminder_call_status>\n" +
                 "    <request_id>request_id</request_id>\n" +
@@ -49,8 +49,8 @@ public class PatientReminderCallLogControllerTest {
                 "    <end_time>null</end_time> \n" +
                 "    <attempt_time>10/12/2012 12:21:45</attempt_time>" +
                 "    <attempt>1</attempt>\n" +
-                "</patient_reminder_call_status>\n";
-
+                "</patient_reminder_call_status>\n";*/
+		String requestXML = "<patient_reminder_call_status><request_id>f9e2aa82-2523-4ddc-9c52-0696b9302948</request_id><call_id>1406354876.128493</call_id><reminder_type>patient_reminder_alert</reminder_type><msisdn>0840701387</msisdn><call_answered>NO</call_answered><disconnection_type>NETWORK_ERROR</disconnection_type><start_time>null</start_time><end_time>null</end_time><attempt_time>26/07/2014 11:37:56</attempt_time><attempt>4</attempt></patient_reminder_call_status>";
         Patient patient = new Patient();
         patient.setPatientId("patientId");
         when(patientService.getPatientByPhoneNumber("1234567890")).thenReturn(patient);
@@ -78,7 +78,6 @@ public class PatientReminderCallLogControllerTest {
         assertEquals("", request.getStartTime());
         assertEquals("", request.getEndTime());
         assertEquals("10/12/2012 12:21:45", request.getAttemptTime());
-        System.out.println(requestXML);
 
     }
 }

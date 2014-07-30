@@ -14,7 +14,7 @@
         <@paginator.filter id="provider_pagination_filter" pagination_id = "provider_pagination">
                <div class="row-fluid filters">
                         <div class="control-group span2">
-                            <label class="control-label">District*</label>
+                            <label class="control-label">District</label>
 
                             <div class="controls">
                                 <select id="district" name="district" data-id="district-autocomplete">

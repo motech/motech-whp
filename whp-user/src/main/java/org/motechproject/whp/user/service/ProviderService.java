@@ -1,5 +1,15 @@
 package org.motechproject.whp.user.service;
 
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
+import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.motechproject.paginator.contract.FilterParams;
 import org.motechproject.scheduler.context.EventContext;
 import org.motechproject.security.service.MotechAuthenticationService;
@@ -15,16 +25,6 @@ import org.motechproject.whp.user.repository.AllProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static org.apache.commons.lang.StringUtils.isEmpty;
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
-import static org.motechproject.whp.common.event.EventKeys.PROVIDER_DISTRICT_CHANGE;
 
 @Service
 public class ProviderService {
@@ -53,15 +53,18 @@ public class ProviderService {
     }
 
     public List<Provider> fetchByFilterParams(Integer startIndex, Integer rowsPerPage, String district, String providerId) {
-        if (isEmpty(providerId) && isEmpty(district)) {
-            return new ArrayList<>();
+        if (!isEmpty(providerId) && !isEmpty(district)) {
+            return allProviders.paginateByDistrictAndProviderId(startIndex, rowsPerPage, district, providerId);
         }
 
-        if (isEmpty(providerId)) {
+        if (isEmpty(providerId) && !isEmpty(district)) {
             return allProviders.paginateByDistrict(startIndex, rowsPerPage, district);
         }
-
-        return filterByProviderId(providerId);
+        
+        if (isEmpty(district) && !isEmpty(providerId)){
+        	return filterByProviderId(providerId);
+        }
+        return new ArrayList<>();
     }
 
     private List<Provider> filterByProviderId(String providerId) {
