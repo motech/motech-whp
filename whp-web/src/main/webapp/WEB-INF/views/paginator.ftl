@@ -1,8 +1,10 @@
 <#macro paginate id entity contextRoot filterSectionId rowsPerPage="10" stylePath="" currentPage=1>
 
+
 <link rel="stylesheet" type="text/css" href="<@spring.url '${stylePath}/motech-paginator-pagination.css'/>"/>
 
-<div id="${id}" ng-init="entity='${entity}';contextRoot='${contextRoot}';rowsPerPage='${rowsPerPage}';id='${id}';filterSectionId='${filterSectionId}'">
+<#-- Author atish added  style="visibility:hidden" to paginator header -->
+<div id="${id}" ng-init="entity='${entity}';contextRoot='${contextRoot}';rowsPerPage='${rowsPerPage}';id='${id}';filterSectionId='${filterSectionId}'" style="visibility:hidden">
     <div class="paginator" ng-controller="PaginationCtrl">
         <div>
 
@@ -23,6 +25,7 @@
         </div>
     </div>
 </div>
+
 
 </#macro>
 <#macro filterButtons >

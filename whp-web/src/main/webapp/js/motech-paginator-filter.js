@@ -3,13 +3,14 @@ var app = angular.module('whp', []);
 function FilterCtrl($scope, $http, $rootScope, $location) {
 
     $scope.initializeFilterForm = function () {
-
+  
         $scope.resetFormFields();
 
         var paramMap = $location.search();
         if (paramMap[$scope.pagination_id + "-searchCriteria"]) {
             $rootScope.searchCriteria = JSON.parse(paramMap[$scope.pagination_id + "-searchCriteria"])
         }
+        
         if (paramMap[$scope.pagination_id + "-sortCriteria"]) {
             $rootScope.sortCriteria = JSON.parse(paramMap[$scope.pagination_id + "-sortCriteria"])
 
@@ -26,6 +27,7 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
                 }
             });
         }
+        
 
         /*Initialize the search box*/
         for (key in $rootScope.searchCriteria) {
@@ -42,7 +44,8 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
 
         $rootScope.$broadcast("filterUpdated");
     }
-
+    
+   
     $scope.resetFormFields = function () {
         var formElement = $('#' + $scope.filter_id);
         $(formElement).find("input").each(function(index, element){
@@ -63,7 +66,7 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
 
     $scope.clearFormFieldsAndSearchCriteria = function() {
         $scope.resetFormFields();
-        $rootScope.searchCriteria = {};
+        $rootScope.searchCriteria = {};        
     }
 
     $(window).bind('hashchange', function () {
@@ -105,8 +108,8 @@ function FilterCtrl($scope, $http, $rootScope, $location) {
             $('#' + id).val(selected);
         }
     }
-
-
+    
+  
     $scope.selected = function (value, id) {
         $('#' + id).val(value);
     }

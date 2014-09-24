@@ -37,6 +37,7 @@ public class ReportingApplicationURLs {
     private String deletePatientURL;
     private String adherencePathDelete;
     private String patientReminderCallLogURL;
+    private String donotcallPatientsURL;
 
     @Value("${whp.reports.adherence}")
     public void setAdherencePath(String adherencePath) {
@@ -178,5 +179,16 @@ public class ReportingApplicationURLs {
     public void setPatientReminderCallLogURL(String patientReminderCallLogURL) {
         this.patientReminderCallLogURL = patientReminderCallLogURL;
     }
+    
+    /**
+     * Created a setter to set /donotcall/patients webservice url
+     * @param donotcallPatientsURL
+     */
+    @Value("${whp.reports.donotcall.patients}")
+	public void setDonotcallPatientsURL(String donotcallPatientsURL) {
+		this.donotcallPatientsURL = donotcallPatientsURL;
+	}
+    
+    
 
 }

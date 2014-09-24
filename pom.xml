@@ -860,11 +860,12 @@
                             <execution>
                                 <id>delete-all-dbs</id>
                                 <phase>process-test-classes</phase>
-                                <configuration>
+                              <!--   <configuration>
                                     <target unless="skipTests">
                                         <ant antfile="build.xml" target="drop.all.dbs" dir="${build.dir}" />
                                     </target>
                                 </configuration>
+                                -->
                                 <goals>
                                     <goal>run</goal>
                                 </goals>

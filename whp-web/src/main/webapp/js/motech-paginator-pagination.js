@@ -1,7 +1,10 @@
 var app = angular.module('whp', []);
 
-function PaginationCtrl($scope, $http, $rootScope, $location) {
 
+function PaginationCtrl($scope, $http, $rootScope, $location) {
+    
+	
+	
     $scope.loadPage = function () {
         $http.get($scope.buildURL($rootScope.searchCriteria, $rootScope.sortCriteria)).success(function (data) {
             $scope.data = data;
@@ -14,12 +17,19 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
             $scope.lastRowCount = $scope.currentPage * ($scope.rowsPerPage);
             if ($scope.lastRowCount > $scope.data.totalRows) {
                 $scope.lastRowCount = $scope.data.totalRows;
-            }
-
+            }   
             setPaginationLinkUrls();
+            
+            /**
+             * @author atish
+             * enablePaginationView which make pagination ui components visible
+             */
+            enablePaginationView();
         });
     }
+    
     function setPaginationLinkUrls() {
+        
         var urlPart = $location.path() + "#?";
         if ($rootScope.searchCriteria)
             urlPart += $scope.id + "-searchCriteria=" + JSON.stringify($rootScope.searchCriteria);
@@ -34,14 +44,29 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         $('#' + $scope.id + " [link-type=nextPage]").attr('href', urlPart + (1 + currentPage));
         $('#' + $scope.id + " [link-type=lastPage]").attr('href', urlPart + $scope.numberOfPages());
     }
-
-
+    
+    /**
+     * @author atish
+     * Created a enablePaginationView which make pagination ui components visible
+     */
+    function enablePaginationView() {
+        $('#'+$scope.id).css('visibility','visible');
+	}
+    /**
+     * @author atish
+     * Created a disablePaginationView which make pagination ui components invisible
+     */
+    function disablePaginationView() {
+        $('#'+$scope.id).css('visibility','hidden');
+	}		
+    
     $scope.prevPage = function () {
         $scope.currentPage--;
         $scope.loadPage();
     }
 
     $scope.buildURL = function (searchCriteria, sortCriteria) {
+    	
         var url = $scope.contextRoot + '/page/' + $scope.entity +
             '?pageNo=' + $scope.currentPage +
             '&rowsPerPage=' + $scope.rowsPerPage;
@@ -53,6 +78,10 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
         }
         return url;
     }
+    
+    
+			  
+    
 
     $scope.nextPage = function () {
         $scope.currentPage++;
@@ -166,9 +195,19 @@ function PaginationCtrl($scope, $http, $rootScope, $location) {
 
 
     $rootScope.$on('filterUpdated', function (evt) {
+    	/**
+    	 * @author atish
+    	 * calling disablePaginationView to which make pagination ui components invisible 
+    	 */
+    	disablePaginationView();
         var searchString = JSON.stringify($rootScope.searchCriteria);
         var sortString = JSON.stringify($rootScope.sortCriteria);
-
+        
+        if(typeof sortString === 'undefined') {
+            var emptySort ={};
+            sortString = JSON.stringify(emptySort);	
+          }
+        
         var searchParams = {}
         searchParams[$scope.id + "-searchCriteria"] = searchString;
         searchParams[$scope.id + "-sortCriteria"] = sortString;

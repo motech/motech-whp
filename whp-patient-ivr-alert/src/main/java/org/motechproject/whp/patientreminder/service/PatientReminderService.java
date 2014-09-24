@@ -2,12 +2,14 @@ package org.motechproject.whp.patientreminder.service;
 
 import java.util.List;
 
+
 import org.apache.commons.collections.CollectionUtils;
 import org.motechproject.whp.patient.domain.Patient;
 import org.motechproject.whp.patient.repository.AllPatients;
 import org.motechproject.whp.patientreminder.ivr.PatientReminderAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 @Component
 public class PatientReminderService {
 
@@ -18,12 +20,18 @@ public class PatientReminderService {
 	private static final String PRIVATE_CATEGORY_VERSION2 = "Commercial/Private Category 2" ;
 	
 	private PatientReminderAlertService patientAlertService;
+	
 	@Autowired
 	public PatientReminderService(AllPatients allPatients , PatientReminderAlertService patientAlertService){
 		this.allPatients = allPatients;
 		this.patientAlertService = patientAlertService;
 	}
 	
+	/**
+	 * @author atish
+	 * @since 19/Sep/2014
+	 *  Change Query to void 'donotcall' registered user 
+	 */
 	private List<Patient> getPatientsUnderGovernmentTreatmentCategory(){
 		List<Patient> patients = allPatients.findByTreatmentType(GOVERNMENT_CATEGORY_VERSION1);
 		patients.addAll(allPatients.findByTreatmentType(GOVERNMENT_CATEGORY_VERSION2));
@@ -35,7 +43,11 @@ public class PatientReminderService {
 		patients.addAll(allPatients.findByTreatmentType(PRIVATE_CATEGORY_VERSION2));
 		return patients;
 	}
-	
+	/**
+	 * @author atish
+	 * @since 19/Sep/2014
+	 *  Change Query to void 'donotcall' registered user 
+	 */
 	public void alertPatientsUnderGovernmentTreatmentCategory(){
 		List<Patient> patients = getPatientsUnderGovernmentTreatmentCategory();
         if (CollectionUtils.isNotEmpty(patients)) {
