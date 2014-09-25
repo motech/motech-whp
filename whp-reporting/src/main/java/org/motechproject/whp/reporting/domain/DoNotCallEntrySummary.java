@@ -6,7 +6,7 @@ public class DoNotCallEntrySummary {
 
 	private String entityId;
 	
-	private Long mobileNumber;
+	private String mobileNumber;
 	
 	public String getEntityId() {
 		return entityId;
@@ -16,16 +16,16 @@ public class DoNotCallEntrySummary {
 		this.entityId = entityId;
 	}
 
-	public Long getMobileNumber() {
+	public String getMobileNumber() {
 		return mobileNumber;
 	}
 
-	public void setMobileNumber(Long mobileNumber) {
+	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
    
 	@Override
 	public String toString() {
-		return String.valueOf(mobileNumber.longValue()) ;
+		return String.valueOf(mobileNumber) ;
 	}
 }
