@@ -190,7 +190,7 @@ public class AllPatients extends LuceneAwareMotechBaseRepository<Patient> {
 	 *  Change Query to void 'donotcall' registered user 
 	 */
     @View(name = "find_treatment_type", map = "function(doc) {" +
-            "if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true && doc.status === 'Open') {" +
+            "if (doc.type ==='Patient' && doc.currentTherapy && doc.currentTherapy.currentTreatment && doc.onActiveTreatment === true && doc.currentTherapy.status === 'Ongoing') {" +
                 "emit(doc.currentTherapy.treatmentCategory.name,doc.patientId);" +
             "}}")
     public List<Patient> findByTreatmentType(String treatmentType){
