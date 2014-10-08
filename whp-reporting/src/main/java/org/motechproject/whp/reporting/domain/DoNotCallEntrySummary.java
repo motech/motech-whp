@@ -23,9 +23,5 @@ public class DoNotCallEntrySummary {
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-   
-	@Override
-	public String toString() {
-		return String.valueOf(mobileNumber) ;
-	}
+ 
 }

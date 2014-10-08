@@ -36,7 +36,9 @@ import static org.motechproject.whp.common.util.MathUtil.roundToFirstDecimal;
 @Data
 public class Patient extends MotechBaseDataObject {
 
-    private String patientId;
+
+	
+	private String patientId;
     private String firstName;
     private String lastName;
     private Gender gender;

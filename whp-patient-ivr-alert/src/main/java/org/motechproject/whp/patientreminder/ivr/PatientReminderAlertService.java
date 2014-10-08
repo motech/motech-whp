@@ -1,7 +1,9 @@
 package org.motechproject.whp.patientreminder.ivr;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.motechproject.whp.common.collections.PaginatedList;
 import org.motechproject.whp.common.util.UUIDGenerator;
@@ -22,6 +24,7 @@ public class PatientReminderAlertService {
     private PatientReminderProperties patientReminderProperties;
     private WGNGateway gateway;
     private ReportingDataService reportingDataService;
+    
     
     
     @Autowired
@@ -51,34 +54,43 @@ public class PatientReminderAlertService {
      * @param patients
      * @return {@link List}
      */ 
-    private List<String> getPhoneNumbers(List<Patient> patients){
-    	List<String> phoneNumbers = new ArrayList<>();
-    	List<String> donotcallPhoneNumbers = createDoNotCallPhoneNumbersList();
+    private List<String> getPhoneNumbers(List<Patient> patients) {
+ 	   Map <String,String> patientsMap = createPatientsMap(patients);
+ 	   for(Map.Entry<String, String> donotcall : createDoNotCallMap().entrySet()) {
+ 		        patientsMap.remove(donotcall.getKey());	   			
+ 	   }
+        return new ArrayList<>(patientsMap.values());
+    }
+    
+    
+    private Map<String,String> createPatientsMap(List<Patient> patients){
+    	Map<String,String> phoneNumbers = new LinkedHashMap<>();
     	for(Patient patient : patients){
     		if(patient.getPhoneNumber() != null && patient.getPhoneNumber() != ""){
-    			if(donotcallPhoneNumbers.contains(patient.getPhoneNumber())==false)
-    			phoneNumbers.add(patient.getPhoneNumber());
-    		}
+    						phoneNumbers.put(createCompositeKey(patient.getPatientId(),patient.getPhoneNumber()), patient.getPhoneNumber());
+    				}  
     	}
     	return phoneNumbers;
     }
-    
-
     /**
      * @author atish
      * Returns List of Donot call phone numbers    
      * @return {@link List}
      */
-    private List<String> createDoNotCallPhoneNumbersList(){
-       	List<String> donotCallPhoneNumbers = new ArrayList<>();
+    private Map<String,String> createDoNotCallMap(){
+       	Map<String,String> donotCallPhoneNumbers = new LinkedHashMap<>();
        	List<DoNotCallEntrySummary> doNotCallEntrySummaries = reportingDataService.getDoNotCallPatients();
        	
        	for(DoNotCallEntrySummary doNotCallEntrySummary: doNotCallEntrySummaries){
-       		  donotCallPhoneNumbers.add(doNotCallEntrySummary.toString());
+       		  donotCallPhoneNumbers.put(createCompositeKey(doNotCallEntrySummary.getEntityId(),doNotCallEntrySummary.getMobileNumber()), doNotCallEntrySummary.getMobileNumber());
        	}
        	return donotCallPhoneNumbers;
     }
     
+    private String createCompositeKey(String entityId, String patientId) {
+    	return entityId+"-"+patientId;
+    }
     
+  
 
 }
