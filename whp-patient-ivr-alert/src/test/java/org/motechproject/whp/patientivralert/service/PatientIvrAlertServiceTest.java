@@ -10,6 +10,7 @@ import org.motechproject.whp.common.util.UUIDGenerator;
 import org.motechproject.whp.patientivralert.configuration.PatientIVRAlertProperties;
 import org.motechproject.whp.patientivralert.model.PatientAdherenceRecord;
 import org.motechproject.whp.patientivralert.model.PatientAlertRequest;
+import org.motechproject.whp.reporting.service.ReportingDataService;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
 
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class PatientIvrAlertServiceTest {
     PatientAdherenceService patientAdherenceService;
     @Mock
     PatientIVRAlertProperties patientIVRAlertProperties;
+    
+    @Mock
+    ReportingDataService reportingDataService;
 
     private int PAGE_SIZE = 100;
     private final String messageId = "message";
@@ -39,7 +43,7 @@ public class PatientIvrAlertServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        patientIvrAlertService = new PatientIvrAlertService(patientAdherenceService, patientIVRAlertProperties, wgnGateway, uuidGenerator);
+        patientIvrAlertService = new PatientIvrAlertService(patientAdherenceService, patientIVRAlertProperties, wgnGateway, uuidGenerator,reportingDataService);
     }
 
     @Test

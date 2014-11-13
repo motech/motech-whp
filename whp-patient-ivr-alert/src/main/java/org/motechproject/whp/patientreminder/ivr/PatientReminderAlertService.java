@@ -79,7 +79,7 @@ public class PatientReminderAlertService {
      */
     private Map<String,String> createDoNotCallMap(){
        	Map<String,String> donotCallPhoneNumbers = new LinkedHashMap<>();
-       	List<DoNotCallEntrySummary> doNotCallEntrySummaries = reportingDataService.getDoNotCallPatients();
+       	List<DoNotCallEntrySummary> doNotCallEntrySummaries = reportingDataService.getDoNotCallPatientsByPatientReminderAlert();
        	
        	for(DoNotCallEntrySummary doNotCallEntrySummary: doNotCallEntrySummaries){
        		  donotCallPhoneNumbers.put(createCompositeKey(doNotCallEntrySummary.getEntityId(),doNotCallEntrySummary.getMobileNumber()), doNotCallEntrySummary.getMobileNumber());

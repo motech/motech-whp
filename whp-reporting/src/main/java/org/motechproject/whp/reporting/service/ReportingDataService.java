@@ -40,7 +40,17 @@ public class ReportingDataService {
      * Returning List of DoNotCallPatients
      * @return {@link List}
      */
-    public List<DoNotCallEntrySummary> getDoNotCallPatients() {
-    	return asList(restTemplate.getForObject(reportingApplicationURLs.getDonotcallPatientsURL(), DoNotCallEntrySummary[].class));
+    public List<DoNotCallEntrySummary> getDoNotCallPatientsByPatientReminderAlert() {
+    	return asList(restTemplate.getForObject(reportingApplicationURLs.getDonotcallPatientsURLByPatientReminderAlert(), DoNotCallEntrySummary[].class));
+    }
+    
+    
+    /**
+     * @author atish
+     * Returning List of DoNotCallPatients
+     * @return {@link List}
+     */
+    public List<DoNotCallEntrySummary> getDoNotCallPatientsByPatientIvrAlert() {
+    	return asList(restTemplate.getForObject(reportingApplicationURLs.getDonotcallPatientsURLByPatientIvrAlert(), DoNotCallEntrySummary[].class));
     }
 }
