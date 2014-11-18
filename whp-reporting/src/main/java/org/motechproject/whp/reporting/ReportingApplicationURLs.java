@@ -208,8 +208,5 @@ public class ReportingApplicationURLs {
 		this.donotcallPatientsURLByPatientIvrAlert = donotcallPatientsURLByPatientIvrAlert;
 	}
 
-    
-    
-    
-
+  
 }

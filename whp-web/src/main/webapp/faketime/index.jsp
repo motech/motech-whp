@@ -16,7 +16,11 @@
     } catch (Exception e) {
         System.out.println("couldn't load native library.");
     }
-    System.startFakingTime();
+    /**
+    	Fake To be used in case of creating fake time for Jobs
+        System.startFakingTime();
+     **/
+    			
     try {
         if (request.getMethod().equals("POST")) {
             String dateTime = request.getParameter("newDateTime");
@@ -24,8 +28,12 @@
 
             System.out.println("Current Time: " + dateFormat.format(new Date()));
             System.out.println("Request for Updated Time: " + dateFormat.format(newDateTime));
-
-            System.moveTimeBy(newDateTime.getTime() - System.currentTimeMillis());
+            
+            /**
+            	@Author Atish Sisodia
+            	Fake To be used in case of creating fake time for Jobs
+            	System.moveTimeBy(newDateTime.getTime() - System.currentTimeMillis());
+            **/
 
         }
     } catch (java.lang.Exception e) {

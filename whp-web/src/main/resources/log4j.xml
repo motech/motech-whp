@@ -1,63 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+<appender name="production" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/whp.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="5"/>
+<param name="immediateFlush" value="true"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+</layout>
+</appender>
+<appender name="integration" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/whp-integration.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="5"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] - %m%n"/>
+</layout>
+</appender>
+<appender name="dataImporter" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/dataImporter.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="5"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] [%p] - %m%n"/>
+</layout>
+</appender>
+<appender name="adminEmail" class="org.motechproject.web.logger.EmailAppender">
+<param name="BufferSize" value="512"/>
+<param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
+<param name="From" value="motech.ivr@thoughtworks.com"/>
+<param name="To" value="motech-whp@thoughtworks.com"/>
+<param name="Subject" value="WHP Error from Prod | "/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern"
+value="[%d{ISO8601}]%n%n%-5p%n%n%c%n%n%m%n%n"/>
+</layout>
+<filter class="org.apache.log4j.varia.LevelRangeFilter">
+<param name="LevelMin" value="error"/>
+<param name="LevelMax" value="fatal"/>
+</filter>
+</appender>
+<appender name="ivr" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/ivr/ivr.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="20"/>
+<param name="immediateFlush" value="true"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+</layout>
+</appender>
+<appender name="allRequests" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/requests.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="20"/>
+<param name="immediateFlush" value="true"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+</layout>
+</appender>
+<appender name="wgnRequests" class="org.apache.log4j.RollingFileAppender">
+<param value="/var/log/whp/wgn-outbound.log" name="File"/>
+<param name="Append" value="true"/>
+<param name="MaxFileSize" value="4096KB"/>
+<param name="maxBackupIndex" value="5"/>
+<param name="immediateFlush" value="true"/>
+<layout class="org.apache.log4j.PatternLayout">
+<param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
+</layout>
+</appender>
+<logger name="org.motechproject.whp.wgn.outbound" additivity="false">
+<level value="info"/>
+<appender-ref ref="wgnRequests"/>
+</logger>
+<logger name="org.motechproject.whp.ivr">
+<level value="info"/>
+<appender-ref ref="ivr"/>
+</logger>
+<logger name="org.motechproject.server.decisiontree">
+<level value="debug"/>
+<appender-ref ref="ivr"/>
+</logger>
+<logger name="org.motechproject.whp.patientivralert.service">
+<level value="info"/>
+<appender-ref ref="ivr"/>
+</logger>
 
-    <appender name="console" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout"/>
-    </appender>
+<logger name="org.springframework">
+<level value="warn"/>
+</logger>
+<logger name="org.springframework.jms.listener">
+<level value="fatal"/>
+</logger>
+<logger name="org.ektorp">
+<level value="warn"/>
+</logger>
+<logger name="org.motechproject">
+<level value="info"/>
+</logger>
+<logger name="org.motechproject">
+<level value="all"/>
+<!-- The appender restricts the levels upon which it will send out an email-->
+<appender-ref ref="adminEmail"/>
+</logger>
+<logger name="org.motechproject.provider.registration.service">
+<level value="info"/>
+<appender-ref ref="integration"/>
+</logger>
+<logger name="org.motechproject.casexml.service">
+<level value="info"/>
+<appender-ref ref="integration"/>
+</logger>
+<logger name="importer">
+<level value="all"/>
+<appender-ref ref="dataImporter"/>
+</logger>
+<logger name="org.motechproject.whp.controller">
+<level value="error"/>
+<appender-ref ref="adminEmail"/>
+</logger>
+<logger name="org.motechproject.web.filter.RequestResponseLoggingFilter">
+<level value="debug"/>
+<appender-ref ref="allRequests"/>
+</logger>
 
-    <appender name="wgnRequests" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
-        </layout>
-    </appender>
-
-    <logger name="org.springframework" additivity="false">
-        <level value="warn"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.springframework.jms.listener" additivity="false">
-        <level value="fatal"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.ektorp" additivity="false">
-        <level value="warn"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-   <logger name="httpclient.wire" additivity="false">
-        <level value="debug"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.motechproject" additivity="false">
-        <level value="info"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.motechproject.web.filter.RequestResponseLoggingFilter" additivity="false">
-        <level value="debug"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.motechproject.whp.controller" additivity="false">
-        <level value="error"/>
-        <appender-ref ref="console"/>
-    </logger>
-
-    <logger name="org.motechproject.whp.wgn.outbound" additivity="false">
-        <level value="info"/>
-        <appender-ref ref="wgnRequests"/>
-    </logger>
-
-    <logger name="org.quartz">
-        <level value="debug" />
-    </logger>
-    <root>
-        <priority value="warn"/>
-        <appender-ref ref="console"/>
-    </root>
-
+<root>
+<priority value="warn"/>
+<appender-ref ref="production"/>
+</root>
 </log4j:configuration>

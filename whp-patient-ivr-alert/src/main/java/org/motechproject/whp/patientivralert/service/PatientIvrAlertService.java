@@ -17,11 +17,18 @@ import org.motechproject.whp.patientivralert.model.PatientIvrAlertBatchRequest;
 import org.motechproject.whp.reporting.domain.DoNotCallEntrySummary;
 import org.motechproject.whp.reporting.service.ReportingDataService;
 import org.motechproject.whp.wgn.outbound.service.WGNGateway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PatientIvrAlertService {
+	
+	
+	 private static Logger logger = LoggerFactory.getLogger(PatientIvrAlertService.class.toString());
+	
+	
     public static final String PATIENT_ALERTS_CALL_TYPE = "patientAlerts";
 
     private PatientAdherenceService patientAdherenceService;
@@ -51,6 +58,7 @@ public class PatientIvrAlertService {
 
         if(!patientAdherenceRecords.isEmpty()) {
             List<PatientAdherenceRecord> patientAdherenceRecordsFiltered = getPatientsAdherenceRecords(patientAdherenceRecords);
+            logger.info(patientAdherenceRecordsFiltered.toString());
             PatientAlertRequest patientAlertRequest = createPatientAlertsRequest(patientAdherenceRecordsFiltered, request);
             EventCallBack eventCallBack = createEventCallBackForNextBatch(request);
             wgnGateway.post(patientIVRAlertProperties.getPatientIVRRequestURL(), patientAlertRequest, eventCallBack);

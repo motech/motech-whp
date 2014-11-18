@@ -22,4 +22,10 @@ public class PatientAdherenceRecord implements Serializable {
         this.mobileNumber = mobileNumber;
         this.missingWeeks = missingWeeks;
     }
+    
+    @Override
+    public String toString(){
+		return patientId+" : "+mobileNumber+"\n";
+    	
+    }
 }

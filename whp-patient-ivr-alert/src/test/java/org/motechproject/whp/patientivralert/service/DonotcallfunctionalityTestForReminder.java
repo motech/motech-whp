@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.motechproject.whp.patient.domain.Patient;
 
-public class DonotcallfunctionalityTest {
+public class DonotcallfunctionalityTestForReminder {
 	
 	private List<Patient> inPatients;
 	

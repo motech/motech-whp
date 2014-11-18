@@ -23,7 +23,6 @@ public class ReportingDataService {
         this.reportingApplicationURLs = reportingApplicationURLs;
         this.restTemplate = restTemplate;
     }
-
     public ProviderAdherenceSummaries getProviderAdherenceStatus(String district) {
         return restTemplate.getForObject(reportingApplicationURLs.getProviderAdherenceStatusByDistrictURL(),
                 ProviderAdherenceSummaries.class,
