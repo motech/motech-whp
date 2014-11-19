@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.motechproject.whp</groupId>
     <artifactId>motech-whp</artifactId>
-    <version>0.8</version>
+    <version>0.9</version>
     <packaging>pom</packaging>
     <name>motech-whp</name>
 
@@ -15,8 +15,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <build.dir>build</build.dir>
         <motech.version>0.12.3-whp</motech.version>
-        <motech.contrib.version>0.17-SNAPSHOT</motech.contrib.version>
-        <whp.reports.version>0.8</whp.reports.version>
+        <motech.contrib.version>0.5</motech.contrib.version>
+        <whp.reports.version>0.9</whp.reports.version>
         <motech.delivery.version>0.12-SNAPSHOT</motech.delivery.version>
     </properties>
 
