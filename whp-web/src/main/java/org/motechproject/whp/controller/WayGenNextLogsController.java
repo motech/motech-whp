@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,8 @@ public class WayGenNextLogsController {
 	 
 	    private Properties diagnosticProperties;
 	    private RestTemplate restTemplate;
-	    
+	    private Logger logger = Logger.getLogger(WayGenNextLogsController.class);	   
+	   
 
 	    @Autowired
 	    public WayGenNextLogsController(RestTemplate restTemplate, Properties diagnosticProperties) {
@@ -29,13 +31,20 @@ public class WayGenNextLogsController {
 	    @RequestMapping(method = RequestMethod.GET, value = "/logs/")
 	    @ResponseBody
 	    public String getWayGenNextLogs(HttpServletRequest request) {
-	    	return restTemplate.getForEntity(getWgnLogsURL(), String.class).getBody();
+	    	logger.info("Before Request ["+getWgnLogsURL()+"]");
+	        return builder(restTemplate.getForEntity(getWgnLogsURL(), String.class).getBody());
+	 
 	    }
 	    
 	    private String getWgnLogsURL() {
-	         return diagnosticProperties.getProperty("link.Internal.WayGenNextLogs");
+	         return diagnosticProperties.getProperty("request.url.WayGenNextLogs");
 	    }
 	    
+	    private String builder(String result) {
+	    	StringBuilder response = new StringBuilder(result);
+	    	logger.info("After Request ["+response.toString()+"]");
+	    	return response.toString();
+	    }
 
 
 }

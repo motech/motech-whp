@@ -124,11 +124,14 @@ value="[%d{ISO8601}]%n%n%-5p%n%n%c%n%n%m%n%n"/>
 <level value="error"/>
 <appender-ref ref="adminEmail"/>
 </logger>
+<logger name="org.motechproject.whp.controller">
+<level value="info"/>
+<appender-ref ref="production"/>
+</logger>
 <logger name="org.motechproject.web.filter.RequestResponseLoggingFilter">
 <level value="debug"/>
 <appender-ref ref="allRequests"/>
 </logger>
-
 <root>
 <priority value="warn"/>
 <appender-ref ref="production"/>
