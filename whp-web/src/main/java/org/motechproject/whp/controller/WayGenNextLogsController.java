@@ -19,7 +19,7 @@ public class WayGenNextLogsController {
 	 
 	    private Properties diagnosticProperties;
 	    private RestTemplate restTemplate;
-	    private Logger logger = Logger.getLogger(WayGenNextLogsController.class);	   
+	    	   
 	   
 
 	    @Autowired
@@ -31,8 +31,7 @@ public class WayGenNextLogsController {
 	    @RequestMapping(method = RequestMethod.GET, value = "/logs/")
 	    @ResponseBody
 	    public String getWayGenNextLogs(HttpServletRequest request) {
-	    	logger.info("Before Request ["+getWgnLogsURL()+"]");
-	        return builder(restTemplate.getForEntity(getWgnLogsURL(), String.class).getBody());
+	        return restTemplate.getForEntity(getWgnLogsURL(), String.class).getBody();
 	 
 	    }
 	    
@@ -40,11 +39,5 @@ public class WayGenNextLogsController {
 	         return diagnosticProperties.getProperty("request.url.WayGenNextLogs");
 	    }
 	    
-	    private String builder(String result) {
-	    	StringBuilder response = new StringBuilder(result);
-	    	logger.info("After Request ["+response.toString()+"]");
-	    	return response.toString();
-	    }
-
 
 }
